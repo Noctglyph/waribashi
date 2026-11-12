@@ -19,7 +19,7 @@ body{margin:0}
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yusei+Magic&family=Zen+Maru+Gothic:wght@500;700&display=swap">
 <style>
-/* Layout: a classroom chalkboard in a wood frame. The rival's hands across the top, yours along the bottom, the turn strip drawn between them; panels sit below on phones, beside the board on wide screens. */
+/* Layout: a classroom wall. Menus sit in one narrow column of chalkboard tiles; the game is a wood-framed chalkboard with rivals across the top and you along the bottom. */
 :root{
   --wall:#2a2824;
   --panel:#34312c;
@@ -30,11 +30,14 @@ body{margin:0}
   --chalk-soft:rgba(236,238,228,.66);
   --chalk-faint:rgba(236,238,228,.24);
   --you:#f3d774;
-  --rival:#f4a6bb;
+  --p1:#f4a6bb;
+  --p2:#9fd0f0;
+  --p3:#c8b4f4;
   --win:#b8e6a3;
   --lose:#ffa48c;
   --wood:#7a5131;
   --wood-hi:#9c6b43;
+  --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   --font-display:"Yusei Magic","Hiragino Maru Gothic ProN","BIZ UDPGothic","Meiryo",sans-serif;
   --font-body:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Meiryo",sans-serif;
   color-scheme:dark;
@@ -46,120 +49,72 @@ body{
   font-family:var(--font-body);font-size:15px;line-height:1.65;line-break:strict;
   padding-left:max(16px,env(safe-area-inset-left,0px));
   padding-right:max(16px,env(safe-area-inset-right,0px));
-  padding-block:20px 48px;
+  padding-block:14px 56px;
   -webkit-tap-highlight-color:transparent;
 }
 button{font:inherit;color:inherit;touch-action:manipulation}
-.layout{max-width:980px;margin:0 auto;display:grid;gap:24px}
-@media (min-width:900px){
-  .layout{grid-template-columns:minmax(0,560px) minmax(280px,360px);justify-content:center;align-items:start}
+h1,h2,h3{text-wrap:balance}
+
+/* App frame */
+.app{max-width:980px;margin:0 auto;display:grid;gap:18px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:40px}
+.logo{margin:0;font-family:var(--font-display);font-weight:400;font-size:22px;letter-spacing:.08em}
+.me-chip{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--chalk-soft);min-width:0}
+.me-chip::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--you);flex:none}
+.me-chip .nm{max-width:9em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.me-chip b{color:var(--you);font-variant-numeric:tabular-nums}
+.screen{display:grid;gap:16px;min-width:0}
+.narrow{width:100%;max-width:560px;margin:0 auto}
+.shead{display:flex;align-items:center;gap:12px}
+.shead h2{margin:0;font-family:var(--font-display);font-weight:400;font-size:26px;letter-spacing:.04em}
+.back{min-height:40px;padding:6px 12px;border-radius:10px;border:1.5px solid var(--line);background:none;color:var(--chalk-soft);font-weight:700;cursor:pointer}
+.back:hover{border-color:var(--chalk-soft)}
+.back:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+
+/* Home */
+.hero{display:grid;gap:4px;padding-block:6px 2px}
+.hero h1{margin:0;font-family:var(--font-display);font-weight:400;font-size:clamp(46px,13vw,64px);line-height:1.05;letter-spacing:.08em}
+.hero p{margin:0;color:var(--chalk-soft);font-size:14px;text-wrap:pretty}
+.modes{display:grid;gap:12px}
+.mode{
+  --c:var(--you);
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 14px;align-items:center;text-align:left;
+  padding:16px 18px;border-radius:10px;border:3px solid var(--wood);
+  background-color:var(--board);background-image:var(--noise);box-shadow:inset 0 0 36px rgba(0,0,0,.28);
+  cursor:pointer;transition:transform .15s ease,border-color .15s ease;
 }
-.play{min-width:0;display:grid;gap:14px}
-.side-col{min-width:0;display:grid;gap:14px}
+.mode.c2{--c:var(--p2)}
+.mode.c1{--c:var(--p1)}
+.mode:hover:not(:disabled){border-color:var(--wood-hi);transform:translateY(-2px)}
+.mode:focus-visible{outline:2px solid var(--chalk);outline-offset:3px}
+.mode:disabled{opacity:.45;cursor:default}
+.mode-k{grid-column:1;font-family:var(--font-display);font-size:25px;line-height:1.25}
+.mode-d{grid-column:1;font-size:14px;color:var(--chalk-soft);text-wrap:pretty}
+.mode-x{grid-column:1;font-size:13px;font-weight:700;color:var(--c);font-variant-numeric:tabular-nums}
+.mode-n{grid-column:2;grid-row:1/span 3;font-family:var(--font-display);font-size:15px;color:var(--c);border:1.5px dashed currentColor;border-radius:999px;padding:4px 12px;white-space:nowrap}
 
-/* Header */
-.head h1{font-family:var(--font-display);font-weight:400;font-size:40px;line-height:1.1;margin:0;letter-spacing:.06em}
-.head p{margin:6px 0 0;color:var(--chalk-soft);font-size:14px;text-wrap:pretty}
-
-/* Board */
-.board-wrap{display:grid}
-.board{
-  position:relative;
-  background-color:var(--board);
-  background-image:
-    radial-gradient(ellipse 60% 40% at 28% 22%,rgba(236,238,228,.06),transparent 70%),
-    radial-gradient(ellipse 50% 35% at 76% 78%,rgba(236,238,228,.045),transparent 70%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  border:10px solid var(--wood);
-  border-radius:6px;
-  box-shadow:inset 0 0 0 2px rgba(0,0,0,.25),inset 0 0 60px rgba(0,0,0,.32),0 16px 30px -12px rgba(0,0,0,.7);
-  padding:14px 10px;
-  display:grid;gap:4px;
-}
-.tray{height:12px;margin:-2px -4px 0;background:linear-gradient(var(--wood-hi),var(--wood));border-radius:0 0 8px 8px;position:relative;box-shadow:0 8px 14px -8px rgba(0,0,0,.7)}
-.tray::before,.tray::after{content:"";position:absolute;top:-4px;height:7px;border-radius:4px}
-.tray::before{left:16%;width:36px;background:var(--chalk)}
-.tray::after{left:calc(16% + 46px);width:22px;background:var(--you)}
-.boardnote{position:absolute;right:8px;top:14px;writing-mode:vertical-rl;font-family:var(--font-display);font-size:13px;letter-spacing:.12em;color:var(--chalk-faint);pointer-events:none;user-select:none}
-.boardnote .tcy{text-combine-upright:all}
-
-.side{display:grid;justify-items:center;gap:2px}
-.name{margin:0;font-size:13px;letter-spacing:.08em;color:var(--chalk-soft);display:flex;align-items:center;gap:6px;min-height:24px}
-.name::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.5}
-.side0 .name::before{background:var(--you)}
-.side1 .name::before{background:var(--rival)}
-.side0.active .name{color:var(--you)}
-.side1.active .name{color:var(--rival)}
-.side.active .name::before{opacity:1}
-
-.hands{display:flex;justify-content:center;gap:clamp(18px,8vw,56px)}
-.hand{
-  position:relative;appearance:none;background:none;border:0;padding:6px 4px;border-radius:18px;
-  width:clamp(88px,27vw,140px);display:flex;flex-direction:column;align-items:center;gap:0;cursor:default;
-  transition:transform .18s ease;
-}
-.side0 .hand{color:var(--you)}
-.side1 .hand{color:var(--rival)}
-.side1 .hand{flex-direction:column-reverse}
-.hand svg{width:100%;height:auto;aspect-ratio:100/130;display:block;overflow:visible;transition:opacity .25s}
-.hand svg .pm{fill:currentColor}
-.hand svg .fg{fill:currentColor;stroke:var(--board);stroke-width:2}
-.hand .count{font-family:var(--font-display);font-size:clamp(26px,7vw,34px);line-height:1.1;font-variant-numeric:tabular-nums}
-.hand.dead svg{opacity:.2}
-.hand.dead .count{opacity:.55}
-.hand.pickable,.hand.target{cursor:pointer}
-.side0 .hand.pickable:hover{transform:translateY(-4px)}
-.side1 .hand.pickable:hover{transform:translateY(4px)}
-.side0 .hand.selected{transform:translateY(-10px)}
-.side1 .hand.selected{transform:translateY(10px)}
-.hand::before{content:"";position:absolute;inset:-2px -6px;border:2px dashed transparent;border-radius:46% 54% 50% 50%/52% 48% 52% 48%;pointer-events:none}
-.hand.selected::before{border-color:currentColor}
-.hand.target::before{border-color:var(--chalk-soft);animation:pulse 1.4s ease-in-out infinite}
-@keyframes pulse{50%{opacity:.35}}
-.hand:focus-visible{outline:2px solid var(--chalk);outline-offset:4px}
-.badge{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);font-family:var(--font-body);font-weight:700;font-size:12px;line-height:1;white-space:nowrap;padding:6px 9px;border-radius:999px;background:var(--board-deep);border:1.5px solid currentColor;pointer-events:none}
-.win{color:var(--win)}
-.lose{color:var(--lose)}
-.draw{color:var(--chalk-soft)}
-
-/* Turn strip */
-.strip{
-  min-height:112px;display:grid;align-content:center;justify-items:center;gap:4px;text-align:center;padding:12px 4px;
-  background-image:repeating-linear-gradient(90deg,var(--chalk-faint) 0 14px,transparent 14px 24px),repeating-linear-gradient(90deg,var(--chalk-faint) 0 14px,transparent 14px 24px);
-  background-size:100% 2px;background-position:top,bottom;background-repeat:no-repeat;
-}
-.strip p{margin:0}
-.turn{font-family:var(--font-display);font-size:24px;line-height:1.25}
-.turn.big{font-size:34px}
-.p0{color:var(--you)}
-.p1{color:var(--rival)}
-.msg{color:var(--chalk-soft);font-size:14px;min-height:1.6em}
-.clock{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--chalk-soft)}
-.clock.low{color:var(--lose)}
-.eval{font-size:13px;color:var(--chalk);padding:2px 10px;border-radius:999px;border:1px dashed var(--chalk-faint);font-variant-numeric:tabular-nums}
-.splits{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:4px}
-.chip{display:inline-flex;flex-direction:column;align-items:center;gap:2px;min-height:44px;padding:6px 16px;border-radius:12px;border:1.5px solid var(--chalk-faint);background:var(--board-deep);cursor:pointer}
-.chip span{font-family:var(--font-display);font-size:20px;line-height:1.2}
-.chip small{font-size:11px;font-weight:700}
-.chip:hover{border-color:var(--chalk-soft)}
-.chip:focus-visible,.btn:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
-
-/* Controls */
-.controls{display:flex;flex-wrap:wrap;gap:10px}
+/* Shared bits */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.panel h2,.panel h3{font-family:var(--font-display);font-weight:400;font-size:19px;margin:0 0 10px;letter-spacing:.04em}
+.note{margin:10px 0 0;font-size:13px;color:var(--chalk-soft);text-wrap:pretty}
+.center{text-align:center}
+.field{display:grid;gap:6px;min-width:0}
+.field>label,.label{margin:0;font-size:13px;color:var(--chalk-soft);letter-spacing:.04em}
+.input{width:100%;min-width:0;min-height:44px;padding:8px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--board-deep);color:var(--chalk);font:inherit;font-size:16px}
+.input::placeholder{color:var(--chalk-faint)}
+.input:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.row .input{flex:1 1 8em}
 .btn{min-height:44px;padding:8px 18px;border-radius:12px;border:1.5px solid var(--line);background:var(--panel);font-weight:700;font-size:15px;cursor:pointer}
 .btn:hover:not(:disabled){border-color:var(--chalk-soft)}
 .btn:disabled{opacity:.4;cursor:default}
+.btn:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .btn.primary{border-color:var(--you);color:var(--you)}
 .btn.danger{color:var(--lose)}
-.controls .end{margin-left:auto}
-
-/* Panels */
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
-.panel h2{font-family:var(--font-display);font-weight:400;font-size:19px;margin:0 0 10px;letter-spacing:.04em}
-.note{margin:10px 0 0;font-size:13px;color:var(--chalk-soft);text-wrap:pretty}
+.btn.big{width:100%;min-height:56px;font-size:18px}
 .settings{display:grid;gap:14px}
 fieldset{border:0;margin:0;padding:0;min-width:0}
-fieldset:disabled{opacity:.4}
+fieldset:disabled{opacity:.45}
 legend{padding:0;margin:0 0 6px;font-size:13px;color:var(--chalk-soft);letter-spacing:.04em}
 .opts{display:flex;flex-wrap:wrap;gap:6px}
 .opts label{position:relative}
@@ -168,27 +123,17 @@ legend{padding:0;margin:0 0 6px;font-size:13px;color:var(--chalk-soft);letter-sp
 .opts input:checked+span{border-color:var(--you);color:var(--you);background:rgba(243,215,116,.1)}
 .opts input:focus-visible+span{outline:2px solid var(--chalk);outline-offset:2px}
 fieldset:disabled .opts span{cursor:default}
+.tag{display:inline-block;font-size:11px;font-weight:700;line-height:1.5;padding:0 8px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
+.tag.host{color:var(--you)}
+.tag.off,.tag.out{color:var(--lose)}
+.tag.mine,.tag.rate{color:var(--chalk-soft)}
+.facts{margin:0;display:grid;gap:8px}
+.facts div{display:grid;grid-template-columns:6.5em minmax(0,1fr);gap:8px}
+.facts dt{color:var(--chalk-soft);font-size:13px}
+.facts dd{margin:0;font-variant-numeric:tabular-nums;min-width:0;overflow-wrap:anywhere}
+.rules{margin:0;padding-left:1.2em;display:grid;gap:6px;font-size:14px}
 
-/* Online */
-.net-body{display:grid;gap:12px}
-.net-body .note{margin:0}
-.field{display:grid;gap:6px;min-width:0}
-.field>label,.label{margin:0;font-size:13px;color:var(--chalk-soft);letter-spacing:.04em}
-.sub{margin:6px 0 0;font-size:13px;color:var(--chalk-soft);letter-spacing:.08em;display:flex;align-items:center;gap:10px}
-.sub::after{content:"";flex:1;border-top:1px dashed var(--line)}
-.input{width:100%;min-width:0;min-height:44px;padding:8px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--board-deep);color:var(--chalk);font:inherit;font-size:16px}
-.input::placeholder{color:var(--chalk-faint)}
-.input:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
-.row{display:flex;flex-wrap:wrap;gap:8px}
-.row .input{flex:1 1 8em}
-.code{margin:0;font-family:var(--font-display);font-size:46px;line-height:1.1;letter-spacing:.2em;font-variant-numeric:tabular-nums;color:var(--you)}
-.rating{margin:0;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.rating b{font-family:var(--font-display);font-weight:400;font-size:32px;line-height:1.1;color:var(--you);font-variant-numeric:tabular-nums}
-.rating span{font-size:13px;color:var(--chalk-soft);font-variant-numeric:tabular-nums}
-.status{margin:12px 0 0;font-size:14px;color:var(--chalk-soft);text-wrap:pretty}
-.status.err{color:var(--lose)}
-.status:empty{display:none}
-
+/* Ranking */
 .rank{list-style:none;margin:0;padding:0;display:grid;gap:2px;font-size:14px}
 .rank li{display:grid;grid-template-columns:1.8em minmax(0,1fr) auto auto;gap:10px;align-items:baseline;padding:6px 8px;border-radius:8px}
 .rank li.me{background:rgba(243,215,116,.1);color:var(--you)}
@@ -199,19 +144,150 @@ fieldset:disabled .opts span{cursor:default}
 .rank .rec{font-size:12px;color:var(--chalk-soft);font-variant-numeric:tabular-nums}
 .rank li.empty{display:block;color:var(--chalk-soft);padding:0}
 
+/* Lobby */
+.codebox{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-radius:10px;border:3px solid var(--wood);background-color:var(--board);background-image:var(--noise)}
+.code{margin:0;font-family:var(--font-display);font-size:46px;line-height:1.1;letter-spacing:.2em;font-variant-numeric:tabular-nums;color:var(--you)}
+.seats{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.seats li{display:flex;align-items:center;gap:8px;min-height:50px;padding:6px 8px 6px 12px;border-radius:12px;background:var(--board-deep);border:1.5px solid var(--line)}
+.seats li.empty{border-style:dashed;background:none;color:var(--chalk-faint)}
+.seats .sn{font-family:var(--font-display);color:var(--chalk-faint);width:1.1em;flex:none}
+.seats .who{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+.kick{flex:none;width:40px;height:40px;border-radius:10px;border:1.5px solid var(--line);background:none;color:var(--chalk-soft);cursor:pointer;font-size:18px;line-height:1}
+.kick:hover{border-color:var(--lose);color:var(--lose)}
+.kick:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+
+/* Search */
+.search{display:grid;justify-items:center;gap:8px;text-align:center;padding:36px 16px 28px;border-radius:6px;border:10px solid var(--wood);background-color:var(--board);background-image:var(--noise);box-shadow:inset 0 0 60px rgba(0,0,0,.32)}
+.radar{width:148px;height:148px;border-radius:50%;border:3px dashed var(--chalk-faint);display:grid;place-items:center;animation:spin 8s linear infinite;margin-bottom:8px}
+.radar svg{width:70px;height:auto;color:var(--you);animation:spin 8s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.search-t{margin:0;font-family:var(--font-display);font-size:26px}
+.search-s{margin:0;font-family:var(--font-display);font-size:42px;line-height:1.1;font-variant-numeric:tabular-nums;color:var(--you)}
+.search .note{margin:0}
+
+/* Game */
+.game{display:grid;gap:24px}
+@media (min-width:900px){
+  .game{grid-template-columns:minmax(0,560px) minmax(280px,360px);justify-content:center;align-items:start}
+}
+.play{min-width:0;display:grid;gap:14px}
+.side-col{min-width:0;display:grid;gap:14px}
+.board-wrap{display:grid}
+.board{
+  position:relative;background-color:var(--board);
+  background-image:radial-gradient(ellipse 60% 40% at 28% 22%,rgba(236,238,228,.06),transparent 70%),radial-gradient(ellipse 50% 35% at 76% 78%,rgba(236,238,228,.045),transparent 70%),var(--noise);
+  border:10px solid var(--wood);border-radius:6px;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.25),inset 0 0 60px rgba(0,0,0,.32),0 16px 30px -12px rgba(0,0,0,.7);
+  padding:14px 10px;display:grid;gap:4px;
+}
+.tray{height:12px;margin:-2px -4px 0;background:linear-gradient(var(--wood-hi),var(--wood));border-radius:0 0 8px 8px;position:relative;box-shadow:0 8px 14px -8px rgba(0,0,0,.7)}
+.tray::before,.tray::after{content:"";position:absolute;top:-4px;height:7px;border-radius:4px}
+.tray::before{left:16%;width:36px;background:var(--chalk)}
+.tray::after{left:calc(16% + 46px);width:22px;background:var(--you)}
+.boardnote{position:absolute;right:8px;top:14px;margin:0;writing-mode:vertical-rl;font-family:var(--font-display);font-size:13px;letter-spacing:.12em;color:var(--chalk-faint);pointer-events:none;user-select:none}
+.boardnote .tcy{text-combine-upright:all}
+
+.opps{display:flex;justify-content:space-around;align-items:start;gap:4px;min-width:0}
+.seat{--c:var(--you);display:grid;justify-items:center;gap:2px;min-width:0;transition:opacity .3s}
+.seat.c1{--c:var(--p1)}
+.seat.c2{--c:var(--p2)}
+.seat.c3{--c:var(--p3)}
+.seat .hands{display:flex;justify-content:center;gap:clamp(18px,8vw,56px)}
+.opps[data-n="2"] .hands{gap:clamp(4px,2vw,14px)}
+.opps[data-n="3"] .hands{gap:2px}
+.name{margin:0;font-size:13px;letter-spacing:.06em;color:var(--chalk-soft);display:flex;align-items:center;justify-content:center;gap:6px;min-height:24px;max-width:100%}
+.name::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--c);opacity:.5}
+.name .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.name .tag{font-size:10px;padding:0 6px}
+.seat.active .name{color:var(--c)}
+.seat.active .name::before{opacity:1}
+.seat.out .hands{opacity:.35}
+
+.hand{
+  position:relative;appearance:none;background:none;border:0;padding:6px 4px;border-radius:18px;color:var(--c);
+  width:clamp(88px,27vw,140px);display:flex;flex-direction:column;align-items:center;cursor:default;transition:transform .18s ease;
+}
+.opp .hand{flex-direction:column-reverse}
+.opps[data-n="2"] .hand{width:clamp(54px,17vw,100px);padding:4px 2px}
+.opps[data-n="3"] .hand{width:clamp(40px,12vw,76px);padding:4px 1px}
+.hand svg{width:100%;height:auto;aspect-ratio:100/130;display:block;overflow:visible;transition:opacity .25s}
+.hand svg .pm{fill:currentColor}
+.hand svg .fg{fill:currentColor;stroke:var(--board);stroke-width:2}
+.hand .count{font-family:var(--font-display);font-size:clamp(26px,7vw,34px);line-height:1.1;font-variant-numeric:tabular-nums}
+.opps[data-n="2"] .count{font-size:clamp(20px,5.5vw,28px)}
+.opps[data-n="3"] .count{font-size:clamp(16px,4.6vw,24px)}
+.hand.dead svg{opacity:.2}
+.hand.dead .count{opacity:.55}
+.hand.pickable,.hand.target{cursor:pointer}
+.me .hand.pickable:hover{transform:translateY(-4px)}
+.opp .hand.pickable:hover{transform:translateY(4px)}
+.me .hand.selected{transform:translateY(-10px)}
+.opp .hand.selected{transform:translateY(10px)}
+.hand::before{content:"";position:absolute;inset:-2px -4px;border:2px dashed transparent;border-radius:46% 54% 50% 50%/52% 48% 52% 48%;pointer-events:none}
+.hand.selected::before{border-color:currentColor}
+.hand.target::before{border-color:var(--chalk-soft);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+.hand:focus-visible{outline:2px solid var(--chalk);outline-offset:4px}
+.badge{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);font-family:var(--font-body);font-weight:700;font-size:12px;line-height:1;white-space:nowrap;padding:6px 9px;border-radius:999px;background:var(--board-deep);border:1.5px solid currentColor;pointer-events:none}
+.win{color:var(--win)}
+.lose{color:var(--lose)}
+.draw{color:var(--chalk-soft)}
+
+.strip{
+  min-height:112px;display:grid;align-content:center;justify-items:center;gap:4px;text-align:center;padding:12px 4px;
+  background-image:repeating-linear-gradient(90deg,var(--chalk-faint) 0 14px,transparent 14px 24px),repeating-linear-gradient(90deg,var(--chalk-faint) 0 14px,transparent 14px 24px);
+  background-size:100% 2px;background-position:top,bottom;background-repeat:no-repeat;
+}
+.strip p{margin:0}
+.turn{font-family:var(--font-display);font-size:24px;line-height:1.25}
+.turn.big{font-size:34px}
+.turn.c0{color:var(--you)}
+.turn.c1{color:var(--p1)}
+.turn.c2{color:var(--p2)}
+.turn.c3{color:var(--p3)}
+.msg{color:var(--chalk-soft);font-size:14px;min-height:1.6em}
+.clock{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--chalk-soft)}
+.clock.low{color:var(--lose)}
+.eval{font-size:13px;color:var(--chalk);padding:2px 10px;border-radius:999px;border:1px dashed var(--chalk-faint);font-variant-numeric:tabular-nums}
+.splits{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:4px}
+.chip{display:inline-flex;flex-direction:column;align-items:center;gap:2px;min-height:44px;padding:6px 16px;border-radius:12px;border:1.5px solid var(--chalk-faint);background:var(--board-deep);cursor:pointer}
+.chip span{font-family:var(--font-display);font-size:20px;line-height:1.2}
+.chip small{font-size:11px;font-weight:700}
+.chip:hover{border-color:var(--chalk-soft)}
+.chip:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.controls{display:flex;flex-wrap:wrap;gap:10px}
+.controls .end{margin-left:auto}
+
 .logbox{max-height:220px;overflow-y:auto;margin:0 -4px;padding:0 4px}
 .log{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:14px}
 .log li{display:grid;grid-template-columns:2.2em auto minmax(0,1fr);gap:8px;align-items:baseline}
 .log .no{color:var(--chalk-faint);font-variant-numeric:tabular-nums;text-align:right}
-.log .who{font-weight:700;white-space:nowrap}
+.log .who{font-weight:700;white-space:nowrap;max-width:7em;overflow:hidden;text-overflow:ellipsis}
+.log .who.c0{color:var(--you)}
+.log .who.c1{color:var(--p1)}
+.log .who.c2{color:var(--p2)}
+.log .who.c3{color:var(--p3)}
 .log .what{min-width:0}
 .log li.empty{display:block;color:var(--chalk-soft)}
+.order{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:14px}
+.order li{display:flex;align-items:center;gap:8px;min-width:0}
+.order .sn{font-family:var(--font-display);color:var(--chalk-faint);width:1.1em;flex:none}
+.order .who{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
 
-.facts{margin:0;display:grid;gap:8px}
-.facts div{display:grid;grid-template-columns:7em minmax(0,1fr);gap:8px}
-.facts dt{color:var(--chalk-soft);font-size:13px}
-.facts dd{margin:0;font-variant-numeric:tabular-nums;min-width:0;overflow-wrap:anywhere}
-.rules{margin:0;padding-left:1.2em;display:grid;gap:6px;font-size:14px}
+/* Splash and toast */
+.splash{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-left,0px));background:rgba(20,18,15,.74);cursor:pointer}
+.splash-in{width:min(440px,100%);padding:26px 20px;border-radius:6px;border:10px solid var(--wood);background-color:var(--board);background-image:var(--noise);text-align:center;display:grid;gap:14px;animation:pop .45s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes pop{from{transform:scale(.85);opacity:0}}
+.splash-t{margin:0;font-family:var(--font-display);font-size:clamp(30px,9vw,40px);line-height:1.2;color:var(--you)}
+.splash-s{margin:0;color:var(--chalk-soft);font-size:14px}
+.vs{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:10px}
+.vs div{display:grid;gap:2px;min-width:0}
+.vs b{font-size:18px;overflow-wrap:anywhere}
+.vs span{font-variant-numeric:tabular-nums;color:var(--chalk-soft)}
+.vs .vs-x{font-family:var(--font-display);font-size:28px;color:var(--p1)}
+.splash .order{justify-items:center}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;width:max-content;max-width:calc(100% - 32px);padding:10px 16px;border-radius:12px;background:var(--panel);border:1.5px solid var(--line);box-shadow:0 10px 24px -8px rgba(0,0,0,.7);font-size:14px;text-wrap:pretty}
+.toast.err{border-color:var(--lose);color:var(--lose)}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before{animation:none!important;transition:none!important}
@@ -230,111 +306,70 @@ fieldset:disabled .opts span{cursor:default}
   </filter>
 </svg>
 
-<div class="layout">
-  <div class="play">
-    <header class="head">
+<div class="app">
+  <header class="bar">
+    <p class="logo">わりばし</p>
+    <p class="me-chip"><span class="nm" id="barName">ななし</span><b id="barRate" hidden></b></p>
+  </header>
+
+  <!-- Home -->
+  <section class="screen narrow" id="scrHome">
+    <div class="hero">
       <h1>わりばし</h1>
-      <p>相手の手をタッチして、指の本数を足していく手遊び。相手の両手を消したら勝ち。</p>
-    </header>
-
-    <div class="board-wrap">
-      <section class="board" id="board" aria-label="対戦ボード">
-        <p class="boardnote" aria-hidden="true"><span id="date"></span>　日直</p>
-        <div class="side side1" id="side1">
-          <p class="name" id="name1">CPU</p>
-          <div class="hands">
-            <button type="button" class="hand" data-p="1" data-i="0"><svg viewBox="0 0 100 130" aria-hidden="true"></svg><span class="count"></span><span class="badge" hidden></span></button>
-            <button type="button" class="hand" data-p="1" data-i="1"><svg viewBox="0 0 100 130" aria-hidden="true"></svg><span class="count"></span><span class="badge" hidden></span></button>
-          </div>
-        </div>
-
-        <div class="strip" aria-live="polite">
-          <p class="turn" id="turn"></p>
-          <p class="msg" id="msg"></p>
-          <p class="clock" id="clock" hidden></p>
-          <p class="eval" id="eval" hidden></p>
-          <div class="splits" id="splits" hidden></div>
-          <button type="button" class="btn primary" id="again" hidden>もう一回</button>
-        </div>
-
-        <div class="side side0" id="side0">
-          <div class="hands">
-            <button type="button" class="hand" data-p="0" data-i="0"><svg viewBox="0 0 100 130" aria-hidden="true"></svg><span class="count"></span><span class="badge" hidden></span></button>
-            <button type="button" class="hand" data-p="0" data-i="1"><svg viewBox="0 0 100 130" aria-hidden="true"></svg><span class="count"></span><span class="badge" hidden></span></button>
-          </div>
-          <p class="name" id="name0">あなた</p>
-        </div>
-      </section>
-      <div class="tray" aria-hidden="true"></div>
+      <p>指の本数を足して、相手の手を消していく教室の手遊び。</p>
     </div>
-
-    <div class="controls">
-      <button type="button" class="btn" id="splitBtn" aria-expanded="false">分身</button>
-      <button type="button" class="btn" id="mergeBtn" aria-expanded="false">合成</button>
-      <button type="button" class="btn end" id="resetBtn">最初から</button>
-      <button type="button" class="btn danger end" id="resignBtn" hidden>投了</button>
+    <div class="field">
+      <label for="netName">あなたの名前</label>
+      <input class="input" id="netName" maxlength="12" autocomplete="nickname" placeholder="例：ゆー">
     </div>
-  </div>
-
-  <div class="side-col">
-    <section class="panel" id="netPanel">
-      <h2>オンライン対戦</h2>
-      <div class="net-body" id="netIdle">
-        <div class="field">
-          <label for="netName">あなたの名前</label>
-          <input class="input" id="netName" maxlength="12" autocomplete="nickname" placeholder="例：ゆー">
-        </div>
-        <p class="sub">レート戦</p>
-        <p class="rating"><b id="myRate">1500</b><span id="myRec">まだ0戦</span></p>
-        <div class="row">
-          <button type="button" class="btn primary" id="netSearch">レート戦をさがす</button>
-          <button type="button" class="btn" id="netCancel" hidden>やめる</button>
-        </div>
-        <p class="note" id="searchNote">いま相手をさがしている人と自動で当たります。1手30秒の持ち時間つき。</p>
-        <p class="sub">友達と遊ぶ</p>
-        <button type="button" class="btn" id="netCreate">部屋を作る</button>
-        <div class="field">
-          <label for="netCode">友達の部屋に入る</label>
-          <div class="row">
-            <input class="input" id="netCode" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="4桁の部屋番号">
-            <button type="button" class="btn" id="netJoin">参加</button>
-          </div>
-        </div>
-        <p class="note">部屋を作ると4桁の番号が出ます。友達に番号を入れてもらうか、リンクを送ってね。ルールは部屋を作った人の設定になります。</p>
-      </div>
-      <div class="net-body" id="netRoom" hidden>
-        <div>
-          <p class="label" id="netRoomLabel">部屋番号</p>
-          <p class="code" id="netRoomCode"></p>
-        </div>
-        <div class="row">
-          <button type="button" class="btn" id="netCopy">リンクをコピー</button>
-          <button type="button" class="btn" id="netLeave">部屋を出る</button>
-        </div>
-        <input class="input" id="netLink" readonly hidden aria-label="招待リンク">
-        <dl class="facts">
-          <div><dt>相手</dt><dd id="netOpp"></dd></div>
-          <div><dt>ルール</dt><dd id="netRules"></dd></div>
-          <div><dt id="netStatLabel">あなたの戦績</dt><dd id="netStats"></dd></div>
-        </dl>
-      </div>
-      <p class="status" id="netStatus" aria-live="polite"></p>
-    </section>
-
+    <div class="modes">
+      <button type="button" class="mode" id="goRated">
+        <span class="mode-k">レート戦</span>
+        <span class="mode-d">近い強さの人と1対1。1手30秒。</span>
+        <span class="mode-x" id="homeRate">レート 1500・まだ0戦</span>
+        <span class="mode-n">1対1</span>
+      </button>
+      <button type="button" class="mode c2" id="goCustom">
+        <span class="mode-k">カスタムマッチ</span>
+        <span class="mode-d">友達と2〜4人で。部屋番号で集まって、ルールも決められる。</span>
+        <span class="mode-n">2〜4人</span>
+      </button>
+      <button type="button" class="mode c1" id="goCpu">
+        <span class="mode-k">CPU対戦</span>
+        <span class="mode-d">ひとりで練習。この端末で2人で遊ぶこともできる。</span>
+        <span class="mode-n">ひとり</span>
+      </button>
+    </div>
+    <p class="note" id="homeNote" hidden>オンライン対戦はまだ準備中です。</p>
     <section class="panel" id="rankPanel" hidden>
       <h2>ランキング</h2>
       <ol class="rank" id="rank"></ol>
       <p class="note">レート戦を1回以上やった人が載ります。レートは1500から始まって、強い相手に勝つほど大きく上がります。</p>
     </section>
-
     <section class="panel">
-      <h2>設定</h2>
+      <h2>ルール</h2>
+      <ul class="rules">
+        <li>最初は全員、両手とも1本。</li>
+        <li>自分の番に、自分の手で相手の手をタッチ。タッチされた手は、タッチした手の本数ぶん増える。</li>
+        <li>5本ぴったりになった手は消える。6本以上になったら1本から数え直し（6本→1本、7本→2本、8本→3本）。</li>
+        <li>分身：自分の両手の合計を配り直せる。左右を入れ替えるだけの配り方と、片手を0にする配り方はできない。消えた手も分身で復活できる。</li>
+        <li>合成：両手の指を片方の手にまとめられる（1と3→4、2と4→6本なので1本）。まとめた結果で手が消える合成はできない。</li>
+        <li>3人以上のときは、好きな相手の手をタッチできる。両手が消えた人は脱落して、最後まで残った人の勝ち。</li>
+        <li>オンラインは持ち時間つき。時間切れと投了は脱落。同じ局面が3回出たら引き分け。</li>
+      </ul>
+    </section>
+  </section>
+
+  <!-- CPU setup -->
+  <section class="screen narrow" id="scrCpu" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>CPU対戦</h2></div>
+    <section class="panel">
       <form class="settings" id="settings" onsubmit="return false">
         <fieldset>
           <legend>対戦相手</legend>
           <div class="opts">
             <label><input type="radio" name="mode" value="cpu" id="mode-cpu"><span>CPU</span></label>
-            <label><input type="radio" name="mode" value="2p" id="mode-2p"><span>2人（この端末で）</span></label>
+            <label><input type="radio" name="mode" value="2p" id="mode-2p"><span>この端末で2人</span></label>
           </div>
         </fieldset>
         <fieldset id="levelSet">
@@ -381,39 +416,166 @@ fieldset:disabled .opts span{cursor:default}
           </div>
         </fieldset>
       </form>
-      <p class="note" id="settingsNote">対戦相手・先手・ルールを変えると、最初からやり直しになります。</p>
     </section>
+    <button type="button" class="btn primary big" id="cpuStart">はじめる</button>
+  </section>
 
+  <!-- Custom match entry -->
+  <section class="screen narrow" id="scrCustom" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>カスタムマッチ</h2></div>
+    <div class="field">
+      <label for="customName">あなたの名前</label>
+      <input class="input" id="customName" maxlength="12" autocomplete="nickname" placeholder="例：ゆー">
+    </div>
     <section class="panel">
-      <h2>記録</h2>
-      <div class="logbox" id="logBox"><ol class="log" id="log"></ol></div>
+      <h3>部屋を作る</h3>
+      <p class="note" style="margin:0 0 12px">あなたがホストになります。2〜4人そろったら、あなたが開始を押します。</p>
+      <button type="button" class="btn primary big" id="netCreate">部屋を作る</button>
     </section>
+    <section class="panel">
+      <h3>部屋に入る</h3>
+      <div class="field">
+        <label for="netCode">友達から聞いた4桁の番号</label>
+        <div class="row">
+          <input class="input" id="netCode" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="部屋番号">
+          <button type="button" class="btn primary" id="netJoin">参加</button>
+        </div>
+      </div>
+    </section>
+  </section>
 
+  <!-- Lobby -->
+  <section class="screen narrow" id="scrLobby" hidden>
+    <div class="shead"><button type="button" class="back" id="lobbyLeave">← 部屋を出る</button><h2>ロビー</h2></div>
+    <div class="codebox">
+      <div>
+        <p class="label">部屋番号</p>
+        <p class="code" id="lobbyCode"></p>
+      </div>
+      <button type="button" class="btn" id="netCopy">リンクをコピー</button>
+    </div>
+    <input class="input" id="netLink" readonly hidden aria-label="招待リンク">
     <section class="panel">
-      <h2>このルールの解析</h2>
-      <dl class="facts">
-        <div><dt>ルール</dt><dd id="aRule"></dd></div>
-        <div><dt>最初の局面</dt><dd id="aStart"></dd></div>
-        <div><dt>行ける局面</dt><dd id="aReach"></dd></div>
-        <div><dt>内訳</dt><dd id="aSplit"></dd></div>
-      </dl>
-      <p class="note">決着した局面からさかのぼって、全局面の勝ち負けを計算しています（後退解析）。左右の入れ替えは同じ局面として数えています。CPU「さいきょう」はこの表を見て指します。</p>
+      <h3>メンバー <span class="tag mine" id="lobbyCount">1/4人</span></h3>
+      <ol class="seats" id="lobbySeats"></ol>
     </section>
+    <section class="panel">
+      <h3>ルール</h3>
+      <form class="settings" id="lobbyRules" onsubmit="return false">
+        <fieldset>
+          <legend>手が消えるルール</legend>
+          <div class="opts">
+            <label><input type="radio" name="overflow" value="wrap" id="lb-overflow-wrap"><span>5本ぴったりで消える</span></label>
+            <label><input type="radio" name="overflow" value="die" id="lb-overflow-die"><span>5本以上で消える</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>分身</legend>
+          <div class="opts">
+            <label><input type="radio" name="split" value="on" id="lb-split-on"><span>あり</span></label>
+            <label><input type="radio" name="split" value="off" id="lb-split-off"><span>なし</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>合成</legend>
+          <div class="opts">
+            <label><input type="radio" name="merge" value="on" id="lb-merge-on"><span>あり</span></label>
+            <label><input type="radio" name="merge" value="off" id="lb-merge-off"><span>なし</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>持ち時間（1手）</legend>
+          <div class="opts">
+            <label><input type="radio" name="limit" value="15" id="lb-limit-15"><span>15秒</span></label>
+            <label><input type="radio" name="limit" value="30" id="lb-limit-30"><span>30秒</span></label>
+            <label><input type="radio" name="limit" value="60" id="lb-limit-60"><span>60秒</span></label>
+          </div>
+        </fieldset>
+      </form>
+      <p class="note" id="lobbyRulesNote"></p>
+    </section>
+    <button type="button" class="btn primary big" id="lobbyStart">開始</button>
+    <p class="note center" id="lobbyHint" style="margin:0"></p>
+  </section>
 
-    <section class="panel">
-      <h2>ルール</h2>
-      <ul class="rules">
-        <li>最初は両手とも1本。</li>
-        <li>自分の番に、自分の手で相手の手をタッチ。タッチされた手は、タッチした手の本数ぶん増える。</li>
-        <li>5本ぴったりになった手は消える。6本以上になったら1本から数え直し（6本→1本、7本→2本、8本→3本）。設定で「5本以上で消える」ルールにも変えられる。</li>
-        <li>分身：自分の両手の合計を配り直せる。左右を入れ替えるだけの配り方と、片手を0にする配り方はできない。消えた手も分身で復活できる。</li>
-        <li>合成：両手の指を片方の手にまとめられる（1と3→4、2と4→6本なので1本）。まとめた結果で手が消える合成はできない。</li>
-        <li>両手とも消えたら負け。同じ局面が3回出たら引き分け。</li>
-        <li>レート戦は「5本ぴったりで消える・分身あり・合成あり」で、1手30秒。時間切れと投了は負け。</li>
-      </ul>
-    </section>
+  <!-- Rated search -->
+  <section class="screen narrow" id="scrSearch" hidden>
+    <div class="search">
+      <div class="radar" aria-hidden="true"><svg viewBox="0 0 100 130" id="radarHand"></svg></div>
+      <p class="search-t">相手をさがしています</p>
+      <p class="search-s" id="searchTime">0秒</p>
+      <p class="note" id="searchInfo">あなたのレート 1500</p>
+      <button type="button" class="btn" id="netCancel">やめる</button>
+    </div>
+  </section>
+
+  <!-- Game -->
+  <section class="screen" id="scrGame" hidden>
+    <div class="game">
+      <div class="play">
+        <div class="board-wrap">
+          <section class="board" id="board" aria-label="対戦ボード">
+            <p class="boardnote" aria-hidden="true"><span id="date"></span>　日直</p>
+            <div class="opps" id="opps" data-n="1"></div>
+            <div class="strip" aria-live="polite">
+              <p class="turn" id="turn"></p>
+              <p class="msg" id="msg"></p>
+              <p class="clock" id="clock" hidden></p>
+              <p class="eval" id="eval" hidden></p>
+              <div class="splits" id="splits" hidden></div>
+              <button type="button" class="btn primary" id="again" hidden>もう一回</button>
+            </div>
+            <div class="seat me" id="seat0">
+              <div class="hands">
+                <button type="button" class="hand" data-k="0" data-i="0"><svg viewBox="0 0 100 130" aria-hidden="true"></svg><span class="count"></span><span class="badge" hidden></span></button>
+                <button type="button" class="hand" data-k="0" data-i="1"><svg viewBox="0 0 100 130" aria-hidden="true"></svg><span class="count"></span><span class="badge" hidden></span></button>
+              </div>
+              <p class="name"><span class="nm">あなた</span><span class="tag" hidden></span></p>
+            </div>
+          </section>
+          <div class="tray" aria-hidden="true"></div>
+        </div>
+        <div class="controls">
+          <button type="button" class="btn" id="splitBtn" aria-expanded="false">分身</button>
+          <button type="button" class="btn" id="mergeBtn" aria-expanded="false">合成</button>
+          <button type="button" class="btn end" id="resetBtn">最初から</button>
+          <button type="button" class="btn danger end" id="resignBtn" hidden>投了</button>
+          <button type="button" class="btn" id="exitBtn">ホームへ</button>
+        </div>
+      </div>
+      <div class="side-col">
+        <section class="panel" id="roomPanel" hidden>
+          <h2 id="roomTitle">対戦</h2>
+          <ol class="order" id="roomOrder"></ol>
+          <p class="note" id="roomRules"></p>
+        </section>
+        <section class="panel">
+          <h2>記録</h2>
+          <div class="logbox" id="logBox"><ol class="log" id="log"></ol></div>
+        </section>
+        <section class="panel" id="anaPanel">
+          <h2>このルールの解析</h2>
+          <dl class="facts">
+            <div><dt>ルール</dt><dd id="aRule"></dd></div>
+            <div><dt>最初の局面</dt><dd id="aStart"></dd></div>
+            <div><dt>行ける局面</dt><dd id="aReach"></dd></div>
+            <div><dt>内訳</dt><dd id="aSplit"></dd></div>
+          </dl>
+          <p class="note">決着した局面からさかのぼって、全局面の勝ち負けを計算しています（後退解析）。CPU「さいきょう」はこの表を見て指します。</p>
+        </section>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="splash" id="splash" hidden role="dialog" aria-modal="false" aria-labelledby="splashT">
+  <div class="splash-in">
+    <p class="splash-t" id="splashT"></p>
+    <div id="splashB"></div>
+    <p class="splash-s" id="splashS"></p>
   </div>
 </div>
+<p class="toast" id="toast" role="status" hidden></p>
 
 <script>
 // ===== SOLVER-START =====
@@ -484,11 +646,11 @@ function buildSolver(rules){
 
 (() => {
 const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
 const KEY = 'waribashi-settings-v2';
 const NAME_KEY = 'waribashi-name';
 const OPTIONS = {mode:['cpu','2p'], level:['weak','normal','strong'], first:['0','1'], overflow:['wrap','die'], split:['on','off'], merge:['on','off'], hints:['off','on']};
 const DEFAULTS = {mode:'cpu', level:'normal', first:'0', overflow:'wrap', split:'on', merge:'on', hints:'off'};
-const RESET_KEYS = ['mode','first','overflow','split','merge'];
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
 // ===== ONLINE CONFIG: Firebase の firebaseConfig をここに貼る =====
@@ -506,12 +668,19 @@ const FIREBASE_VERSION = '10.12.2';
 const STALE_MS = 6 * 60 * 60 * 1000;
 const RATED_RULES = {overflow:'wrap', split:'on', merge:'on'};
 const RATED_LIMIT = 30;
+const LIMITS = [15, 30, 60];
+const MAX_PLAYERS = 4;
 const START_GRACE = 5000;
+const SPLASH_MS = 2600;
 const QUEUE_FRESH = 40000, HEARTBEAT_MS = 12000, RESCAN_MS = 2500;
 const ELO_K = 32, BASE_RATE = 1500;
 
 const lsGet = k => { try { return localStorage.getItem(k); } catch(e) { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch(e) {} };
+const clone = x => JSON.parse(JSON.stringify(x));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const arr = v => Array.isArray(v) ? v : (v && typeof v === 'object' ? Object.keys(v).sort((a, b) => a - b).map(k => v[k]) : []);
 
 function loadSettings(){
   let o = {};
@@ -520,12 +689,12 @@ function loadSettings(){
   for (const k in OPTIONS) if (OPTIONS[k].includes(o[k])) s[k] = o[k];
   return s;
 }
+let settings = loadSettings();
 const saveSettings = () => lsSet(KEY, JSON.stringify(settings));
 
-let settings = loadSettings();
-const net = {on:false, gen:0, fbPromise:null, fb:null, uid:null, code:null, seat:0, room:null, unsub:[], presRef:null,
-  connected:true, oppOnline:false, busy:false, connecting:false, profile:null, board:null, offset:0,
-  msg:'', err:false, resignArm:0, timeoutKey:''};
+const ui = {screen:'home', resignArm:0, exitArm:0, splashKeys:new Set(), splashTimer:null, toastTimer:null};
+const net = {on:false, gen:0, fbPromise:null, fb:null, uid:null, code:null, seat:-1, room:null, unsub:[], presRef:null,
+  connected:true, busy:false, connecting:false, profile:null, board:null, offset:0, timeoutKey:''};
 const search = {on:false, gen:0, since:0, timers:[], unsub:null, working:false};
 let netQueue = Promise.resolve();
 const counted = new Set();
@@ -533,7 +702,11 @@ const counted = new Set();
 const serverNow = () => Date.now() + (net.offset || 0);
 const myRating = () => BASE_RATE + Math.round(+((net.profile || {}).rp) || 0);
 const ratedGames = p => (+(p && p.rw) || 0) + (+(p && p.rl) || 0) + (+(p && p.rd) || 0);
-const isRated = () => !!(net.on && net.room && net.room.rated);
+const isRated = () => !!(net.on && net.room && net.room.kind === 'rated');
+const isHost = () => !!(net.on && net.room && net.room.host === net.uid);
+const netPlaying = () => !!(net.on && net.room && net.room.status === 'playing' && net.room.state && net.seat >= 0);
+const typedName = () => ($('#netName').value || '').trim().slice(0, 12) || 'ななし';
+const sortedUids = ps => Object.keys(ps || {}).sort((a, b) => (+ps[a].joinedAt || 0) - (+ps[b].joinedAt || 0));
 
 function rules(){
   const r = net.on && net.room && net.room.rules;
@@ -541,108 +714,173 @@ function rules(){
   return {overflow: settings.overflow, split: settings.split === 'on', merge: settings.merge === 'on'};
 }
 const ruleText = r => `${r.overflow === 'die' ? '5本以上で消える' : '5本ぴったりで消える'}／分身${r.split ? 'あり' : 'なし'}／合成${r.merge ? 'あり' : 'なし'}`;
+const roomLimit = room => { const v = +((room && room.rules) || {}).limit; return LIMITS.includes(v) ? v : RATED_LIMIT; };
 const cache = {};
 const solver = () => { const r = rules(), k = `${r.overflow}/${r.split}/${r.merge}`; return cache[k] || (cache[k] = buildSolver(r)); };
-const hintsOn = () => settings.hints === 'on' && !net.on;
+const hintsOn = () => settings.hints === 'on' && !net.on && G && G.n === 2;
 
+// ===================== Game model (2–4 players) =====================
+// S = {n, hands:[[a,b]…], turn, first, ply, game, over, last, log, seen, limit, turnAt, seats?, names?}
 let G = null, sel = null, panel = null, busy = false, cpuTimer = null;
 
-const typedName = () => ($('#netName').value || '').trim().slice(0, 12) || 'ななし';
-const localNames = () => settings.mode === 'cpu' ? ['あなた','CPU'] : ['下の人','上の人'];
-function seatPlayer(s){ const ps = net.room && net.room.players; return ps && ps[s] ? ps[s] : null; }
-function names(){
-  if (!net.on) return localNames();
-  const opp = seatPlayer(1 - net.seat);
-  return ['あなた', opp && opp.name ? String(opp.name) : '相手'];
-}
-const netPlaying = () => !!(net.on && net.room && net.room.state);
-const isHuman = p => net.on ? p === 0 : (settings.mode === '2p' || p === 0);
-const interactive = () => !!G && !G.over && !busy && isHuman(G.turn) && (!net.on || (netPlaying() && !net.busy));
-const stateIdx = p => { const h = G.hands; return idx(h[p][0], h[p][1], h[1-p][0], h[1-p][1]); };
-const currentMoves = () => solver().moves[stateIdx(G.turn)];
-const liveHands = p => [0,1].filter(i => G.hands[p][i] > 0);
+const alive = (S, p) => S.hands[p][0] + S.hands[p][1] > 0;
+const aliveList = S => S.hands.map((h, p) => p).filter(p => alive(S, p));
+function nextAlive(S, p){ for (let k = 1; k <= S.n; k++) { const q = (p + k) % S.n; if (alive(S, q)) return q; } return p; }
 const posKeyOf = S => S.turn + ':' + S.hands.map(h => [...h].sort().join('')).join('|');
-const sourceHand = () => { if (sel !== null) return sel; const l = liveHands(G.turn); return l.length===1 ? l[0] : null; };
-const pick = a => a[Math.floor(Math.random()*a.length)];
 
-function evalChild(next){
-  const s = solver(), r = s.res[next], d = s.dist[next];
-  if (r === -1) return {cls:'win', label:`勝ち ${d+1}手`};
-  if (r === 1) return {cls:'lose', label:`負け ${d+1}手`};
-  return {cls:'draw', label:'引き分け'};
-}
-
-// ----- Game state: plain data, so the same step() runs locally and inside online transactions -----
-function initState(first, game, limit, turnAt){
-  const S = {hands:[[1,1],[1,1]], turn:first, first, ply:0, game, over:null, last:null, log:[], seen:{}, limit:limit || 0, turnAt:turnAt || 0};
+function initState(o){
+  const n = o.n || 2, first = o.first || 0;
+  const S = {n, hands: Array.from({length: n}, () => [1, 1]), turn: first, first, ply: 0, game: o.game || 1,
+    over: null, last: null, log: [], seen: {}, limit: o.limit || 0, turnAt: o.turnAt || 0};
+  if (o.seats) S.seats = o.seats;
+  if (o.names) S.names = o.names;
   S.seen[posKeyOf(S)] = 1;
   return S;
 }
-function step(S0, m, now){
-  const S = JSON.parse(JSON.stringify(S0));
-  const p = S.turn, o = 1 - p;
-  let text;
-  if (m.kind === 'attack') {
-    S.hands[o][m.to] = m.after;
-    const sum = m.before + m.value;
-    text = `${m.value}本の手で${m.before}本の手をタッチ → `
-      + (m.after === 0 ? `${sum}本で消えた` : sum >= 6 ? `${sum}本なので1本から数え直して${m.after}本` : `${m.after}本`);
-  } else if (m.kind === 'merge') {
-    const [a, b] = S.hands[p], sum = a + b, x = m.hands[m.into];
-    S.hands[p] = [...m.hands];
-    text = `合成 ${a}と${b} → ` + (sum >= 6 ? `${sum}本なので1本から数え直して${x}本` : `${x}本`);
-  } else {
-    const b = S.hands[p].join('·');
-    S.hands[p] = [...m.hands];
-    text = `分身 ${b} → ${m.hands.join('·')}`;
+
+function legalMoves(S, r){
+  const p = S.turn, [a, b] = S.hands[p], out = [];
+  for (let q = 0; q < S.n; q++) {
+    if (q === p || !alive(S, q)) continue;
+    for (let f = 0; f < 2; f++) {
+      const v = S.hands[p][f]; if (!v) continue;
+      for (let t = 0; t < 2; t++) {
+        const w = S.hands[q][t]; if (!w) continue;
+        let x = w + v; if (x >= 5) x = r.overflow === 'wrap' ? x - 5 : 0;
+        out.push({kind:'attack', from:f, to:t, target:q, value:v, before:w, after:x});
+      }
+    }
   }
-  S.ply++;
-  S.log = (S.log || []).concat({n:S.ply, p, text}).slice(-80);
-  S.last = {kind:m.kind, p, from: m.from ?? -1, to: m.to ?? -1, into: m.into ?? -1};
-  S.over = null;
-  if (S.hands[o][0] === 0 && S.hands[o][1] === 0) S.over = {type:'win', winner:p};
-  else {
-    S.turn = o;
-    S.seen = S.seen || {};
-    const k = posKeyOf(S);
-    S.seen[k] = (S.seen[k] || 0) + 1;
-    if (S.seen[k] >= 3) S.over = {type:'draw'};
-    if (S.limit) S.turnAt = now || 0;
+  if (r.split) {
+    const s = a + b;
+    for (let x = 1; x <= 4; x++) {
+      const y = s - x; if (y < 1 || y > 4) continue;
+      if ((x === a && y === b) || (x === b && y === a)) continue;
+      out.push({kind:'split', hands:[x, y]});
+    }
   }
-  return S;
-}
-// The database may hand arrays back as objects and drops empty values; rebuild a clean state.
-function normState(r){
-  if (!r || !r.hands) return null;
-  const bit = v => (+v === 1 ? 1 : 0);
-  const hands = [0,1].map(p => [0,1].map(i => { const v = +((r.hands[p] || {})[i]); return v >= 0 && v <= 4 ? v : 0; }));
-  const log = (Array.isArray(r.log) ? r.log : Object.values(r.log || {})).filter(e => e && typeof e.text === 'string');
-  let over = null;
-  if (r.over && r.over.type === 'win') { over = {type:'win', winner:bit(r.over.winner)}; if (typeof r.over.reason === 'string') over.reason = r.over.reason; }
-  else if (r.over && r.over.type === 'draw') over = {type:'draw'};
-  return {hands, turn:bit(r.turn), first:bit(r.first), ply:+r.ply || 0, game:+r.game || 1, over, last:r.last || null, log,
-    seen:r.seen || {}, limit:+r.limit || 0, turnAt:+r.turnAt || 0};
-}
-// Online states use seat numbers; the board always shows "me" as player 0.
-function toLocal(S){
-  if (net.seat === 0) return S;
-  const f = p => 1 - p;
-  return {...S, hands:[S.hands[1], S.hands[0]], turn:f(S.turn), first:f(S.first),
-    over: S.over && S.over.type === 'win' ? {...S.over, winner:f(S.over.winner)} : S.over,
-    last: S.last ? {...S.last, p:f(+S.last.p)} : null,
-    log: S.log.map(e => ({...e, p:f(+e.p)}))};
+  if (r.merge && a > 0 && b > 0) {
+    let x = a + b; if (x >= 5) x = r.overflow === 'wrap' ? x - 5 : 0;
+    if (x > 0) { const into = a >= b ? 0 : 1, h = [0, 0]; h[into] = x; out.push({kind:'merge', hands:h, into}); }
+  }
+  return out;
 }
 
-// Hand drawing: fingers point up, thumb folded across the palm; index → pinky.
+function step(S0, m, now){
+  const S = clone(S0), p = S.turn, e = {n: S.ply + 1, p, k: m.kind};
+  if (m.kind === 'attack') {
+    const q = m.target;
+    S.hands[q][m.to] = m.after;
+    Object.assign(e, {q, v: m.value, b: m.before, a: m.after});
+    if (!alive(S, q)) e.ko = 1;
+  } else if (m.kind === 'merge') {
+    e.f = [...S.hands[p]]; e.x = m.hands[m.into];
+    S.hands[p] = [...m.hands];
+  } else {
+    e.f = [...S.hands[p]]; e.t = [...m.hands];
+    S.hands[p] = [...m.hands];
+  }
+  S.ply++;
+  S.log = (S.log || []).concat(e).slice(-80);
+  S.last = {kind: m.kind, p, from: m.from ?? -1, to: m.to ?? -1, target: m.target ?? -1, into: m.into ?? -1};
+  S.over = null;
+  const alv = aliveList(S);
+  if (alv.length <= 1) { S.over = {type:'win', winner: alv.length ? alv[0] : p}; return S; }
+  S.turn = nextAlive(S, p);
+  S.seen = S.seen || {};
+  const k = posKeyOf(S);
+  S.seen[k] = (S.seen[k] || 0) + 1;
+  if (S.seen[k] >= 3) S.over = {type:'draw'};
+  else if (S.limit) S.turnAt = now || 0;
+  return S;
+}
+
+// Take a player out (resign or time-out). Returns undefined when there is nothing to do.
+function eliminate(S0, q, reason, now){
+  if (S0.over || !alive(S0, q)) return undefined;
+  const S = clone(S0);
+  S.hands[q] = [0, 0];
+  S.ply++;
+  S.log = (S.log || []).concat({n: S.ply, p: q, k: reason}).slice(-80);
+  S.last = {kind: 'out', p: q, from: -1, to: -1, target: -1, into: -1};
+  const alv = aliveList(S);
+  if (alv.length <= 1) { S.over = {type:'win', winner: alv[0], reason, by: q}; return S; }
+  if (S.turn === q) { S.turn = nextAlive(S, q); if (S.limit) S.turnAt = now || 0; }
+  return S;
+}
+
+// The database may hand arrays back as objects and drops empty values; rebuild a clean state with no undefined fields.
+function normState(r){
+  if (!r || !r.hands) return null;
+  const H = arr(r.hands);
+  const n = Math.min(MAX_PLAYERS, Math.max(2, +r.n || H.length || 2));
+  const seat = v => { v = Math.floor(+v); return v >= 0 && v < n ? v : 0; };
+  const hands = Array.from({length: n}, (_, p) => [0, 1].map(i => { const v = +((H[p] || {})[i]); return v >= 0 && v <= 4 ? v : 0; }));
+  const log = arr(r.log).filter(e => e && typeof e.k === 'string').map(e => {
+    const o = {k: e.k};
+    for (const f of ['n','p','q','v','b','a','ko','x']) if (e[f] !== undefined && e[f] !== null) o[f] = +e[f];
+    if (e.f) o.f = arr(e.f).map(Number);
+    if (e.t) o.t = arr(e.t).map(Number);
+    return o;
+  });
+  let over = null;
+  if (r.over && r.over.type === 'win') {
+    over = {type:'win', winner: seat(r.over.winner)};
+    if (typeof r.over.reason === 'string') over.reason = r.over.reason;
+    if (r.over.by !== undefined && r.over.by !== null) over.by = seat(r.over.by);
+  } else if (r.over && r.over.type === 'draw') over = {type:'draw'};
+  const L = r.last;
+  const num = v => (v === undefined || v === null || isNaN(+v)) ? -1 : +v;
+  const last = L ? {kind: String(L.kind || ''), p: seat(L.p), from: num(L.from), to: num(L.to), target: num(L.target), into: num(L.into)} : null;
+  const S = {n, hands, turn: seat(r.turn), first: seat(r.first), ply: +r.ply || 0, game: +r.game || 1, over, last, log,
+    seen: r.seen || {}, limit: +r.limit || 0, turnAt: +r.turnAt || 0};
+  const seats = arr(r.seats).map(String), names = arr(r.names).map(String);
+  if (seats.length) S.seats = seats;
+  if (names.length) S.names = names;
+  return S;
+}
+
+// Online states use seat numbers; the board always shows "me" as player 0 and the rest in turn order.
+function toLocal(S, seat){
+  const n = S.n, R = k => (seat + k) % n, Lc = p => (p - seat + n) % n;
+  const over = S.over && S.over.type === 'win' ? Object.assign({}, S.over, {winner: Lc(S.over.winner)}, S.over.by !== undefined ? {by: Lc(S.over.by)} : {}) : S.over;
+  return {...S,
+    hands: Array.from({length: n}, (_, k) => [...S.hands[R(k)]]),
+    names: S.names ? Array.from({length: n}, (_, k) => S.names[R(k)] || '') : null,
+    seats: S.seats ? Array.from({length: n}, (_, k) => S.seats[R(k)]) : null,
+    turn: Lc(S.turn), first: Lc(S.first), over,
+    last: S.last ? {...S.last, p: Lc(S.last.p), target: S.last.target >= 0 ? Lc(S.last.target) : -1} : null,
+    log: S.log.map(e => Object.assign({}, e, {p: Lc(e.p)}, e.q !== undefined ? {q: Lc(e.q)} : {}))};
+}
+
+function names(){
+  if (net.on && G && G.names) return G.names.map((x, k) => k === 0 ? 'あなた' : (x || '相手'));
+  return settings.mode === 'cpu' ? ['あなた', 'CPU'] : ['下の人', '上の人'];
+}
+
+function logText(e, nm){
+  if (e.k === 'attack') {
+    const sum = e.b + e.v;
+    const res = e.a === 0 ? `${sum}本で消えた` : sum >= 6 ? `${sum}本なので${e.a}本` : `${e.a}本`;
+    return `${nm[e.q]}の${e.b}本に${e.v}本でタッチ → ${res}` + (e.ko && G && G.n > 2 ? `（${nm[e.q]}脱落）` : '');
+  }
+  if (e.k === 'merge') { const sum = e.f[0] + e.f[1]; return `合成 ${e.f[0]}と${e.f[1]} → ` + (sum >= 6 ? `${sum}本なので${e.x}本` : `${e.x}本`); }
+  if (e.k === 'split') return `分身 ${e.f.join('·')} → ${e.t.join('·')}`;
+  if (e.k === 'resign') return '投了';
+  if (e.k === 'time') return '時間切れ';
+  return '';
+}
+
+// ===================== Board =====================
 const FINGERS = [{x:61,top:14},{x:46,top:8},{x:31,top:14},{x:16,top:28}];
 const XF = [['', 'matrix(-1 0 0 1 100 0)'], ['matrix(1 0 0 -1 0 130)', 'rotate(180 50 65)']];
-function handSVG(n, p, i){
+function handSVG(n, top, i){
   let f = '';
   FINGERS.forEach((g, k) => {
-    const top = k < n ? g.top : (k===3 ? 50 : 46);
-    f += `<rect class="fg" x="${g.x}" y="${top}" width="13.5" height="${72-top}" rx="6.75"/>`;
+    const y = k < n ? g.top : (k === 3 ? 50 : 46);
+    f += `<rect class="fg" x="${g.x}" y="${y}" width="13.5" height="${72 - y}" rx="6.75"/>`;
   });
-  return `<g transform="${XF[p][i]}"><g filter="url(#chalk)">`
+  return `<g transform="${XF[top ? 1 : 0][i]}"><g filter="url(#chalk)">`
     + `<rect class="pm" x="27" y="104" width="40" height="26" rx="8"/>`
     + `<rect class="pm" x="13" y="56" width="68" height="58" rx="20"/>`
     + f
@@ -650,40 +888,75 @@ function handSVG(n, p, i){
     + `</g></g>`;
 }
 
-const handBtns = [[],[]];
-document.querySelectorAll('.hand').forEach(b => {
-  const p = +b.dataset.p, i = +b.dataset.i;
-  handBtns[p][i] = b;
-  b.addEventListener('click', () => onHand(p, i));
-});
+const handBtns = [$$('#seat0 .hand')];
+handBtns[0].forEach((b, i) => b.addEventListener('click', () => onHand(0, i)));
+let boardN = 0;
+function ensureBoard(n){
+  if (boardN === n) return;
+  boardN = n;
+  $('.boardnote').hidden = n > 2;
+  const opps = $('#opps');
+  opps.innerHTML = '';
+  opps.dataset.n = n - 1;
+  handBtns.length = 1;
+  for (let k = 1; k < n; k++) {
+    const seat = document.createElement('div');
+    seat.className = `seat opp c${k}`;
+    seat.id = 'seat' + k;
+    seat.innerHTML = '<p class="name"><span class="nm"></span><span class="tag" hidden></span></p><div class="hands">'
+      + [0, 1].map(i => `<button type="button" class="hand" data-k="${k}" data-i="${i}"><svg viewBox="0 0 100 130" aria-hidden="true"></svg><span class="count"></span><span class="badge" hidden></span></button>`).join('')
+      + '</div>';
+    opps.append(seat);
+    handBtns[k] = [...seat.querySelectorAll('.hand')];
+    handBtns[k].forEach((b, i) => b.addEventListener('click', () => onHand(k, i)));
+  }
+}
 
-// ----- Local play -----
+// ===================== Local play (CPU / same device) =====================
+const isHuman = k => net.on ? k === 0 : (settings.mode === '2p' || k === 0);
+const interactive = () => !!G && !G.over && !busy && isHuman(G.turn) && (!net.on || (netPlaying() && !net.busy && alive(G, 0)));
+const liveHands = k => [0, 1].filter(i => G.hands[k][i] > 0);
+const sourceHand = () => { if (sel !== null) return sel; const l = liveHands(G.turn); return l.length === 1 ? l[0] : null; };
+const stateIdx = p => { const h = G.hands; return idx(h[p][0], h[p][1], h[1-p][0], h[1-p][1]); };
+
+function evalChild(next){
+  const s = solver(), r = s.res[next], d = s.dist[next];
+  if (r === -1) return {cls:'win', label:`勝ち ${d+1}手`};
+  if (r === 1) return {cls:'lose', label:`負け ${d+1}手`};
+  return {cls:'draw', label:'引き分け'};
+}
+// The solver's version of a move, for hints in 2-player local games.
+function solverMove(m){
+  const ms = solver().moves[stateIdx(G.turn)] || [];
+  if (m.kind === 'attack') return ms.find(x => x.kind === 'attack' && x.from === m.from && x.to === m.to);
+  if (m.kind === 'merge') return ms.find(x => x.kind === 'merge');
+  return ms.find(x => x.kind === 'split' && x.hands[0] === m.hands[0] && x.hands[1] === m.hands[1]);
+}
+
 function newGame(){
-  if (net.on) return;
   clearTimeout(cpuTimer); cpuTimer = null; busy = false;
-  G = initState(+settings.first, 1);
+  G = initState({n: 2, first: +settings.first});
   sel = null; panel = null;
   render(); maybeCpu();
 }
-
 function maybeCpu(){
-  if (net.on || !G || G.over || settings.mode !== 'cpu' || G.turn !== 1) return;
+  if (net.on || !G || G.over || settings.mode !== 'cpu' || G.turn !== 1 || ui.screen !== 'game') return;
   clearTimeout(cpuTimer);
-  cpuTimer = setTimeout(() => { cpuTimer = null; doMove(chooseCpuMove()); }, 700);
+  cpuTimer = setTimeout(() => { cpuTimer = null; if (!net.on && ui.screen === 'game') doMove(chooseCpuMove()); }, 700);
 }
-
 function chooseCpuMove(){
-  const s = solver(), ms = currentMoves();
-  const score = m => s.res[m.next]===-1 ? 1000 - s.dist[m.next] : s.res[m.next]===1 ? -1000 + s.dist[m.next] : 0;
+  const s = solver(), ms = solver().moves[stateIdx(G.turn)];
+  const score = m => s.res[m.next] === -1 ? 1000 - s.dist[m.next] : s.res[m.next] === 1 ? -1000 + s.dist[m.next] : 0;
   const best = () => {
-    let top = -Infinity, arr = [];
-    for (const m of ms) { const v = score(m); if (v > top) { top = v; arr = [m]; } else if (v === top) arr.push(m); }
-    return pick(arr);
+    let top = -Infinity, list = [];
+    for (const m of ms) { const v = score(m); if (v > top) { top = v; list = [m]; } else if (v === top) list.push(m); }
+    return pick(list);
   };
-  if (settings.level === 'strong') return best();
-  if (settings.level === 'normal') return Math.random() < 0.6 ? best() : pick(ms);
-  const kill = ms.filter(m => s.res[m.next]===-1 && s.dist[m.next]===0);
-  return kill.length && Math.random() < 0.7 ? pick(kill) : pick(ms);
+  let m;
+  if (settings.level === 'strong') m = best();
+  else if (settings.level === 'normal') m = Math.random() < 0.6 ? best() : pick(ms);
+  else { const kill = ms.filter(x => s.res[x.next] === -1 && s.dist[x.next] === 0); m = kill.length && Math.random() < 0.7 ? pick(kill) : pick(ms); }
+  return m && {...m, target: 1 - G.turn};
 }
 
 async function doMove(m){
@@ -694,14 +967,14 @@ async function doMove(m){
   busy = false;
   if (online) { if (gen === net.gen) await netMove(m); else render(); return; }
   if (net.on || G !== g0) { render(); return; }
-  G = step(G, m); render(); maybeCpu();
+  G = step(G, m, 0); render(); maybeCpu();
 }
 
 function animateMove(m){
-  if (reduceMotion.matches) return Promise.resolve();
-  const p = G.turn, o = 1 - p;
+  if (reduceMotion.matches || !G) return Promise.resolve();
+  const p = G.turn;
   if (m.kind === 'attack') {
-    const a = handBtns[p][m.from], t = handBtns[o][m.to];
+    const a = handBtns[p] && handBtns[p][m.from], t = handBtns[m.target] && handBtns[m.target][m.to];
     if (!a || !t) return Promise.resolve();
     const ra = a.getBoundingClientRect(), rt = t.getBoundingClientRect();
     const dx = (rt.left + rt.width/2 - (ra.left + ra.width/2)) * 0.6;
@@ -716,37 +989,35 @@ function animateMove(m){
     return anim.finished.finally(() => { a.style.zIndex = ''; });
   }
   if (m.kind === 'merge') {
-    const a = handBtns[p][1 - m.into], t = handBtns[p][m.into];
+    const a = handBtns[p] && handBtns[p][1 - m.into], t = handBtns[p] && handBtns[p][m.into];
     if (!a || !t) return Promise.resolve();
     const dx = (t.getBoundingClientRect().left - a.getBoundingClientRect().left) * 0.8;
     a.style.zIndex = 2;
-    const anim = a.animate([
-      {transform:'translate(0,0)'},
-      {transform:`translate(${dx}px,0) scale(.9)`, offset:.55},
-      {transform:'translate(0,0)'}
-    ], {duration:480, easing:'cubic-bezier(.25,.8,.3,1)'});
+    const anim = a.animate([{transform:'translate(0,0)'},{transform:`translate(${dx}px,0) scale(.9)`, offset:.55},{transform:'translate(0,0)'}],
+      {duration:480, easing:'cubic-bezier(.25,.8,.3,1)'});
     return anim.finished.finally(() => { a.style.zIndex = ''; });
   }
+  if (m.kind !== 'split' || !handBtns[p]) return Promise.resolve();
   const lift = p === 0 ? -12 : 12;
   return Promise.all(handBtns[p].map((b, i) => b.animate(
     [{transform:'none'},{transform:`translateY(${lift}px)`},{transform:'none'}],
     {duration:360, delay:i*70, easing:'ease-out'}).finished));
 }
 
-function onHand(p, i){
+function onHand(k, i){
   if (!interactive()) return;
-  if (p === G.turn) {
-    if (G.hands[p][i] === 0) return;
+  if (k === G.turn) {
+    if (!G.hands[k][i]) return;
     sel = sel === i ? null : i; panel = null;
     render(); return;
   }
   const src = sourceHand();
-  if (src === null || G.hands[p][i] === 0) return;
-  const m = currentMoves().find(m => m.kind==='attack' && m.from===src && m.to===i);
+  if (src === null || !G.hands[k][i]) return;
+  const m = legalMoves(G, rules()).find(x => x.kind === 'attack' && x.from === src && x.to === i && x.target === k);
   if (m) doMove(m);
 }
 
-// ----- Online (Firebase Realtime Database + anonymous sign-in) -----
+// ===================== Online: Firebase =====================
 const fail = msg => Object.assign(new Error(msg), {userMessage: msg});
 function errText(e, fallback){
   const c = String((e && (e.code || e.message)) || '');
@@ -755,7 +1026,6 @@ function errText(e, fallback){
   if (/network|offline|unavailable/i.test(c)) return 'インターネットにつながっていません';
   return (e && e.userMessage) || fallback;
 }
-function setNetMsg(msg, err){ net.msg = msg || ''; net.err = !!err; renderNet(); }
 
 function loadFirebase(){
   if (!FIREBASE_CONFIG) return Promise.reject(fail('オンライン対戦の設定がまだです'));
@@ -780,12 +1050,11 @@ function loadFirebase(){
   }
   return net.fbPromise;
 }
-
 // Listeners that live for the whole visit: clock offset, my profile, the ranking.
 function watchGlobal(fb){
   const db = fb.db;
   fb.onValue(fb.ref(db, '.info/serverTimeOffset'), s => { net.offset = +s.val() || 0; });
-  fb.onValue(fb.ref(db, 'players/' + net.uid), s => { net.profile = s.val(); renderNet(); }, () => {});
+  fb.onValue(fb.ref(db, 'players/' + net.uid), s => { net.profile = s.val(); renderChrome(); }, () => {});
   fb.onValue(fb.query(fb.ref(db, 'players'), fb.orderByChild('rp'), fb.limitToLast(50)),
     s => { net.board = s.val() || {}; renderRank(); }, () => { net.board = {}; renderRank(); });
 }
@@ -795,89 +1064,79 @@ async function createRoomRecord(extra){
   const fb = net.fb;
   for (let t = 0; t < 12; t++) {
     const code = String(1000 + Math.floor(Math.random() * 9000));
-    const room = Object.assign({createdAt: Date.now()}, extra);
+    const room = Object.assign({createdAt: Date.now(), host: net.uid}, extra);
     const res = await fb.runTransaction(fb.ref(fb.db, 'rooms/' + code), cur => {
       if (cur === null || !cur.createdAt || Date.now() - cur.createdAt > STALE_MS) return room;
       return undefined;
     });
     const v = res.snapshot.val();
-    if (res.committed && v && v.createdAt === room.createdAt && v.players && v.players[0] && v.players[0].uid === net.uid) return code;
+    if (res.committed && v && v.createdAt === room.createdAt && v.host === net.uid) return code;
   }
   throw fail('部屋を作れませんでした。もう一度試してね');
 }
 
 async function netCreate(){
   if (net.connecting || net.on) return;
-  net.connecting = true; setNetMsg('部屋を作っています…');
+  net.connecting = true; renderChrome();
   try {
     const fb = await loadFirebase();
     if (search.on) await cancelSearch();
     lsSet(NAME_KEY, typedName()); saveName(fb);
-    const r = rules();
-    const code = await createRoomRecord({
-      rules: {overflow: r.overflow, split: r.split ? 'on' : 'off', merge: r.merge ? 'on' : 'off'},
-      players: {0: {uid: net.uid, name: typedName()}}});
-    setNetMsg('');
-    attach(code, 0);
-  } catch(e) { setNetMsg(errText(e, '部屋を作れませんでした'), true); }
-  finally { net.connecting = false; renderNet(); }
+    const code = await createRoomRecord({kind:'custom', status:'lobby', games:0,
+      rules: {overflow: settings.overflow, split: settings.split, merge: settings.merge, limit: 30},
+      players: {[net.uid]: {name: typedName(), joinedAt: Date.now()}}});
+    attach(code);
+  } catch(e) { toast(errText(e, '部屋を作れませんでした'), true); }
+  finally { net.connecting = false; renderChrome(); }
 }
 
 async function netJoin(raw){
   const code = String(raw || '').replace(/\D/g, '').slice(0, 4);
-  if (code.length !== 4) { setNetMsg('部屋番号は4桁の数字です', true); return; }
+  if (code.length !== 4) { toast('部屋番号は4桁の数字です', true); return; }
   if (net.connecting || net.on) return;
-  net.connecting = true; setNetMsg('部屋に入っています…');
+  net.connecting = true; renderChrome();
   try {
     const fb = await loadFirebase();
     if (search.on) await cancelSearch();
     lsSet(NAME_KEY, typedName()); saveName(fb);
-    const room = (await fb.get(fb.ref(fb.db, 'rooms/' + code))).val();
+    const me = {name: typedName(), joinedAt: Date.now()};
+    const res = await fb.runTransaction(fb.ref(fb.db, 'rooms/' + code), cur => {
+      if (cur === null) return null;
+      const ps = cur.players || {};
+      if (ps[net.uid]) return undefined;
+      if (cur.kind !== 'custom' || cur.status !== 'lobby' || Object.keys(ps).length >= MAX_PLAYERS) return undefined;
+      cur.players = Object.assign({}, ps, {[net.uid]: me});
+      return cur;
+    });
+    const room = res.snapshot.val();
     if (!room || !room.players) throw fail(`${code} の部屋は見つかりません`);
-    const ps = room.players;
-    let seat;
-    if (ps[0] && ps[0].uid === net.uid) seat = 0;
-    else if (ps[1] && ps[1].uid === net.uid) seat = 1;
-    else if (ps[1]) throw fail('その部屋はもう2人そろっています');
-    else {
-      const me = {uid: net.uid, name: typedName()};
-      const res = await fb.runTransaction(fb.ref(fb.db, `rooms/${code}/players/1`), cur => {
-        if (cur === null) return me;
-        return cur.uid === net.uid ? cur : undefined;
-      });
-      const got = res.snapshot.val();
-      if (!res.committed || !got || got.uid !== net.uid) throw fail('その部屋はもう2人そろっています');
-      seat = 1;
+    if (!room.players[net.uid]) {
+      if (room.status !== 'lobby' || room.kind !== 'custom') throw fail('その部屋はもう始まっています');
+      throw fail(`その部屋は満員です（${MAX_PLAYERS}人まで）`);
     }
-    if (seat === 1) {
-      await fb.runTransaction(fb.ref(fb.db, `rooms/${code}/state`), cur => cur === null ? initState(Math.random() < .5 ? 0 : 1, 1) : undefined);
-    }
-    setNetMsg('');
-    attach(code, seat);
-  } catch(e) { setNetMsg(errText(e, '部屋に入れませんでした'), true); }
-  finally { net.connecting = false; renderNet(); }
+    attach(code);
+  } catch(e) { toast(errText(e, '部屋に入れませんでした'), true); setUrlRoom(null); }
+  finally { net.connecting = false; renderChrome(); }
 }
 
-function attach(code, seat){
+function attach(code){
   detach();
   const gen = ++net.gen, fb = net.fb, db = fb.db;
-  Object.assign(net, {on:true, code, seat, room:null, busy:false, oppOnline:false, connected:true, resignArm:0, timeoutKey:''});
+  Object.assign(net, {on:true, code, seat:-1, room:null, busy:false, connected:true, timeoutKey:''});
   clearTimeout(cpuTimer); cpuTimer = null; busy = false;
-  G = initState(0, 0); sel = null; panel = null;
+  G = null; sel = null; panel = null; ui.resignArm = 0; ui.exitArm = 0;
   setUrlRoom(code);
   const presRef = fb.ref(db, `rooms/${code}/online/${net.uid}`);
   net.presRef = presRef;
   const watch = (path, onVal) => net.unsub.push(fb.onValue(fb.ref(db, path),
     s => { if (gen === net.gen) onVal(s.val()); },
-    e => { if (gen === net.gen) setNetMsg(errText(e, 'データを読めませんでした'), true); }));
+    e => { if (gen === net.gen) toast(errText(e, 'データを読めませんでした'), true); }));
   watch('.info/connected', v => {
     net.connected = v === true;
     if (net.connected) fb.onDisconnect(presRef).remove().then(() => fb.set(presRef, true)).catch(() => {});
     render();
   });
   watch('rooms/' + code, onRoom);
-  render();
-  try { $('#board').scrollIntoView({behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'center'}); } catch(e) {}
 }
 
 function detach(){
@@ -893,37 +1152,70 @@ function detach(){
   netQueue = Promise.resolve();
 }
 
-function leaveRoom(msg){
+// Leave the room for good: resign if still playing, then take my name off the member list.
+async function leaveRoom(msg){
+  if (!net.on) { goHome(); if (msg) toast(msg, true); return; }
+  const fb = net.fb, code = net.code, uid = net.uid;
+  if (netPlaying() && G && !G.over && alive(G, 0)) {
+    const res = await netResign();
+    if (res && res.committed && isRated()) await applyRating(normState(res.snapshot.val()));
+  }
   detach();
-  Object.assign(net, {on:false, code:null, room:null, seat:0, busy:false, oppOnline:false, resignArm:0});
+  Object.assign(net, {on:false, code:null, room:null, seat:-1, busy:false});
+  G = null;
   setUrlRoom(null);
-  busy = false;
-  newGame();
-  setNetMsg(msg || '', !!msg);
+  goHome();
+  if (msg) toast(msg, true);
+  fb.runTransaction(fb.ref(fb.db, 'rooms/' + code), cur => {
+    if (cur === null) return null;
+    const ps = Object.assign({}, cur.players || {});
+    if (!ps[uid]) return undefined;
+    delete ps[uid];
+    const rest = sortedUids(ps);
+    if (!rest.length) return null;
+    cur.players = ps;
+    if (cur.host === uid) cur.host = rest[0];
+    if (cur.online) delete cur.online[uid];
+    return cur;
+  }).catch(() => {});
+}
+
+// Drop the room view after the room vanished or I was removed (no writes).
+function dropRoom(msg){
+  detach();
+  Object.assign(net, {on:false, code:null, room:null, seat:-1, busy:false});
+  G = null;
+  setUrlRoom(null);
+  goHome();
+  if (msg) toast(msg, true);
 }
 
 function onRoom(room){
-  if (!room) { leaveRoom('部屋がなくなりました'); return; }
-  const mine = room.players && room.players[net.seat];
-  if (!mine || mine.uid !== net.uid) { leaveRoom('この部屋には入れなくなりました'); return; }
+  if (!room) { dropRoom('部屋がなくなりました'); return; }
   net.room = room;
-  const opp = room.players[1 - net.seat];
-  net.oppOnline = !!(opp && room.online && room.online[opp.uid]);
-  const S = normState(room.state);
-  if (S) {
-    if (room.rated) applyRating(S); else countFree(S);
-    const L = toLocal(S), gen = net.gen;
-    netQueue = netQueue.then(() => applyNet(L, gen)).catch(() => {});
-  } else {
-    G = initState(0, 0);
+  const ps = room.players || {};
+  if (room.status !== 'playing') {
+    if (!ps[net.uid]) { dropRoom('部屋から外れました'); return; }
+    net.seat = -1; G = null;
+    setScreen('lobby');
+    return;
   }
+  const S = normState(room.state);
+  const seat = S && S.seats ? S.seats.indexOf(net.uid) : -1;
+  if (!S || seat < 0) { dropRoom('この試合には入っていません'); return; }
+  net.seat = seat;
+  if (room.kind === 'rated') applyRating(S); else countFree(S);
+  maybeSplash(room, S);
+  const L = toLocal(S, seat), gen = net.gen;
+  if (ui.screen !== 'game') { G = L; sel = null; panel = null; setScreen('game'); }
+  else netQueue = netQueue.then(() => applyNet(L, gen)).catch(() => {});
   render();
 }
 
 async function applyNet(L, gen){
   if (gen !== net.gen) return;
   const prev = G;
-  if (prev && L.game === prev.game && L.ply === prev.ply + 1 && L.last && L.last.p === 1 && prev.turn === 1) {
+  if (prev && L.game === prev.game && L.n === prev.n && L.ply === prev.ply + 1 && L.last && L.last.p !== 0 && prev.turn === L.last.p) {
     busy = true; sel = null; panel = null; render();
     try { await animateMove(L.last); } catch(e) {}
     busy = false;
@@ -937,60 +1229,83 @@ async function stateTx(fn, failMsg){
   const fb = net.fb, gen = net.gen;
   net.busy = true; render();
   let res = null;
-  try { res = await fb.runTransaction(fb.ref(fb.db, `rooms/${net.code}/state`), cur => {
-    if (cur === null) return null;
-    const S = normState(cur);
-    return S ? fn(S) : undefined;
-  }); }
-  catch(e) { if (gen === net.gen && failMsg) setNetMsg(errText(e, failMsg), true); }
+  try {
+    res = await fb.runTransaction(fb.ref(fb.db, `rooms/${net.code}/state`), cur => {
+      if (cur === null) return null;
+      const S = normState(cur);
+      return S ? fn(S) : undefined;
+    });
+  } catch(e) { if (gen === net.gen && failMsg) toast(errText(e, failMsg), true); }
   if (gen === net.gen) { net.busy = false; render(); }
   return res;
 }
 
-async function netMove(m){
-  const seat = net.seat, expect = G.ply, game = G.game;
-  const res = await stateTx(S => {
+function netMove(m){
+  const seat = net.seat, expect = G.ply, game = G.game, n = G.n;
+  const rm = Object.assign({}, m, m.kind === 'attack' ? {target: (seat + m.target) % n} : {});
+  return stateTx(S => {
     if (S.over || S.turn !== seat || S.ply !== expect || S.game !== game) return undefined;
-    return step(S, m, serverNow());
-  }, '手を送れませんでした。電波を確認してね');
-  if (res && !res.committed && net.on && G && !G.over) setNetMsg('その手は間に合いませんでした', true);
+    return step(S, rm, serverNow());
+  }, '手を送れませんでした。電波を確認してね').then(res => {
+    if (res && !res.committed && net.on && G && !G.over) toast('その手は間に合いませんでした', true);
+  });
 }
-
 function netResign(){
   const seat = net.seat;
-  return stateTx(S => {
-    if (S.over) return undefined;
-    S.over = {type:'win', winner:1 - seat, reason:'resign'};
-    S.log = S.log.concat({n:S.ply, p:seat, text:'投了'}).slice(-80);
-    return S;
-  }, '投了を送れませんでした');
+  return stateTx(S => eliminate(S, seat, 'resign', serverNow()), '投了を送れませんでした');
 }
-
-function claimTimeout(){
+function claimTimeout(ply, turn){
   return stateTx(S => {
-    if (S.over || !S.limit || serverNow() < S.turnAt + S.limit * 1000 + 1500) return undefined;
-    S.over = {type:'win', winner:1 - S.turn, reason:'time'};
-    S.log = S.log.concat({n:S.ply, p:S.turn, text:'時間切れ'}).slice(-80);
-    return S;
+    if (S.over || !S.limit || S.ply !== ply || S.turn !== turn || serverNow() < S.turnAt + S.limit * 1000 + 1500) return undefined;
+    return eliminate(S, S.turn, 'time', serverNow());
   }).then(res => { if (!res || !res.committed) setTimeout(() => { net.timeoutKey = ''; }, 1500); });
 }
 
-async function netRematch(){
-  const fb = net.fb, seat = net.seat, gen = net.gen;
+async function roomTx(fn, failMsg){
+  const fb = net.fb, gen = net.gen;
   net.busy = true; render();
-  try {
-    await fb.runTransaction(fb.ref(fb.db, 'rooms/' + net.code), cur => {
-      if (cur === null) return null;
-      const S = normState(cur.state);
-      if (!S || !S.over) return undefined;
-      const rm = Object.assign({}, cur.rematch || {});
-      rm[seat] = true;
-      if (rm[0] && rm[1]) { cur.state = initState(1 - S.first, S.game + 1); cur.rematch = null; }
-      else cur.rematch = rm;
-      return cur;
-    });
-  } catch(e) { if (gen === net.gen) setNetMsg(errText(e, '送れませんでした。電波を確認してね'), true); }
+  let res = null;
+  try { res = await fb.runTransaction(fb.ref(fb.db, 'rooms/' + net.code), cur => cur === null ? null : fn(cur)); }
+  catch(e) { if (gen === net.gen) toast(errText(e, failMsg), true); }
   if (gen === net.gen) { net.busy = false; render(); }
+  return res;
+}
+function startGame(){
+  const me = net.uid;
+  return roomTx(cur => {
+    if (cur.host !== me || cur.status !== 'lobby') return undefined;
+    const ps = cur.players || {}, uids = shuffle(Object.keys(ps));
+    if (uids.length < 2) return undefined;
+    const game = (+cur.games || 0) + 1;
+    cur.games = game;
+    cur.status = 'playing';
+    cur.state = initState({n: uids.length, seats: uids, names: uids.map(u => String(ps[u].name || 'ななし').slice(0, 12)),
+      game, limit: roomLimit(cur), turnAt: serverNow() + START_GRACE});
+    return cur;
+  }, '開始できませんでした');
+}
+function backToLobby(){
+  const me = net.uid;
+  return roomTx(cur => {
+    if (cur.host !== me || cur.status !== 'playing') return undefined;
+    cur.status = 'lobby';
+    cur.state = null;
+    return cur;
+  }, 'ロビーにもどれませんでした');
+}
+function kick(uid){
+  const me = net.uid;
+  return roomTx(cur => {
+    if (cur.host !== me || cur.status !== 'lobby' || !cur.players || !cur.players[uid] || uid === me) return undefined;
+    delete cur.players[uid];
+    if (cur.online) delete cur.online[uid];
+    return cur;
+  }, '外せませんでした');
+}
+function setLobbyRule(key, value){
+  if (!isHost()) return;
+  const fb = net.fb;
+  fb.update(fb.ref(fb.db, `rooms/${net.code}/rules`), {[key]: key === 'limit' ? +value : value}).catch(e => toast(errText(e, 'ルールを変えられませんでした'), true));
 }
 
 function countFree(S){
@@ -1005,41 +1320,84 @@ function countFree(S){
 
 // Elo rating from the ratings both players had when the match was made.
 function ratingChange(room, S, seat){
-  const ps = room.players || {};
-  const rm = Math.round(+(ps[seat] && ps[seat].rating)) || BASE_RATE;
-  const ro = Math.round(+(ps[1 - seat] && ps[1 - seat].rating)) || BASE_RATE;
+  const ps = room.players || {}, seats = S.seats || [];
+  const rOf = s => Math.round(+((ps[seats[s]] || {}).rating)) || BASE_RATE;
+  const rm = rOf(seat), ro = rOf(1 - seat);
   const score = S.over.type === 'draw' ? 0.5 : S.over.winner === seat ? 1 : 0;
   const expect = 1 / (1 + Math.pow(10, (ro - rm) / 400));
   const delta = Math.round(ELO_K * (score - expect));
   return {from: rm, to: rm + delta, delta, score};
 }
-
 // Each player applies only their own rating, once per match; the room keeps a flag so a reload can't apply it twice.
 async function applyRating(S){
-  if (!S.over || S.game !== 1 || !net.room) return;
+  if (!S || !S.over || !net.room || net.room.kind !== 'rated') return;
   const key = `rated:${net.code}:${net.room.createdAt}`;
   if (counted.has(key)) return;
   counted.add(key);
-  const fb = net.fb, code = net.code, seat = net.seat, room = net.room;
+  const fb = net.fb, code = net.code, seat = net.seat, room = net.room, uid = net.uid;
   try {
-    const res = await fb.runTransaction(fb.ref(fb.db, `rooms/${code}/applied/${seat}`), cur => cur ? undefined : true);
+    const res = await fb.runTransaction(fb.ref(fb.db, `rooms/${code}/applied/${uid}`), cur => cur ? undefined : true);
     if (!res.committed) return;
     const d = ratingChange(room, S, seat);
     const field = d.score === 1 ? 'rw' : d.score === 0 ? 'rl' : 'rd';
-    const me = room.players[seat];
-    await fb.update(fb.ref(fb.db, 'players/' + net.uid), {rp: fb.increment(d.delta), [field]: fb.increment(1), name: String(me.name || typedName())});
+    await fb.update(fb.ref(fb.db, 'players/' + uid), {rp: fb.increment(d.delta), [field]: fb.increment(1), name: typedName()});
   } catch(e) {}
 }
 
-// ----- Matchmaking: a shared queue; whoever finds a partner makes the room and marks both entries in one transaction -----
+function maybeSplash(room, S){
+  const key = `${net.code}:${room.createdAt}:${S.game}`;
+  if (S.ply > 0 || S.over || ui.splashKeys.has(key)) return;
+  ui.splashKeys.add(key);
+  const L = toLocal(S, net.seat), nm = L.names.map((x, k) => k === 0 ? 'あなた' : x);
+  const body = $('#splashB');
+  body.innerHTML = '';
+  if (room.kind === 'rated') {
+    const ps = room.players || {}, rate = k => Math.round(+((ps[L.seats[k]] || {}).rating)) || BASE_RATE;
+    const vs = document.createElement('div');
+    vs.className = 'vs';
+    vs.innerHTML = '<div><b></b><span></span></div><span class="vs-x">VS</span><div><b></b><span></span></div>';
+    const cells = vs.querySelectorAll('div');
+    [0, 1].forEach(k => { cells[k].querySelector('b').textContent = nm[k]; cells[k].querySelector('span').textContent = `レート ${rate(k)}`; });
+    body.append(vs);
+    showSplash('マッチングしました！', `先手は${nm[L.turn]}。1手${S.limit}秒`);
+  } else {
+    const ol = document.createElement('ol');
+    ol.className = 'order';
+    for (let s = 0; s < S.n; s++) {
+      const k = (s - net.seat + S.n) % S.n;
+      const li = document.createElement('li');
+      li.innerHTML = '<span class="sn"></span><span class="who"></span>';
+      li.querySelector('.sn').textContent = s + 1;
+      li.querySelector('.who').textContent = nm[k];
+      ol.append(li);
+    }
+    body.append(ol);
+    showSplash('開始しました！', `${nm[L.turn]}から。1手${S.limit}秒`);
+  }
+}
+function showSplash(title, sub){
+  $('#splashT').textContent = title;
+  $('#splashS').textContent = sub;
+  const el = $('#splash');
+  el.hidden = false;
+  const inner = el.querySelector('.splash-in');
+  inner.style.animation = 'none'; void inner.offsetWidth; inner.style.animation = '';
+  clearTimeout(ui.splashTimer);
+  ui.splashTimer = setTimeout(hideSplash, SPLASH_MS);
+}
+function hideSplash(){ clearTimeout(ui.splashTimer); $('#splash').hidden = true; }
+
+// ===================== Matchmaking =====================
+// A shared queue; whoever finds a partner makes the room and marks both entries in one transaction.
 async function startSearch(){
   if (search.on || net.on || net.connecting) return;
-  net.connecting = true; setNetMsg('');
+  setScreen('search');
+  net.connecting = true;
   let fb;
   try { fb = await loadFirebase(); }
-  catch(e) { setNetMsg(errText(e, 'オンライン機能を使えませんでした'), true); return; }
-  finally { net.connecting = false; renderNet(); }
-  if (search.on || net.on) return;
+  catch(e) { net.connecting = false; goHome(); toast(errText(e, 'オンライン機能を使えませんでした'), true); return; }
+  net.connecting = false;
+  if (search.on || net.on || ui.screen !== 'search') return;
   lsSet(NAME_KEY, typedName()); saveName(fb);
   const sg = ++search.gen;
   Object.assign(search, {on:true, since:Date.now(), working:false});
@@ -1049,18 +1407,16 @@ async function startSearch(){
   render();
   tryMatch(sg);
 }
-
 function stopSearch(){
   search.gen++;
   search.timers.forEach(clearInterval); search.timers = [];
   if (search.unsub) { try { search.unsub(); } catch(e) {} search.unsub = null; }
   search.on = false;
 }
-
 // Leaves the queue. Returns a room code if someone matched us at the last moment.
 async function cancelSearch(){
   if (!search.on) return null;
-  stopSearch(); render();
+  stopSearch();
   const fb = net.fb, meRef = fb.ref(fb.db, 'queue/' + net.uid);
   try {
     const res = await fb.runTransaction(meRef, cur => (cur && cur.match) ? undefined : null);
@@ -1070,7 +1426,6 @@ async function cancelSearch(){
   } catch(e) {}
   return null;
 }
-
 async function enqueue(sg){
   if (sg !== search.gen || !search.on) return;
   const fb = net.fb, meRef = fb.ref(fb.db, 'queue/' + net.uid);
@@ -1078,18 +1433,23 @@ async function enqueue(sg){
     await fb.onDisconnect(meRef).remove();
     const entry = {name: typedName(), rating: myRating(), ts: serverNow()};
     await fb.runTransaction(meRef, cur => (sg !== search.gen || (cur && cur.match)) ? undefined : entry);
-  } catch(e) { if (sg === search.gen) setNetMsg(errText(e, '相手さがしに参加できませんでした'), true); }
+  } catch(e) { if (sg === search.gen) toast(errText(e, '相手さがしに参加できませんでした'), true); }
 }
-
 function gotMatch(code){
   if (!search.on) return;
   stopSearch();
   const fb = net.fb, meRef = fb.ref(fb.db, 'queue/' + net.uid);
   fb.onDisconnect(meRef).cancel().catch(() => {});
   fb.set(meRef, null).catch(() => {});
-  netJoin(code);
+  joinRated(code);
 }
-
+async function joinRated(code){
+  try {
+    const room = (await net.fb.get(net.fb.ref(net.fb.db, 'rooms/' + code))).val();
+    if (!room || !room.players || !room.players[net.uid]) throw fail('マッチした部屋に入れませんでした');
+    attach(code);
+  } catch(e) { goHome(); toast(errText(e, 'マッチした部屋に入れませんでした'), true); }
+}
 async function tryMatch(sg){
   if (search.working || sg !== search.gen || net.on) return;
   search.working = true;
@@ -1105,11 +1465,12 @@ async function tryMatch(sg){
     const cands = Object.keys(q).filter(u => u !== net.uid && q[u] && !q[u].match && now - (+q[u].ts || 0) < QUEUE_FRESH).sort((a, b) => gap(a) - gap(b));
     if (!cands.length) { if (!mine) await enqueue(sg); return; }
     const oppUid = cands[0], opp = q[oppUid];
-    const first = Math.random() < .5 ? 0 : 1;
-    code = await createRoomRecord({rated: true, rules: RATED_RULES,
-      players: {0: {uid: net.uid, name: typedName(), rating: myR},
-                1: {uid: oppUid, name: String(opp.name || '相手').slice(0, 12), rating: Math.round(+opp.rating) || BASE_RATE}},
-      state: initState(first, 1, RATED_LIMIT, serverNow() + START_GRACE)});
+    const t0 = Date.now();
+    const pls = {[net.uid]: {name: typedName(), rating: myR, joinedAt: t0},
+                 [oppUid]: {name: String(opp.name || '相手').slice(0, 12), rating: Math.round(+opp.rating) || BASE_RATE, joinedAt: t0}};
+    const seats = shuffle([net.uid, oppUid]);
+    code = await createRoomRecord({kind:'rated', status:'playing', games:1, rules: Object.assign({}, RATED_RULES, {limit: RATED_LIMIT}), players: pls,
+      state: initState({n: 2, seats, names: seats.map(u => pls[u].name), game: 1, limit: RATED_LIMIT, turnAt: serverNow() + START_GRACE})});
     if (sg !== search.gen) return;
     const res = await fb.runTransaction(fb.ref(db, 'queue'), cur => {
       if (cur === null) return null;
@@ -1126,17 +1487,40 @@ async function tryMatch(sg){
       const c = code; code = null;
       stopSearch();
       fb.onDisconnect(fb.ref(db, 'queue/' + net.uid)).cancel().catch(() => {});
-      setNetMsg('');
-      attach(c, 0);
+      attach(c);
     }
   } catch(e) {
-    if (sg === search.gen) setNetMsg(errText(e, '相手さがしでエラーが出ました'), true);
+    if (sg === search.gen) toast(errText(e, '相手さがしでエラーが出ました'), true);
   } finally {
     if (code) fb.set(fb.ref(db, 'rooms/' + code), null).catch(() => {});
     search.working = false;
   }
 }
 
+// ===================== Screens =====================
+const SCREENS = {home:'#scrHome', cpu:'#scrCpu', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
+function setScreen(s){
+  if (ui.screen !== s) {
+    ui.screen = s;
+    for (const k in SCREENS) $(SCREENS[k]).hidden = k !== s;
+    $('.logo').style.visibility = s === 'home' ? 'hidden' : '';
+    try { window.scrollTo(0, 0); } catch(e) {}
+  }
+  render();
+}
+function goHome(){
+  clearTimeout(cpuTimer); cpuTimer = null;
+  hideSplash();
+  setScreen('home');
+}
+function toast(msg, err){
+  const el = $('#toast');
+  clearTimeout(ui.toastTimer);
+  el.textContent = msg || '';
+  el.classList.toggle('err', !!err);
+  el.hidden = !msg;
+  if (msg) ui.toastTimer = setTimeout(() => { el.hidden = true; }, err ? 6000 : 3500);
+}
 function setUrlRoom(code){
   try {
     const u = new URL(location.href);
@@ -1150,40 +1534,119 @@ function shareLink(){
 }
 function copyLink(){
   const link = shareLink(), box = $('#netLink');
-  const fallback = () => { box.value = link; box.hidden = false; box.focus(); box.select(); setNetMsg('リンクを選択しました。コピーして送ってね'); };
-  try { navigator.clipboard.writeText(link).then(() => { box.hidden = true; setNetMsg('リンクをコピーしました'); }, fallback); }
+  const fallback = () => { box.value = link; box.hidden = false; box.focus(); box.select(); toast('リンクを選択しました。コピーして送ってね'); };
+  try { navigator.clipboard.writeText(link).then(() => { box.hidden = true; toast('リンクをコピーしました'); }, fallback); }
   catch(e) { fallback(); }
 }
 
-// ----- Rendering -----
+// ===================== Rendering =====================
 function render(){
-  if (!G) return;
-  const nm = names(), r = rules();
-  $('#name0').textContent = nm[0];
-  $('#name1').textContent = nm[1];
-  for (const p of [0,1]) $('#side'+p).classList.toggle('active', !G.over && G.turn === p && (!net.on || netPlaying()));
-  const act = interactive(), src = act ? sourceHand() : null, ms = act ? currentMoves() : [];
-  for (const p of [0,1]) for (const i of [0,1]) {
-    const b = handBtns[p][i], n = G.hands[p][i], mine = p === G.turn;
-    b.querySelector('svg').innerHTML = handSVG(n, p, i);
-    b.querySelector('.count').textContent = n === 0 ? '×' : n;
-    const pickable = act && mine && n > 0;
-    const target = act && !mine && n > 0 && src !== null;
-    b.classList.toggle('dead', n === 0);
-    b.classList.toggle('selected', act && mine && sel === i);
-    b.classList.toggle('pickable', pickable);
-    b.classList.toggle('target', target);
-    b.disabled = !(pickable || target);
-    b.setAttribute('aria-pressed', String(act && mine && sel === i));
-    b.setAttribute('aria-label', `${nm[p]}の${i===0?'左側':'右側'}の手、${n===0?'消えている':n+'本'}`);
-    const badge = b.querySelector('.badge');
-    if (target && hintsOn()) {
-      const m = ms.find(m => m.kind==='attack' && m.from===src && m.to===i);
-      const e = evalChild(m.next);
-      badge.textContent = e.label; badge.className = 'badge ' + e.cls; badge.hidden = false;
-    } else badge.hidden = true;
+  renderChrome();
+  if (ui.screen === 'lobby') renderLobby();
+  if (ui.screen === 'cpu') renderCpu();
+  if (ui.screen === 'game') renderGame();
+  tick();
+}
+
+function renderChrome(){
+  const ok = !!FIREBASE_CONFIG, p = net.profile || {}, g = ratedGames(p);
+  $('#barName').textContent = typedName();
+  $('#barRate').hidden = !ok;
+  $('#barRate').textContent = myRating();
+  $('#homeRate').textContent = `レート ${myRating()}・` + (g ? `${+p.rw || 0}勝${+p.rl || 0}敗${+p.rd ? (+p.rd) + '分' : ''}` : 'まだ0戦');
+  $('#goRated').disabled = !ok;
+  $('#goCustom').disabled = !ok;
+  $('#homeNote').hidden = ok;
+  $('#netCreate').disabled = net.connecting;
+  $('#netJoin').disabled = net.connecting;
+  $('#searchInfo').textContent = `あなたのレート ${myRating()}・見つかったら自動で始まります`;
+}
+
+function renderCpu(){
+  for (const k in OPTIONS) { const el = document.getElementById(`${k}-${settings[k]}`); if (el) el.checked = true; }
+  $('#levelSet').disabled = settings.mode !== 'cpu';
+  const ln = settings.mode === 'cpu' ? ['あなた', 'CPU'] : ['下の人', '上の人'];
+  $('#first-0-label').textContent = ln[0];
+  $('#first-1-label').textContent = ln[1];
+}
+
+function renderLobby(){
+  const room = net.room;
+  if (!room) return;
+  const ps = room.players || {}, uids = sortedUids(ps), online = room.online || {}, host = isHost();
+  $('#lobbyCode').textContent = net.code;
+  $('#lobbyCount').textContent = `${uids.length}/${MAX_PLAYERS}人`;
+  const ol = $('#lobbySeats');
+  ol.innerHTML = '';
+  for (let s = 0; s < MAX_PLAYERS; s++) {
+    const li = document.createElement('li'), u = uids[s];
+    if (!u) { li.className = 'empty'; li.innerHTML = `<span class="sn">${s + 1}</span><span>空き</span>`; ol.append(li); continue; }
+    li.innerHTML = '<span class="sn"></span><span class="who"></span>';
+    li.querySelector('.sn').textContent = s + 1;
+    li.querySelector('.who').textContent = String(ps[u].name || 'ななし');
+    const tag = (cls, t) => { const x = document.createElement('span'); x.className = 'tag ' + cls; x.textContent = t; li.append(x); };
+    if (room.host === u) tag('host', 'ホスト');
+    if (u === net.uid) tag('mine', 'あなた');
+    else if (!online[u]) tag('off', '切断中');
+    if (host && u !== net.uid) {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'kick'; b.textContent = '×';
+      b.setAttribute('aria-label', `${ps[u].name || 'ななし'}を部屋から外す`);
+      b.addEventListener('click', () => kick(u));
+      li.append(b);
+    }
+    ol.append(li);
   }
-  renderStrip(act, ms);
+  const r = room.rules || {};
+  const cur = {overflow: r.overflow === 'die' ? 'die' : 'wrap', split: r.split === 'off' ? 'off' : 'on', merge: r.merge === 'off' ? 'off' : 'on', limit: String(roomLimit(room))};
+  for (const k in cur) { const el = document.getElementById(`lb-${k}-${cur[k]}`); if (el) el.checked = true; }
+  $$('#lobbyRules fieldset').forEach(f => { f.disabled = !host; });
+  $('#lobbyRulesNote').textContent = host ? 'ルールはあなたが決められます。変えるとみんなにすぐ反映されます。' : 'ルールはホストが決めます。';
+  const start = $('#lobbyStart');
+  start.hidden = !host;
+  start.disabled = uids.length < 2 || net.busy;
+  start.textContent = uids.length >= 2 ? `${uids.length}人で開始` : '開始';
+  $('#lobbyHint').textContent = host
+    ? (uids.length < 2 ? '友達が入ると開始できます。部屋番号かリンクを送ってね' : '全員そろったら開始を押してね')
+    : 'ホストが開始するのを待っています';
+}
+
+function renderGame(){
+  if (!G) return;
+  ensureBoard(G.n);
+  const nm = names(), r = rules(), act = interactive(), src = act ? sourceHand() : null, ms = act ? legalMoves(G, r) : [];
+  const online = (net.room && net.room.online) || {}, ps = (net.room && net.room.players) || {};
+  for (let k = 0; k < G.n; k++) {
+    const seatEl = $('#seat' + k), out = !alive(G, k) && G.n > 2;
+    seatEl.classList.toggle('active', !G.over && G.turn === k && (!net.on || netPlaying()));
+    seatEl.classList.toggle('out', out);
+    seatEl.querySelector('.nm').textContent = nm[k];
+    const tg = seatEl.querySelector('.tag');
+    let tt = '', tc = '';
+    if (out) { tt = '脱落'; tc = 'out'; }
+    else if (net.on && k > 0 && G.seats && !online[G.seats[k]]) { tt = '切断中'; tc = 'off'; }
+    else if (isRated() && G.seats) { tt = String(Math.round(+((ps[G.seats[k]] || {}).rating)) || BASE_RATE); tc = 'rate'; }
+    tg.hidden = !tt; tg.textContent = tt; tg.className = 'tag ' + tc;
+    for (const i of [0, 1]) {
+      const b = handBtns[k][i], n = G.hands[k][i], mine = k === G.turn;
+      b.querySelector('svg').innerHTML = handSVG(n, k > 0, i);
+      b.querySelector('.count').textContent = n === 0 ? '×' : n;
+      const pickable = act && mine && n > 0;
+      const target = act && !mine && n > 0 && src !== null;
+      b.classList.toggle('dead', n === 0);
+      b.classList.toggle('selected', act && mine && sel === i);
+      b.classList.toggle('pickable', pickable);
+      b.classList.toggle('target', target);
+      b.disabled = !(pickable || target);
+      b.setAttribute('aria-pressed', String(act && mine && sel === i));
+      b.setAttribute('aria-label', `${nm[k]}の${i === 0 ? '左側' : '右側'}の手、${n === 0 ? '消えている' : n + '本'}`);
+      const badge = b.querySelector('.badge');
+      const sm = target && hintsOn() ? solverMove({kind:'attack', from: src, to: i}) : null;
+      if (sm) { const e = evalChild(sm.next); badge.textContent = e.label; badge.className = 'badge ' + e.cls; badge.hidden = false; }
+      else badge.hidden = true;
+    }
+  }
+  renderStrip(act, ms, nm);
 
   for (const [kind, id, label] of [['split','#splitBtn','分身'], ['merge','#mergeBtn','合成']]) {
     const b = $(id), open = panel === kind;
@@ -1193,43 +1656,37 @@ function render(){
     b.textContent = open ? `${label}をやめる` : label;
   }
   $('#resetBtn').hidden = net.on;
-  const rb = $('#resignBtn'), armed = net.resignArm && Date.now() < net.resignArm;
-  rb.hidden = !(net.on && netPlaying() && !G.over);
+  const now = Date.now(), rb = $('#resignBtn'), xb = $('#exitBtn');
+  rb.hidden = !(netPlaying() && !G.over && alive(G, 0));
   rb.disabled = net.busy;
-  rb.textContent = armed ? 'もう一度押すと投了' : '投了';
+  rb.textContent = ui.resignArm > now ? 'もう一度押すと投了' : '投了';
+  const midGame = netPlaying() && !G.over && alive(G, 0);
+  xb.textContent = !net.on ? 'ホームへ' : ui.exitArm > now ? 'もう一度押すと投了して退出' : '退出';
+  xb.classList.toggle('danger', midGame && ui.exitArm > now);
 
-  for (const k in OPTIONS) { const el = document.getElementById(`${k}-${settings[k]}`); if (el) el.checked = true; }
-  document.querySelectorAll('#settings fieldset').forEach(f => { f.disabled = net.on || (f.id === 'levelSet' && settings.mode !== 'cpu'); });
-  $('#settingsNote').textContent = net.on ? 'オンライン対戦中は、部屋のルールで遊びます。' : '対戦相手・先手・ルールを変えると、最初からやり直しになります。';
-  const ln = localNames();
-  $('#first-0-label').textContent = ln[0];
-  $('#first-1-label').textContent = ln[1];
-  renderLog(); renderAnalysis(); renderNet(); tick();
+  $('#anaPanel').hidden = net.on;
+  if (!net.on) renderAnalysis();
+  renderRoomPanel(nm);
+  renderLog(nm);
 }
 
-function renderStrip(act, ms){
-  const nm = names(), turn = $('#turn'), msg = $('#msg'), ev = $('#eval'), sp = $('#splits'), again = $('#again');
+function renderStrip(act, ms, nm){
+  const turn = $('#turn'), msg = $('#msg'), ev = $('#eval'), sp = $('#splits'), again = $('#again');
   turn.className = 'turn';
-  if (net.on && !netPlaying()) {
-    turn.textContent = '友達を待っています';
-    msg.textContent = `部屋番号 ${net.code} を伝えてね`;
-    ev.hidden = true; sp.hidden = true; again.hidden = true;
-    return;
-  }
   if (G.over) {
     if (G.over.type === 'win') {
-      turn.textContent = `${nm[G.over.winner]}の勝ち！`;
-      turn.classList.add('big', 'p' + G.over.winner);
-      const loser = nm[1 - G.over.winner];
-      msg.textContent = G.over.reason === 'resign' ? `${loser}が投了しました`
-        : G.over.reason === 'time' ? `${loser}の時間切れ` : `${G.ply}手で決着`;
+      const w = G.over.winner;
+      turn.textContent = `${nm[w]}の勝ち！`;
+      turn.classList.add('big', 'c' + w);
+      const by = G.over.by;
+      msg.textContent = G.over.reason === 'resign' && by !== undefined ? `${nm[by]}が投了しました`
+        : G.over.reason === 'time' && by !== undefined ? `${nm[by]}の時間切れ` : `${G.ply}手で決着`;
     } else {
       turn.textContent = '引き分け';
       turn.classList.add('big');
       msg.textContent = '同じ局面が3回出ました';
     }
-    sp.hidden = true; again.hidden = false;
-    ev.hidden = true;
+    sp.hidden = true; again.hidden = false; again.disabled = false; ev.hidden = true;
     if (isRated()) {
       const S = normState(net.room.state);
       if (S && S.over) {
@@ -1237,34 +1694,29 @@ function renderStrip(act, ms){
         ev.textContent = `レート ${d.from} → ${d.to}（${d.delta >= 0 ? '+' : ''}${d.delta}）`;
         ev.hidden = false;
       }
-      again.disabled = false;
       again.textContent = '次の相手をさがす';
     } else if (net.on) {
-      const rm = (net.room && net.room.rematch) || {};
-      const mine = !!rm[net.seat], theirs = !!rm[1 - net.seat];
-      again.disabled = mine || net.busy;
-      again.textContent = mine ? '相手を待っています…' : 'もう一回';
-      if (theirs && !mine) msg.textContent += '　相手が「もう一回」を押しました';
-    } else { again.disabled = false; again.textContent = 'もう一回'; }
+      again.textContent = isHost() ? 'ロビーにもどる' : 'ホストを待っています…';
+      again.disabled = !isHost() || net.busy;
+    } else again.textContent = 'もう一回';
     return;
   }
   again.hidden = true;
-  turn.classList.add('p' + G.turn);
+  turn.classList.add('c' + G.turn);
   turn.textContent = `${nm[G.turn]}の番`;
   if (net.on && !net.connected) msg.textContent = 'インターネットにつながっていません';
-  else if (net.on && G.turn === 1) msg.textContent = net.oppOnline ? '相手が考え中…' : '相手の接続が切れています（戻ってくれば続きから）';
+  else if (net.on && !alive(G, 0)) msg.textContent = 'あなたは脱落しました。最後まで見られます';
+  else if (net.on && G.turn !== 0) msg.textContent = G.seats && !(net.room.online || {})[G.seats[G.turn]] ? '接続が切れています（時間切れで脱落）' : '考え中…';
   else if (!isHuman(G.turn)) msg.textContent = '考え中…';
   else if (busy || net.busy) msg.textContent = '';
   else if (panel === 'split') msg.textContent = '配り方を選んでください';
   else if (panel === 'merge') msg.textContent = 'これでよければタップして合成';
   else if (sourceHand() === null) msg.textContent = '使う手を選んでください';
-  else msg.textContent = 'タッチする相手の手を選んでください';
+  else msg.textContent = G.n > 2 ? 'タッチする相手の手を選んでください（だれでもOK）' : 'タッチする相手の手を選んでください';
 
   if (hintsOn()) {
     const s = solver(), cur = stateIdx(G.turn), r = s.res[cur], d = s.dist[cur], who = nm[G.turn];
-    ev.textContent = r === 1 ? `解析：${who}の勝ち（最善で${d}手）`
-      : r === -1 ? `解析：${who}の負け（相手が最善なら${d}手）`
-      : '解析：両者最善なら引き分け';
+    ev.textContent = r === 1 ? `解析：${who}の勝ち（最善で${d}手）` : r === -1 ? `解析：${who}の負け（相手が最善なら${d}手）` : '解析：両者最善なら引き分け';
     ev.hidden = false;
   } else ev.hidden = true;
 
@@ -1281,7 +1733,8 @@ function renderStrip(act, ms){
         b.innerHTML = `<span>${m.hands[0]} · ${m.hands[1]}</span>`;
         b.setAttribute('aria-label', `左側${m.hands[0]}本、右側${m.hands[1]}本に分身`);
       }
-      if (hintsOn()) { const e = evalChild(m.next); b.innerHTML += `<small class="${e.cls}">${e.label}</small>`; }
+      const sm = hintsOn() ? solverMove(m) : null;
+      if (sm) { const e = evalChild(sm.next); b.innerHTML += `<small class="${e.cls}">${e.label}</small>`; }
       b.addEventListener('click', () => doMove(m));
       sp.append(b);
     });
@@ -1289,8 +1742,32 @@ function renderStrip(act, ms){
   } else sp.hidden = true;
 }
 
-function renderLog(){
-  const ol = $('#log'), nm = names();
+function renderRoomPanel(nm){
+  const pnl = $('#roomPanel');
+  pnl.hidden = !net.on;
+  if (!net.on || !G) return;
+  $('#roomTitle').textContent = isRated() ? 'レート戦' : `カスタムマッチ（部屋 ${net.code}）`;
+  const ol = $('#roomOrder'), online = (net.room && net.room.online) || {}, ps = (net.room && net.room.players) || {};
+  ol.innerHTML = '';
+  for (let s = 0; s < G.n; s++) {
+    const k = (s - net.seat + G.n) % G.n, li = document.createElement('li');
+    li.innerHTML = '<span class="sn"></span><span class="who"></span>';
+    li.querySelector('.sn').textContent = s + 1;
+    li.querySelector('.who').textContent = nm[k];
+    li.querySelector('.who').className = 'who';
+    const tag = (cls, t) => { const x = document.createElement('span'); x.className = 'tag ' + cls; x.textContent = t; li.append(x); };
+    const uid = G.seats && G.seats[k];
+    if (isRated()) tag('rate', String(Math.round(+((ps[uid] || {}).rating)) || BASE_RATE));
+    if (net.room && net.room.host === uid && !isRated()) tag('host', 'ホスト');
+    if (!alive(G, k) && G.n > 2) tag('out', '脱落');
+    else if (k > 0 && uid && !online[uid]) tag('off', '切断中');
+    ol.append(li);
+  }
+  $('#roomRules').textContent = `${ruleText(rules())}／1手${G.limit || roomLimit(net.room)}秒`;
+}
+
+function renderLog(nm){
+  const ol = $('#log');
   ol.innerHTML = '';
   if (!G.log || !G.log.length) {
     const li = document.createElement('li');
@@ -1299,10 +1776,12 @@ function renderLog(){
   }
   G.log.forEach((e, k) => {
     const li = document.createElement('li');
-    li.innerHTML = `<span class="no"></span><span class="who p${e.p ? 1 : 0}"></span><span class="what"></span>`;
+    li.innerHTML = '<span class="no"></span><span class="who"></span><span class="what"></span>';
     li.querySelector('.no').textContent = e.n || k + 1;
-    li.querySelector('.who').textContent = nm[e.p ? 1 : 0];
-    li.querySelector('.what').textContent = e.text;
+    const who = li.querySelector('.who');
+    who.textContent = nm[e.p] || '';
+    who.className = 'who c' + (e.p || 0);
+    li.querySelector('.what').textContent = logText(e, nm);
     ol.append(li);
   });
   const box = $('#logBox'); box.scrollTop = box.scrollHeight;
@@ -1314,35 +1793,6 @@ function renderAnalysis(){
   $('#aStart').textContent = r === 1 ? `先手必勝（最善で${d}手）` : r === -1 ? `後手必勝（最善で${d}手）` : '引き分け（両者最善なら終わらない）';
   $('#aReach').textContent = `${s.reach}通り`;
   $('#aSplit').textContent = `手番側の勝ち ${s.counts.win}・負け ${s.counts.lose}・引き分け ${s.counts.draw}`;
-}
-
-function renderNet(){
-  const ok = !!FIREBASE_CONFIG, p = net.profile || {};
-  $('#netIdle').hidden = net.on;
-  $('#netRoom').hidden = !net.on;
-  $('#netCreate').disabled = !ok || net.connecting;
-  $('#netJoin').disabled = !ok || net.connecting;
-  $('#netSearch').hidden = search.on;
-  $('#netSearch').disabled = !ok || net.connecting;
-  $('#netCancel').hidden = !search.on;
-  $('#myRate').textContent = myRating();
-  const g = ratedGames(p);
-  $('#myRec').textContent = g ? `${+p.rw || 0}勝 ${+p.rl || 0}敗 ${+p.rd || 0}分` : 'まだ0戦';
-  if (!search.on) $('#searchNote').textContent = `いま相手をさがしている人と自動で当たります。1手${RATED_LIMIT}秒の持ち時間つき。`;
-  if (net.on) {
-    const rated = isRated(), opp = seatPlayer(1 - net.seat);
-    $('#netRoomLabel').textContent = rated ? 'レート戦の部屋' : '部屋番号';
-    $('#netRoomCode').textContent = net.code;
-    $('#netCopy').hidden = rated;
-    const oppRate = rated && opp && opp.rating ? `${Math.round(+opp.rating)}・` : '';
-    $('#netOpp').textContent = opp ? `${opp.name || '相手'}（${oppRate}${net.oppOnline ? '接続中' : '切断中'}）` : 'まだ来ていません';
-    $('#netRules').textContent = (rated ? `レート戦・1手${(G && G.limit) || RATED_LIMIT}秒／` : '') + ruleText(rules());
-    $('#netStatLabel').textContent = rated ? 'あなたのレート' : 'あなたの戦績';
-    $('#netStats').textContent = rated ? String(myRating()) : `${+p.wins || 0}勝 ${+p.losses || 0}敗 ${+p.draws || 0}分`;
-  } else $('#netLink').hidden = true;
-  const st = $('#netStatus');
-  st.textContent = ok ? net.msg : 'オンライン対戦はまだ準備中です（Firebaseの設定を入れると使えます）';
-  st.classList.toggle('err', ok && net.err);
 }
 
 function renderRank(){
@@ -1370,72 +1820,113 @@ function renderRank(){
   });
 }
 
-// Runs every 250ms: the move clock, the search timer, and the resign confirmation.
+// Runs every 250ms: the move clock, the search timer and the two-tap confirmations.
 function tick(){
-  const c = $('#clock');
-  if (net.on && netPlaying() && G && G.limit && !G.over) {
+  const c = $('#clock'), now = Date.now();
+  if (ui.screen === 'game' && netPlaying() && G && G.limit && !G.over) {
     const left = Math.ceil((G.turnAt + G.limit * 1000 - serverNow()) / 1000);
     const shown = Math.max(0, Math.min(G.limit, left));
     c.hidden = false;
-    c.textContent = `${G.turn === 0 ? 'あなた' : '相手'}の残り ${shown}秒`;
+    c.textContent = `${names()[G.turn]}の残り ${shown}秒`;
     c.classList.toggle('low', shown <= 10);
     if (serverNow() > G.turnAt + G.limit * 1000 + 2000 && !net.busy) {
-      const k = `${net.code}:${G.game}:${G.ply}`;
-      if (net.timeoutKey !== k) { net.timeoutKey = k; claimTimeout(); }
+      const turnRoom = (net.seat + G.turn) % G.n, k = `${net.code}:${G.game}:${G.ply}:${turnRoom}`;
+      if (net.timeoutKey !== k) { net.timeoutKey = k; claimTimeout(G.ply, turnRoom); }
     }
   } else c.hidden = true;
-  if (search.on) $('#searchNote').textContent = `相手をさがしています…（${Math.floor((Date.now() - search.since) / 1000)}秒）`;
-  if (net.resignArm && Date.now() > net.resignArm) { net.resignArm = 0; render(); }
+  if (ui.screen === 'search' && search.on) $('#searchTime').textContent = `${Math.floor((now - search.since) / 1000)}秒`;
+  if ((ui.resignArm && now > ui.resignArm) || (ui.exitArm && now > ui.exitArm)) {
+    if (ui.resignArm && now > ui.resignArm) ui.resignArm = 0;
+    if (ui.exitArm && now > ui.exitArm) ui.exitArm = 0;
+    if (ui.screen === 'game') renderGame();
+  }
 }
 setInterval(tick, 250);
 
-// ----- Events -----
+// ===================== Events =====================
+$('#goCpu').addEventListener('click', () => setScreen('cpu'));
+$('#goCustom').addEventListener('click', () => setScreen('custom'));
+$('#goRated').addEventListener('click', startSearch);
+$$('[data-home]').forEach(b => b.addEventListener('click', goHome));
+$('#cpuStart').addEventListener('click', () => { setScreen('game'); newGame(); });
+$('#settings').addEventListener('change', e => {
+  const t = e.target;
+  if (!(t.name in OPTIONS) || !OPTIONS[t.name].includes(t.value)) return;
+  settings[t.name] = t.value; saveSettings(); render();
+});
+$('#lobbyRules').addEventListener('change', e => setLobbyRule(e.target.name, e.target.value));
+$('#lobbyStart').addEventListener('click', startGame);
+$('#lobbyLeave').addEventListener('click', () => leaveRoom());
+$('#netCopy').addEventListener('click', copyLink);
+$('#netCreate').addEventListener('click', netCreate);
+$('#netJoin').addEventListener('click', () => netJoin($('#netCode').value));
+$('#netCode').addEventListener('input', e => { const v = e.target.value.replace(/\D/g, '').slice(0, 4); if (v !== e.target.value) e.target.value = v; });
+$('#netCode').addEventListener('keydown', e => { if (e.key === 'Enter') netJoin($('#netCode').value); });
+$('#netCancel').addEventListener('click', async () => {
+  const code = await cancelSearch();
+  if (code) joinRated(code); else goHome();
+});
+// Two name fields (home and custom match) share one value.
+const nameInputs = [$('#netName'), $('#customName')];
+function onNameChange(){
+  lsSet(NAME_KEY, typedName());
+  if (net.fb) {
+    saveName(net.fb);
+    if (net.on && net.room && net.room.status === 'lobby') net.fb.update(net.fb.ref(net.fb.db, `rooms/${net.code}/players/${net.uid}`), {name: typedName()}).catch(() => {});
+  }
+  renderChrome();
+}
+nameInputs.forEach(inp => {
+  inp.value = lsGet(NAME_KEY) || '';
+  inp.addEventListener('input', () => { nameInputs.forEach(o => { if (o !== inp) o.value = inp.value; }); renderChrome(); });
+  inp.addEventListener('change', onNameChange);
+});
 for (const [kind, id] of [['split','#splitBtn'], ['merge','#mergeBtn']]) {
   $(id).addEventListener('click', () => { if (!interactive()) return; panel = panel === kind ? null : kind; sel = null; render(); });
 }
 $('#resetBtn').addEventListener('click', newGame);
 $('#resignBtn').addEventListener('click', () => {
-  if (!net.on || !netPlaying() || !G || G.over || net.busy) return;
-  if (net.resignArm && Date.now() < net.resignArm) { net.resignArm = 0; netResign(); }
-  else { net.resignArm = Date.now() + 3000; render(); }
+  if (!netPlaying() || !G || G.over || net.busy) return;
+  if (ui.resignArm > Date.now()) { ui.resignArm = 0; netResign(); }
+  else { ui.resignArm = Date.now() + 3000; render(); }
+});
+$('#exitBtn').addEventListener('click', () => {
+  if (!net.on) { goHome(); return; }
+  const midGame = netPlaying() && G && !G.over && alive(G, 0);
+  if (!midGame) { leaveRoom(); return; }
+  if (ui.exitArm > Date.now()) { ui.exitArm = 0; leaveRoom(); }
+  else { ui.exitArm = Date.now() + 3000; render(); }
 });
 $('#again').addEventListener('click', () => {
-  if (isRated()) { leaveRoom(); startSearch(); }
-  else if (net.on) netRematch();
+  if (isRated()) { leaveRoom().then(startSearch); }
+  else if (net.on) { if (isHost()) backToLobby(); }
   else newGame();
 });
-$('#settings').addEventListener('change', e => {
-  const t = e.target;
-  if (net.on || !(t.name in OPTIONS) || !OPTIONS[t.name].includes(t.value)) return;
-  settings[t.name] = t.value; saveSettings();
-  if (RESET_KEYS.includes(t.name)) newGame(); else render();
-});
+$('#splash').addEventListener('click', hideSplash);
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && (sel !== null || panel)) { sel = null; panel = null; render(); }
+  if (e.key === 'Escape') { if (!$('#splash').hidden) hideSplash(); else if (sel !== null || panel) { sel = null; panel = null; render(); } }
 });
-$('#netName').value = lsGet(NAME_KEY) || '';
-$('#netName').addEventListener('change', () => { lsSet(NAME_KEY, typedName()); if (net.fb) saveName(net.fb); });
-$('#netCode').addEventListener('input', e => { const v = e.target.value.replace(/\D/g, '').slice(0, 4); if (v !== e.target.value) e.target.value = v; });
-$('#netCode').addEventListener('keydown', e => { if (e.key === 'Enter') netJoin($('#netCode').value); });
-$('#netCreate').addEventListener('click', netCreate);
-$('#netJoin').addEventListener('click', () => netJoin($('#netCode').value));
-$('#netSearch').addEventListener('click', startSearch);
-$('#netCancel').addEventListener('click', async () => { const code = await cancelSearch(); render(); if (code) netJoin(code); });
-$('#netLeave').addEventListener('click', () => leaveRoom());
-$('#netCopy').addEventListener('click', copyLink);
 
-const now = new Date();
-$('#date').innerHTML = `<span class="tcy">${now.getMonth()+1}</span>月<span class="tcy">${now.getDate()}</span>日（${'日月火水木金土'[now.getDay()]}）`;
+const today = new Date();
+$('#date').innerHTML = `<span class="tcy">${today.getMonth()+1}</span>月<span class="tcy">${today.getDate()}</span>日（${'日月火水木金土'[today.getDay()]}）`;
+$('#radarHand').innerHTML = handSVG(2, false, 0);
 
 function start(data){
   let room = '';
   try { room = (new URLSearchParams(location.search).get('room') || '').replace(/\D/g, '').slice(0, 4); } catch(e) {}
-  if (data && data.G && data.G.hands) { G = data.G; render(); maybeCpu(); }
-  else newGame();
+  for (const k in SCREENS) $(SCREENS[k]).hidden = k !== 'home';
+  $('.logo').style.visibility = 'hidden';
+  if (data && data.G && data.G.hands && data.G.n) { G = data.G; setScreen('game'); maybeCpu(); }
+  else render();
   renderRank();
   if (FIREBASE_CONFIG) {
-    loadFirebase().catch(e => setNetMsg(errText(e, 'オンライン機能を使えませんでした'), true));
-    if (room.length === 4) { $('#netCode').value = room; netJoin(room); }
+    loadFirebase().catch(e => toast(errText(e, 'オンライン機能を使えませんでした'), true));
+    if (room.length === 4) {
+      $('#netCode').value = room;
+      // Rejoin straight away if this browser already has a name; first-timers pick a name first.
+      if (lsGet(NAME_KEY)) netJoin(room);
+      else { setScreen('custom'); $('#customName').focus(); toast('名前を入れて「参加」を押してね'); }
+    }
   }
 }
 start({});
