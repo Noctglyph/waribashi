@@ -1,0 +1,1125 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="指の本数を足して、相手の両手を消したら勝ち。教室の手遊び「わりばし」をスマホで。">
+<meta property="og:title" content="わりばし対戦">
+<meta property="og:description" content="指の本数を足して、相手の両手を消したら勝ち。CPU対戦・友達とオンライン対戦ができます。">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#2a2824">
+<style>
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+[hidden]{display:none!important}
+</style>
+<title>わりばし対戦</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yusei+Magic&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<style>
+/* Layout: a classroom chalkboard in a wood frame. The rival's hands across the top, yours along the bottom, the turn strip drawn between them; panels sit below on phones, beside the board on wide screens. */
+:root{
+  --wall:#2a2824;
+  --panel:#34312c;
+  --line:rgba(236,238,228,.16);
+  --board:#24423a;
+  --board-deep:#1a3029;
+  --chalk:#eceee4;
+  --chalk-soft:rgba(236,238,228,.66);
+  --chalk-faint:rgba(236,238,228,.24);
+  --you:#f3d774;
+  --rival:#f4a6bb;
+  --win:#b8e6a3;
+  --lose:#ffa48c;
+  --wood:#7a5131;
+  --wood-hi:#9c6b43;
+  --font-display:"Yusei Magic","Hiragino Maru Gothic ProN","BIZ UDPGothic","Meiryo",sans-serif;
+  --font-body:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Meiryo",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--wall)}
+body{
+  background:var(--wall);color:var(--chalk);
+  font-family:var(--font-body);font-size:15px;line-height:1.65;line-break:strict;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:20px 48px;
+  -webkit-tap-highlight-color:transparent;
+}
+button{font:inherit;color:inherit;touch-action:manipulation}
+.layout{max-width:980px;margin:0 auto;display:grid;gap:24px}
+@media (min-width:900px){
+  .layout{grid-template-columns:minmax(0,560px) minmax(280px,360px);justify-content:center;align-items:start}
+}
+.play{min-width:0;display:grid;gap:14px}
+.side-col{min-width:0;display:grid;gap:14px}
+
+/* Header */
+.head h1{font-family:var(--font-display);font-weight:400;font-size:40px;line-height:1.1;margin:0;letter-spacing:.06em}
+.head p{margin:6px 0 0;color:var(--chalk-soft);font-size:14px;text-wrap:pretty}
+
+/* Board */
+.board-wrap{display:grid}
+.board{
+  position:relative;
+  background-color:var(--board);
+  background-image:
+    radial-gradient(ellipse 60% 40% at 28% 22%,rgba(236,238,228,.06),transparent 70%),
+    radial-gradient(ellipse 50% 35% at 76% 78%,rgba(236,238,228,.045),transparent 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  border:10px solid var(--wood);
+  border-radius:6px;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.25),inset 0 0 60px rgba(0,0,0,.32),0 16px 30px -12px rgba(0,0,0,.7);
+  padding:14px 10px;
+  display:grid;gap:4px;
+}
+.tray{height:12px;margin:-2px -4px 0;background:linear-gradient(var(--wood-hi),var(--wood));border-radius:0 0 8px 8px;position:relative;box-shadow:0 8px 14px -8px rgba(0,0,0,.7)}
+.tray::before,.tray::after{content:"";position:absolute;top:-4px;height:7px;border-radius:4px}
+.tray::before{left:16%;width:36px;background:var(--chalk)}
+.tray::after{left:calc(16% + 46px);width:22px;background:var(--you)}
+.boardnote{position:absolute;right:8px;top:14px;writing-mode:vertical-rl;font-family:var(--font-display);font-size:13px;letter-spacing:.12em;color:var(--chalk-faint);pointer-events:none;user-select:none}
+.boardnote .tcy{text-combine-upright:all}
+
+.side{display:grid;justify-items:center;gap:2px}
+.name{margin:0;font-size:13px;letter-spacing:.08em;color:var(--chalk-soft);display:flex;align-items:center;gap:6px;min-height:24px}
+.name::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.5}
+.side0 .name::before{background:var(--you)}
+.side1 .name::before{background:var(--rival)}
+.side0.active .name{color:var(--you)}
+.side1.active .name{color:var(--rival)}
+.side.active .name::before{opacity:1}
+
+.hands{display:flex;justify-content:center;gap:clamp(18px,8vw,56px)}
+.hand{
+  position:relative;appearance:none;background:none;border:0;padding:6px 4px;border-radius:18px;
+  width:clamp(88px,27vw,140px);display:flex;flex-direction:column;align-items:center;gap:0;cursor:default;
+  transition:transform .18s ease;
+}
+.side0 .hand{color:var(--you)}
+.side1 .hand{color:var(--rival)}
+.side1 .hand{flex-direction:column-reverse}
+.hand svg{width:100%;height:auto;aspect-ratio:100/130;display:block;overflow:visible;transition:opacity .25s}
+.hand svg .pm{fill:currentColor}
+.hand svg .fg{fill:currentColor;stroke:var(--board);stroke-width:2}
+.hand .count{font-family:var(--font-display);font-size:clamp(26px,7vw,34px);line-height:1.1;font-variant-numeric:tabular-nums}
+.hand.dead svg{opacity:.2}
+.hand.dead .count{opacity:.55}
+.hand.pickable,.hand.target{cursor:pointer}
+.side0 .hand.pickable:hover{transform:translateY(-4px)}
+.side1 .hand.pickable:hover{transform:translateY(4px)}
+.side0 .hand.selected{transform:translateY(-10px)}
+.side1 .hand.selected{transform:translateY(10px)}
+.hand::before{content:"";position:absolute;inset:-2px -6px;border:2px dashed transparent;border-radius:46% 54% 50% 50%/52% 48% 52% 48%;pointer-events:none}
+.hand.selected::before{border-color:currentColor}
+.hand.target::before{border-color:var(--chalk-soft);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+.hand:focus-visible{outline:2px solid var(--chalk);outline-offset:4px}
+.badge{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);font-family:var(--font-body);font-weight:700;font-size:12px;line-height:1;white-space:nowrap;padding:6px 9px;border-radius:999px;background:var(--board-deep);border:1.5px solid currentColor;pointer-events:none}
+.win{color:var(--win)}
+.lose{color:var(--lose)}
+.draw{color:var(--chalk-soft)}
+
+/* Turn strip */
+.strip{
+  min-height:112px;display:grid;align-content:center;justify-items:center;gap:4px;text-align:center;padding:12px 4px;
+  background-image:repeating-linear-gradient(90deg,var(--chalk-faint) 0 14px,transparent 14px 24px),repeating-linear-gradient(90deg,var(--chalk-faint) 0 14px,transparent 14px 24px);
+  background-size:100% 2px;background-position:top,bottom;background-repeat:no-repeat;
+}
+.strip p{margin:0}
+.turn{font-family:var(--font-display);font-size:24px;line-height:1.25}
+.turn.big{font-size:34px}
+.p0{color:var(--you)}
+.p1{color:var(--rival)}
+.msg{color:var(--chalk-soft);font-size:14px;min-height:1.6em}
+.eval{font-size:13px;color:var(--chalk);padding:2px 10px;border-radius:999px;border:1px dashed var(--chalk-faint)}
+.splits{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:4px}
+.chip{display:inline-flex;flex-direction:column;align-items:center;gap:2px;min-height:44px;padding:6px 16px;border-radius:12px;border:1.5px solid var(--chalk-faint);background:var(--board-deep);cursor:pointer}
+.chip span{font-family:var(--font-display);font-size:20px;line-height:1.2}
+.chip small{font-size:11px;font-weight:700}
+.chip:hover{border-color:var(--chalk-soft)}
+.chip:focus-visible,.btn:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+
+/* Controls */
+.controls{display:flex;flex-wrap:wrap;gap:10px}
+.btn{min-height:44px;padding:8px 18px;border-radius:12px;border:1.5px solid var(--line);background:var(--panel);font-weight:700;font-size:15px;cursor:pointer}
+.btn:hover:not(:disabled){border-color:var(--chalk-soft)}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.primary{border-color:var(--you);color:var(--you)}
+.controls .btn:last-child{margin-left:auto}
+
+/* Panels */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.panel h2{font-family:var(--font-display);font-weight:400;font-size:19px;margin:0 0 10px;letter-spacing:.04em}
+.note{margin:10px 0 0;font-size:13px;color:var(--chalk-soft);text-wrap:pretty}
+.settings{display:grid;gap:14px}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+fieldset:disabled{opacity:.4}
+legend{padding:0;margin:0 0 6px;font-size:13px;color:var(--chalk-soft);letter-spacing:.04em}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opts label{position:relative}
+.opts input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.opts span{display:inline-flex;align-items:center;min-height:36px;padding:4px 14px;border-radius:999px;border:1.5px solid var(--line);cursor:pointer;font-size:14px}
+.opts input:checked+span{border-color:var(--you);color:var(--you);background:rgba(243,215,116,.1)}
+.opts input:focus-visible+span{outline:2px solid var(--chalk);outline-offset:2px}
+fieldset:disabled .opts span{cursor:default}
+
+/* Online */
+.net-body{display:grid;gap:12px}
+.field{display:grid;gap:6px;min-width:0}
+.field>label,.label{margin:0;font-size:13px;color:var(--chalk-soft);letter-spacing:.04em}
+.input{width:100%;min-width:0;min-height:44px;padding:8px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--board-deep);color:var(--chalk);font:inherit;font-size:16px}
+.input::placeholder{color:var(--chalk-faint)}
+.input:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.row .input{flex:1 1 8em}
+.code{margin:0;font-family:var(--font-display);font-size:46px;line-height:1.1;letter-spacing:.2em;font-variant-numeric:tabular-nums;color:var(--you)}
+.status{margin:12px 0 0;font-size:14px;color:var(--chalk-soft);text-wrap:pretty}
+.status.err{color:var(--lose)}
+.status:empty{display:none}
+
+.logbox{max-height:220px;overflow-y:auto;margin:0 -4px;padding:0 4px}
+.log{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:14px}
+.log li{display:grid;grid-template-columns:2.2em auto minmax(0,1fr);gap:8px;align-items:baseline}
+.log .no{color:var(--chalk-faint);font-variant-numeric:tabular-nums;text-align:right}
+.log .who{font-weight:700;white-space:nowrap}
+.log .what{min-width:0}
+.log li.empty{display:block;color:var(--chalk-soft)}
+
+.facts{margin:0;display:grid;gap:8px}
+.facts div{display:grid;grid-template-columns:7em minmax(0,1fr);gap:8px}
+.facts dt{color:var(--chalk-soft);font-size:13px}
+.facts dd{margin:0;font-variant-numeric:tabular-nums;min-width:0;overflow-wrap:anywhere}
+.rules{margin:0;padding-left:1.2em;display:grid;gap:6px;font-size:14px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="chalk" x="-10%" y="-10%" width="120%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="4" result="grainNoise"/>
+    <feColorMatrix in="grainNoise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -2.4 0 0 0 1.75" result="mask"/>
+    <feComposite in="SourceGraphic" in2="mask" operator="in" result="grain"/>
+    <feTurbulence type="turbulence" baseFrequency="0.045" numOctaves="2" seed="9" result="warp"/>
+    <feDisplacementMap in="grain" in2="warp" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<div class="layout">
+  <div class="play">
+    <header class="head">
+      <h1>わりばし</h1>
+      <p>相手の手をタッチして、指の本数を足していく手遊び。相手の両手を消したら勝ち。</p>
+    </header>
+
+    <div class="board-wrap">
+      <section class="board" aria-label="対戦ボード">
+        <p class="boardnote" aria-hidden="true"><span id="date"></span>　日直</p>
+        <div class="side side1" id="side1">
+          <p class="name" id="name1">CPU</p>
+          <div class="hands">
+            <button type="button" class="hand" data-p="1" data-i="0"><svg viewBox="0 0 100 130" aria-hidden="true"></svg><span class="count"></span><span class="badge" hidden></span></button>
+            <button type="button" class="hand" data-p="1" data-i="1"><svg viewBox="0 0 100 130" aria-hidden="true"></svg><span class="count"></span><span class="badge" hidden></span></button>
+          </div>
+        </div>
+
+        <div class="strip" aria-live="polite">
+          <p class="turn" id="turn"></p>
+          <p class="msg" id="msg"></p>
+          <p class="eval" id="eval" hidden></p>
+          <div class="splits" id="splits" hidden></div>
+          <button type="button" class="btn primary" id="again" hidden>もう一回</button>
+        </div>
+
+        <div class="side side0" id="side0">
+          <div class="hands">
+            <button type="button" class="hand" data-p="0" data-i="0"><svg viewBox="0 0 100 130" aria-hidden="true"></svg><span class="count"></span><span class="badge" hidden></span></button>
+            <button type="button" class="hand" data-p="0" data-i="1"><svg viewBox="0 0 100 130" aria-hidden="true"></svg><span class="count"></span><span class="badge" hidden></span></button>
+          </div>
+          <p class="name" id="name0">あなた</p>
+        </div>
+      </section>
+      <div class="tray" aria-hidden="true"></div>
+    </div>
+
+    <div class="controls">
+      <button type="button" class="btn" id="splitBtn" aria-expanded="false">分身</button>
+      <button type="button" class="btn" id="mergeBtn" aria-expanded="false">合成</button>
+      <button type="button" class="btn" id="resetBtn">最初から</button>
+    </div>
+  </div>
+
+  <div class="side-col">
+    <section class="panel" id="netPanel">
+      <h2>オンライン対戦</h2>
+      <div class="net-body" id="netIdle">
+        <div class="field">
+          <label for="netName">あなたの名前</label>
+          <input class="input" id="netName" maxlength="12" autocomplete="nickname" placeholder="例：ゆー">
+        </div>
+        <button type="button" class="btn primary" id="netCreate">部屋を作る</button>
+        <div class="field">
+          <label for="netCode">友達の部屋に入る</label>
+          <div class="row">
+            <input class="input" id="netCode" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="4桁の部屋番号">
+            <button type="button" class="btn" id="netJoin">参加</button>
+          </div>
+        </div>
+        <p class="note">部屋を作ると4桁の番号が出ます。友達に番号を入れてもらうか、リンクを送ってね。ルールは部屋を作った人の設定になります。</p>
+      </div>
+      <div class="net-body" id="netRoom" hidden>
+        <div>
+          <p class="label">部屋番号</p>
+          <p class="code" id="netRoomCode"></p>
+        </div>
+        <div class="row">
+          <button type="button" class="btn" id="netCopy">リンクをコピー</button>
+          <button type="button" class="btn" id="netLeave">部屋を出る</button>
+        </div>
+        <input class="input" id="netLink" readonly hidden aria-label="招待リンク">
+        <dl class="facts">
+          <div><dt>相手</dt><dd id="netOpp"></dd></div>
+          <div><dt>ルール</dt><dd id="netRules"></dd></div>
+          <div><dt>あなたの戦績</dt><dd id="netStats"></dd></div>
+        </dl>
+      </div>
+      <p class="status" id="netStatus" aria-live="polite"></p>
+    </section>
+
+    <section class="panel">
+      <h2>設定</h2>
+      <form class="settings" id="settings" onsubmit="return false">
+        <fieldset>
+          <legend>対戦相手</legend>
+          <div class="opts">
+            <label><input type="radio" name="mode" value="cpu" id="mode-cpu"><span>CPU</span></label>
+            <label><input type="radio" name="mode" value="2p" id="mode-2p"><span>2人（この端末で）</span></label>
+          </div>
+        </fieldset>
+        <fieldset id="levelSet">
+          <legend>CPUの強さ</legend>
+          <div class="opts">
+            <label><input type="radio" name="level" value="weak" id="level-weak"><span>よわい</span></label>
+            <label><input type="radio" name="level" value="normal" id="level-normal"><span>ふつう</span></label>
+            <label><input type="radio" name="level" value="strong" id="level-strong"><span>さいきょう</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>先手</legend>
+          <div class="opts">
+            <label><input type="radio" name="first" value="0" id="first-0"><span id="first-0-label">あなた</span></label>
+            <label><input type="radio" name="first" value="1" id="first-1"><span id="first-1-label">CPU</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>手が消えるルール</legend>
+          <div class="opts">
+            <label><input type="radio" name="overflow" value="wrap" id="overflow-wrap"><span>5本ぴったりで消える（6本→1本）</span></label>
+            <label><input type="radio" name="overflow" value="die" id="overflow-die"><span>5本以上で消える</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>分身</legend>
+          <div class="opts">
+            <label><input type="radio" name="split" value="on" id="split-on"><span>あり</span></label>
+            <label><input type="radio" name="split" value="off" id="split-off"><span>なし</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>合成</legend>
+          <div class="opts">
+            <label><input type="radio" name="merge" value="on" id="merge-on"><span>あり</span></label>
+            <label><input type="radio" name="merge" value="off" id="merge-off"><span>なし</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>解析を表示</legend>
+          <div class="opts">
+            <label><input type="radio" name="hints" value="off" id="hints-off"><span>しない</span></label>
+            <label><input type="radio" name="hints" value="on" id="hints-on"><span>する</span></label>
+          </div>
+        </fieldset>
+      </form>
+      <p class="note" id="settingsNote">対戦相手・先手・ルールを変えると、最初からやり直しになります。</p>
+    </section>
+
+    <section class="panel">
+      <h2>記録</h2>
+      <div class="logbox" id="logBox"><ol class="log" id="log"></ol></div>
+    </section>
+
+    <section class="panel">
+      <h2>このルールの解析</h2>
+      <dl class="facts">
+        <div><dt>ルール</dt><dd id="aRule"></dd></div>
+        <div><dt>最初の局面</dt><dd id="aStart"></dd></div>
+        <div><dt>行ける局面</dt><dd id="aReach"></dd></div>
+        <div><dt>内訳</dt><dd id="aSplit"></dd></div>
+      </dl>
+      <p class="note">決着した局面からさかのぼって、全局面の勝ち負けを計算しています（後退解析）。左右の入れ替えは同じ局面として数えています。CPU「さいきょう」はこの表を見て指します。</p>
+    </section>
+
+    <section class="panel">
+      <h2>ルール</h2>
+      <ul class="rules">
+        <li>最初は両手とも1本。</li>
+        <li>自分の番に、自分の手で相手の手をタッチ。タッチされた手は、タッチした手の本数ぶん増える。</li>
+        <li>5本ぴったりになった手は消える。6本以上になったら1本から数え直し（6本→1本、7本→2本、8本→3本）。設定で「5本以上で消える」ルールにも変えられる。</li>
+        <li>分身：自分の両手の合計を配り直せる。左右を入れ替えるだけの配り方と、片手を0にする配り方はできない。消えた手も分身で復活できる。</li>
+        <li>合成：両手の指を片方の手にまとめられる（1と3→4、2と4→6本なので1本）。まとめた結果で手が消える合成はできない。</li>
+        <li>両手とも消えたら負け。同じ局面が3回出たら引き分け。</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<script>
+// ===== SOLVER-START =====
+function idx(a,b,c,d){return ((a*5+b)*5+c)*5+d}
+function decode(s){return [Math.floor(s/125),Math.floor(s/25)%5,Math.floor(s/5)%5,s%5]}
+// Moves for the player to move, holding (a,b) against the opponent's (c,d).
+function genMoves(a,b,c,d,rules){
+  const out=[], mine=[a,b], opp=[c,d];
+  for(let f=0;f<2;f++){
+    const v=mine[f]; if(!v) continue;
+    for(let t=0;t<2;t++){
+      const w=opp[t]; if(!w) continue;
+      let x=w+v; if(x>=5) x = rules.overflow==='wrap' ? x-5 : 0;
+      const n=[c,d]; n[t]=x;
+      out.push({kind:'attack',from:f,to:t,value:v,before:w,after:x,next:idx(n[0],n[1],a,b)});
+    }
+  }
+  if(rules.split){
+    const s=a+b;
+    for(let x=1;x<=4;x++){
+      const y=s-x; if(y<1||y>4) continue;
+      if((x===a&&y===b)||(x===b&&y===a)) continue;
+      out.push({kind:'split',hands:[x,y],next:idx(c,d,x,y)});
+    }
+  }
+  // Merge: gather both hands into the larger one; the other hand goes to 0. Not allowed if the result vanishes.
+  if(rules.merge && a>0 && b>0){
+    let x=a+b; if(x>=5) x = rules.overflow==='wrap' ? x-5 : 0;
+    if(x>0){
+      const into = a>=b ? 0 : 1, h=[0,0]; h[into]=x;
+      out.push({kind:'merge',hands:h,into,next:idx(c,d,h[0],h[1])});
+    }
+  }
+  return out;
+}
+// Retrograde analysis over all 625 ordered positions. res: 1 = side to move wins, -1 = loses, 0 = draw. dist = plies to the end with best play.
+function buildSolver(rules){
+  const N=625, res=new Int8Array(N), dist=new Int16Array(N), moves=new Array(N), deg=new Int16Array(N), preds=[], q=[];
+  for(let s=0;s<N;s++) preds.push([]);
+  for(let s=0;s<N;s++){
+    const [a,b,c,d]=decode(s);
+    if(a===0&&b===0){ res[s]=-1; moves[s]=[]; q.push(s); continue; }
+    if(c===0&&d===0){ res[s]=1; moves[s]=[]; continue; }
+    const ms=genMoves(a,b,c,d,rules); moves[s]=ms; deg[s]=ms.length;
+    for(const m of ms) preds[m.next].push(s);
+  }
+  for(let h=0;h<q.length;h++){
+    const s=q[h];
+    for(const p of preds[s]){
+      if(res[p]!==0) continue;
+      if(res[s]===-1){ res[p]=1; dist[p]=dist[s]+1; q.push(p); }
+      else if(--deg[p]===0){ res[p]=-1; dist[p]=dist[s]+1; q.push(p); }
+    }
+  }
+  const start=idx(1,1,1,1), seen=new Uint8Array(N), stack=[start], canon=new Set(), counts={win:0,lose:0,draw:0};
+  seen[start]=1;
+  while(stack.length){
+    const s=stack.pop(), [a,b,c,d]=decode(s);
+    if(!(a===0&&b===0)){
+      const k=Math.min(a,b)+','+Math.max(a,b)+'|'+Math.min(c,d)+','+Math.max(c,d);
+      if(!canon.has(k)){ canon.add(k); counts[res[s]===1?'win':res[s]===-1?'lose':'draw']++; }
+    }
+    for(const m of moves[s]) if(!seen[m.next]){ seen[m.next]=1; stack.push(m.next); }
+  }
+  return {res,dist,moves,start,reach:canon.size,counts};
+}
+// ===== SOLVER-END =====
+
+(() => {
+const $ = s => document.querySelector(s);
+const KEY = 'waribashi-settings-v2';
+const NAME_KEY = 'waribashi-name';
+const OPTIONS = {mode:['cpu','2p'], level:['weak','normal','strong'], first:['0','1'], overflow:['wrap','die'], split:['on','off'], merge:['on','off'], hints:['off','on']};
+const DEFAULTS = {mode:'cpu', level:'normal', first:'0', overflow:'wrap', split:'on', merge:'on', hints:'off'};
+const RESET_KEYS = ['mode','first','overflow','split','merge'];
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+// ===== ONLINE CONFIG: Firebase の firebaseConfig をここに貼る =====
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDXvLIzi9CgPRjk7z7y9ehOj8M0jtwscuQ",
+  authDomain: "waribashi-24ed7.firebaseapp.com",
+  databaseURL: "https://waribashi-24ed7-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "waribashi-24ed7",
+  storageBucket: "waribashi-24ed7.firebasestorage.app",
+  messagingSenderId: "763401574692",
+  appId: "1:763401574692:web:37c276342c9566db06fbb1"
+};
+// ===== END ONLINE CONFIG =====
+const FIREBASE_VERSION = '10.12.2';
+const STALE_MS = 6 * 60 * 60 * 1000;
+
+const lsGet = k => { try { return localStorage.getItem(k); } catch(e) { return null; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch(e) {} };
+
+function loadSettings(){
+  let o = {};
+  try { o = JSON.parse(lsGet(KEY) || '{}') || {}; } catch(e) {}
+  const s = {...DEFAULTS};
+  for (const k in OPTIONS) if (OPTIONS[k].includes(o[k])) s[k] = o[k];
+  return s;
+}
+const saveSettings = () => lsSet(KEY, JSON.stringify(settings));
+
+let settings = loadSettings();
+const net = {on:false, gen:0, fbPromise:null, fb:null, uid:null, code:null, seat:0, room:null, unsub:[], presRef:null,
+  connected:true, oppOnline:false, busy:false, connecting:false, stats:null, msg:'', err:false};
+let netQueue = Promise.resolve();
+const counted = new Set();
+
+function rules(){
+  const r = net.on && net.room && net.room.rules;
+  if (r) return {overflow: r.overflow === 'die' ? 'die' : 'wrap', split: r.split !== 'off', merge: r.merge !== 'off'};
+  return {overflow: settings.overflow, split: settings.split === 'on', merge: settings.merge === 'on'};
+}
+const ruleText = r => `${r.overflow === 'die' ? '5本以上で消える' : '5本ぴったりで消える'}／分身${r.split ? 'あり' : 'なし'}／合成${r.merge ? 'あり' : 'なし'}`;
+const cache = {};
+const solver = () => { const r = rules(), k = `${r.overflow}/${r.split}/${r.merge}`; return cache[k] || (cache[k] = buildSolver(r)); };
+const hintsOn = () => settings.hints === 'on' && !net.on;
+
+let G = null, sel = null, panel = null, busy = false, cpuTimer = null;
+
+const typedName = () => ($('#netName').value || '').trim().slice(0, 12) || 'ななし';
+const localNames = () => settings.mode === 'cpu' ? ['あなた','CPU'] : ['下の人','上の人'];
+function seatPlayer(s){ const ps = net.room && net.room.players; return ps && ps[s] ? ps[s] : null; }
+function names(){
+  if (!net.on) return localNames();
+  const opp = seatPlayer(1 - net.seat);
+  return ['あなた', opp && opp.name ? String(opp.name) : '相手'];
+}
+const netPlaying = () => !!(net.on && net.room && net.room.state);
+const isHuman = p => net.on ? p === 0 : (settings.mode === '2p' || p === 0);
+const interactive = () => !!G && !G.over && !busy && isHuman(G.turn) && (!net.on || (netPlaying() && !net.busy));
+const stateIdx = p => { const h = G.hands; return idx(h[p][0], h[p][1], h[1-p][0], h[1-p][1]); };
+const currentMoves = () => solver().moves[stateIdx(G.turn)];
+const liveHands = p => [0,1].filter(i => G.hands[p][i] > 0);
+const posKeyOf = S => S.turn + ':' + S.hands.map(h => [...h].sort().join('')).join('|');
+const sourceHand = () => { if (sel !== null) return sel; const l = liveHands(G.turn); return l.length===1 ? l[0] : null; };
+const pick = a => a[Math.floor(Math.random()*a.length)];
+
+function evalChild(next){
+  const s = solver(), r = s.res[next], d = s.dist[next];
+  if (r === -1) return {cls:'win', label:`勝ち ${d+1}手`};
+  if (r === 1) return {cls:'lose', label:`負け ${d+1}手`};
+  return {cls:'draw', label:'引き分け'};
+}
+
+// ----- Game state: plain data, so the same step() runs locally and inside online transactions -----
+function initState(first, game){
+  const S = {hands:[[1,1],[1,1]], turn:first, first, ply:0, game, over:null, last:null, log:[], seen:{}};
+  S.seen[posKeyOf(S)] = 1;
+  return S;
+}
+function step(S0, m){
+  const S = JSON.parse(JSON.stringify(S0));
+  const p = S.turn, o = 1 - p;
+  let text;
+  if (m.kind === 'attack') {
+    S.hands[o][m.to] = m.after;
+    const sum = m.before + m.value;
+    text = `${m.value}本の手で${m.before}本の手をタッチ → `
+      + (m.after === 0 ? `${sum}本で消えた` : sum >= 6 ? `${sum}本なので1本から数え直して${m.after}本` : `${m.after}本`);
+  } else if (m.kind === 'merge') {
+    const [a, b] = S.hands[p], sum = a + b, x = m.hands[m.into];
+    S.hands[p] = [...m.hands];
+    text = `合成 ${a}と${b} → ` + (sum >= 6 ? `${sum}本なので1本から数え直して${x}本` : `${x}本`);
+  } else {
+    const b = S.hands[p].join('·');
+    S.hands[p] = [...m.hands];
+    text = `分身 ${b} → ${m.hands.join('·')}`;
+  }
+  S.ply++;
+  S.log = (S.log || []).concat({n:S.ply, p, text}).slice(-80);
+  S.last = {kind:m.kind, p, from: m.from ?? -1, to: m.to ?? -1, into: m.into ?? -1};
+  S.over = null;
+  if (S.hands[o][0] === 0 && S.hands[o][1] === 0) S.over = {type:'win', winner:p};
+  else {
+    S.turn = o;
+    S.seen = S.seen || {};
+    const k = posKeyOf(S);
+    S.seen[k] = (S.seen[k] || 0) + 1;
+    if (S.seen[k] >= 3) S.over = {type:'draw'};
+  }
+  return S;
+}
+// The database may hand arrays back as objects and drops empty values; rebuild a clean state.
+function normState(r){
+  if (!r || !r.hands) return null;
+  const bit = v => (+v === 1 ? 1 : 0);
+  const hands = [0,1].map(p => [0,1].map(i => { const v = +((r.hands[p] || {})[i]); return v >= 0 && v <= 4 ? v : 0; }));
+  const log = (Array.isArray(r.log) ? r.log : Object.values(r.log || {})).filter(e => e && typeof e.text === 'string');
+  const over = r.over && r.over.type === 'win' ? {type:'win', winner:bit(r.over.winner)} : r.over && r.over.type === 'draw' ? {type:'draw'} : null;
+  return {hands, turn:bit(r.turn), first:bit(r.first), ply:+r.ply || 0, game:+r.game || 1, over, last:r.last || null, log, seen:r.seen || {}};
+}
+// Online states use seat numbers; the board always shows "me" as player 0.
+function toLocal(S){
+  if (net.seat === 0) return S;
+  const f = p => 1 - p;
+  return {...S, hands:[S.hands[1], S.hands[0]], turn:f(S.turn), first:f(S.first),
+    over: S.over && S.over.type === 'win' ? {type:'win', winner:f(S.over.winner)} : S.over,
+    last: S.last ? {...S.last, p:f(+S.last.p)} : null,
+    log: S.log.map(e => ({...e, p:f(+e.p)}))};
+}
+
+// Hand drawing: fingers point up, thumb folded across the palm; index → pinky.
+const FINGERS = [{x:61,top:14},{x:46,top:8},{x:31,top:14},{x:16,top:28}];
+const XF = [['', 'matrix(-1 0 0 1 100 0)'], ['matrix(1 0 0 -1 0 130)', 'rotate(180 50 65)']];
+function handSVG(n, p, i){
+  let f = '';
+  FINGERS.forEach((g, k) => {
+    const top = k < n ? g.top : (k===3 ? 50 : 46);
+    f += `<rect class="fg" x="${g.x}" y="${top}" width="13.5" height="${72-top}" rx="6.75"/>`;
+  });
+  return `<g transform="${XF[p][i]}"><g filter="url(#chalk)">`
+    + `<rect class="pm" x="27" y="104" width="40" height="26" rx="8"/>`
+    + `<rect class="pm" x="13" y="56" width="68" height="58" rx="20"/>`
+    + f
+    + `<rect class="fg" x="52" y="80" width="34" height="17" rx="8.5" transform="rotate(-6 69 88)"/>`
+    + `</g></g>`;
+}
+
+const handBtns = [[],[]];
+document.querySelectorAll('.hand').forEach(b => {
+  const p = +b.dataset.p, i = +b.dataset.i;
+  handBtns[p][i] = b;
+  b.addEventListener('click', () => onHand(p, i));
+});
+
+// ----- Local play -----
+function newGame(){
+  if (net.on) return;
+  clearTimeout(cpuTimer); cpuTimer = null; busy = false;
+  G = initState(+settings.first, 1);
+  sel = null; panel = null;
+  render(); maybeCpu();
+}
+
+function maybeCpu(){
+  if (net.on || !G || G.over || settings.mode !== 'cpu' || G.turn !== 1) return;
+  clearTimeout(cpuTimer);
+  cpuTimer = setTimeout(() => { cpuTimer = null; doMove(chooseCpuMove()); }, 700);
+}
+
+function chooseCpuMove(){
+  const s = solver(), ms = currentMoves();
+  const score = m => s.res[m.next]===-1 ? 1000 - s.dist[m.next] : s.res[m.next]===1 ? -1000 + s.dist[m.next] : 0;
+  const best = () => {
+    let top = -Infinity, arr = [];
+    for (const m of ms) { const v = score(m); if (v > top) { top = v; arr = [m]; } else if (v === top) arr.push(m); }
+    return pick(arr);
+  };
+  if (settings.level === 'strong') return best();
+  if (settings.level === 'normal') return Math.random() < 0.6 ? best() : pick(ms);
+  const kill = ms.filter(m => s.res[m.next]===-1 && s.dist[m.next]===0);
+  return kill.length && Math.random() < 0.7 ? pick(kill) : pick(ms);
+}
+
+async function doMove(m){
+  if (!m || busy || !G || G.over) return;
+  const online = net.on, gen = net.gen, g0 = G;
+  busy = true; sel = null; panel = null; render();
+  try { await animateMove(m); } catch(e) {}
+  busy = false;
+  if (online) { if (gen === net.gen) await netMove(m); else render(); return; }
+  if (net.on || G !== g0) { render(); return; }
+  G = step(G, m); render(); maybeCpu();
+}
+
+function animateMove(m){
+  if (reduceMotion.matches) return Promise.resolve();
+  const p = G.turn, o = 1 - p;
+  if (m.kind === 'attack') {
+    const a = handBtns[p][m.from], t = handBtns[o][m.to];
+    const ra = a.getBoundingClientRect(), rt = t.getBoundingClientRect();
+    const dx = (rt.left + rt.width/2 - (ra.left + ra.width/2)) * 0.6;
+    const dy = (rt.top + rt.height/2 - (ra.top + ra.height/2)) * 0.6;
+    a.style.zIndex = 2;
+    const anim = a.animate([
+      {transform:'translate(0,0)'},
+      {transform:`translate(${dx}px,${dy}px) scale(1.06)`, offset:.5},
+      {transform:'translate(0,0)'}
+    ], {duration:520, easing:'cubic-bezier(.25,.8,.3,1)'});
+    setTimeout(() => t.animate([{transform:'none'},{transform:'scale(1.12) rotate(-4deg)'},{transform:'none'}], {duration:300, easing:'ease-out'}), 230);
+    return anim.finished.finally(() => { a.style.zIndex = ''; });
+  }
+  if (m.kind === 'merge') {
+    const a = handBtns[p][1 - m.into], t = handBtns[p][m.into];
+    const dx = (t.getBoundingClientRect().left - a.getBoundingClientRect().left) * 0.8;
+    a.style.zIndex = 2;
+    const anim = a.animate([
+      {transform:'translate(0,0)'},
+      {transform:`translate(${dx}px,0) scale(.9)`, offset:.55},
+      {transform:'translate(0,0)'}
+    ], {duration:480, easing:'cubic-bezier(.25,.8,.3,1)'});
+    return anim.finished.finally(() => { a.style.zIndex = ''; });
+  }
+  const lift = p === 0 ? -12 : 12;
+  return Promise.all(handBtns[p].map((b, i) => b.animate(
+    [{transform:'none'},{transform:`translateY(${lift}px)`},{transform:'none'}],
+    {duration:360, delay:i*70, easing:'ease-out'}).finished));
+}
+
+function onHand(p, i){
+  if (!interactive()) return;
+  if (p === G.turn) {
+    if (G.hands[p][i] === 0) return;
+    sel = sel === i ? null : i; panel = null;
+    render(); return;
+  }
+  const src = sourceHand();
+  if (src === null || G.hands[p][i] === 0) return;
+  const m = currentMoves().find(m => m.kind==='attack' && m.from===src && m.to===i);
+  if (m) doMove(m);
+}
+
+// ----- Online play (Firebase Realtime Database + anonymous sign-in) -----
+const fail = msg => Object.assign(new Error(msg), {userMessage: msg});
+function errText(e, fallback){
+  const c = String((e && (e.code || e.message)) || '');
+  if (/operation-not-allowed|admin-restricted/.test(c)) return 'Firebaseで「匿名」ログインが有効になっていません';
+  if (/PERMISSION_DENIED|permission/i.test(c)) return 'データベースのルールで止められました。ルールを確認してね';
+  if (/network|offline|unavailable/i.test(c)) return 'インターネットにつながっていません';
+  return (e && e.userMessage) || fallback;
+}
+function setNetMsg(msg, err){ net.msg = msg || ''; net.err = !!err; renderNet(); }
+
+function loadFirebase(){
+  if (!FIREBASE_CONFIG) return Promise.reject(fail('オンライン対戦の設定がまだです'));
+  if (!net.fbPromise) {
+    net.fbPromise = (async () => {
+      const base = `https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/`;
+      let mods;
+      try { mods = await Promise.all(['app','auth','database'].map(n => import(base + `firebase-${n}.js`))); }
+      catch(e) { throw fail('オンライン機能を読み込めませんでした。電波を確認してね'); }
+      const [appMod, authMod, dbMod] = mods;
+      const app = appMod.getApps().length ? appMod.getApp() : appMod.initializeApp(FIREBASE_CONFIG);
+      const auth = authMod.getAuth(app);
+      let user = await new Promise(res => { let off = null; off = authMod.onAuthStateChanged(auth, u => { if (off) off(); res(u); }); });
+      if (!user) user = (await authMod.signInAnonymously(auth)).user;
+      net.uid = user.uid;
+      net.fb = Object.assign({db: dbMod.getDatabase(app)}, dbMod);
+      return net.fb;
+    })();
+    net.fbPromise.catch(() => { net.fbPromise = null; });
+  }
+  return net.fbPromise;
+}
+
+async function netCreate(){
+  if (net.connecting || net.on) return;
+  net.connecting = true; setNetMsg('部屋を作っています…');
+  try {
+    const fb = await loadFirebase();
+    lsSet(NAME_KEY, typedName());
+    const r = rules();
+    const roomRules = {overflow: r.overflow, split: r.split ? 'on' : 'off', merge: r.merge ? 'on' : 'off'};
+    for (let t = 0; t < 12; t++) {
+      const code = String(1000 + Math.floor(Math.random() * 9000));
+      const room = {createdAt: Date.now(), rules: roomRules, players: {0: {uid: net.uid, name: typedName()}}};
+      const res = await fb.runTransaction(fb.ref(fb.db, 'rooms/' + code), cur => {
+        if (cur === null || !cur.createdAt || Date.now() - cur.createdAt > STALE_MS) return room;
+        return undefined;
+      });
+      if (res.committed) { setNetMsg(''); attach(code, 0); return; }
+    }
+    throw fail('部屋を作れませんでした。もう一度試してね');
+  } catch(e) { setNetMsg(errText(e, '部屋を作れませんでした'), true); }
+  finally { net.connecting = false; renderNet(); }
+}
+
+async function netJoin(raw){
+  const code = String(raw || '').replace(/\D/g, '').slice(0, 4);
+  if (code.length !== 4) { setNetMsg('部屋番号は4桁の数字です', true); return; }
+  if (net.connecting || net.on) return;
+  net.connecting = true; setNetMsg('部屋に入っています…');
+  try {
+    const fb = await loadFirebase();
+    lsSet(NAME_KEY, typedName());
+    const room = (await fb.get(fb.ref(fb.db, 'rooms/' + code))).val();
+    if (!room || !room.players) throw fail(`${code} の部屋は見つかりません`);
+    const ps = room.players;
+    let seat;
+    if (ps[0] && ps[0].uid === net.uid) seat = 0;
+    else if (ps[1] && ps[1].uid === net.uid) seat = 1;
+    else if (ps[1]) throw fail('その部屋はもう2人そろっています');
+    else {
+      const me = {uid: net.uid, name: typedName()};
+      const res = await fb.runTransaction(fb.ref(fb.db, `rooms/${code}/players/1`), cur => {
+        if (cur === null) return me;
+        return cur.uid === net.uid ? cur : undefined;
+      });
+      const got = res.snapshot.val();
+      if (!res.committed || !got || got.uid !== net.uid) throw fail('その部屋はもう2人そろっています');
+      seat = 1;
+    }
+    if (seat === 1) {
+      await fb.runTransaction(fb.ref(fb.db, `rooms/${code}/state`), cur => cur === null ? initState(Math.random() < .5 ? 0 : 1, 1) : undefined);
+    }
+    setNetMsg('');
+    attach(code, seat);
+  } catch(e) { setNetMsg(errText(e, '部屋に入れませんでした'), true); }
+  finally { net.connecting = false; renderNet(); }
+}
+
+function attach(code, seat){
+  detach();
+  const gen = ++net.gen, fb = net.fb, db = fb.db;
+  Object.assign(net, {on:true, code, seat, room:null, busy:false, oppOnline:false, connected:true});
+  clearTimeout(cpuTimer); cpuTimer = null; busy = false;
+  G = initState(0, 0); sel = null; panel = null;
+  setUrlRoom(code);
+  const presRef = fb.ref(db, `rooms/${code}/online/${net.uid}`);
+  net.presRef = presRef;
+  const watch = (path, onVal) => net.unsub.push(fb.onValue(fb.ref(db, path),
+    s => { if (gen === net.gen) onVal(s.val()); },
+    e => { if (gen === net.gen) setNetMsg(errText(e, 'データを読めませんでした'), true); }));
+  watch('.info/connected', v => {
+    net.connected = v === true;
+    if (net.connected) fb.onDisconnect(presRef).remove().then(() => fb.set(presRef, true)).catch(() => {});
+    render();
+  });
+  watch('rooms/' + code, onRoom);
+  watch('players/' + net.uid, v => { net.stats = v; renderNet(); });
+  render();
+}
+
+function detach(){
+  net.unsub.forEach(u => { try { u(); } catch(e) {} });
+  net.unsub = [];
+  if (net.fb && net.presRef) {
+    const fb = net.fb, r = net.presRef;
+    fb.onDisconnect(r).cancel().catch(() => {});
+    fb.set(r, null).catch(() => {});
+  }
+  net.presRef = null;
+  net.gen++;
+  netQueue = Promise.resolve();
+}
+
+function leaveRoom(msg){
+  detach();
+  Object.assign(net, {on:false, code:null, room:null, seat:0, busy:false, oppOnline:false});
+  setUrlRoom(null);
+  busy = false;
+  newGame();
+  setNetMsg(msg || '', !!msg);
+}
+
+function onRoom(room){
+  if (!room) { leaveRoom('部屋がなくなりました'); return; }
+  const mine = room.players && room.players[net.seat];
+  if (!mine || mine.uid !== net.uid) { leaveRoom('この部屋には入れなくなりました'); return; }
+  net.room = room;
+  const opp = room.players[1 - net.seat];
+  net.oppOnline = !!(opp && room.online && room.online[opp.uid]);
+  const S = normState(room.state);
+  if (S) {
+    countResult(S);
+    const L = toLocal(S), gen = net.gen;
+    netQueue = netQueue.then(() => applyNet(L, gen)).catch(() => {});
+  } else {
+    G = initState(0, 0);
+  }
+  render();
+}
+
+async function applyNet(L, gen){
+  if (gen !== net.gen) return;
+  const prev = G;
+  if (prev && L.game === prev.game && L.ply === prev.ply + 1 && L.last && L.last.p === 1 && prev.turn === 1) {
+    busy = true; sel = null; panel = null; render();
+    try { await animateMove(L.last); } catch(e) {}
+    busy = false;
+    if (gen !== net.gen) return;
+  }
+  if (!prev || L.game !== prev.game || L.ply !== prev.ply) { sel = null; panel = null; }
+  G = L; render();
+}
+
+async function netMove(m){
+  const fb = net.fb, seat = net.seat, expect = G.ply, game = G.game, gen = net.gen;
+  net.busy = true; render();
+  try {
+    const res = await fb.runTransaction(fb.ref(fb.db, `rooms/${net.code}/state`), cur => {
+      if (cur === null) return null;
+      const S = normState(cur);
+      if (!S || S.over || S.turn !== seat || S.ply !== expect || S.game !== game) return undefined;
+      return step(S, m);
+    });
+    if (gen === net.gen && !res.committed) setNetMsg('その手は送れませんでした。もう一度どうぞ', true);
+  } catch(e) {
+    if (gen === net.gen) setNetMsg(errText(e, '手を送れませんでした。電波を確認してね'), true);
+  }
+  if (gen === net.gen) { net.busy = false; render(); }
+}
+
+async function netRematch(){
+  const fb = net.fb, seat = net.seat, gen = net.gen;
+  net.busy = true; render();
+  try {
+    await fb.runTransaction(fb.ref(fb.db, 'rooms/' + net.code), cur => {
+      if (cur === null) return null;
+      const S = normState(cur.state);
+      if (!S || !S.over) return undefined;
+      const rm = Object.assign({}, cur.rematch || {});
+      rm[seat] = true;
+      if (rm[0] && rm[1]) { cur.state = initState(1 - S.first, S.game + 1); cur.rematch = null; }
+      else cur.rematch = rm;
+      return cur;
+    });
+  } catch(e) { if (gen === net.gen) setNetMsg(errText(e, '送れませんでした。電波を確認してね'), true); }
+  if (gen === net.gen) { net.busy = false; render(); }
+}
+
+function countResult(S){
+  if (!S.over || !net.fb || !net.room) return;
+  const key = `waribashi-count:${net.code}:${net.room.createdAt}:${S.game}`;
+  if (counted.has(key) || lsGet(key)) return;
+  counted.add(key); lsSet(key, '1');
+  const field = S.over.type === 'draw' ? 'draws' : S.over.winner === net.seat ? 'wins' : 'losses';
+  const fb = net.fb;
+  fb.update(fb.ref(fb.db, 'players/' + net.uid), {[field]: fb.increment(1)}).catch(() => {});
+}
+
+function setUrlRoom(code){
+  try {
+    const u = new URL(location.href);
+    if (code) u.searchParams.set('room', code); else u.searchParams.delete('room');
+    if (u.href !== location.href) history.replaceState(null, '', u.href);
+  } catch(e) {}
+}
+function shareLink(){
+  try { const u = new URL(location.href); u.search = ''; u.hash = ''; u.searchParams.set('room', net.code); return u.href; }
+  catch(e) { return ''; }
+}
+function copyLink(){
+  const link = shareLink(), box = $('#netLink');
+  const fallback = () => { box.value = link; box.hidden = false; box.focus(); box.select(); setNetMsg('リンクを選択しました。コピーして送ってね'); };
+  try { navigator.clipboard.writeText(link).then(() => { box.hidden = true; setNetMsg('リンクをコピーしました'); }, fallback); }
+  catch(e) { fallback(); }
+}
+
+// ----- Rendering -----
+function render(){
+  if (!G) return;
+  const nm = names(), r = rules();
+  $('#name0').textContent = nm[0];
+  $('#name1').textContent = nm[1];
+  for (const p of [0,1]) $('#side'+p).classList.toggle('active', !G.over && G.turn === p && (!net.on || netPlaying()));
+  const act = interactive(), src = act ? sourceHand() : null, ms = act ? currentMoves() : [];
+  for (const p of [0,1]) for (const i of [0,1]) {
+    const b = handBtns[p][i], n = G.hands[p][i], mine = p === G.turn;
+    b.querySelector('svg').innerHTML = handSVG(n, p, i);
+    b.querySelector('.count').textContent = n === 0 ? '×' : n;
+    const pickable = act && mine && n > 0;
+    const target = act && !mine && n > 0 && src !== null;
+    b.classList.toggle('dead', n === 0);
+    b.classList.toggle('selected', act && mine && sel === i);
+    b.classList.toggle('pickable', pickable);
+    b.classList.toggle('target', target);
+    b.disabled = !(pickable || target);
+    b.setAttribute('aria-pressed', String(act && mine && sel === i));
+    b.setAttribute('aria-label', `${nm[p]}の${i===0?'左側':'右側'}の手、${n===0?'消えている':n+'本'}`);
+    const badge = b.querySelector('.badge');
+    if (target && hintsOn()) {
+      const m = ms.find(m => m.kind==='attack' && m.from===src && m.to===i);
+      const e = evalChild(m.next);
+      badge.textContent = e.label; badge.className = 'badge ' + e.cls; badge.hidden = false;
+    } else badge.hidden = true;
+  }
+  renderStrip(act, ms);
+
+  for (const [kind, id, label] of [['split','#splitBtn','分身'], ['merge','#mergeBtn','合成']]) {
+    const b = $(id), open = panel === kind;
+    b.hidden = !r[kind];
+    b.disabled = !(act && ms.some(m => m.kind === kind));
+    b.setAttribute('aria-expanded', String(open));
+    b.textContent = open ? `${label}をやめる` : label;
+  }
+  $('#resetBtn').hidden = net.on;
+
+  for (const k in OPTIONS) { const el = document.getElementById(`${k}-${settings[k]}`); if (el) el.checked = true; }
+  document.querySelectorAll('#settings fieldset').forEach(f => { f.disabled = net.on || (f.id === 'levelSet' && settings.mode !== 'cpu'); });
+  $('#settingsNote').textContent = net.on ? 'オンライン対戦中は、部屋を作った人のルールで遊びます。' : '対戦相手・先手・ルールを変えると、最初からやり直しになります。';
+  const ln = localNames();
+  $('#first-0-label').textContent = ln[0];
+  $('#first-1-label').textContent = ln[1];
+  renderLog(); renderAnalysis(); renderNet();
+}
+
+function renderStrip(act, ms){
+  const nm = names(), turn = $('#turn'), msg = $('#msg'), ev = $('#eval'), sp = $('#splits'), again = $('#again');
+  turn.className = 'turn';
+  if (net.on && !netPlaying()) {
+    turn.textContent = '友達を待っています';
+    msg.textContent = `部屋番号 ${net.code} を伝えてね`;
+    ev.hidden = true; sp.hidden = true; again.hidden = true;
+    return;
+  }
+  if (G.over) {
+    if (G.over.type === 'win') {
+      turn.textContent = `${nm[G.over.winner]}の勝ち！`;
+      turn.classList.add('big', 'p' + G.over.winner);
+      msg.textContent = `${G.ply}手で決着`;
+    } else {
+      turn.textContent = '引き分け';
+      turn.classList.add('big');
+      msg.textContent = '同じ局面が3回出ました';
+    }
+    ev.hidden = true; sp.hidden = true; again.hidden = false;
+    if (net.on) {
+      const rm = (net.room && net.room.rematch) || {};
+      const mine = !!rm[net.seat], theirs = !!rm[1 - net.seat];
+      again.disabled = mine || net.busy;
+      again.textContent = mine ? '相手を待っています…' : 'もう一回';
+      if (theirs && !mine) msg.textContent += '　相手が「もう一回」を押しました';
+    } else { again.disabled = false; again.textContent = 'もう一回'; }
+    return;
+  }
+  again.hidden = true;
+  turn.classList.add('p' + G.turn);
+  turn.textContent = `${nm[G.turn]}の番`;
+  if (net.on && !net.connected) msg.textContent = 'インターネットにつながっていません';
+  else if (net.on && G.turn === 1) msg.textContent = net.oppOnline ? '相手が考え中…' : '相手の接続が切れています（戻ってくれば続きから）';
+  else if (!isHuman(G.turn)) msg.textContent = '考え中…';
+  else if (busy || net.busy) msg.textContent = '';
+  else if (panel === 'split') msg.textContent = '配り方を選んでください';
+  else if (panel === 'merge') msg.textContent = 'これでよければタップして合成';
+  else if (sourceHand() === null) msg.textContent = '使う手を選んでください';
+  else msg.textContent = 'タッチする相手の手を選んでください';
+
+  if (hintsOn()) {
+    const s = solver(), cur = stateIdx(G.turn), r = s.res[cur], d = s.dist[cur], who = nm[G.turn];
+    ev.textContent = r === 1 ? `解析：${who}の勝ち（最善で${d}手）`
+      : r === -1 ? `解析：${who}の負け（相手が最善なら${d}手）`
+      : '解析：両者最善なら引き分け';
+    ev.hidden = false;
+  } else ev.hidden = true;
+
+  if (panel && act) {
+    sp.innerHTML = '';
+    const [h0, h1] = G.hands[G.turn];
+    ms.filter(m => m.kind === panel).forEach(m => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'chip';
+      if (m.kind === 'merge') {
+        b.innerHTML = `<span>${h0} + ${h1} → ${m.hands[m.into]}</span>`;
+        b.setAttribute('aria-label', `${h0}本と${h1}本を合成して${m.hands[m.into]}本にする`);
+      } else {
+        b.innerHTML = `<span>${m.hands[0]} · ${m.hands[1]}</span>`;
+        b.setAttribute('aria-label', `左側${m.hands[0]}本、右側${m.hands[1]}本に分身`);
+      }
+      if (hintsOn()) { const e = evalChild(m.next); b.innerHTML += `<small class="${e.cls}">${e.label}</small>`; }
+      b.addEventListener('click', () => doMove(m));
+      sp.append(b);
+    });
+    sp.hidden = false;
+  } else sp.hidden = true;
+}
+
+function renderLog(){
+  const ol = $('#log'), nm = names();
+  ol.innerHTML = '';
+  if (!G.log || !G.log.length) {
+    const li = document.createElement('li');
+    li.className = 'empty'; li.textContent = 'まだ1手も指していません';
+    ol.append(li); return;
+  }
+  G.log.forEach((e, k) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="no"></span><span class="who p${e.p ? 1 : 0}"></span><span class="what"></span>`;
+    li.querySelector('.no').textContent = e.n || k + 1;
+    li.querySelector('.who').textContent = nm[e.p ? 1 : 0];
+    li.querySelector('.what').textContent = e.text;
+    ol.append(li);
+  });
+  const box = $('#logBox'); box.scrollTop = box.scrollHeight;
+}
+
+function renderAnalysis(){
+  const s = solver(), r = s.res[s.start], d = s.dist[s.start];
+  $('#aRule').textContent = ruleText(rules());
+  $('#aStart').textContent = r === 1 ? `先手必勝（最善で${d}手）` : r === -1 ? `後手必勝（最善で${d}手）` : '引き分け（両者最善なら終わらない）';
+  $('#aReach').textContent = `${s.reach}通り`;
+  $('#aSplit').textContent = `手番側の勝ち ${s.counts.win}・負け ${s.counts.lose}・引き分け ${s.counts.draw}`;
+}
+
+function renderNet(){
+  const ok = !!FIREBASE_CONFIG;
+  $('#netIdle').hidden = net.on;
+  $('#netRoom').hidden = !net.on;
+  $('#netCreate').disabled = !ok || net.connecting;
+  $('#netJoin').disabled = !ok || net.connecting;
+  if (net.on) {
+    $('#netRoomCode').textContent = net.code;
+    const opp = seatPlayer(1 - net.seat);
+    $('#netOpp').textContent = opp ? `${opp.name || '相手'}（${net.oppOnline ? '接続中' : '切断中'}）` : 'まだ来ていません';
+    $('#netRules').textContent = ruleText(rules());
+    const s = net.stats || {};
+    $('#netStats').textContent = `${s.wins || 0}勝 ${s.losses || 0}敗 ${s.draws || 0}分`;
+  } else $('#netLink').hidden = true;
+  const st = $('#netStatus');
+  st.textContent = ok ? net.msg : 'オンライン対戦はまだ準備中です（Firebaseの設定を入れると使えます）';
+  st.classList.toggle('err', ok && net.err);
+}
+
+// ----- Events -----
+for (const [kind, id] of [['split','#splitBtn'], ['merge','#mergeBtn']]) {
+  $(id).addEventListener('click', () => { if (!interactive()) return; panel = panel === kind ? null : kind; sel = null; render(); });
+}
+$('#resetBtn').addEventListener('click', newGame);
+$('#again').addEventListener('click', () => { if (net.on) netRematch(); else newGame(); });
+$('#settings').addEventListener('change', e => {
+  const t = e.target;
+  if (net.on || !(t.name in OPTIONS) || !OPTIONS[t.name].includes(t.value)) return;
+  settings[t.name] = t.value; saveSettings();
+  if (RESET_KEYS.includes(t.name)) newGame(); else render();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && (sel !== null || panel)) { sel = null; panel = null; render(); }
+});
+$('#netName').value = lsGet(NAME_KEY) || '';
+$('#netName').addEventListener('change', () => lsSet(NAME_KEY, typedName()));
+$('#netCode').addEventListener('input', e => { const v = e.target.value.replace(/\D/g, '').slice(0, 4); if (v !== e.target.value) e.target.value = v; });
+$('#netCode').addEventListener('keydown', e => { if (e.key === 'Enter') netJoin($('#netCode').value); });
+$('#netCreate').addEventListener('click', netCreate);
+$('#netJoin').addEventListener('click', () => netJoin($('#netCode').value));
+$('#netLeave').addEventListener('click', () => leaveRoom());
+$('#netCopy').addEventListener('click', copyLink);
+
+const now = new Date();
+$('#date').innerHTML = `<span class="tcy">${now.getMonth()+1}</span>月<span class="tcy">${now.getDate()}</span>日（${'日月火水木金土'[now.getDay()]}）`;
+
+function start(data){
+  let room = '';
+  try { room = (new URLSearchParams(location.search).get('room') || '').replace(/\D/g, '').slice(0, 4); } catch(e) {}
+  if (data && data.G && data.G.hands) { G = data.G; render(); maybeCpu(); }
+  else newGame();
+  if (room.length === 4 && FIREBASE_CONFIG) { $('#netCode').value = room; netJoin(room); }
+}
+start({});
+})();
+</script>
+
+</body>
+</html>
