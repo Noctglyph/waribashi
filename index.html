@@ -353,6 +353,7 @@ fieldset:disabled .opts span{cursor:default}
 .splash-t{margin:0;font-family:var(--font-display);font-size:clamp(24px,7.2vw,38px);line-height:1.2;color:var(--you);white-space:nowrap}
 .splash-s{margin:0;color:var(--chalk-soft);font-size:14px}
 .splash .order{text-align:left}
+.dbg{position:fixed;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:70;max-height:38vh;overflow:auto;margin:0;padding:8px 10px;border-radius:8px;background:rgba(0,0,0,.86);color:#a6f0a6;font:11px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-all}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;width:max-content;max-width:calc(100% - 32px);padding:10px 16px;border-radius:12px;background:var(--panel);border:1.5px solid var(--line);box-shadow:0 10px 24px -8px rgba(0,0,0,.7);font-size:14px;text-wrap:pretty}
 .toast.err{border-color:var(--lose);color:var(--lose)}
 
@@ -424,6 +425,7 @@ fieldset:disabled .opts span{cursor:default}
         <li>オンラインは持ち時間つき。時間切れと投了は脱落。同じ局面が3回出たら引き分け。</li>
       </ul>
     </section>
+    <p class="note center" id="appVer" style="margin:0"></p>
   </section>
 
   <!-- CPU setup -->
@@ -591,7 +593,7 @@ fieldset:disabled .opts span{cursor:default}
   <section class="screen narrow" id="scrSearch" hidden>
     <div class="search">
       <div class="radar" aria-hidden="true"><svg viewBox="0 0 100 130" id="radarHand"></svg></div>
-      <p class="search-t">相手をさがしています</p>
+      <p class="search-t" id="searchTitle">相手をさがしています</p>
       <p class="search-s" id="searchTime">0秒</p>
       <p class="note" id="searchInfo">あなたのレート 1500</p>
       <button type="button" class="btn" id="netCancel">やめる</button>
@@ -664,6 +666,7 @@ fieldset:disabled .opts span{cursor:default}
   </div>
 </div>
 <p class="toast" id="toast" role="status" hidden></p>
+<pre class="dbg" id="dbg" hidden></pre>
 
 <script>
 // ===== SOLVER-START =====
@@ -763,6 +766,17 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
+const APP_VERSION = '11/13-3';
+const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
+const dbgLines = [];
+function dbg(...a){
+  if (!DEBUG) return;
+  dbgLines.push(new Date().toTimeString().slice(0, 8) + ' ' + a.join(' '));
+  if (dbgLines.length > 60) dbgLines.shift();
+  const el = document.getElementById('dbg');
+  if (el) { el.hidden = false; el.textContent = dbgLines.join('\n'); el.scrollTop = el.scrollHeight; }
+}
+const short = u => String(u || '').slice(0, 5);
 const lsGet = k => { try { return localStorage.getItem(k); } catch(e) { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch(e) {} };
 const clone = x => JSON.parse(JSON.stringify(x));
@@ -1322,6 +1336,7 @@ function attach(code){
     render();
   });
   watch('rooms/' + code, onRoom);
+  dbg('attach room ' + code);
 }
 
 function detach(){
@@ -1379,8 +1394,14 @@ function dropRoom(msg){
 function onRoom(room){
   if (!room) {
     const waiting = net.room && net.room.kind === 'rated' && G && !G.over && G.ply === 0 && !G.turnAt;
-    if (waiting) { dropRoom(); toast('相手が来なかったので、さがし直しています'); startSearch(); }
-    else dropRoom('部屋がなくなりました');
+    if (waiting) {
+      dbg('pending room ' + net.code + ' gone, searching again');
+      detach();
+      Object.assign(net, {on:false, code:null, room:null, seat:-1, busy:false});
+      G = null;
+      setUrlRoom(null);
+      startSearch(true);
+    } else dropRoom('部屋がなくなりました');
     return;
   }
   net.room = room;
@@ -1402,8 +1423,12 @@ function onRoom(room){
   net.seat = seat;
   if (room.kind === 'rated' && !S.over && S.ply === 0 && !S.turnAt) {
     const joined = room.joined || {};
+    dbg('room ' + net.code + ' joined: ' + S.seats.map(u => short(u) + (joined[u] ? '✓' : '…')).join(' '));
     if (!joined[net.uid]) net.fb.set(net.fb.ref(net.fb.db, `rooms/${net.code}/joined/${net.uid}`), true).catch(() => {});
     else if (S.seats.every(u => joined[u])) startClock();
+    G = toLocal(S, seat);
+    setScreen('search');
+    return;
   }
   if (room.kind === 'rated') applyRating(S); else recordGame(S);
   maybeSplash(room, S);
@@ -1621,9 +1646,10 @@ function hideSplash(){ clearTimeout(ui.splashTimer); $('#splash').hidden = true;
 
 // ===================== Matchmaking =====================
 // A shared queue; whoever finds a partner makes the room and marks both entries in one transaction.
-async function startSearch(){
+async function startSearch(keepTimer){
   if (search.on || net.on || net.connecting) return;
   ui.resumeSearch = false;
+  if (!keepTimer) ui.searchSince = Date.now();
   setScreen('search');
   net.connecting = true;
   let fb;
@@ -1633,9 +1659,10 @@ async function startSearch(){
   if (search.on || net.on || ui.screen !== 'search') return;
   lsSet(NAME_KEY, typedName()); saveName(fb);
   const sg = ++search.gen;
-  Object.assign(search, {on:true, since:Date.now(), working:false});
+  Object.assign(search, {on:true, since: ui.searchSince || Date.now(), working:false});
+  dbg('search start me=' + short(net.uid));
   const meRef = fb.ref(fb.db, 'queue/' + net.uid);
-  search.unsub = fb.onValue(meRef, s => { const v = s.val(); if (sg === search.gen && v && v.match) gotMatch(String(v.match)); });
+  search.unsub = fb.onValue(meRef, s => { const v = s.val(); dbg('my entry: ' + (v ? (v.match ? 'match ' + v.match : 'waiting') : 'none')); if (sg === search.gen && v && v.match) gotMatch(String(v.match)); });
   search.timers = [setInterval(() => tryMatch(sg), RESCAN_MS), setInterval(() => enqueue(sg, false), HEARTBEAT_MS)];
   render();
   tryMatch(sg);
@@ -1671,6 +1698,7 @@ async function enqueue(sg, create){
 }
 function gotMatch(code){
   if (!search.on) return;
+  dbg('got match ' + code);
   stopSearch();
   const fb = net.fb, meRef = fb.ref(fb.db, 'queue/' + net.uid);
   fb.onDisconnect(meRef).cancel().catch(() => {});
@@ -1681,7 +1709,7 @@ async function joinRated(code, resume = true){
   try {
     const room = (await net.fb.get(net.fb.ref(net.fb.db, 'rooms/' + code))).val();
     const S = room && normState(room.state);
-    if (!room || !room.players || !room.players[net.uid] || !S || S.over) { if (!net.on) { if (resume) startSearch(); else goHome(); } return; }
+    if (!room || !room.players || !room.players[net.uid] || !S || S.over) { dbg('match room ' + code + ' not usable'); if (!net.on) { if (resume) startSearch(true); else goHome(); } return; }
     attach(code);
   } catch(e) { goHome(); toast(errText(e, 'マッチした部屋に入れませんでした'), true); }
 }
@@ -1689,6 +1717,7 @@ async function joinRated(code, resume = true){
 function startClock(){
   if (net.clockTx) return;
   net.clockTx = true;
+  dbg('both in, starting the clock');
   const fb = net.fb, gen = net.gen;
   fb.runTransaction(fb.ref(fb.db, `rooms/${net.code}/state`), cur => {
     if (cur === null) return null;
@@ -1702,6 +1731,7 @@ function startClock(){
 function cancelMatch(){
   if (net.cancelTx) return;
   net.cancelTx = true;
+  dbg('rival did not arrive, calling off ' + net.code);
   const fb = net.fb, gen = net.gen;
   fb.runTransaction(fb.ref(fb.db, 'rooms/' + net.code), cur => {
     if (cur === null) return null;
@@ -1723,6 +1753,7 @@ async function tryMatch(sg){
     const now = serverNow(), myR = myRating();
     const gap = u => Math.abs((+q[u].rating || BASE_RATE) - myR);
     const cands = Object.keys(q).filter(u => u !== net.uid && q[u] && !q[u].match && now - (+q[u].ts || 0) < QUEUE_FRESH).sort((a, b) => gap(a) - gap(b));
+    dbg('queue: ' + Object.keys(q).map(u => short(u) + (q[u].match ? '(m)' : '') + '/' + Math.round((now - (+q[u].ts || 0)) / 1000) + 's').join(' ') + ' → cands ' + cands.map(short).join(','));
     if (!cands.length) { if (!mine) await enqueue(sg, true); return; }
     const oppUid = cands[0], opp = q[oppUid];
     const t0 = Date.now();
@@ -1745,6 +1776,7 @@ async function tryMatch(sg){
       return cur;
     });
     const after = (res.snapshot.val() || {})[oppUid];
+    dbg('claim ' + short(oppUid) + ' room ' + code + ': ' + (res.committed && after && String(after.match) === code ? 'OK' : 'lost'));
     if (res.committed && after && String(after.match) === code && sg === search.gen) {
       const c = code; code = null;
       stopSearch();
@@ -1831,8 +1863,14 @@ function renderChrome(){
   $('#netCreate').disabled = net.connecting;
   $('#netJoin').disabled = net.connecting;
   const si = $('#searchInfo');
-  si.textContent = 'あなたのレート ';
-  si.append(rateEl(mr), '・見つかったら自動で始まります');
+  if (net.on && isRated() && G && G.names) {
+    $('#searchTitle').textContent = '相手が見つかりました';
+    si.textContent = `${G.names[1] || '相手'}さんとつないでいます…`;
+  } else {
+    $('#searchTitle').textContent = '相手をさがしています';
+    si.textContent = 'あなたのレート ';
+    si.append(rateEl(mr), '・見つかったら自動で始まります');
+  }
 }
 
 function renderCpu(){
@@ -2147,7 +2185,7 @@ function renderRank(){
 // Runs every 250ms: the move clock, the search timer and the two-tap confirmations.
 function tick(){
   const c = $('#clock'), now = Date.now();
-  if (ui.screen === 'game' && isRated() && G && !G.over && G.ply === 0 && !G.turnAt && serverNow() > (+net.room.waitUntil || 0)) cancelMatch();
+  if (isRated() && G && !G.over && G.ply === 0 && !G.turnAt && serverNow() > (+net.room.waitUntil || 0)) cancelMatch();
   if (ui.screen === 'game' && netPlaying() && G && G.limit && G.turnAt && !G.over) {
     const left = Math.ceil((G.turnAt + G.limit * 1000 - serverNow()) / 1000);
     const shown = Math.max(0, Math.min(G.limit, left));
@@ -2159,7 +2197,7 @@ function tick(){
       if (net.timeoutKey !== k) { net.timeoutKey = k; claimTimeout(G.ply, turnRoom); }
     }
   } else c.hidden = true;
-  if (ui.screen === 'search' && search.on) $('#searchTime').textContent = `${Math.floor((now - search.since) / 1000)}秒`;
+  if (ui.screen === 'search' && (search.on || net.on)) $('#searchTime').textContent = `${Math.floor((now - (ui.searchSince || search.since)) / 1000)}秒`;
   if ((ui.resignArm && now > ui.resignArm) || (ui.exitArm && now > ui.exitArm)) {
     if (ui.resignArm && now > ui.resignArm) ui.resignArm = 0;
     if (ui.exitArm && now > ui.exitArm) ui.exitArm = 0;
@@ -2172,7 +2210,7 @@ setInterval(tick, 250);
 $('#goCpu').addEventListener('click', () => setScreen('cpu'));
 $('#homePlate').addEventListener('click', () => setScreen('plate'));
 $('#goCustom').addEventListener('click', () => setScreen('custom'));
-$('#goRated').addEventListener('click', startSearch);
+$('#goRated').addEventListener('click', () => startSearch());
 $$('[data-home]').forEach(b => b.addEventListener('click', goHome));
 $('#cpuStart').addEventListener('click', () => { setScreen('game'); newGame(); });
 $('#settings').addEventListener('change', e => {
@@ -2189,6 +2227,16 @@ $('#netJoin').addEventListener('click', () => netJoin($('#netCode').value));
 $('#netCode').addEventListener('input', e => { const v = e.target.value.replace(/\D/g, '').slice(0, 4); if (v !== e.target.value) e.target.value = v; });
 $('#netCode').addEventListener('keydown', e => { if (e.key === 'Enter') netJoin($('#netCode').value); });
 $('#netCancel').addEventListener('click', async () => {
+  if (net.on) {
+    const fb = net.fb, code = net.code, pending = isRated() && G && !G.turnAt;
+    dropRoom();
+    if (pending) fb.runTransaction(fb.ref(fb.db, 'rooms/' + code), cur => {
+      if (cur === null) return null;
+      const S = normState(cur.state);
+      return (!S || S.over || S.ply !== 0 || S.turnAt) ? undefined : null;
+    }).catch(() => {});
+    return;
+  }
   const code = await cancelSearch();
   if (code) joinRated(code, false); else goHome();
 });
@@ -2222,7 +2270,7 @@ $('#exitBtn').addEventListener('click', () => {
   else { ui.exitArm = Date.now() + 3000; render(); }
 });
 $('#again').addEventListener('click', () => {
-  if (isRated()) { leaveRoom().then(startSearch); }
+  if (isRated()) { leaveRoom().then(() => startSearch()); }
   else if (net.on) { if (isHost()) backToLobby(); }
   else newGame();
 });
@@ -2242,6 +2290,8 @@ document.addEventListener('keydown', e => {
 const today = new Date();
 $('#date').innerHTML = `<span class="tcy">${today.getMonth()+1}</span>月<span class="tcy">${today.getDate()}</span>日（${'日月火水木金土'[today.getDay()]}）`;
 $('#radarHand').innerHTML = handSVG(2, false, 0);
+$('#appVer').textContent = `バージョン ${APP_VERSION}`;
+dbg('debug on, version ' + APP_VERSION);
 TIERS.forEach(([min], i) => {
   const li = document.createElement('li');
   li.className = 't' + i;
