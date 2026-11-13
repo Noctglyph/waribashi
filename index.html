@@ -766,7 +766,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/13-3';
+const APP_VERSION = '11/13-4';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -1194,6 +1194,7 @@ function onHand(k, i){
 
 // ===================== Online: Firebase =====================
 const fail = msg => Object.assign(new Error(msg), {userMessage: msg});
+const withTimeout = (p, ms) => Promise.race([p, new Promise((_, no) => setTimeout(() => no(Object.assign(new Error('timeout'), {code: 'timeout'})), ms))]);
 function errText(e, fallback){
   const c = String((e && (e.code || e.message)) || '');
   if (/operation-not-allowed|admin-restricted/.test(c)) return 'Firebaseで「匿名」ログインが有効になっていません';
@@ -1321,7 +1322,7 @@ async function netJoin(raw){
 function attach(code){
   detach();
   const gen = ++net.gen, fb = net.fb, db = fb.db;
-  Object.assign(net, {on:true, code, seat:-1, room:null, busy:false, connected:true, timeoutKey:'', clockTx:false, cancelTx:false, presFix:0});
+  Object.assign(net, {on:true, code, seat:-1, room:null, busy:false, connected:true, timeoutKey:'', clockTx:false, cancelTx:false, presFix:0, joining:0, attachedAt:Date.now()});
   clearTimeout(cpuTimer); cpuTimer = null; busy = false;
   G = null; sel = null; panel = null; ui.resignArm = 0; ui.exitArm = 0;
   setUrlRoom(code);
@@ -1392,6 +1393,11 @@ function dropRoom(msg){
 }
 
 function onRoom(room){
+  if (net.joining) {
+    const S0 = room && normState(room.state);
+    if (!room || room.kind !== 'rated' || !room.players || !room.players[net.uid] || !S0 || S0.over) { abandonJoin(!room ? 'gone' : 'not mine'); return; }
+    net.joining = 0;
+  }
   if (!room) {
     const waiting = net.room && net.room.kind === 'rated' && G && !G.over && G.ply === 0 && !G.turnAt;
     if (waiting) {
@@ -1663,14 +1669,18 @@ async function startSearch(keepTimer){
   dbg('search start me=' + short(net.uid));
   const meRef = fb.ref(fb.db, 'queue/' + net.uid);
   search.unsub = fb.onValue(meRef, s => { const v = s.val(); dbg('my entry: ' + (v ? (v.match ? 'match ' + v.match : 'waiting') : 'none')); if (sg === search.gen && v && v.match) gotMatch(String(v.match)); });
+  // The whole queue stays synced while searching (no one-off reads); a change triggers a match attempt.
+  search.q = null;
+  search.unsubQ = fb.onValue(fb.ref(fb.db, 'queue'), s => { if (sg !== search.gen) return; search.q = s.val() || {}; tryMatch(sg); }, () => {});
   search.timers = [setInterval(() => tryMatch(sg), RESCAN_MS), setInterval(() => enqueue(sg, false), HEARTBEAT_MS)];
   render();
-  tryMatch(sg);
 }
 function stopSearch(){
   search.gen++;
   search.timers.forEach(clearInterval); search.timers = [];
   if (search.unsub) { try { search.unsub(); } catch(e) {} search.unsub = null; }
+  if (search.unsubQ) { try { search.unsubQ(); } catch(e) {} search.unsubQ = null; }
+  search.q = null;
   search.on = false;
 }
 // Leaves the queue. Returns a room code if someone matched us at the last moment.
@@ -1705,13 +1715,22 @@ function gotMatch(code){
   fb.set(meRef, null).catch(() => {});
   joinRated(code);
 }
-async function joinRated(code, resume = true){
-  try {
-    const room = (await net.fb.get(net.fb.ref(net.fb.db, 'rooms/' + code))).val();
-    const S = room && normState(room.state);
-    if (!room || !room.players || !room.players[net.uid] || !S || S.over) { dbg('match room ' + code + ' not usable'); if (!net.on) { if (resume) startSearch(true); else goHome(); } return; }
-    attach(code);
-  } catch(e) { goHome(); toast(errText(e, 'マッチした部屋に入れませんでした'), true); }
+// Join a room someone matched me into. No get(): the room listener tells us whether it is usable.
+function joinRated(code, resume = true){
+  if (net.on) return;
+  dbg('joining ' + code);
+  attach(code);
+  net.joining = Date.now();
+  net.joinResume = resume;
+}
+function abandonJoin(why){
+  const resume = net.joinResume !== false;
+  dbg('match room ' + net.code + ' not usable (' + why + '), ' + (resume ? 'searching again' : 'going home'));
+  detach();
+  Object.assign(net, {on:false, code:null, room:null, seat:-1, busy:false, joining:0});
+  G = null;
+  setUrlRoom(null);
+  if (resume) startSearch(true); else goHome();
 }
 // Both players are in: start the clock (whoever gets there first).
 function startClock(){
@@ -1746,8 +1765,8 @@ async function tryMatch(sg){
   const fb = net.fb, db = fb.db;
   let code = null;
   try {
-    const q = (await fb.get(fb.ref(db, 'queue'))).val() || {};
-    if (sg !== search.gen) return;
+    if (!search.q) return;
+    const q = search.q;
     const mine = q[net.uid];
     if (mine && mine.match) { gotMatch(String(mine.match)); return; }
     const now = serverNow(), myR = myRating();
@@ -1784,7 +1803,8 @@ async function tryMatch(sg){
       attach(c);
     }
   } catch(e) {
-    if (sg === search.gen) toast(errText(e, '相手さがしでエラーが出ました'), true);
+    dbg('tryMatch error: ' + ((e && (e.code || e.message)) || e));
+    if (sg === search.gen && !(e && e.code === 'timeout')) toast(errText(e, '相手さがしでエラーが出ました'), true);
   } finally {
     if (code) fb.set(fb.ref(db, 'rooms/' + code), null).catch(() => {});
     search.working = false;
@@ -2186,6 +2206,14 @@ function renderRank(){
 function tick(){
   const c = $('#clock'), now = Date.now();
   if (isRated() && G && !G.over && G.ply === 0 && !G.turnAt && serverNow() > (+net.room.waitUntil || 0)) cancelMatch();
+  // Watchdog: the search screen must always be either searching or joining a room.
+  if (ui.screen === 'search' && !document.hidden) {
+    const idle = !search.on && !net.on && !net.connecting;
+    if (!idle) ui.idleSince = 0;
+    else if (!ui.idleSince) ui.idleSince = now;
+    else if (now - ui.idleSince > 3000) { ui.idleSince = 0; dbg('watchdog: search was idle, restarting'); startSearch(true); }
+    if (net.on && !net.room && now - (net.attachedAt || now) > 8000) abandonJoin('no data');
+  }
   if (ui.screen === 'game' && netPlaying() && G && G.limit && G.turnAt && !G.over) {
     const left = Math.ceil((G.turnAt + G.limit * 1000 - serverNow()) / 1000);
     const shown = Math.max(0, Math.min(G.limit, left));
@@ -2237,8 +2265,9 @@ $('#netCancel').addEventListener('click', async () => {
     }).catch(() => {});
     return;
   }
-  const code = await cancelSearch();
-  if (code) joinRated(code, false); else goHome();
+  // Go home first so nothing restarts the search; a last-moment match is left to time out on the other side.
+  goHome();
+  await cancelSearch();
 });
 // Two name fields (home and custom match) share one value.
 const nameInputs = [$('#netName'), $('#customName')];
