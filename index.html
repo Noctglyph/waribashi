@@ -353,7 +353,7 @@ fieldset:disabled .opts span{cursor:default}
 .splash-t{margin:0;font-family:var(--font-display);font-size:clamp(24px,7.2vw,38px);line-height:1.2;color:var(--you);white-space:nowrap}
 .splash-s{margin:0;color:var(--chalk-soft);font-size:14px}
 .splash .order{text-align:left}
-.dbg{position:fixed;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:70;max-height:38vh;overflow:auto;margin:0;padding:8px 10px;border-radius:8px;background:rgba(0,0,0,.86);color:#a6f0a6;font:11px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-all}
+.dbg{pointer-events:none;position:fixed;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:70;max-height:38vh;overflow:auto;margin:0;padding:8px 10px;border-radius:8px;background:rgba(0,0,0,.86);color:#a6f0a6;font:11px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-all}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;width:max-content;max-width:calc(100% - 32px);padding:10px 16px;border-radius:12px;background:var(--panel);border:1.5px solid var(--line);box-shadow:0 10px 24px -8px rgba(0,0,0,.7);font-size:14px;text-wrap:pretty}
 .toast.err{border-color:var(--lose);color:var(--lose)}
 
@@ -766,7 +766,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/13-4';
+const APP_VERSION = '11/13-5';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -777,6 +777,8 @@ function dbg(...a){
   if (el) { el.hidden = false; el.textContent = dbgLines.join('\n'); el.scrollTop = el.scrollHeight; }
 }
 const short = u => String(u || '').slice(0, 5);
+// Rebuild a list only when what it shows has changed, so a tap is never lost to a redraw.
+function unchanged(el, key){ if (el.dataset.key === key) return true; el.dataset.key = key; return false; }
 const lsGet = k => { try { return localStorage.getItem(k); } catch(e) { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch(e) {} };
 const clone = x => JSON.parse(JSON.stringify(x));
@@ -1322,7 +1324,7 @@ async function netJoin(raw){
 function attach(code){
   detach();
   const gen = ++net.gen, fb = net.fb, db = fb.db;
-  Object.assign(net, {on:true, code, seat:-1, room:null, busy:false, connected:true, timeoutKey:'', clockTx:false, cancelTx:false, presFix:0, joining:0, attachedAt:Date.now()});
+  Object.assign(net, {on:true, code, seat:-1, room:null, busy:false, connected:true, timeoutKey:'', clockTx:false, cancelTx:false, presFix:0, joining:0, attachedAt:Date.now(), started:false});
   clearTimeout(cpuTimer); cpuTimer = null; busy = false;
   G = null; sel = null; panel = null; ui.resignArm = 0; ui.exitArm = 0;
   setUrlRoom(code);
@@ -1336,7 +1338,15 @@ function attach(code){
     if (net.connected) fb.onDisconnect(presRef).remove().then(() => fb.set(presRef, true)).catch(() => {});
     render();
   });
-  watch('rooms/' + code, onRoom);
+  // Firebase shows my own writes to listeners immediately, even while onRoom is still running.
+  // So room updates are queued and handled one at a time with the newest data, never inside one another.
+  let latestRoom, roomQueued = false;
+  watch('rooms/' + code, v => {
+    latestRoom = v;
+    if (roomQueued) return;
+    roomQueued = true;
+    queueMicrotask(() => { roomQueued = false; if (gen === net.gen) onRoom(latestRoom); });
+  });
   dbg('attach room ' + code);
 }
 
@@ -1393,6 +1403,7 @@ function dropRoom(msg){
 }
 
 function onRoom(room){
+  if (room && !room.createdAt) room = null;   // a stray write left only a fragment: the room is gone
   if (net.joining) {
     const S0 = room && normState(room.state);
     if (!room || room.kind !== 'rated' || !room.players || !room.players[net.uid] || !S0 || S0.over) { abandonJoin(!room ? 'gone' : 'not mine'); return; }
@@ -1414,7 +1425,8 @@ function onRoom(room){
   // Self-heal: if I'm connected but not marked online here, mark me again.
   if (net.connected && net.presRef && !(room.online || {})[net.uid] && Date.now() - net.presFix > 3000) {
     net.presFix = Date.now();
-    net.fb.set(net.presRef, true).catch(() => {});
+    const r = net.presRef;
+    setTimeout(() => net.fb.set(r, true).catch(() => {}), 0);
   }
   const ps = room.players || {};
   if (room.status !== 'playing') {
@@ -1428,18 +1440,21 @@ function onRoom(room){
   if (!S || seat < 0) { dropRoom('この試合には入っていません'); return; }
   net.seat = seat;
   if (room.kind === 'rated' && !S.over && S.ply === 0 && !S.turnAt) {
+    if (net.started) { dbg('ignoring a stale not-started view'); return; }
     const joined = room.joined || {};
     dbg('room ' + net.code + ' joined: ' + S.seats.map(u => short(u) + (joined[u] ? '✓' : '…')).join(' '));
-    if (!joined[net.uid]) net.fb.set(net.fb.ref(net.fb.db, `rooms/${net.code}/joined/${net.uid}`), true).catch(() => {});
-    else if (S.seats.every(u => joined[u])) startClock();
+    if (!joined[net.uid]) { const r = net.fb.ref(net.fb.db, `rooms/${net.code}/joined/${net.uid}`); setTimeout(() => net.fb.set(r, true).catch(() => {}), 0); }
+    else if (S.seats.every(u => joined[u])) setTimeout(startClock, 0);
     G = toLocal(S, seat);
+    dbg('pending → stay on search (screen was ' + ui.screen + ')');
     setScreen('search');
     return;
   }
   if (room.kind === 'rated') applyRating(S); else recordGame(S);
   maybeSplash(room, S);
   const L = toLocal(S, seat), gen = net.gen;
-  if (ui.screen !== 'game') { G = L; sel = null; panel = null; setScreen('game'); }
+  if (S.turnAt) net.started = true;
+  if (ui.screen !== 'game') { dbg('started → game'); G = L; sel = null; panel = null; setScreen('game'); }
   else netQueue = netQueue.then(() => applyNet(L, gen)).catch(() => {});
   render();
 }
@@ -1734,7 +1749,7 @@ function abandonJoin(why){
 }
 // Both players are in: start the clock (whoever gets there first).
 function startClock(){
-  if (net.clockTx) return;
+  if (!net.on || net.clockTx) return;
   net.clockTx = true;
   dbg('both in, starting the clock');
   const fb = net.fb, gen = net.gen;
@@ -1748,8 +1763,9 @@ function startClock(){
 }
 // The rival never arrived: remove the room; everyone still searching carries on.
 function cancelMatch(){
-  if (net.cancelTx) return;
+  if (net.cancelTx || Date.now() - (net.cancelAt || 0) < 2000) return;
   net.cancelTx = true;
+  net.cancelAt = Date.now();
   dbg('rival did not arrive, calling off ' + net.code);
   const fb = net.fb, gen = net.gen;
   fb.runTransaction(fb.ref(fb.db, 'rooms/' + net.code), cur => {
@@ -1757,7 +1773,8 @@ function cancelMatch(){
     const S = normState(cur.state);
     if (!S || S.over || S.ply !== 0 || S.turnAt) return undefined;
     return null;
-  }).catch(() => {}).finally(() => { if (gen === net.gen) net.cancelTx = false; });
+  }).then(r => dbg('call-off ' + (r.committed ? 'done' : 'not needed')), e => dbg('call-off failed: ' + ((e && (e.code || e.message)) || e)))
+    .finally(() => { if (gen === net.gen) net.cancelTx = false; });
 }
 async function tryMatch(sg){
   if (search.working || sg !== search.gen || net.on) return;
@@ -1911,6 +1928,8 @@ function renderPlateEditor(){
   const prog = item => item.key === 'maxRate' ? `最高 ${st.maxRate}` : `${Math.min(st[item.key] || 0, item.goal)}/${item.goal}`;
   const meter = f => { const m = document.createElement('span'); m.className = 'meter'; m.innerHTML = '<i></i>'; m.firstChild.style.width = Math.round(f * 100) + '%'; return m; };
   const tp = $('#titlePicks');
+  const pickKey = JSON.stringify([u.titles, u.plates, look, typedName(), st]);
+  if (unchanged(tp, pickKey)) return;
   tp.innerHTML = '';
   TITLES.forEach(t => {
     const have = u.titles.includes(t.id), on = look.title === t.id, b = document.createElement('button');
@@ -1952,6 +1971,8 @@ function renderLobby(){
   $('#lobbyCode').textContent = net.code;
   $('#lobbyCount').textContent = `${uids.length}/${MAX_PLAYERS}人`;
   const ol = $('#lobbySeats');
+  const seatKey = JSON.stringify([host, room.host, uids.map(u => [u, ps[u].name, ps[u].title, ps[u].plate, ps[u].rating, !!online[u]])]);
+  if (!unchanged(ol, seatKey)) {
   ol.innerHTML = '';
   for (let s = 0; s < MAX_PLAYERS; s++) {
     const li = document.createElement('li'), u = uids[s];
@@ -1971,6 +1992,7 @@ function renderLobby(){
       li.append(b);
     }
     ol.append(li);
+  }
   }
   const r = room.rules || {};
   const cur = {overflow: r.overflow === 'die' ? 'die' : 'wrap', split: r.split === 'off' ? 'off' : 'on', merge: r.merge === 'off' ? 'off' : 'on', limit: String(roomLimit(room))};
@@ -2101,8 +2123,10 @@ function renderStrip(act, ms, nm){
   } else ev.hidden = true;
 
   if (panel && act) {
-    sp.innerHTML = '';
     const [h0, h1] = G.hands[G.turn];
+    const shapes = ms.filter(m => m.kind !== 'attack');
+    if (unchanged(sp, JSON.stringify([h0, h1, G.ply, G.game, hintsOn(), shapes.map(m => [m.kind, m.hands])]))) { sp.hidden = false; return; }
+    sp.innerHTML = '';
     ms.filter(m => m.kind !== 'attack').forEach(m => {
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'chip';
@@ -2119,7 +2143,7 @@ function renderStrip(act, ms, nm){
       sp.append(b);
     });
     sp.hidden = false;
-  } else sp.hidden = true;
+  } else { sp.hidden = true; sp.dataset.key = ''; }
 }
 
 function renderRoomPanel(nm){
