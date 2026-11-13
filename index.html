@@ -144,6 +144,56 @@ fieldset:disabled .opts span{cursor:default}
 .t5{color:var(--t5)}
 .t6{color:var(--t6)}
 .t7{color:var(--t7)}
+/* Nameplates */
+.plate{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:10px;align-items:center;min-width:0;padding:10px 14px;border-radius:10px;border:2px solid var(--pe);color:var(--pf);text-align:left;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 2px 0 rgba(0,0,0,.28)}
+.pl-title{grid-column:1;min-width:0;font-size:11px;font-weight:700;letter-spacing:.06em;line-height:1.4;color:var(--pa);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-name{grid-column:1;min-width:0;font-family:var(--font-display);font-size:22px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-rate{grid-column:2;grid-row:1/span 2;font-size:14px;font-weight:700;line-height:1.5;padding:1px 10px;border-radius:999px;color:#1c1b18;font-variant-numeric:tabular-nums;box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.plate.sm{padding:5px 10px;border-radius:8px;border-width:1.5px}
+.plate.sm .pl-title{font-size:10px}
+.plate.sm .pl-name{font-size:16px}
+.plate.sm .pl-rate{font-size:12px;padding:0 8px}
+.plate.lg{padding:14px 18px}
+.plate.lg .pl-title{font-size:13px}
+.plate.lg .pl-name{font-size:30px}
+.plate.lg .pl-rate{font-size:16px;padding:2px 12px}
+.bg-t0{background:var(--t0)}
+.bg-t1{background:var(--t1)}
+.bg-t2{background:var(--t2)}
+.bg-t3{background:var(--t3)}
+.bg-t4{background:var(--t4)}
+.bg-t5{background:var(--t5)}
+.bg-t6{background:var(--t6)}
+.bg-t7{background:var(--t7)}
+.pl-chalk{background-color:var(--board);background-image:var(--noise);--pf:var(--chalk);--pa:var(--you);--pe:var(--wood)}
+.pl-wood{background-color:#86593a;background-image:repeating-linear-gradient(97deg,rgba(255,235,200,.07) 0 2px,transparent 2px 7px,rgba(0,0,0,.05) 7px 9px,transparent 9px 15px),linear-gradient(180deg,#a0704a,#74492b);--pf:#fff5e6;--pa:#ffd9a0;--pe:#55361e}
+.pl-note{background-color:#f3f1e8;background-image:linear-gradient(rgba(70,120,200,.2) 1px,transparent 1px),linear-gradient(90deg,rgba(70,120,200,.2) 1px,transparent 1px);background-size:12px 12px;--pf:#25303f;--pa:#2f6db5;--pe:#c3cee3}
+.pl-sakura{background-color:#f6c9d6;background-image:radial-gradient(circle at 16% 28%,rgba(255,255,255,.75) 0 3px,transparent 4px),radial-gradient(circle at 70% 74%,rgba(255,255,255,.6) 0 2px,transparent 3px),radial-gradient(circle at 90% 20%,rgba(255,255,255,.65) 0 2.5px,transparent 3.5px),radial-gradient(circle at 44% 88%,rgba(255,255,255,.5) 0 1.8px,transparent 2.8px),linear-gradient(120deg,#fadbe4,#efa6be);--pf:#4b1d2c;--pa:#a8325a;--pe:#e0849f}
+.pl-night{background-color:#131a33;background-image:radial-gradient(circle at 12% 30%,#fff 0 1px,transparent 1.6px),radial-gradient(circle at 38% 78%,#fff 0 .8px,transparent 1.4px),radial-gradient(circle at 63% 22%,#fff 0 1.2px,transparent 1.8px),radial-gradient(circle at 84% 66%,#fff 0 .9px,transparent 1.5px),radial-gradient(circle at 93% 18%,#ffe9a8 0 1.4px,transparent 2px),linear-gradient(160deg,#1d2856,#0c1124);--pf:#eef1ff;--pa:#a9bdff;--pe:#2d3a70}
+.pl-sea{background-color:#2a8796;background-image:repeating-radial-gradient(ellipse at 50% 150%,rgba(255,255,255,.09) 0 6px,transparent 6px 14px),linear-gradient(160deg,#41b4bf,#1d6a7c);--pf:#f0fdff;--pa:#cffcff;--pe:#145060}
+.pl-gold{background-color:#d9ae46;background-image:linear-gradient(115deg,#b07f20 0%,#f6dc83 36%,#c8952e 58%,#f3d77d 84%,#a3761c 100%);--pf:#2a1d04;--pa:#5b3c00;--pe:#86601a}
+.pl-rainbow{background-color:#f3e7ff;background-image:linear-gradient(100deg,#ffd1d1,#ffe6b5,#fffab5,#d2f6c6,#c6eaff,#d9cfff,#f5cfff);--pf:#2a2433;--pa:#6a3fa0;--pe:#c9b3e6}
+.plate-btn{position:relative;display:block;width:100%;padding:0;border:0;background:none;cursor:pointer;border-radius:12px;text-align:left;color:inherit}
+.plate-btn:focus-visible{outline:2px solid var(--chalk);outline-offset:3px}
+.plate-btn .plate{transition:transform .15s ease}
+.plate-btn:hover .plate{transform:translateY(-2px)}
+.plate-edit{position:absolute;right:12px;top:-11px;font-size:12px;font-weight:700;line-height:1.6;padding:0 10px;border-radius:999px;background:var(--panel);border:1.5px solid var(--line);color:var(--chalk-soft)}
+.plate-btn:hover .plate-edit{color:var(--chalk);border-color:var(--chalk-soft)}
+.picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.picks.plates{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.pick{display:grid;gap:3px;align-content:start;text-align:left;min-height:58px;min-width:0;padding:8px 10px;border-radius:10px;border:1.5px solid var(--line);background:var(--board-deep);cursor:pointer}
+.pick b{font-size:14px;min-width:0;overflow-wrap:anywhere}
+.pick small{font-size:11px;color:var(--chalk-soft);text-wrap:pretty}
+.pick.on{border-color:var(--you);background:rgba(243,215,116,.08)}
+.pick.on b{color:var(--you)}
+.pick:hover:not(:disabled){border-color:var(--chalk-soft)}
+.pick:disabled{cursor:default}
+.pick:disabled>*{opacity:.5}
+.pick:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.meter{display:block;height:4px;border-radius:2px;background:var(--line);overflow:hidden;margin-top:2px}
+.meter i{display:block;height:100%;background:var(--chalk-soft)}
+.vsbox{display:grid;gap:6px}
+.vsbox .vs-x{margin:0;font-family:var(--font-display);font-size:26px;line-height:1.1;color:var(--p1)}
 .tiers{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
 .tiers li{font-size:12px;font-weight:700;line-height:1.6;padding:0 9px;border-radius:999px;border:1px solid currentColor;font-variant-numeric:tabular-nums;white-space:nowrap}
 .facts{margin:0;display:grid;gap:8px}
@@ -158,7 +208,9 @@ fieldset:disabled .opts span{cursor:default}
 .rank li.me{background:rgba(243,215,116,.1);color:var(--you)}
 .rank .pos{font-family:var(--font-display);text-align:right;color:var(--chalk-soft)}
 .rank li.me .pos{color:var(--you)}
-.rank .who{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank .who{display:grid;min-width:0}
+.rank .rn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank .who small{font-size:11px;color:var(--chalk-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rank .rt{font-weight:700;font-variant-numeric:tabular-nums}
 .rank .rec{font-size:12px;color:var(--chalk-soft);font-variant-numeric:tabular-nums}
 .rank li.empty{display:block;color:var(--chalk-soft);padding:0}
@@ -170,7 +222,7 @@ fieldset:disabled .opts span{cursor:default}
 .seats li{display:flex;align-items:center;gap:8px;min-height:50px;padding:6px 8px 6px 12px;border-radius:12px;background:var(--board-deep);border:1.5px solid var(--line)}
 .seats li.empty{border-style:dashed;background:none;color:var(--chalk-faint)}
 .seats .sn{font-family:var(--font-display);color:var(--chalk-faint);width:1.1em;flex:none}
-.seats .who{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+.seats .plate{flex:1}
 .kick{flex:none;width:40px;height:40px;border-radius:10px;border:1.5px solid var(--line);background:none;color:var(--chalk-soft);cursor:pointer;font-size:18px;line-height:1}
 .kick:hover{border-color:var(--lose);color:var(--lose)}
 .kick:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
@@ -272,6 +324,7 @@ fieldset:disabled .opts span{cursor:default}
 .chip{display:inline-flex;flex-direction:column;align-items:center;gap:2px;min-height:44px;padding:6px 16px;border-radius:12px;border:1.5px solid var(--chalk-faint);background:var(--board-deep);cursor:pointer}
 .chip span{font-family:var(--font-display);font-size:20px;line-height:1.2}
 .chip small{font-size:11px;font-weight:700}
+.chip small.k{color:var(--chalk-soft)}
 .chip:hover{border-color:var(--chalk-soft)}
 .chip:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .controls{display:flex;flex-wrap:wrap;gap:10px}
@@ -291,20 +344,15 @@ fieldset:disabled .opts span{cursor:default}
 .order{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:14px}
 .order li{display:flex;align-items:center;gap:8px;min-width:0}
 .order .sn{font-family:var(--font-display);color:var(--chalk-faint);width:1.1em;flex:none}
-.order .who{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+.order .plate{flex:1}
 
 /* Splash and toast */
 .splash{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-left,0px));background:rgba(20,18,15,.74);cursor:pointer}
 .splash-in{width:min(440px,100%);padding:26px 20px;border-radius:6px;border:10px solid var(--wood);background-color:var(--board);background-image:var(--noise);text-align:center;display:grid;gap:14px;animation:pop .45s cubic-bezier(.2,.9,.3,1.3)}
 @keyframes pop{from{transform:scale(.85);opacity:0}}
-.splash-t{margin:0;font-family:var(--font-display);font-size:clamp(30px,9vw,40px);line-height:1.2;color:var(--you)}
+.splash-t{margin:0;font-family:var(--font-display);font-size:clamp(24px,7.2vw,38px);line-height:1.2;color:var(--you);white-space:nowrap}
 .splash-s{margin:0;color:var(--chalk-soft);font-size:14px}
-.vs{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:10px}
-.vs div{display:grid;gap:2px;min-width:0}
-.vs b{font-size:18px;overflow-wrap:anywhere}
-.vs small{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
-.vs .vs-x{font-family:var(--font-display);font-size:28px;color:var(--p1)}
-.splash .order{justify-items:center}
+.splash .order{text-align:left}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;width:max-content;max-width:calc(100% - 32px);padding:10px 16px;border-radius:12px;background:var(--panel);border:1.5px solid var(--line);box-shadow:0 10px 24px -8px rgba(0,0,0,.7);font-size:14px;text-wrap:pretty}
 .toast.err{border-color:var(--lose);color:var(--lose)}
 
@@ -337,10 +385,8 @@ fieldset:disabled .opts span{cursor:default}
       <h1>わりばし</h1>
       <p>指の本数を足して、相手の手を消していく教室の手遊び。</p>
     </div>
-    <div class="field">
-      <label for="netName">あなたの名前</label>
-      <input class="input" id="netName" maxlength="12" autocomplete="nickname" placeholder="例：ゆー">
-    </div>
+    <button type="button" class="plate-btn" id="homePlate" aria-label="ネームプレートを編集"><span id="homePlateBox"></span><span class="plate-edit">編集</span></button>
+    <p class="note" id="homeNameHint" hidden style="margin:-6px 0 0">プレートをタップして、名前と称号を決めよう。</p>
     <div class="modes">
       <button type="button" class="mode" id="goRated">
         <span class="mode-k">レート戦</span>
@@ -438,6 +484,29 @@ fieldset:disabled .opts span{cursor:default}
       </form>
     </section>
     <button type="button" class="btn primary big" id="cpuStart">はじめる</button>
+  </section>
+
+  <!-- Nameplate editor -->
+  <section class="screen narrow" id="scrPlate" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>ネームプレート</h2></div>
+    <div id="platePreview"></div>
+    <div class="field">
+      <label for="netName">名前</label>
+      <input class="input" id="netName" maxlength="12" autocomplete="nickname" placeholder="例：ゆー">
+    </div>
+    <section class="panel">
+      <h3>称号 <span class="tag mine" id="titleCount"></span></h3>
+      <div class="picks" id="titlePicks"></div>
+    </section>
+    <section class="panel">
+      <h3>プレート <span class="tag mine" id="plateCount"></span></h3>
+      <div class="picks plates" id="platePicks"></div>
+    </section>
+    <section class="panel">
+      <h3>あなたの記録</h3>
+      <dl class="facts" id="myStats"></dl>
+      <p class="note">記録・称号・プレートはオンライン対戦（レート戦とカスタムマッチ）で増えます。CPUの称号はCPU対戦で手に入ります。</p>
+    </section>
   </section>
 
   <!-- Custom match entry -->
@@ -556,8 +625,7 @@ fieldset:disabled .opts span{cursor:default}
           <div class="tray" aria-hidden="true"></div>
         </div>
         <div class="controls">
-          <button type="button" class="btn" id="splitBtn" aria-expanded="false">分身</button>
-          <button type="button" class="btn" id="mergeBtn" aria-expanded="false">合成</button>
+          <button type="button" class="btn" id="shapeBtn" aria-expanded="false">分身・合成</button>
           <button type="button" class="btn end" id="resetBtn">最初から</button>
           <button type="button" class="btn danger end" id="resignBtn" hidden>投了</button>
           <button type="button" class="btn" id="exitBtn">ホームへ</button>
@@ -724,6 +792,71 @@ const tierOf = r => { let t = 0; TIERS.forEach(([min], i) => { if (r >= min) t =
 const tierCls = r => 't' + tierOf(r);
 const tierName = r => TIERS[tierOf(r)][1];
 function rateEl(r, tag){ const e = document.createElement(tag || 'b'); e.className = tierCls(r); e.textContent = r; return e; }
+
+// ----- Nameplates: titles and plate designs unlock from your record -----
+const TITLES = [
+  {id:'rookie', name:'ルーキー', need:'はじめから'},
+  {id:'first', name:'はじめての勝利', need:'オンラインで1勝', key:'wins', goal:1},
+  {id:'g10', name:'常連', need:'オンラインで10試合', key:'games', goal:10},
+  {id:'w10', name:'勝ち慣れてきた', need:'オンラインで10勝', key:'wins', goal:10},
+  {id:'g30', name:'歴戦', need:'オンラインで30試合', key:'games', goal:30},
+  {id:'w50', name:'わりばし名人', need:'オンラインで50勝', key:'wins', goal:50},
+  {id:'s3', name:'3連勝', need:'オンラインで3連勝', key:'best', goal:3},
+  {id:'s5', name:'止まらない', need:'オンラインで5連勝', key:'best', goal:5},
+  {id:'merge', name:'合成職人', need:'合成を20回', key:'merges', goal:20},
+  {id:'split', name:'分身の術', need:'分身を20回', key:'splits', goal:20},
+  {id:'ko', name:'とどめ屋', need:'相手の手を30回消す', key:'kos', goal:30},
+  {id:'royale', name:'バトロワ王', need:'3人以上の試合で勝つ', key:'royale', goal:1},
+  {id:'long', name:'粘り勝ち', need:'40手以上の試合で勝つ', key:'long', goal:1},
+  {id:'mizu', name:'水色の壁', need:'レート1600に届く', key:'maxRate', goal:1600},
+  {id:'ao', name:'青の領域', need:'レート1700に届く', key:'maxRate', goal:1700},
+  {id:'kin', name:'黄金の指', need:'レート1800に届く', key:'maxRate', goal:1800},
+  {id:'cpu', name:'CPUキラー', need:'CPU（ふつう以上）に勝つ', key:'cpuNormal', goal:1},
+  {id:'strong', name:'さいきょうと互角', need:'CPU（さいきょう）と引き分け', key:'cpuDraw', goal:1},
+];
+const PLATES = [
+  {id:'chalk', name:'黒板', need:'はじめから'},
+  {id:'wood', name:'木の机', need:'オンラインで5試合', key:'games', goal:5},
+  {id:'note', name:'方眼ノート', need:'オンラインで5勝', key:'wins', goal:5},
+  {id:'sakura', name:'桜', need:'オンラインで15勝', key:'wins', goal:15},
+  {id:'night', name:'夜空', need:'オンラインで3連勝', key:'best', goal:3},
+  {id:'sea', name:'水面', need:'レート1600に届く', key:'maxRate', goal:1600},
+  {id:'gold', name:'金', need:'レート1700に届く', key:'maxRate', goal:1700},
+  {id:'rainbow', name:'虹', need:'称号を10個集める', key:'titles', goal:10},
+];
+const STAT_KEYS = ['games','wins','best','streak','merges','splits','kos','royale','long','cpuNormal','cpuDraw'];
+function statsOf(p){
+  const st = (p && p.st) || {}, o = {};
+  for (const k of STAT_KEYS) o[k] = +st[k] || 0;
+  o.maxRate = Math.max(+st.maxRate || 0, BASE_RATE);
+  return o;
+}
+const progress = (item, st) => item.key ? Math.min(1, (st[item.key] || 0) / item.goal) : 1;
+function unlocked(st){
+  const titles = TITLES.filter(t => progress(t, st) >= 1).map(t => t.id);
+  const st2 = Object.assign({}, st, {titles: titles.length});
+  return {titles, plates: PLATES.filter(p => progress(p, st2) >= 1).map(p => p.id), st: st2};
+}
+const titleName = id => (TITLES.find(t => t.id === id) || TITLES[0]).name;
+const plateId = id => PLATES.some(p => p.id === id) ? id : 'chalk';
+const titleId = id => TITLES.some(t => t.id === id) ? id : 'rookie';
+function myLook(){
+  const u = unlocked(statsOf(net.profile)), p = net.profile || {};
+  const t = p.title || lsGet('waribashi-title'), pl = p.plate || lsGet('waribashi-plate');
+  return {title: u.titles.includes(t) ? t : 'rookie', plate: u.plates.includes(pl) ? pl : 'chalk'};
+}
+const myEntry = () => Object.assign({name: typedName(), rating: myRating(), joinedAt: Date.now()}, myLook());
+function plateEl(info, size){
+  info = info || {};
+  const el = document.createElement('div');
+  el.className = `plate pl-${plateId(info.plate)}` + (size ? ' ' + size : '');
+  const t = document.createElement('span'); t.className = 'pl-title'; t.textContent = titleName(info.title);
+  const n = document.createElement('span'); n.className = 'pl-name'; n.textContent = String(info.name || 'ななし').slice(0, 12);
+  el.append(t, n);
+  const r = Math.round(+info.rating);
+  if (r) { const b = document.createElement('span'); b.className = 'pl-rate bg-' + tierCls(r); b.textContent = r; el.append(b); }
+  return el;
+}
 
 const serverNow = () => Date.now() + (net.offset || 0);
 const myRating = () => BASE_RATE + Math.round(+((net.profile || {}).rp) || 0);
@@ -993,7 +1126,9 @@ async function doMove(m){
   busy = false;
   if (online) { if (gen === net.gen) await netMove(m); else render(); return; }
   if (net.on || G !== g0) { render(); return; }
-  G = step(G, m, 0); render(); maybeCpu();
+  G = step(G, m, 0);
+  if (G.over) recordCpu(G);
+  render(); maybeCpu();
 }
 
 function animateMove(m){
@@ -1080,11 +1215,35 @@ function loadFirebase(){
 function watchGlobal(fb){
   const db = fb.db;
   fb.onValue(fb.ref(db, '.info/serverTimeOffset'), s => { net.offset = +s.val() || 0; });
-  fb.onValue(fb.ref(db, 'players/' + net.uid), s => { net.profile = s.val(); renderChrome(); }, () => {});
+  let firstProfile = true;
+  fb.onValue(fb.ref(db, 'players/' + net.uid), s => {
+    const before = unlocked(statsOf(net.profile));
+    net.profile = s.val();
+    const after = unlocked(statsOf(net.profile));
+    if (!firstProfile) {
+      const got = after.titles.filter(x => !before.titles.includes(x)).map(x => `称号「${titleName(x)}」`)
+        .concat(after.plates.filter(x => !before.plates.includes(x)).map(x => `プレート「${PLATES.find(q => q.id === x).name}」`));
+      if (got.length) toast(got.join('と') + 'を手に入れた！');
+    }
+    firstProfile = false;
+    render();
+  }, () => {});
   fb.onValue(fb.query(fb.ref(db, 'players'), fb.orderByChild('rp'), fb.limitToLast(50)),
     s => { net.board = s.val() || {}; renderRank(); }, () => { net.board = {}; renderRank(); });
 }
-const saveName = fb => fb.update(fb.ref(fb.db, 'players/' + net.uid), {name: typedName()}).catch(() => {});
+const saveName = fb => fb.update(fb.ref(fb.db, 'players/' + net.uid), Object.assign({name: typedName()}, myLook())).catch(() => {});
+// Keep my entry in the lobby's member list in step with my nameplate.
+function updateRoomEntry(){
+  if (!net.fb || !net.on || !net.room || net.room.status !== 'lobby') return;
+  net.fb.update(net.fb.ref(net.fb.db, `rooms/${net.code}/players/${net.uid}`), Object.assign({name: typedName(), rating: myRating()}, myLook())).catch(() => {});
+}
+function chooseLook(kind, id){
+  lsSet('waribashi-' + kind, id);
+  net.profile = Object.assign({}, net.profile || {}, {[kind]: id});
+  if (net.fb) net.fb.update(net.fb.ref(net.fb.db, 'players/' + net.uid), {[kind]: id}).catch(() => {});
+  updateRoomEntry();
+  render();
+}
 
 async function createRoomRecord(extra){
   const fb = net.fb;
@@ -1110,7 +1269,7 @@ async function netCreate(){
     lsSet(NAME_KEY, typedName()); saveName(fb);
     const code = await createRoomRecord({kind:'custom', status:'lobby', games:0,
       rules: {overflow: settings.overflow, split: settings.split, merge: settings.merge, limit: 30},
-      players: {[net.uid]: {name: typedName(), joinedAt: Date.now()}}});
+      players: {[net.uid]: myEntry()}});
     attach(code);
   } catch(e) { toast(errText(e, '部屋を作れませんでした'), true); }
   finally { net.connecting = false; renderChrome(); }
@@ -1125,7 +1284,7 @@ async function netJoin(raw){
     const fb = await loadFirebase();
     if (search.on) await cancelSearch();
     lsSet(NAME_KEY, typedName()); saveName(fb);
-    const me = {name: typedName(), joinedAt: Date.now()};
+    const me = myEntry();
     const res = await fb.runTransaction(fb.ref(fb.db, 'rooms/' + code), cur => {
       if (cur === null) return null;
       const ps = cur.players || {};
@@ -1184,7 +1343,8 @@ async function leaveRoom(msg){
   const fb = net.fb, code = net.code, uid = net.uid;
   if (netPlaying() && G && !G.over && alive(G, 0)) {
     const res = await netResign();
-    if (res && res.committed && isRated()) await applyRating(normState(res.snapshot.val()));
+    const S = res && res.committed ? normState(res.snapshot.val()) : null;
+    if (S) { if (isRated()) await applyRating(S); else await recordGame(S); }
   }
   detach();
   Object.assign(net, {on:false, code:null, room:null, seat:-1, busy:false});
@@ -1230,7 +1390,7 @@ function onRoom(room){
   const seat = S && S.seats ? S.seats.indexOf(net.uid) : -1;
   if (!S || seat < 0) { dropRoom('この試合には入っていません'); return; }
   net.seat = seat;
-  if (room.kind === 'rated') applyRating(S); else countFree(S);
+  if (room.kind === 'rated') applyRating(S); else recordGame(S);
   maybeSplash(room, S);
   const L = toLocal(S, seat), gen = net.gen;
   if (ui.screen !== 'game') { G = L; sel = null; panel = null; setScreen('game'); }
@@ -1334,14 +1494,43 @@ function setLobbyRule(key, value){
   fb.update(fb.ref(fb.db, `rooms/${net.code}/rules`), {[key]: key === 'limit' ? +value : value}).catch(e => toast(errText(e, 'ルールを変えられませんでした'), true));
 }
 
-function countFree(S){
-  if (!S.over || !net.fb || !net.room) return;
-  const key = `waribashi-count:${net.code}:${net.room.createdAt}:${S.game}`;
-  if (counted.has(key) || lsGet(key)) return;
-  counted.add(key); lsSet(key, '1');
-  const field = S.over.type === 'draw' ? 'draws' : S.over.winner === net.seat ? 'wins' : 'losses';
+// My record (for titles and plates). Counted once per game, when I am knocked out or the game ends.
+function bumpStats(fn){
+  if (!net.fb || !net.uid) return Promise.resolve();
   const fb = net.fb;
-  fb.update(fb.ref(fb.db, 'players/' + net.uid), {[field]: fb.increment(1)}).catch(() => {});
+  return fb.runTransaction(fb.ref(fb.db, `players/${net.uid}/st`), cur => fn(Object.assign({}, cur || {}))).catch(() => {});
+}
+function recordGame(S, newRating, ctx){
+  ctx = ctx || {code: net.code, createdAt: net.room && net.room.createdAt, seat: net.seat};
+  const seat = ctx.seat;
+  if (!S || seat < 0 || !(S.over || !alive(S, seat))) return Promise.resolve();
+  const key = `waribashi-rec:${ctx.code}:${ctx.createdAt}:${S.game}`;
+  if (counted.has(key) || lsGet(key)) return Promise.resolve();
+  counted.add(key); lsSet(key, '1');
+  const won = S.over && S.over.type === 'win' && S.over.winner === seat ? 1 : 0;
+  const draw = S.over && S.over.type === 'draw';
+  const mine = S.log.filter(e => e.p === seat), count = k => mine.filter(e => e.k === k).length;
+  const kos = mine.filter(e => e.k === 'attack' && e.a === 0).length;
+  return bumpStats(st => {
+    const n = k => +st[k] || 0;
+    st.games = n('games') + 1;
+    st.wins = n('wins') + won;
+    st.merges = n('merges') + count('merge');
+    st.splits = n('splits') + count('split');
+    st.kos = n('kos') + kos;
+    st.streak = won ? n('streak') + 1 : draw ? n('streak') : 0;
+    st.best = Math.max(n('best'), st.streak);
+    if (won && S.n >= 3) st.royale = n('royale') + 1;
+    if (won && S.ply >= 40) st.long = n('long') + 1;
+    if (newRating) st.maxRate = Math.max(n('maxRate') || BASE_RATE, newRating);
+    return st;
+  });
+}
+function recordCpu(S){
+  if (settings.mode !== 'cpu' || !S.over) return;
+  const won = S.over.type === 'win' && S.over.winner === 0, draw = S.over.type === 'draw';
+  if (won && settings.level !== 'weak') bumpStats(st => { st.cpuNormal = (+st.cpuNormal || 0) + 1; return st; });
+  else if (draw && settings.level === 'strong') bumpStats(st => { st.cpuDraw = (+st.cpuDraw || 0) + 1; return st; });
 }
 
 // Elo rating from the ratings both players had when the match was made.
@@ -1367,6 +1556,7 @@ async function applyRating(S){
     const d = ratingChange(room, S, seat);
     const field = d.score === 1 ? 'rw' : d.score === 0 ? 'rl' : 'rd';
     await fb.update(fb.ref(fb.db, 'players/' + uid), {rp: fb.increment(d.delta), [field]: fb.increment(1), name: typedName()});
+    await recordGame(S, d.to, {code, createdAt: room.createdAt, seat});
   } catch(e) {}
 }
 
@@ -1378,27 +1568,24 @@ function maybeSplash(room, S){
   const body = $('#splashB');
   body.innerHTML = '';
   if (room.kind === 'rated') {
-    const ps = room.players || {}, rate = k => Math.round(+((ps[L.seats[k]] || {}).rating)) || BASE_RATE;
-    const vs = document.createElement('div');
-    vs.className = 'vs';
-    vs.innerHTML = '<div><b></b><small></small></div><span class="vs-x">VS</span><div><b></b><small></small></div>';
-    const cells = vs.querySelectorAll('div');
-    [0, 1].forEach(k => {
-      const b = cells[k].querySelector('b'), s = cells[k].querySelector('small'), r = rate(k);
-      b.textContent = nm[k]; b.className = tierCls(r);
-      s.textContent = `${tierName(r)} ${r}`; s.className = tierCls(r);
-    });
-    body.append(vs);
+    const ps = room.players || {};
+    const info = k => Object.assign({name: L.names[k]}, ps[L.seats[k]] || {}, {rating: Math.round(+((ps[L.seats[k]] || {}).rating)) || BASE_RATE});
+    const box = document.createElement('div');
+    box.className = 'vsbox';
+    const x = document.createElement('p');
+    x.className = 'vs-x'; x.textContent = 'VS';
+    box.append(plateEl(info(0)), x, plateEl(info(1)));
+    body.append(box);
     showSplash('マッチングしました！', `先手は${nm[L.turn]}。1手${S.limit}秒`);
   } else {
     const ol = document.createElement('ol');
     ol.className = 'order';
+    const ps = room.players || {};
     for (let s = 0; s < S.n; s++) {
-      const k = (s - net.seat + S.n) % S.n;
       const li = document.createElement('li');
-      li.innerHTML = '<span class="sn"></span><span class="who"></span>';
+      li.innerHTML = '<span class="sn"></span>';
       li.querySelector('.sn').textContent = s + 1;
-      li.querySelector('.who').textContent = nm[k];
+      li.append(plateEl(Object.assign({name: S.names[s]}, ps[S.seats[s]] || {}), 'sm'));
       ol.append(li);
     }
     body.append(ol);
@@ -1461,7 +1648,7 @@ async function enqueue(sg){
   const fb = net.fb, meRef = fb.ref(fb.db, 'queue/' + net.uid);
   try {
     await fb.onDisconnect(meRef).remove();
-    const entry = {name: typedName(), rating: myRating(), ts: serverNow()};
+    const entry = Object.assign({name: typedName(), rating: myRating(), ts: serverNow()}, myLook());
     await fb.runTransaction(meRef, cur => (sg !== search.gen || (cur && cur.match)) ? undefined : entry);
   } catch(e) { if (sg === search.gen) toast(errText(e, '相手さがしに参加できませんでした'), true); }
 }
@@ -1496,8 +1683,9 @@ async function tryMatch(sg){
     if (!cands.length) { if (!mine) await enqueue(sg); return; }
     const oppUid = cands[0], opp = q[oppUid];
     const t0 = Date.now();
-    const pls = {[net.uid]: {name: typedName(), rating: myR, joinedAt: t0},
-                 [oppUid]: {name: String(opp.name || '相手').slice(0, 12), rating: Math.round(+opp.rating) || BASE_RATE, joinedAt: t0}};
+    const pls = {[net.uid]: Object.assign(myEntry(), {rating: myR, joinedAt: t0}),
+                 [oppUid]: {name: String(opp.name || '相手').slice(0, 12), rating: Math.round(+opp.rating) || BASE_RATE, joinedAt: t0,
+                   title: titleId(opp.title), plate: plateId(opp.plate)}};
     const seats = shuffle([net.uid, oppUid]);
     code = await createRoomRecord({kind:'rated', status:'playing', games:1, rules: Object.assign({}, RATED_RULES, {limit: RATED_LIMIT}), players: pls,
       state: initState({n: 2, seats, names: seats.map(u => pls[u].name), game: 1, limit: RATED_LIMIT, turnAt: serverNow() + START_GRACE})});
@@ -1528,7 +1716,7 @@ async function tryMatch(sg){
 }
 
 // ===================== Screens =====================
-const SCREENS = {home:'#scrHome', cpu:'#scrCpu', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
+const SCREENS = {home:'#scrHome', cpu:'#scrCpu', plate:'#scrPlate', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
 function setScreen(s){
   if (ui.screen !== s) {
     ui.screen = s;
@@ -1574,6 +1762,7 @@ function render(){
   renderChrome();
   if (ui.screen === 'lobby') renderLobby();
   if (ui.screen === 'cpu') renderCpu();
+  if (ui.screen === 'plate') renderPlateEditor();
   if (ui.screen === 'game') renderGame();
   tick();
 }
@@ -1588,6 +1777,10 @@ function renderChrome(){
   const hr = $('#homeRate');
   hr.textContent = 'レート ';
   hr.append(rateEl(mr), `（${tierName(mr)}）・` + (g ? `${+p.rw || 0}勝${+p.rl || 0}敗${+p.rd ? (+p.rd) + '分' : ''}` : 'まだ0戦'));
+  const hb = $('#homePlateBox');
+  hb.innerHTML = '';
+  hb.append(plateEl(Object.assign({name: typedName(), rating: ok ? mr : 0}, myLook()), 'lg'));
+  $('#homeNameHint').hidden = !!lsGet(NAME_KEY);
   $('#goRated').disabled = !ok;
   $('#goCustom').disabled = !ok;
   $('#homeNote').hidden = ok;
@@ -1606,6 +1799,50 @@ function renderCpu(){
   $('#first-1-label').textContent = ln[1];
 }
 
+function renderPlateEditor(){
+  const ok = !!FIREBASE_CONFIG, u = unlocked(statsOf(net.profile)), st = u.st, look = myLook();
+  const pv = $('#platePreview');
+  pv.innerHTML = '';
+  pv.append(plateEl(Object.assign({name: typedName(), rating: ok ? myRating() : 0}, look), 'lg'));
+  $('#titleCount').textContent = `${u.titles.length}/${TITLES.length}`;
+  $('#plateCount').textContent = `${u.plates.length}/${PLATES.length}`;
+  const prog = item => item.key === 'maxRate' ? `最高 ${st.maxRate}` : `${Math.min(st[item.key] || 0, item.goal)}/${item.goal}`;
+  const meter = f => { const m = document.createElement('span'); m.className = 'meter'; m.innerHTML = '<i></i>'; m.firstChild.style.width = Math.round(f * 100) + '%'; return m; };
+  const tp = $('#titlePicks');
+  tp.innerHTML = '';
+  TITLES.forEach(t => {
+    const have = u.titles.includes(t.id), on = look.title === t.id, b = document.createElement('button');
+    b.type = 'button'; b.className = 'pick' + (on ? ' on' : ''); b.disabled = !have;
+    b.setAttribute('aria-pressed', String(on));
+    b.innerHTML = '<b></b><small></small>';
+    b.querySelector('b').textContent = have ? t.name : '？？？';
+    b.querySelector('small').textContent = have ? t.need : `${t.need}（${prog(t)}）`;
+    if (!have && t.key !== 'maxRate') b.append(meter(progress(t, st)));
+    b.addEventListener('click', () => chooseLook('title', t.id));
+    tp.append(b);
+  });
+  const pp = $('#platePicks');
+  pp.innerHTML = '';
+  PLATES.forEach(p => {
+    const have = u.plates.includes(p.id), on = look.plate === p.id, b = document.createElement('button');
+    b.type = 'button'; b.className = 'pick' + (on ? ' on' : ''); b.disabled = !have;
+    b.setAttribute('aria-pressed', String(on));
+    b.append(plateEl({name: typedName(), title: look.title, plate: p.id}, 'sm'));
+    const nb = document.createElement('b'), sm = document.createElement('small');
+    nb.textContent = p.name;
+    sm.textContent = have ? p.need : `${p.need}（${prog(p)}）`;
+    b.append(nb, sm);
+    if (!have && p.key !== 'maxRate') b.append(meter(progress(p, st)));
+    b.addEventListener('click', () => chooseLook('plate', p.id));
+    pp.append(b);
+  });
+  const rows = [['オンライン試合', `${st.games}試合`], ['勝ち', st.games ? `${st.wins}勝（勝率${Math.round(st.wins / st.games * 100)}%）` : '0勝'],
+    ['最高連勝', `${st.best}連勝`], ['合成', `${st.merges}回`], ['分身', `${st.splits}回`], ['消した手', `${st.kos}本`], ['最高レート', String(st.maxRate)]];
+  const dl = $('#myStats');
+  dl.innerHTML = '';
+  rows.forEach(([k, v]) => { const d = document.createElement('div'); d.innerHTML = '<dt></dt><dd></dd>'; d.firstChild.textContent = k; d.lastChild.textContent = v; dl.append(d); });
+}
+
 function renderLobby(){
   const room = net.room;
   if (!room) return;
@@ -1617,9 +1854,9 @@ function renderLobby(){
   for (let s = 0; s < MAX_PLAYERS; s++) {
     const li = document.createElement('li'), u = uids[s];
     if (!u) { li.className = 'empty'; li.innerHTML = `<span class="sn">${s + 1}</span><span>空き</span>`; ol.append(li); continue; }
-    li.innerHTML = '<span class="sn"></span><span class="who"></span>';
+    li.innerHTML = '<span class="sn"></span>';
     li.querySelector('.sn').textContent = s + 1;
-    li.querySelector('.who').textContent = String(ps[u].name || 'ななし');
+    li.append(plateEl(ps[u], 'sm'));
     const tag = (cls, t) => { const x = document.createElement('span'); x.className = 'tag ' + cls; x.textContent = t; li.append(x); };
     if (room.host === u) tag('host', 'ホスト');
     if (u === net.uid) tag('mine', 'あなた');
@@ -1684,13 +1921,11 @@ function renderGame(){
   }
   renderStrip(act, ms, nm);
 
-  for (const [kind, id, label] of [['split','#splitBtn','分身'], ['merge','#mergeBtn','合成']]) {
-    const b = $(id), open = panel === kind;
-    b.hidden = !r[kind];
-    b.disabled = !(act && ms.some(m => m.kind === kind));
-    b.setAttribute('aria-expanded', String(open));
-    b.textContent = open ? `${label}をやめる` : label;
-  }
+  const sb = $('#shapeBtn');
+  sb.hidden = !r.split && !r.merge;
+  sb.disabled = !(act && ms.some(m => m.kind !== 'attack'));
+  sb.setAttribute('aria-expanded', String(!!panel));
+  sb.textContent = panel ? 'やめる' : (r.split && r.merge ? '分身・合成' : r.split ? '分身' : '合成');
   $('#resetBtn').hidden = net.on;
   const now = Date.now(), rb = $('#resignBtn'), xb = $('#exitBtn');
   rb.hidden = !(netPlaying() && !G.over && alive(G, 0));
@@ -1747,8 +1982,7 @@ function renderStrip(act, ms, nm){
   else if (net.on && G.turn !== 0) msg.textContent = G.seats && !(net.room.online || {})[G.seats[G.turn]] ? '接続が切れています（時間切れで脱落）' : '考え中…';
   else if (!isHuman(G.turn)) msg.textContent = '考え中…';
   else if (busy || net.busy) msg.textContent = '';
-  else if (panel === 'split') msg.textContent = '配り方を選んでください';
-  else if (panel === 'merge') msg.textContent = 'これでよければタップして合成';
+  else if (panel) { const r = rules(); msg.textContent = r.split && r.merge ? '分身か合成を選んでください' : r.split ? '配り方を選んでください' : 'これでよければタップして合成'; }
   else if (sourceHand() === null) msg.textContent = '使う手を選んでください';
   else msg.textContent = G.n > 2 ? 'タッチする相手の手を選んでください（だれでもOK）' : 'タッチする相手の手を選んでください';
 
@@ -1761,14 +1995,14 @@ function renderStrip(act, ms, nm){
   if (panel && act) {
     sp.innerHTML = '';
     const [h0, h1] = G.hands[G.turn];
-    ms.filter(m => m.kind === panel).forEach(m => {
+    ms.filter(m => m.kind !== 'attack').forEach(m => {
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'chip';
       if (m.kind === 'merge') {
-        b.innerHTML = `<span>${h0} + ${h1} → ${m.hands[m.into]}</span>`;
+        b.innerHTML = `<span>${h0} + ${h1} → ${m.hands[m.into]}</span><small class="k">合成</small>`;
         b.setAttribute('aria-label', `${h0}本と${h1}本を合成して${m.hands[m.into]}本にする`);
       } else {
-        b.innerHTML = `<span>${m.hands[0]} · ${m.hands[1]}</span>`;
+        b.innerHTML = `<span>${m.hands[0]} · ${m.hands[1]}</span><small class="k">分身</small>`;
         b.setAttribute('aria-label', `左側${m.hands[0]}本、右側${m.hands[1]}本に分身`);
       }
       const sm = hintsOn() ? solverMove(m) : null;
@@ -1789,13 +2023,12 @@ function renderRoomPanel(nm){
   ol.innerHTML = '';
   for (let s = 0; s < G.n; s++) {
     const k = (s - net.seat + G.n) % G.n, li = document.createElement('li');
-    li.innerHTML = '<span class="sn"></span><span class="who"></span>';
-    li.querySelector('.sn').textContent = s + 1;
-    li.querySelector('.who').textContent = nm[k];
-    li.querySelector('.who').className = 'who';
-    const tag = (cls, t) => { const x = document.createElement('span'); x.className = 'tag ' + cls; x.textContent = t; li.append(x); };
     const uid = G.seats && G.seats[k];
-    if (isRated()) { const rr = Math.round(+((ps[uid] || {}).rating)) || BASE_RATE; tag('rate ' + tierCls(rr), String(rr)); }
+    li.innerHTML = '<span class="sn"></span>';
+    li.querySelector('.sn').textContent = s + 1;
+    li.append(plateEl(Object.assign({name: G.names ? G.names[k] : nm[k]}, ps[uid] || {}), 'sm'));
+    const tag = (cls, t) => { const x = document.createElement('span'); x.className = 'tag ' + cls; x.textContent = t; li.append(x); };
+    if (k === 0) tag('mine', 'あなた');
     if (net.room && net.room.host === uid && !isRated()) tag('host', 'ホスト');
     if (!alive(G, k) && G.n > 2) tag('out', '脱落');
     else if (k > 0 && uid && !online[uid]) tag('off', '切断中');
@@ -1842,17 +2075,18 @@ function renderRank(){
   const b = net.board;
   if (!b) { empty('読み込み中…'); return; }
   const rows = Object.keys(b).map(uid => ({uid, p: b[uid] || {}})).filter(r => ratedGames(r.p) > 0)
-    .map(r => ({uid: r.uid, name: String(r.p.name || 'ななし').slice(0, 12), rate: BASE_RATE + Math.round(+r.p.rp || 0),
+    .map(r => ({uid: r.uid, name: String(r.p.name || 'ななし').slice(0, 12), title: r.p.title, rate: BASE_RATE + Math.round(+r.p.rp || 0),
       w: +r.p.rw || 0, l: +r.p.rl || 0, d: +r.p.rd || 0}))
     .sort((x, y) => y.rate - x.rate || (y.w - x.w));
   if (!rows.length) { empty('まだ誰もレート戦をしていません'); return; }
   rows.slice(0, 20).forEach(r => {
     const li = document.createElement('li');
     if (r.uid === net.uid) li.className = 'me';
-    li.innerHTML = '<span class="pos"></span><span class="who"></span><span class="rt"></span><span class="rec"></span>';
+    li.innerHTML = '<span class="pos"></span><span class="who"><span class="rn"></span><small></small></span><span class="rt"></span><span class="rec"></span>';
     li.querySelector('.pos').textContent = 1 + rows.filter(x => x.rate > r.rate).length;
-    li.querySelector('.who').textContent = r.name;
-    li.querySelector('.who').classList.add(tierCls(r.rate));
+    li.querySelector('.rn').textContent = r.name;
+    li.querySelector('.rn').classList.add(tierCls(r.rate));
+    li.querySelector('.who small').textContent = titleName(r.title);
     li.querySelector('.rt').textContent = r.rate;
     li.querySelector('.rt').classList.add(tierCls(r.rate));
     li.querySelector('.rec').textContent = `${r.w}勝${r.l}敗${r.d ? r.d + '分' : ''}`;
@@ -1885,6 +2119,7 @@ setInterval(tick, 250);
 
 // ===================== Events =====================
 $('#goCpu').addEventListener('click', () => setScreen('cpu'));
+$('#homePlate').addEventListener('click', () => setScreen('plate'));
 $('#goCustom').addEventListener('click', () => setScreen('custom'));
 $('#goRated').addEventListener('click', startSearch);
 $$('[data-home]').forEach(b => b.addEventListener('click', goHome));
@@ -1912,18 +2147,16 @@ function onNameChange(){
   lsSet(NAME_KEY, typedName());
   if (net.fb) {
     saveName(net.fb);
-    if (net.on && net.room && net.room.status === 'lobby') net.fb.update(net.fb.ref(net.fb.db, `rooms/${net.code}/players/${net.uid}`), {name: typedName()}).catch(() => {});
+    updateRoomEntry();
   }
   renderChrome();
 }
 nameInputs.forEach(inp => {
   inp.value = lsGet(NAME_KEY) || '';
-  inp.addEventListener('input', () => { nameInputs.forEach(o => { if (o !== inp) o.value = inp.value; }); renderChrome(); });
+  inp.addEventListener('input', () => { nameInputs.forEach(o => { if (o !== inp) o.value = inp.value; }); renderChrome(); if (ui.screen === 'plate') renderPlateEditor(); });
   inp.addEventListener('change', onNameChange);
 });
-for (const [kind, id] of [['split','#splitBtn'], ['merge','#mergeBtn']]) {
-  $(id).addEventListener('click', () => { if (!interactive()) return; panel = panel === kind ? null : kind; sel = null; render(); });
-}
+$('#shapeBtn').addEventListener('click', () => { if (!interactive()) return; panel = panel ? null : 'shape'; sel = null; render(); });
 $('#resetBtn').addEventListener('click', newGame);
 $('#resignBtn').addEventListener('click', () => {
   if (!netPlaying() || !G || G.over || net.busy) return;
