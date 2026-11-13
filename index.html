@@ -760,7 +760,7 @@ const LIMITS = [15, 30, 60];
 const MAX_PLAYERS = 4;
 const START_GRACE = 5000;
 const SPLASH_MS = 2600;
-const QUEUE_FRESH = 40000, HEARTBEAT_MS = 12000, RESCAN_MS = 2500;
+const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
 const lsGet = k => { try { return localStorage.getItem(k); } catch(e) { return null; } };
@@ -1073,7 +1073,7 @@ function ensureBoard(n){
 
 // ===================== Local play (CPU / same device) =====================
 const isHuman = k => net.on ? k === 0 : (settings.mode === '2p' || k === 0);
-const interactive = () => !!G && !G.over && !busy && isHuman(G.turn) && (!net.on || (netPlaying() && !net.busy && alive(G, 0)));
+const interactive = () => !!G && !G.over && !busy && isHuman(G.turn) && !(G.limit && !G.turnAt) && (!net.on || (netPlaying() && !net.busy && alive(G, 0)));
 const liveHands = k => [0, 1].filter(i => G.hands[k][i] > 0);
 const sourceHand = () => { if (sel !== null) return sel; const l = liveHands(G.turn); return l.length === 1 ? l[0] : null; };
 const stateIdx = p => { const h = G.hands; return idx(h[p][0], h[p][1], h[1-p][0], h[1-p][1]); };
@@ -1307,7 +1307,7 @@ async function netJoin(raw){
 function attach(code){
   detach();
   const gen = ++net.gen, fb = net.fb, db = fb.db;
-  Object.assign(net, {on:true, code, seat:-1, room:null, busy:false, connected:true, timeoutKey:''});
+  Object.assign(net, {on:true, code, seat:-1, room:null, busy:false, connected:true, timeoutKey:'', clockTx:false, cancelTx:false, presFix:0});
   clearTimeout(cpuTimer); cpuTimer = null; busy = false;
   G = null; sel = null; panel = null; ui.resignArm = 0; ui.exitArm = 0;
   setUrlRoom(code);
@@ -1377,8 +1377,18 @@ function dropRoom(msg){
 }
 
 function onRoom(room){
-  if (!room) { dropRoom('部屋がなくなりました'); return; }
+  if (!room) {
+    const waiting = net.room && net.room.kind === 'rated' && G && !G.over && G.ply === 0 && !G.turnAt;
+    if (waiting) { dropRoom(); toast('相手が来なかったので、さがし直しています'); startSearch(); }
+    else dropRoom('部屋がなくなりました');
+    return;
+  }
   net.room = room;
+  // Self-heal: if I'm connected but not marked online here, mark me again.
+  if (net.connected && net.presRef && !(room.online || {})[net.uid] && Date.now() - net.presFix > 3000) {
+    net.presFix = Date.now();
+    net.fb.set(net.presRef, true).catch(() => {});
+  }
   const ps = room.players || {};
   if (room.status !== 'playing') {
     if (!ps[net.uid]) { dropRoom('部屋から外れました'); return; }
@@ -1390,6 +1400,11 @@ function onRoom(room){
   const seat = S && S.seats ? S.seats.indexOf(net.uid) : -1;
   if (!S || seat < 0) { dropRoom('この試合には入っていません'); return; }
   net.seat = seat;
+  if (room.kind === 'rated' && !S.over && S.ply === 0 && !S.turnAt) {
+    const joined = room.joined || {};
+    if (!joined[net.uid]) net.fb.set(net.fb.ref(net.fb.db, `rooms/${net.code}/joined/${net.uid}`), true).catch(() => {});
+    else if (S.seats.every(u => joined[u])) startClock();
+  }
   if (room.kind === 'rated') applyRating(S); else recordGame(S);
   maybeSplash(room, S);
   const L = toLocal(S, seat), gen = net.gen;
@@ -1442,7 +1457,7 @@ function netResign(){
 }
 function claimTimeout(ply, turn){
   return stateTx(S => {
-    if (S.over || !S.limit || S.ply !== ply || S.turn !== turn || serverNow() < S.turnAt + S.limit * 1000 + 1500) return undefined;
+    if (S.over || !S.limit || !S.turnAt || S.ply !== ply || S.turn !== turn || serverNow() < S.turnAt + S.limit * 1000 + 1500) return undefined;
     return eliminate(S, S.turn, 'time', serverNow());
   }).then(res => { if (!res || !res.committed) setTimeout(() => { net.timeoutKey = ''; }, 1500); });
 }
@@ -1562,7 +1577,7 @@ async function applyRating(S){
 
 function maybeSplash(room, S){
   const key = `${net.code}:${room.createdAt}:${S.game}`;
-  if (S.ply > 0 || S.over || ui.splashKeys.has(key)) return;
+  if (S.ply > 0 || S.over || ui.splashKeys.has(key) || (room.kind === 'rated' && !S.turnAt)) return;
   ui.splashKeys.add(key);
   const L = toLocal(S, net.seat), nm = L.names.map((x, k) => k === 0 ? 'あなた' : x);
   const body = $('#splashB');
@@ -1608,6 +1623,7 @@ function hideSplash(){ clearTimeout(ui.splashTimer); $('#splash').hidden = true;
 // A shared queue; whoever finds a partner makes the room and marks both entries in one transaction.
 async function startSearch(){
   if (search.on || net.on || net.connecting) return;
+  ui.resumeSearch = false;
   setScreen('search');
   net.connecting = true;
   let fb;
@@ -1620,7 +1636,7 @@ async function startSearch(){
   Object.assign(search, {on:true, since:Date.now(), working:false});
   const meRef = fb.ref(fb.db, 'queue/' + net.uid);
   search.unsub = fb.onValue(meRef, s => { const v = s.val(); if (sg === search.gen && v && v.match) gotMatch(String(v.match)); });
-  search.timers = [setInterval(() => tryMatch(sg), RESCAN_MS), setInterval(() => enqueue(sg), HEARTBEAT_MS)];
+  search.timers = [setInterval(() => tryMatch(sg), RESCAN_MS), setInterval(() => enqueue(sg, false), HEARTBEAT_MS)];
   render();
   tryMatch(sg);
 }
@@ -1643,13 +1659,14 @@ async function cancelSearch(){
   } catch(e) {}
   return null;
 }
-async function enqueue(sg){
+// create=false is the heartbeat: it only refreshes my entry and never brings back one that a match removed.
+async function enqueue(sg, create){
   if (sg !== search.gen || !search.on) return;
   const fb = net.fb, meRef = fb.ref(fb.db, 'queue/' + net.uid);
   try {
     await fb.onDisconnect(meRef).remove();
     const entry = Object.assign({name: typedName(), rating: myRating(), ts: serverNow()}, myLook());
-    await fb.runTransaction(meRef, cur => (sg !== search.gen || (cur && cur.match)) ? undefined : entry);
+    await fb.runTransaction(meRef, cur => (sg !== search.gen || (cur && cur.match) || (!cur && !create)) ? undefined : entry);
   } catch(e) { if (sg === search.gen) toast(errText(e, '相手さがしに参加できませんでした'), true); }
 }
 function gotMatch(code){
@@ -1660,12 +1677,38 @@ function gotMatch(code){
   fb.set(meRef, null).catch(() => {});
   joinRated(code);
 }
-async function joinRated(code){
+async function joinRated(code, resume = true){
   try {
     const room = (await net.fb.get(net.fb.ref(net.fb.db, 'rooms/' + code))).val();
-    if (!room || !room.players || !room.players[net.uid]) throw fail('マッチした部屋に入れませんでした');
+    const S = room && normState(room.state);
+    if (!room || !room.players || !room.players[net.uid] || !S || S.over) { if (!net.on) { if (resume) startSearch(); else goHome(); } return; }
     attach(code);
   } catch(e) { goHome(); toast(errText(e, 'マッチした部屋に入れませんでした'), true); }
+}
+// Both players are in: start the clock (whoever gets there first).
+function startClock(){
+  if (net.clockTx) return;
+  net.clockTx = true;
+  const fb = net.fb, gen = net.gen;
+  fb.runTransaction(fb.ref(fb.db, `rooms/${net.code}/state`), cur => {
+    if (cur === null) return null;
+    const S = normState(cur);
+    if (!S || S.over || S.ply !== 0 || S.turnAt) return undefined;
+    S.turnAt = serverNow() + START_GRACE;
+    return S;
+  }).catch(() => {}).finally(() => { if (gen === net.gen) net.clockTx = false; });
+}
+// The rival never arrived: remove the room; everyone still searching carries on.
+function cancelMatch(){
+  if (net.cancelTx) return;
+  net.cancelTx = true;
+  const fb = net.fb, gen = net.gen;
+  fb.runTransaction(fb.ref(fb.db, 'rooms/' + net.code), cur => {
+    if (cur === null) return null;
+    const S = normState(cur.state);
+    if (!S || S.over || S.ply !== 0 || S.turnAt) return undefined;
+    return null;
+  }).catch(() => {}).finally(() => { if (gen === net.gen) net.cancelTx = false; });
 }
 async function tryMatch(sg){
   if (search.working || sg !== search.gen || net.on) return;
@@ -1680,7 +1723,7 @@ async function tryMatch(sg){
     const now = serverNow(), myR = myRating();
     const gap = u => Math.abs((+q[u].rating || BASE_RATE) - myR);
     const cands = Object.keys(q).filter(u => u !== net.uid && q[u] && !q[u].match && now - (+q[u].ts || 0) < QUEUE_FRESH).sort((a, b) => gap(a) - gap(b));
-    if (!cands.length) { if (!mine) await enqueue(sg); return; }
+    if (!cands.length) { if (!mine) await enqueue(sg, true); return; }
     const oppUid = cands[0], opp = q[oppUid];
     const t0 = Date.now();
     const pls = {[net.uid]: Object.assign(myEntry(), {rating: myR, joinedAt: t0}),
@@ -1688,7 +1731,8 @@ async function tryMatch(sg){
                    title: titleId(opp.title), plate: plateId(opp.plate)}};
     const seats = shuffle([net.uid, oppUid]);
     code = await createRoomRecord({kind:'rated', status:'playing', games:1, rules: Object.assign({}, RATED_RULES, {limit: RATED_LIMIT}), players: pls,
-      state: initState({n: 2, seats, names: seats.map(u => pls[u].name), game: 1, limit: RATED_LIMIT, turnAt: serverNow() + START_GRACE})});
+      waitUntil: serverNow() + JOIN_WAIT,
+      state: initState({n: 2, seats, names: seats.map(u => pls[u].name), game: 1, limit: RATED_LIMIT, turnAt: 0})});
     if (sg !== search.gen) return;
     const res = await fb.runTransaction(fb.ref(db, 'queue'), cur => {
       if (cur === null) return null;
@@ -1697,7 +1741,7 @@ async function tryMatch(sg){
       o.match = code;
       delete cur[net.uid];
       const t = serverNow();
-      for (const u of Object.keys(cur)) { const e = cur[u]; if (u !== oppUid && e && !e.match && t - (+e.ts || 0) > QUEUE_FRESH * 3) delete cur[u]; }
+      for (const u of Object.keys(cur)) { const e = cur[u]; if (u !== oppUid && u !== net.uid && e && t - (+e.ts || 0) > QUEUE_FRESH * 3) delete cur[u]; }
       return cur;
     });
     const after = (res.snapshot.val() || {})[oppUid];
@@ -1975,6 +2019,12 @@ function renderStrip(act, ms, nm){
     return;
   }
   again.hidden = true;
+  if (net.on && G.limit && !G.turnAt) {
+    turn.textContent = '相手を待っています';
+    msg.textContent = 'ふたりそろったら始まります';
+    ev.hidden = true; sp.hidden = true;
+    return;
+  }
   turn.classList.add('c' + G.turn);
   turn.textContent = `${nm[G.turn]}の番`;
   if (net.on && !net.connected) msg.textContent = 'インターネットにつながっていません';
@@ -2097,7 +2147,8 @@ function renderRank(){
 // Runs every 250ms: the move clock, the search timer and the two-tap confirmations.
 function tick(){
   const c = $('#clock'), now = Date.now();
-  if (ui.screen === 'game' && netPlaying() && G && G.limit && !G.over) {
+  if (ui.screen === 'game' && isRated() && G && !G.over && G.ply === 0 && !G.turnAt && serverNow() > (+net.room.waitUntil || 0)) cancelMatch();
+  if (ui.screen === 'game' && netPlaying() && G && G.limit && G.turnAt && !G.over) {
     const left = Math.ceil((G.turnAt + G.limit * 1000 - serverNow()) / 1000);
     const shown = Math.max(0, Math.min(G.limit, left));
     c.hidden = false;
@@ -2139,7 +2190,7 @@ $('#netCode').addEventListener('input', e => { const v = e.target.value.replace(
 $('#netCode').addEventListener('keydown', e => { if (e.key === 'Enter') netJoin($('#netCode').value); });
 $('#netCancel').addEventListener('click', async () => {
   const code = await cancelSearch();
-  if (code) joinRated(code); else goHome();
+  if (code) joinRated(code, false); else goHome();
 });
 // Two name fields (home and custom match) share one value.
 const nameInputs = [$('#netName'), $('#customName')];
@@ -2176,6 +2227,14 @@ $('#again').addEventListener('click', () => {
   else newGame();
 });
 $('#splash').addEventListener('click', hideSplash);
+document.addEventListener('visibilitychange', async () => {
+  if (document.hidden) {
+    if (search.on) { ui.resumeSearch = true; const code = await cancelSearch(); if (code) joinRated(code); }
+  } else if (ui.resumeSearch) {
+    ui.resumeSearch = false;
+    if (ui.screen === 'search' && !net.on && !search.on) startSearch();
+  }
+});
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { if (!$('#splash').hidden) hideSplash(); else if (sel !== null || panel) { sel = null; panel = null; render(); } }
 });
