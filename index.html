@@ -292,6 +292,18 @@ fieldset:disabled .opts span{cursor:default}
 .opps[data-n="2"] .count{font-size:clamp(20px,5.5vw,28px)}
 .opps[data-n="3"] .count{font-size:clamp(16px,4.6vw,24px)}
 .hand.dead svg{opacity:.2}
+.hand .count .bits{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:max(10px,.36em);letter-spacing:.12em;line-height:1.3;color:var(--chalk-soft);font-weight:700}
+.binnote{margin:6px 0 0;flex-basis:100%}
+.splitter{flex-basis:100%;display:grid;gap:10px;padding:10px 12px;border-radius:12px;border:1.5px solid var(--chalk-faint);background:var(--board-deep)}
+.sp-vals{display:flex;align-items:center;justify-content:center;gap:16px}
+.sp-h{display:grid;justify-items:center;min-width:4.5em}
+.sp-h b{font-family:var(--font-display);font-size:30px;line-height:1.1;font-variant-numeric:tabular-nums}
+.sp-lbl{font-size:11px;font-weight:700;color:var(--chalk-soft)}
+.sp-b{font:700 12px/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.14em;color:var(--chalk-soft)}
+.sp-op{font-size:20px;color:var(--chalk-soft)}
+.sp-range{width:100%;margin:0;accent-color:var(--you);min-height:28px}
+.sp-go{justify-self:center;min-width:12em}
+.sp-go:disabled{opacity:.5;cursor:default}
 .hand.dead .count{opacity:.55}
 .hand.pickable,.hand.target{cursor:pointer}
 .me .hand.pickable:hover{transform:translateY(-4px)}
@@ -478,6 +490,7 @@ fieldset:disabled .opts span{cursor:default}
         <li>分身：自分の両手の合計を配り直せる。左右を入れ替えるだけの配り方と、片手を0にする配り方はできない。消えた手も分身で復活できる。</li>
         <li>合成：両手の指を片方の手にまとめられる（1と3→4、2と4→6本なので1本）。まとめた結果で手が消える合成はできない。</li>
         <li>3人以上のときは、好きな相手の手をタッチできる。両手が消えた人は脱落して、最後まで残った人の勝ち。</li>
+        <li>2進数ルール（CPU対戦・カスタムマッチ）：指1本ずつが1・2・4・8・16。立っている指の合計が手の数で、5本全部が立つ31ぴったりで消えて、32以上は31を引く（32→1、35→4）。</li>
         <li>オンラインは持ち時間つき。時間切れと投了は脱落。同じ局面が3回出たら引き分け。</li>
       </ul>
     </section>
@@ -512,10 +525,18 @@ fieldset:disabled .opts span{cursor:default}
           </div>
         </fieldset>
         <fieldset>
+          <legend>数え方</legend>
+          <div class="opts">
+            <label><input type="radio" name="count" value="normal" id="count-normal"><span>ふつう</span></label>
+            <label><input type="radio" name="count" value="binary" id="count-binary"><span>2進数</span></label>
+          </div>
+          <p class="note binnote" id="binNote" hidden>指1本ずつが 1・2・4・8・16（親指が1、小指が16）。立っている指を足した数が手の数。5本全部立つ（31）と消えるので、片手で30まで。</p>
+        </fieldset>
+        <fieldset>
           <legend>手が消えるルール</legend>
           <div class="opts">
-            <label><input type="radio" name="overflow" value="wrap" id="overflow-wrap"><span>5本ぴったりで消える（6本→1本）</span></label>
-            <label><input type="radio" name="overflow" value="die" id="overflow-die"><span>5本以上で消える</span></label>
+            <label><input type="radio" name="overflow" value="wrap" id="overflow-wrap"><span id="ovWrapLabel">5本ぴったりで消える（6本→1本）</span></label>
+            <label><input type="radio" name="overflow" value="die" id="overflow-die"><span id="ovDieLabel">5本以上で消える</span></label>
           </div>
         </fieldset>
         <fieldset>
@@ -634,10 +655,18 @@ fieldset:disabled .opts span{cursor:default}
       <h3>ルール</h3>
       <form class="settings" id="lobbyRules" onsubmit="return false">
         <fieldset>
+          <legend>数え方</legend>
+          <div class="opts">
+            <label><input type="radio" name="count" value="normal" id="lb-count-normal"><span>ふつう</span></label>
+            <label><input type="radio" name="count" value="binary" id="lb-count-binary"><span>2進数</span></label>
+          </div>
+          <p class="note binnote" id="lbBinNote" hidden>指1本ずつが 1・2・4・8・16。5本全部立つ（31）と消える。</p>
+        </fieldset>
+        <fieldset>
           <legend>手が消えるルール</legend>
           <div class="opts">
-            <label><input type="radio" name="overflow" value="wrap" id="lb-overflow-wrap"><span>5本ぴったりで消える</span></label>
-            <label><input type="radio" name="overflow" value="die" id="lb-overflow-die"><span>5本以上で消える</span></label>
+            <label><input type="radio" name="overflow" value="wrap" id="lb-overflow-wrap"><span id="lbOvWrapLabel">5本ぴったりで消える</span></label>
+            <label><input type="radio" name="overflow" value="die" id="lb-overflow-die"><span id="lbOvDieLabel">5本以上で消える</span></label>
           </div>
         </fieldset>
         <fieldset>
@@ -751,68 +780,84 @@ fieldset:disabled .opts span{cursor:default}
 
 <script>
 // ===== SOLVER-START =====
-function idx(a,b,c,d){return ((a*5+b)*5+c)*5+d}
-function decode(s){return [Math.floor(s/125),Math.floor(s/25)%5,Math.floor(s/5)%5,s%5]}
-// Moves for the player to move, holding (a,b) against the opponent's (c,d).
+// B = 5 (normal: hands 0-4, all five fingers = 5 vanishes) or 31 (binary: hands 0-30, all five fingers = 11111 = 31 vanishes).
+// Positions keep each player's two hands unordered: id = pair(side to move) * P + pair(other side).
+function pairIndex(B, a, b){ if (a > b) { const t = a; a = b; b = t; } return a * B - a * (a - 1) / 2 + (b - a); }
+function stateId(B, a, b, c, d){ return pairIndex(B, a, b) * (B * (B + 1) / 2) + pairIndex(B, c, d); }
+// Moves for the player to move, holding (a,b) against the opponent's (c,d). next = position id after the move.
 function genMoves(a,b,c,d,rules){
-  const out=[], mine=[a,b], opp=[c,d];
+  const B=rules.base||5, out=[], mine=[a,b], opp=[c,d];
+  const add=(w,v)=>{ const x=w+v; return x<B ? x : rules.overflow==='wrap' ? x-B : 0; };
   for(let f=0;f<2;f++){
     const v=mine[f]; if(!v) continue;
     for(let t=0;t<2;t++){
       const w=opp[t]; if(!w) continue;
-      let x=w+v; if(x>=5) x = rules.overflow==='wrap' ? x-5 : 0;
-      const n=[c,d]; n[t]=x;
-      out.push({kind:'attack',from:f,to:t,value:v,before:w,after:x,next:idx(n[0],n[1],a,b)});
+      const x=add(w,v), n=[c,d]; n[t]=x;
+      out.push({kind:'attack',from:f,to:t,value:v,before:w,after:x,next:stateId(B,n[0],n[1],a,b)});
     }
   }
   if(rules.split){
     const s=a+b;
-    for(let x=1;x<=4;x++){
-      const y=s-x; if(y<1||y>4) continue;
+    for(let x=1;x<B;x++){
+      const y=s-x; if(y<1||y>=B) continue;
       if((x===a&&y===b)||(x===b&&y===a)) continue;
-      out.push({kind:'split',hands:[x,y],next:idx(c,d,x,y)});
+      out.push({kind:'split',hands:[x,y],next:stateId(B,c,d,x,y)});
     }
   }
   // Merge: gather both hands into the larger one; the other hand goes to 0. Not allowed if the result vanishes.
   if(rules.merge && a>0 && b>0){
-    let x=a+b; if(x>=5) x = rules.overflow==='wrap' ? x-5 : 0;
+    const x=add(a,b);
     if(x>0){
       const into = a>=b ? 0 : 1, h=[0,0]; h[into]=x;
-      out.push({kind:'merge',hands:h,into,next:idx(c,d,h[0],h[1])});
+      out.push({kind:'merge',hands:h,into,next:stateId(B,c,d,h[0],h[1])});
     }
   }
   return out;
 }
-// Retrograde analysis over all 625 ordered positions. res: 1 = side to move wins, -1 = loses, 0 = draw. dist = plies to the end with best play.
-function buildSolver(rules){
-  const N=625, res=new Int8Array(N), dist=new Int16Array(N), moves=new Array(N), deg=new Int16Array(N), preds=[], q=[];
-  for(let s=0;s<N;s++) preds.push([]);
+// Retrograde analysis over every position. res: 1 = side to move wins, -1 = loses, 0 = draw. dist = plies to the end with best play.
+// Self-contained (no outside names) so it can also run inside a Web Worker for the 246,016 binary positions.
+function solveCore(B, wrap, split, merge){
+  const P=B*(B+1)/2, pa=new Uint8Array(P), pb=new Uint8Array(P), pi=new Int32Array(B*B);
+  let k=0; for(let a=0;a<B;a++) for(let b=a;b<B;b++){ pa[k]=a; pb[k]=b; pi[a*B+b]=k; pi[b*B+a]=k; k++; }
+  const N=P*P, sid=(a,b,c,d)=>pi[a*B+b]*P+pi[c*B+d];
+  const add=(w,v)=>{ const x=w+v; return x<B ? x : wrap ? x-B : 0; };
+  function each(s, cb){
+    const me=(s/P)|0, op=s-me*P, a=pa[me], b=pb[me], c=pa[op], d=pb[op], mine=[a,b], opp=[c,d];
+    for(let f=0;f<2;f++){ const v=mine[f]; if(!v || (f===1 && a===b)) continue;
+      for(let t=0;t<2;t++){ const w=opp[t]; if(!w || (t===1 && c===d)) continue;
+        const n=[c,d]; n[t]=add(w,v); cb(sid(n[0],n[1],a,b)); } }
+    if(split){ const s2=a+b; for(let x=1;x<=s2-x;x++){ const y=s2-x; if(y>=B || x===a) continue; cb(sid(c,d,x,y)); } }
+    if(merge && a>0 && b>0){ const x=add(a,b,0); if(x>0) cb(sid(c,d,0,x)); }
+  }
+  const res=new Int8Array(N), dist=new Int16Array(N), deg=new Int32Array(N), off=new Int32Array(N+1), q=new Int32Array(N);
+  let qt=0;
   for(let s=0;s<N;s++){
-    const [a,b,c,d]=decode(s);
-    if(a===0&&b===0){ res[s]=-1; moves[s]=[]; q.push(s); continue; }
-    if(c===0&&d===0){ res[s]=1; moves[s]=[]; continue; }
-    const ms=genMoves(a,b,c,d,rules); moves[s]=ms; deg[s]=ms.length;
-    for(const m of ms) preds[m.next].push(s);
+    const me=(s/P)|0, op=s-me*P;
+    if(me===0){ res[s]=-1; q[qt++]=s; continue; }
+    if(op===0){ res[s]=1; continue; }
+    let n=0; each(s, nx=>{ n++; off[nx+1]++; }); deg[s]=n;
   }
-  for(let h=0;h<q.length;h++){
+  for(let s=0;s<N;s++) off[s+1]+=off[s];
+  const fill=off.slice(0,N), preds=new Int32Array(off[N]);
+  for(let s=0;s<N;s++){ const me=(s/P)|0, op=s-me*P; if(me===0||op===0) continue; each(s, nx=>{ preds[fill[nx]++]=s; }); }
+  for(let h=0;h<qt;h++){
     const s=q[h];
-    for(const p of preds[s]){
-      if(res[p]!==0) continue;
-      if(res[s]===-1){ res[p]=1; dist[p]=dist[s]+1; q.push(p); }
-      else if(--deg[p]===0){ res[p]=-1; dist[p]=dist[s]+1; q.push(p); }
+    for(let i=off[s];i<off[s+1];i++){
+      const p=preds[i]; if(res[p]!==0) continue;
+      if(res[s]===-1){ res[p]=1; dist[p]=dist[s]+1; q[qt++]=p; }
+      else if(--deg[p]===0){ res[p]=-1; dist[p]=dist[s]+1; q[qt++]=p; }
     }
   }
-  const start=idx(1,1,1,1), seen=new Uint8Array(N), stack=[start], canon=new Set(), counts={win:0,lose:0,draw:0};
-  seen[start]=1;
+  const start=sid(1,1,1,1), seen=new Uint8Array(N), stack=[start], counts={win:0,lose:0,draw:0};
+  let reach=0; seen[start]=1;
   while(stack.length){
-    const s=stack.pop(), [a,b,c,d]=decode(s);
-    if(!(a===0&&b===0)){
-      const k=Math.min(a,b)+','+Math.max(a,b)+'|'+Math.min(c,d)+','+Math.max(c,d);
-      if(!canon.has(k)){ canon.add(k); counts[res[s]===1?'win':res[s]===-1?'lose':'draw']++; }
-    }
-    for(const m of moves[s]) if(!seen[m.next]){ seen[m.next]=1; stack.push(m.next); }
+    const s=stack.pop(), me=(s/P)|0, op=s-me*P;
+    if(me===0) continue;
+    reach++; counts[res[s]===1?'win':res[s]===-1?'lose':'draw']++;
+    if(op===0) continue;
+    each(s, nx=>{ if(!seen[nx]){ seen[nx]=1; stack.push(nx); } });
   }
-  return {res,dist,moves,start,reach:canon.size,counts};
+  return {res,dist,start,reach,counts};
 }
 // ===== SOLVER-END =====
 
@@ -821,8 +866,8 @@ const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const KEY = 'waribashi-settings-v2';
 const NAME_KEY = 'waribashi-name';
-const OPTIONS = {mode:['cpu','2p'], level:['weak','normal','strong'], first:['0','1'], overflow:['wrap','die'], split:['on','off'], merge:['on','off'], hints:['off','on']};
-const DEFAULTS = {mode:'cpu', level:'normal', first:'0', overflow:'wrap', split:'on', merge:'on', hints:'off'};
+const OPTIONS = {mode:['cpu','2p'], level:['weak','normal','strong'], first:['0','1'], count:['normal','binary'], overflow:['wrap','die'], split:['on','off'], merge:['on','off'], hints:['off','on']};
+const DEFAULTS = {mode:'cpu', level:'normal', first:'0', count:'normal', overflow:'wrap', split:'on', merge:'on', hints:'off'};
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
 // ===== ONLINE CONFIG: Firebase の firebaseConfig をここに貼る =====
@@ -847,7 +892,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/14-1';
+const APP_VERSION = '11/14-2';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -1055,15 +1100,39 @@ const netPlaying = () => !!(net.on && net.room && net.room.status === 'playing' 
 const typedName = () => ($('#netName').value || '').trim().slice(0, 12) || 'ななし';
 const sortedUids = ps => Object.keys(ps || {}).sort((a, b) => (+ps[a].joinedAt || 0) - (+ps[b].joinedAt || 0));
 
+const BIN = 31;   // binary mode: fingers count 1·2·4·8·16; like the normal game, a full hand (11111 = 31) vanishes, so hands hold 0-30
 function rules(){
   const r = net.on && net.room && net.room.rules;
-  if (r) return {overflow: r.overflow === 'die' ? 'die' : 'wrap', split: r.split !== 'off', merge: r.merge !== 'off'};
-  return {overflow: settings.overflow, split: settings.split === 'on', merge: settings.merge === 'on'};
+  if (r) return {overflow: r.overflow === 'die' ? 'die' : 'wrap', split: r.split !== 'off', merge: r.merge !== 'off', base: r.count === 'binary' ? BIN : 5};
+  return {overflow: settings.overflow, split: settings.split === 'on', merge: settings.merge === 'on', base: settings.count === 'binary' ? BIN : 5};
 }
-const ruleText = r => `${r.overflow === 'die' ? '5本以上で消える' : '5本ぴったりで消える'}／分身${r.split ? 'あり' : 'なし'}／合成${r.merge ? 'あり' : 'なし'}`;
+const isBin = r => (r || rules()).base === BIN;
+const bits = n => n.toString(2).padStart(5, '0');
+const vanishText = (bin, die) => bin ? (die ? '31以上で消える' : '31ぴったりで消える') : (die ? '5本以上で消える' : '5本ぴったりで消える');
+const ruleText = r => `${isBin(r) ? '2進数／' : ''}${vanishText(isBin(r), r.overflow === 'die')}／分身${r.split ? 'あり' : 'なし'}／合成${r.merge ? 'あり' : 'なし'}`;
 const roomLimit = room => { const v = +((room && room.rules) || {}).limit; return LIMITS.includes(v) ? v : RATED_LIMIT; };
+// Solved tables per rule set. The normal game is instant; binary (246,016 positions) is solved in a Web Worker
+// so the page never freezes, and everything that needs it waits for .ready.
 const cache = {};
-const solver = () => { const r = rules(), k = `${r.overflow}/${r.split}/${r.merge}`; return cache[k] || (cache[k] = buildSolver(r)); };
+function solverFor(r){
+  const k = `${r.base}/${r.overflow}/${r.split}/${r.merge}`;
+  if (cache[k]) return cache[k];
+  const S = cache[k] = {ready: false, B: r.base, sid: (a, b, c, d) => stateId(r.base, a, b, c, d)};
+  const args = [r.base, r.overflow === 'wrap', !!r.split, !!r.merge];
+  const done = core => { if (S.ready) return; Object.assign(S, core, {ready: true}); dbg && dbg(`solved base ${r.base} in ${Date.now() - S.t0}ms`); render(); maybeCpu(); };
+  const local = () => setTimeout(() => done(solveCore(...args)), 30);
+  S.t0 = Date.now();
+  if (r.base <= 5) { Object.assign(S, solveCore(...args), {ready: true}); return S; }
+  try {
+    const url = URL.createObjectURL(new Blob([`${solveCore}\nonmessage = e => { const c = solveCore(...e.data); postMessage(c, [c.res.buffer, c.dist.buffer]); };`], {type: 'text/javascript'}));
+    const w = new Worker(url);
+    w.onmessage = e => { w.terminate(); URL.revokeObjectURL(url); done(e.data); };
+    w.onerror = e => { if (e && e.preventDefault) e.preventDefault(); w.terminate(); local(); };
+    w.postMessage(args);
+  } catch(e) { local(); }
+  return S;
+}
+const solver = () => solverFor(rules());
 const hintsOn = () => settings.hints === 'on' && !net.on && G && G.n === 2;
 
 // ===================== Game model (2–4 players) =====================
@@ -1073,7 +1142,8 @@ let G = null, sel = null, panel = null, busy = false, cpuTimer = null;
 const alive = (S, p) => S.hands[p][0] + S.hands[p][1] > 0;
 const aliveList = S => S.hands.map((h, p) => p).filter(p => alive(S, p));
 function nextAlive(S, p){ for (let k = 1; k <= S.n; k++) { const q = (p + k) % S.n; if (alive(S, q)) return q; } return p; }
-const posKeyOf = S => S.turn + ':' + S.hands.map(h => [...h].sort().join('')).join('|');
+const handKey = h => { const x = [...h].sort((p, q) => p - q); return x[1] < 10 ? x.join('') : x.join(','); };
+const posKeyOf = S => S.turn + ':' + S.hands.map(handKey).join('|');
 
 function initState(o){
   const n = o.n || 2, first = o.first || 0;
@@ -1086,28 +1156,28 @@ function initState(o){
 }
 
 function legalMoves(S, r){
-  const p = S.turn, [a, b] = S.hands[p], out = [];
+  const B = r.base || 5, p = S.turn, [a, b] = S.hands[p], out = [];
   for (let q = 0; q < S.n; q++) {
     if (q === p || !alive(S, q)) continue;
     for (let f = 0; f < 2; f++) {
       const v = S.hands[p][f]; if (!v) continue;
       for (let t = 0; t < 2; t++) {
         const w = S.hands[q][t]; if (!w) continue;
-        let x = w + v; if (x >= 5) x = r.overflow === 'wrap' ? x - 5 : 0;
+        let x = w + v; if (x >= B) x = r.overflow === 'wrap' ? x - B : 0;
         out.push({kind:'attack', from:f, to:t, target:q, value:v, before:w, after:x});
       }
     }
   }
   if (r.split) {
     const s = a + b;
-    for (let x = 1; x <= 4; x++) {
-      const y = s - x; if (y < 1 || y > 4) continue;
+    for (let x = 1; x < B; x++) {
+      const y = s - x; if (y < 1 || y >= B) continue;
       if ((x === a && y === b) || (x === b && y === a)) continue;
       out.push({kind:'split', hands:[x, y]});
     }
   }
   if (r.merge && a > 0 && b > 0) {
-    let x = a + b; if (x >= 5) x = r.overflow === 'wrap' ? x - 5 : 0;
+    let x = a + b; if (x >= B) x = r.overflow === 'wrap' ? x - B : 0;
     if (x > 0) { const into = a >= b ? 0 : 1, h = [0, 0]; h[into] = x; out.push({kind:'merge', hands:h, into}); }
   }
   return out;
@@ -1162,7 +1232,7 @@ function normState(r){
   const H = arr(r.hands);
   const n = Math.min(MAX_PLAYERS, Math.max(2, +r.n || H.length || 2));
   const seat = v => { v = Math.floor(+v); return v >= 0 && v < n ? v : 0; };
-  const hands = Array.from({length: n}, (_, p) => [0, 1].map(i => { const v = +((H[p] || {})[i]); return v >= 0 && v <= 4 ? v : 0; }));
+  const hands = Array.from({length: n}, (_, p) => [0, 1].map(i => { const v = +((H[p] || {})[i]); return v >= 0 && v < BIN ? v : 0; }));
   const log = arr(r.log).filter(e => e && typeof e.k === 'string').map(e => {
     const o = {k: e.k};
     for (const f of ['n','p','q','v','b','a','ko','x']) if (e[f] !== undefined && e[f] !== null) o[f] = +e[f];
@@ -1206,12 +1276,14 @@ function names(){
 }
 
 function logText(e, nm){
+  const bin = isBin(), u = bin ? '' : '本', B = bin ? BIN : 5;
+  const over = (sum, x) => bin ? `${sum}から31を引いて${x}` : `${sum}本なので${x}本`;
   if (e.k === 'attack') {
     const sum = e.b + e.v;
-    const res = e.a === 0 ? `${sum}本で消えた` : sum >= 6 ? `${sum}本なので${e.a}本` : `${e.a}本`;
-    return `${nm[e.q]}の${e.b}本に${e.v}本でタッチ → ${res}` + (e.ko && G && G.n > 2 ? `（${nm[e.q]}脱落）` : '');
+    const res = e.a === 0 ? `${sum}${u}で消えた` : sum > B ? over(sum, e.a) : `${e.a}${u}`;
+    return `${nm[e.q]}の${e.b}${u}に${e.v}${u}でタッチ → ${res}` + (e.ko && G && G.n > 2 ? `（${nm[e.q]}脱落）` : '');
   }
-  if (e.k === 'merge') { const sum = e.f[0] + e.f[1]; return `合成 ${e.f[0]}と${e.f[1]} → ` + (sum >= 6 ? `${sum}本なので${e.x}本` : `${e.x}本`); }
+  if (e.k === 'merge') { const sum = e.f[0] + e.f[1]; return `合成 ${e.f[0]}と${e.f[1]} → ` + (sum > B ? over(sum, e.x) : `${e.x}${u}`); }
   if (e.k === 'split') return `分身 ${e.f.join('·')} → ${e.t.join('·')}`;
   if (e.k === 'resign') return '投了';
   if (e.k === 'time') return '時間切れ';
@@ -1221,18 +1293,22 @@ function logText(e, nm){
 // ===================== Board =====================
 const FINGERS = [{x:61,top:14},{x:46,top:8},{x:31,top:14},{x:16,top:28}];
 const XF = [['', 'matrix(-1 0 0 1 100 0)'], ['matrix(1 0 0 -1 0 130)', 'rotate(180 50 65)']];
-function handSVG(n, top, i, ch){
+// bin: fingers are bits — thumb 1, index 2, middle 4, ring 8, pinky 16.
+function handSVG(n, top, i, ch, bin){
   const paint = ch && ch.grad ? ` style="fill:url(#${ch.grad})"` : '';
+  const up = k => bin ? (n >> (k + 1)) & 1 : k < n;
   let f = '';
   FINGERS.forEach((g, k) => {
-    const y = k < n ? g.top : (k === 3 ? 50 : 46);
+    const y = up(k) ? g.top : (k === 3 ? 50 : 46);
     f += `<rect class="fg"${paint} x="${g.x}" y="${y}" width="13.5" height="${72 - y}" rx="6.75"/>`;
   });
+  const thumb = bin && (n & 1)
+    ? `<rect class="fg"${paint} x="67" y="48" width="14" height="44" rx="7" transform="rotate(40 74 90)"/>`
+    : `<rect class="fg"${paint} x="52" y="80" width="34" height="17" rx="8.5" transform="rotate(-6 69 88)"/>`;
   return `<g transform="${XF[top ? 1 : 0][i]}"><g filter="url(#chalk)">`
     + `<rect class="pm"${paint} x="27" y="104" width="40" height="26" rx="8"/>`
     + `<rect class="pm"${paint} x="13" y="56" width="68" height="58" rx="20"/>`
-    + f
-    + `<rect class="fg"${paint} x="52" y="80" width="34" height="17" rx="8.5" transform="rotate(-6 69 88)"/>`
+    + f + thumb
     + `</g></g>`;
 }
 // Chalk colour for a seat on the board: mine everywhere; other players' from the room.
@@ -1272,7 +1348,8 @@ const isHuman = k => net.on ? k === 0 : (settings.mode === '2p' || k === 0);
 const interactive = () => !!G && !G.over && !busy && isHuman(G.turn) && !(G.limit && !G.turnAt) && (!net.on || (netPlaying() && !net.busy && alive(G, 0)));
 const liveHands = k => [0, 1].filter(i => G.hands[k][i] > 0);
 const sourceHand = () => { if (sel !== null) return sel; const l = liveHands(G.turn); return l.length === 1 ? l[0] : null; };
-const stateIdx = p => { const h = G.hands; return idx(h[p][0], h[p][1], h[1-p][0], h[1-p][1]); };
+const stateIdx = p => { const h = G.hands; return solver().sid(h[p][0], h[p][1], h[1-p][0], h[1-p][1]); };
+const movesAt = p => { const h = G.hands; return genMoves(h[p][0], h[p][1], h[1-p][0], h[1-p][1], rules()); };
 
 function evalChild(next){
   const s = solver(), r = s.res[next], d = s.dist[next];
@@ -1282,7 +1359,8 @@ function evalChild(next){
 }
 // The solver's version of a move, for hints in 2-player local games.
 function solverMove(m){
-  const ms = solver().moves[stateIdx(G.turn)] || [];
+  if (!solver().ready) return null;
+  const ms = movesAt(G.turn);
   if (m.kind === 'attack') return ms.find(x => x.kind === 'attack' && x.from === m.from && x.to === m.to);
   if (m.kind === 'merge') return ms.find(x => x.kind === 'merge');
   return ms.find(x => x.kind === 'split' && x.hands[0] === m.hands[0] && x.hands[1] === m.hands[1]);
@@ -1297,10 +1375,20 @@ function newGame(){
 function maybeCpu(){
   if (net.on || !G || G.over || settings.mode !== 'cpu' || G.turn !== 1 || ui.screen !== 'game') return;
   clearTimeout(cpuTimer);
-  cpuTimer = setTimeout(() => { cpuTimer = null; if (!net.on && ui.screen === 'game') doMove(chooseCpuMove()); }, 700);
+  // binary: the table may still be computing; it calls maybeCpu() again when it is done
+  cpuTimer = setTimeout(() => { cpuTimer = null; if (!net.on && ui.screen === 'game' && solver().ready) doMove(chooseCpuMove()); }, 700);
+}
+// Random play for the weaker levels. With 31 values there are up to 29 ways to split, so pick the kind of move first.
+function randomMove(ms){
+  if (!isBin()) return pick(ms);
+  const kinds = [['attack', 6], ['split', 3], ['merge', 1]].filter(([k]) => ms.some(m => m.kind === k));
+  let t = Math.random() * kinds.reduce((a, [, w]) => a + w, 0), kind = kinds[0][0];
+  for (const [k, w] of kinds) { if ((t -= w) < 0) { kind = k; break; } }
+  return pick(ms.filter(m => m.kind === kind));
 }
 function chooseCpuMove(){
-  const s = solver(), ms = solver().moves[stateIdx(G.turn)];
+  const s = solver(), ms = movesAt(G.turn);
+  if (!s.ready || !ms.length) return null;
   const score = m => s.res[m.next] === -1 ? 1000 - s.dist[m.next] : s.res[m.next] === 1 ? -1000 + s.dist[m.next] : 0;
   const best = () => {
     let top = -Infinity, list = [];
@@ -1309,8 +1397,8 @@ function chooseCpuMove(){
   };
   let m;
   if (settings.level === 'strong') m = best();
-  else if (settings.level === 'normal') m = Math.random() < 0.6 ? best() : pick(ms);
-  else { const kill = ms.filter(x => s.res[x.next] === -1 && s.dist[x.next] === 0); m = kill.length && Math.random() < 0.7 ? pick(kill) : pick(ms); }
+  else if (settings.level === 'normal') m = Math.random() < 0.6 ? best() : randomMove(ms);
+  else { const kill = ms.filter(x => s.res[x.next] === -1 && s.dist[x.next] === 0); m = kill.length && Math.random() < 0.7 ? pick(kill) : randomMove(ms); }
   return m && {...m, target: 1 - G.turn};
 }
 
@@ -1465,7 +1553,7 @@ async function netCreate(){
     if (search.on) await cancelSearch();
     lsSet(NAME_KEY, typedName()); saveName(fb);
     const code = await createRoomRecord({kind:'custom', status:'lobby', games:0,
-      rules: {overflow: settings.overflow, split: settings.split, merge: settings.merge, limit: 30},
+      rules: {count: settings.count, overflow: settings.overflow, split: settings.split, merge: settings.merge, limit: 30},
       players: {[net.uid]: myEntry()}});
     attach(code);
   } catch(e) { toast(errText(e, '部屋を作れませんでした'), true); }
@@ -2208,6 +2296,11 @@ function renderChrome(){
 
 function renderCpu(){
   for (const k in OPTIONS) { const el = document.getElementById(`${k}-${settings[k]}`); if (el) el.checked = true; }
+  const bin = settings.count === 'binary';
+  $('#binNote').hidden = !bin;
+  $('#ovWrapLabel').textContent = bin ? '31ぴったりで消える（32→1）' : '5本ぴったりで消える（6本→1本）';
+  $('#ovDieLabel').textContent = vanishText(bin, true);
+  if (bin) solverFor(rules());   // start solving the binary table early, in the background
   $('#levelSet').disabled = settings.mode !== 'cpu';
   const ln = settings.mode === 'cpu' ? ['あなた', 'CPU'] : ['下の人', '上の人'];
   $('#first-0-label').textContent = ln[0];
@@ -2382,7 +2475,10 @@ function renderLobby(){
   }
   }
   const r = room.rules || {};
-  const cur = {overflow: r.overflow === 'die' ? 'die' : 'wrap', split: r.split === 'off' ? 'off' : 'on', merge: r.merge === 'off' ? 'off' : 'on', limit: String(roomLimit(room))};
+  const cur = {count: r.count === 'binary' ? 'binary' : 'normal', overflow: r.overflow === 'die' ? 'die' : 'wrap', split: r.split === 'off' ? 'off' : 'on', merge: r.merge === 'off' ? 'off' : 'on', limit: String(roomLimit(room))};
+  $('#lbBinNote').hidden = cur.count !== 'binary';
+  $('#lbOvWrapLabel').textContent = vanishText(cur.count === 'binary', false);
+  $('#lbOvDieLabel').textContent = vanishText(cur.count === 'binary', true);
   for (const k in cur) { const el = document.getElementById(`lb-${k}-${cur[k]}`); if (el) el.checked = true; }
   $$('#lobbyRules fieldset').forEach(f => { f.disabled = !host; });
   $('#lobbyRulesNote').textContent = host ? 'ルールはあなたが決められます。変えるとみんなにすぐ反映されます。' : 'ルールはホストが決めます。';
@@ -2417,8 +2513,10 @@ function renderGame(){
     tg.hidden = !tt; tg.textContent = tt; tg.className = 'tag ' + tc;
     for (const i of [0, 1]) {
       const b = handBtns[k][i], n = G.hands[k][i], mine = k === G.turn;
-      b.querySelector('svg').innerHTML = handSVG(n, k > 0, i, ch);
-      b.querySelector('.count').textContent = n === 0 ? '×' : n;
+      b.querySelector('svg').innerHTML = handSVG(n, k > 0, i, ch, isBin(r));
+      const cnt = b.querySelector('.count');
+      if (isBin(r) && n > 0) cnt.innerHTML = `${n}<small class="bits">${bits(n)}</small>`;
+      else cnt.textContent = n === 0 ? '×' : n;
       const pickable = act && mine && n > 0;
       const target = act && !mine && n > 0 && src !== null;
       b.classList.toggle('dead', n === 0);
@@ -2427,7 +2525,7 @@ function renderGame(){
       b.classList.toggle('target', target);
       b.disabled = !(pickable || target);
       b.setAttribute('aria-pressed', String(act && mine && sel === i));
-      b.setAttribute('aria-label', `${nm[k]}の${i === 0 ? '左側' : '右側'}の手、${n === 0 ? '消えている' : n + '本'}`);
+      b.setAttribute('aria-label', `${nm[k]}の${i === 0 ? '左側' : '右側'}の手、${n === 0 ? '消えている' : isBin(r) ? `${n}（2進数で${bits(n)}）` : n + '本'}`);
       const badge = b.querySelector('.badge');
       const sm = target && hintsOn() ? solverMove({kind:'attack', from: src, to: i}) : null;
       if (sm) { const e = evalChild(sm.next); badge.textContent = e.label; badge.className = 'badge ' + e.cls; badge.hidden = false; }
@@ -2516,8 +2614,8 @@ function renderStrip(act, ms, nm){
   else msg.textContent = G.n > 2 ? 'タッチする相手の手を選んでください（だれでもOK）' : 'タッチする相手の手を選んでください';
 
   if (hintsOn()) {
-    const s = solver(), cur = stateIdx(G.turn), r = s.res[cur], d = s.dist[cur], who = nm[G.turn];
-    ev.textContent = r === 1 ? `解析：${who}の勝ち（最善で${d}手）` : r === -1 ? `解析：${who}の負け（相手が最善なら${d}手）` : '解析：両者最善なら引き分け';
+    const s = solver(), cur = stateIdx(G.turn), r = s.ready ? s.res[cur] : 0, d = s.ready ? s.dist[cur] : 0, who = nm[G.turn];
+    ev.textContent = !s.ready ? '解析：計算中…' : r === 1 ? `解析：${who}の勝ち（最善で${d}手）` : r === -1 ? `解析：${who}の負け（相手が最善なら${d}手）` : '解析：両者最善なら引き分け';
     ev.hidden = false;
   } else ev.hidden = true;
 
@@ -2526,12 +2624,41 @@ function renderStrip(act, ms, nm){
     const shapes = ms.filter(m => m.kind !== 'attack');
     if (unchanged(sp, JSON.stringify([h0, h1, G.ply, G.game, hintsOn(), shapes.map(m => [m.kind, m.hands])]))) { sp.hidden = false; return; }
     sp.innerHTML = '';
-    ms.filter(m => m.kind !== 'attack').forEach(m => {
+    const splitMs = shapes.filter(m => m.kind === 'split');
+    if (isBin() && splitMs.length) {
+      // up to 30 ways to split: choose the left hand with a slider instead of a wall of buttons
+      const tot = h0 + h1, lo = Math.max(1, tot - (BIN - 1)), hi = Math.min(BIN - 1, tot - 1);
+      const box = document.createElement('div');
+      box.className = 'splitter';
+      box.innerHTML = '<div class="sp-vals"><span class="sp-h"><small class="sp-lbl">左</small><b class="sp-x"></b><small class="sp-b sp-xb"></small></span>'
+        + '<span class="sp-op">＋</span><span class="sp-h"><small class="sp-lbl">右</small><b class="sp-y"></b><small class="sp-b sp-yb"></small></span></div>'
+        + `<input type="range" class="sp-range" min="${lo}" max="${hi}" step="1" aria-label="左側の手の数">`
+        + '<button type="button" class="chip sp-go"><span>この形に分身</span></button>';
+      const rng = box.querySelector('.sp-range'), go = box.querySelector('.sp-go');
+      // start at the legal split closest to half and half
+      const x0 = splitMs.map(m => m.hands[0]).sort((p, q) => Math.abs(p - tot / 2) - Math.abs(q - tot / 2) || p - q)[0];
+      rng.value = String(x0);
+      const upd = () => {
+        const x = +rng.value, y = tot - x, m = splitMs.find(z => z.hands[0] === x && z.hands[1] === y);
+        box.querySelector('.sp-x').textContent = x; box.querySelector('.sp-y').textContent = y;
+        box.querySelector('.sp-xb').textContent = bits(x); box.querySelector('.sp-yb').textContent = bits(y);
+        go.disabled = !m;
+        go.innerHTML = `<span>${m ? 'この形に分身' : '今と同じ形です'}</span><small class="k">分身 ${x} · ${y}</small>`;
+        const sm = m && hintsOn() ? solverMove(m) : null;
+        if (sm) { const e = evalChild(sm.next); go.innerHTML += `<small class="${e.cls}">${e.label}</small>`; }
+        go.onclick = m ? () => doMove(m) : null;
+        go.setAttribute('aria-label', m ? `左側${x}、右側${y}に分身` : '今と同じ形なので分身できません');
+      };
+      rng.addEventListener('input', upd);
+      upd();
+      sp.append(box);
+    }
+    shapes.filter(m => m.kind === 'merge' || !isBin()).forEach(m => {
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'chip';
       if (m.kind === 'merge') {
         b.innerHTML = `<span>${h0} + ${h1} → ${m.hands[m.into]}</span><small class="k">合成</small>`;
-        b.setAttribute('aria-label', `${h0}本と${h1}本を合成して${m.hands[m.into]}本にする`);
+        b.setAttribute('aria-label', isBin() ? `${h0}と${h1}を合成して${m.hands[m.into]}にする` : `${h0}本と${h1}本を合成して${m.hands[m.into]}本にする`);
       } else {
         b.innerHTML = `<span>${m.hands[0]} · ${m.hands[1]}</span><small class="k">分身</small>`;
         b.setAttribute('aria-label', `左側${m.hands[0]}本、右側${m.hands[1]}本に分身`);
@@ -2591,8 +2718,10 @@ function renderLog(nm){
 }
 
 function renderAnalysis(){
-  const s = solver(), r = s.res[s.start], d = s.dist[s.start];
+  const s = solver();
   $('#aRule').textContent = ruleText(rules());
+  if (!s.ready) { for (const id of ['#aStart', '#aReach', '#aSplit']) $(id).textContent = '計算中…'; return; }
+  const r = s.res[s.start], d = s.dist[s.start];
   $('#aStart').textContent = r === 1 ? `先手必勝（最善で${d}手）` : r === -1 ? `後手必勝（最善で${d}手）` : '引き分け（両者最善なら終わらない）';
   $('#aReach').textContent = `${s.reach}通り`;
   $('#aSplit').textContent = `手番側の勝ち ${s.counts.win}・負け ${s.counts.lose}・引き分け ${s.counts.draw}`;
