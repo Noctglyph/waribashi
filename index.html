@@ -489,6 +489,52 @@ fieldset:disabled .opts span{cursor:default}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;width:max-content;max-width:calc(100% - 32px);padding:10px 16px;border-radius:12px;background:var(--panel);border:1.5px solid var(--line);box-shadow:0 10px 24px -8px rgba(0,0,0,.7);font-size:14px;text-wrap:pretty}
 .toast.err{border-color:var(--lose);color:var(--lose)}
 
+/* ----- Today's boss ----- */
+.bosscard{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:center;width:100%;padding:12px 16px 12px 12px;border-radius:12px;border:5px solid var(--wood);background-color:#2c2346;background-image:radial-gradient(ellipse 60% 70% at 18% 50%,rgba(201,162,255,.18),transparent 70%),var(--noise);box-shadow:inset 0 0 36px rgba(0,0,0,.35);text-align:left;cursor:pointer;color:var(--chalk);overflow:hidden}
+.bosscard:focus-visible{outline:2px solid var(--chalk);outline-offset:3px}
+.bosscard::after{content:"";position:absolute;inset:-20% auto -20% -40%;width:24%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.1),transparent);transform:skewX(-18deg);animation:shine 7s ease-in-out infinite;pointer-events:none}
+.bc-face svg,.bh-face svg,.bface svg,.sp-boss svg{display:block;width:100%;height:auto;overflow:visible}
+.bc-face{width:76px;animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4px) rotate(-2deg)}}
+.bc-txt{display:grid;gap:3px;min-width:0}
+.bc-tag{justify-self:start;font-size:11px;font-weight:700;letter-spacing:.04em;line-height:1.7;padding:0 9px;border-radius:999px;background:#c9a2ff;color:#1c1b18}
+.bc-name{font-family:var(--font-display);font-weight:400;font-size:24px;line-height:1.2}
+.bc-hp,.bh-hp{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;color:#e7d6ff}
+.bc-hp .meter,.bh-hp .meter{flex:1;height:9px;border-radius:5px;margin:0;background:rgba(0,0,0,.35);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.bc-hp .meter i,.bh-hp .meter i{background:linear-gradient(90deg,#ff7d7d,#c9a2ff);border-radius:5px;transition:width .6s ease}
+.bc-sub{font-size:12px;color:var(--chalk-soft)}
+.bosscard.down .bc-face,.bosshero.down .bh-face{animation:none;filter:grayscale(.6);opacity:.8}
+.bosscard.claim{border-color:var(--coin);animation:glowb 1.8s ease-in-out infinite}
+.bc-stamp{position:absolute;right:12px;top:10px;padding:2px 10px;border:3px solid var(--lose);border-radius:8px;color:var(--lose);font-family:var(--font-display);font-size:18px;transform:rotate(10deg);background:rgba(28,22,40,.6)}
+.bosshero{display:grid;justify-items:center;gap:6px;padding:18px 16px;border-radius:8px;border:8px solid var(--wood);background-color:#2c2346;background-image:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(201,162,255,.2),transparent 70%),var(--noise);box-shadow:inset 0 0 50px rgba(0,0,0,.4);text-align:center}
+.bh-face{width:min(150px,40vw);animation:bob 2.6s ease-in-out infinite}
+.bh-tag{margin:0;font-size:12px;font-weight:700;line-height:1.7;padding:0 10px;border-radius:999px;background:#c9a2ff;color:#1c1b18}
+.bh-name{margin:0;font-family:var(--font-display);font-weight:400;font-size:30px;line-height:1.2}
+.bh-rule{margin:0;color:#e7d6ff;font-size:14px}
+.bh-hp{width:100%;max-width:360px}
+.bh-hpt{margin:0;font-family:var(--font-display);font-size:18px;font-variant-numeric:tabular-nums}
+.bh-sub{margin:0;font-size:13px;color:var(--chalk-soft)}
+.road{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.road li{display:grid;grid-template-columns:3.6em 44px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--board-deep);border:1.5px solid var(--line)}
+.road li.got{border-color:rgba(242,207,91,.55)}
+.road li.next{border-color:#c9a2ff;box-shadow:0 0 0 1px #c9a2ff inset}
+.road .rn{font-family:var(--font-display);font-size:15px;color:var(--chalk-soft);text-align:center;line-height:1.2}
+.road .ri{display:grid;place-items:center;width:44px;height:44px;border-radius:10px;background:rgba(0,0,0,.25)}
+.road .ri svg{width:30px;height:auto;aspect-ratio:100/130;overflow:visible}
+.road .ri svg .pm,.road .ri svg .fg{fill:currentColor}
+.road .ri svg .fg{stroke:var(--board-deep);stroke-width:2}
+.road .ri .pswatch{display:block;width:38px;height:26px;border-radius:6px;border:2px solid var(--pe)}
+.road .ri .tt{font-family:var(--font-display);font-size:13px;color:var(--you)}
+.road b{font-size:14px;min-width:0;overflow-wrap:anywhere}
+.road b small{display:block;font-size:11px;font-weight:400;color:var(--chalk-soft)}
+.road .rs{font-size:12px;font-weight:700;color:var(--chalk-soft);white-space:nowrap}
+.road li.got .rs{color:var(--coin)}
+.seat .bface{display:inline-block;width:34px;vertical-align:middle;margin-right:4px}
+.tag.boss{color:#e7d6ff;border-color:#c9a2ff;letter-spacing:.06em}
+.sp-boss{width:120px;margin:0 auto;animation:bob 2.6s ease-in-out infinite}
+.pl-flag{background-color:#9e2b2b;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.07) 0 8px,transparent 8px 16px),linear-gradient(160deg,#c13b3b,#7c1f2a);--pf:#fff4e6;--pa:#ffd36b;--pe:#5a1520}
+.pl-throne{background-color:#3a2263;background-image:radial-gradient(circle at 85% 20%,rgba(255,220,130,.5) 0 2px,transparent 3px),linear-gradient(115deg,#4b2b84 0%,#7d55c7 45%,#c9a2ff 60%,#5b3696 100%);--pf:#fff7dd;--pa:#f6dc83;--pe:#2a1647}
+
 /* ----- Effects ----- */
 .fx-layer{position:fixed;inset:0;z-index:80;pointer-events:none;overflow:hidden}
 .fx-dust{position:absolute;display:block;border-radius:35%;opacity:.95}
@@ -562,6 +608,15 @@ fieldset:disabled .opts span{cursor:default}
   <linearGradient id="cg-gold" gradientUnits="userSpaceOnUse" x1="10" y1="0" x2="90" y2="130">
     <stop offset="0" stop-color="#8f5f12"/><stop offset=".28" stop-color="#ffefb0"/><stop offset=".5" stop-color="#b47a1c"/><stop offset=".74" stop-color="#fff3c2"/><stop offset="1" stop-color="#8a5a10"/>
   </linearGradient>
+  <linearGradient id="cg-royal" gradientUnits="userSpaceOnUse" x1="10" y1="0" x2="90" y2="130">
+    <stop offset="0" stop-color="#5b2c8f"/><stop offset=".35" stop-color="#d9bcff"/><stop offset=".6" stop-color="#7a45c0"/><stop offset=".85" stop-color="#ead9ff"/><stop offset="1" stop-color="#5b2c8f"/>
+  </linearGradient>
+  <linearGradient id="cg-fire" gradientUnits="userSpaceOnUse" x1="50" y1="130" x2="50" y2="0">
+    <stop offset="0" stop-color="#b8321a"/><stop offset=".45" stop-color="#ff7a3a"/><stop offset=".8" stop-color="#ffd36b"/><stop offset="1" stop-color="#fff2b0"/>
+  </linearGradient>
+  <linearGradient id="cg-star" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="130">
+    <stop offset="0" stop-color="#2a3a8f"/><stop offset=".3" stop-color="#8ea8ff"/><stop offset=".5" stop-color="#f2f5ff"/><stop offset=".7" stop-color="#7d95ff"/><stop offset="1" stop-color="#2a3a8f"/>
+  </linearGradient>
   <linearGradient id="cg-rainbow" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="130">
     <stop offset="0" stop-color="#ff9a9a"/><stop offset=".2" stop-color="#ffd59a"/><stop offset=".4" stop-color="#fff59a"/><stop offset=".6" stop-color="#b8f2a6"/><stop offset=".8" stop-color="#9fdcff"/><stop offset="1" stop-color="#c6b4ff"/>
   </linearGradient>
@@ -605,6 +660,13 @@ fieldset:disabled .opts span{cursor:default}
       <span class="pu-prog" id="puProg"><span class="meter"><i id="puMeter"></i></span><span id="puCount"></span></span>
       <span class="pu-side"><span class="coin" id="puCoins" hidden></span><span id="puLeft"></span></span>
     </button>
+    <button type="button" class="bosscard" id="goBoss" aria-label="今日のボス">
+      <span class="bc-face" id="bcFace"></span>
+      <span class="bc-txt"><span class="bc-tag" id="bcTag">今日のボス</span><b class="bc-name">黒板消し大王</b>
+        <span class="bc-hp"><span class="meter"><i id="bcHp" style="width:100%"></i></span><span id="bcHpT">HP --</span></span>
+        <span class="bc-sub" id="bcSub"></span></span>
+      <span class="bc-stamp" id="bcStamp" hidden>討伐！</span>
+    </button>
     <div class="modes">
       <button type="button" class="mode main" id="goRated">
         <span class="mode-k">レート戦</span>
@@ -625,6 +687,43 @@ fieldset:disabled .opts span{cursor:default}
     </div>
     <p class="ticker"><span class="tk-tag">ヒント</span><span class="tk-t" id="ticker"></span></p>
     <p class="note" id="homeNote" hidden>オンライン対戦はまだ準備中です。</p>
+  </section>
+
+  <!-- Today's boss -->
+  <section class="screen narrow" id="scrBoss" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>今日のボス</h2></div>
+    <div class="bosshero" id="bossHero">
+      <div class="bh-face" id="bhFace"></div>
+      <p class="bh-tag" id="bhTag"></p>
+      <h3 class="bh-name">黒板消し大王</h3>
+      <p class="bh-rule" id="bhRule"></p>
+      <div class="bh-hp"><span class="meter"><i id="bhHp" style="width:100%"></i></span></div>
+      <p class="bh-hpt" id="bhHpT"></p>
+      <p class="bh-sub" id="bhSub"></p>
+    </div>
+    <button type="button" class="btn gold big" id="bossClaim" hidden>討伐報酬を受け取る</button>
+    <button type="button" class="btn primary big" id="bossGo">挑戦する</button>
+    <p class="note center" id="bossNote" style="margin:-6px 0 0"></p>
+    <section class="panel">
+      <h3>ごほうびロード <span class="tag mine" id="roadCount"></span></h3>
+      <ol class="road" id="bossRoad"></ol>
+      <p class="note">大王が倒された日に参加していて、報酬を受け取ると「討伐」が1回増えます。限定アイテムはここでしか手に入りません。</p>
+    </section>
+    <section class="panel">
+      <h3>今日のダメージランキング</h3>
+      <ol class="rank" id="bossTop"></ol>
+    </section>
+    <section class="panel">
+      <h3>ボス戦のルール</h3>
+      <ul class="rules">
+        <li>大王は毎朝4:00に現れます。HPはプレイヤー全員で共通。みんなの攻撃でHPを0にしたら討伐成功！</li>
+        <li>挑戦は1日3回まで。大王の手を1本消すごとに100ダメージ。大王は3回まで起き上がり、3回とも倒すとボーナス300ダメージ。</li>
+        <li>あなたの両手が消えるか、同じ局面が3回出たら挑戦終了。それまでのダメージはちゃんと入ります。</li>
+        <li>曜日ごとにルールが変わります（合成なし、2進数など）。日曜は大王が本気です。</li>
+        <li>ふだんのオンライン対戦でも、相手の手を1本消すと20ダメージ入ります。</li>
+        <li>討伐できた日に参加していたら、コイン100枚と「討伐」1回ぶんの報酬を受け取れます（その日の4:00まで）。</li>
+      </ul>
+    </section>
   </section>
 
   <!-- Ranking -->
@@ -1180,11 +1279,11 @@ function shapeFx(p, m){
   else { hs.forEach(h => { const [x, y] = centerOf(h); dust(x, y, color, 8, 34); }); const [x, y] = centerOf(hs[0].parentElement); floatText(x, y - 10, '分身！', color); }
   sfx('tap');
 }
-const gameId = () => net.on ? `${net.code}:${net.room && net.room.createdAt}:${G.game || 0}` : `cpu:${ui.gameSeq || 0}`;
+const gameId = () => net.on ? `${net.code}:${net.room && net.room.createdAt}:${G.game || 0}` : `${ui.boss ? 'boss' : 'cpu'}:${ui.gameSeq || 0}`;
 // After every board update: play the effect of a move that arrived from elsewhere (rival, CPU, network).
 function boardFx(){
   const gid = gameId();
-  if (ui.fxGid !== gid) { ui.fxGid = gid; ui.fxPly = G.ply; if (G.over) ui.resultFor = gid; return; }
+  if (ui.fxGid !== gid) { ui.fxGid = gid; ui.fxPly = G.ply; if (G.over) { ui.resultFor = gid; dbg('entered a finished game ' + gid); } return; }
   if (G.ply <= ui.fxPly) { ui.fxPly = G.ply; return; }
   ui.fxPly = G.ply;
   if (ui.fxSkip === `${gid}:${G.ply}`) return;   // my own move, already animated
@@ -1204,13 +1303,23 @@ function maybeResult(){
   if (!G || !G.over || ui.screen !== 'game') return;
   const gid = gameId();
   // a short pause so the last touch (and its chalk burst) can be seen first
-  if (ui.resultFor !== gid) { ui.resultFor = gid; setTimeout(() => { if (ui.screen === 'game' && G && G.over && gameId() === gid) showResult(); }, 450); }
+  if (ui.resultFor !== gid) {
+    ui.resultFor = gid;
+    setTimeout(() => {
+      if (ui.screen === 'game' && G && G.over && gameId() === gid) showResult();
+      else {
+        dbg(`result skipped: screen ${ui.screen}, over ${!!(G && G.over)}, game ${gid} → ${G ? gameId() : '-'}`);
+        if (ui.resultFor === gid && G && !G.over) ui.resultFor = null;
+      }
+    }, 450);
+  }
   else if (!$('#result').hidden) updateResult();
 }
 function showResult(){
   const el = $('#result'), nm = names(), o = G.over, cpu = !net.on && settings.mode === 'cpu', local2 = !net.on && settings.mode === '2p';
   let kind = 'draw', title = '引き分け';
-  if (o.type === 'win') {
+  if (ui.boss) { kind = ui.boss.cleared ? 'win' : o.type === 'draw' ? 'draw' : 'lose'; title = ui.boss.cleared ? '討伐！' : o.type === 'draw' ? '引き分け' : 'やられた…'; }
+  else if (o.type === 'win') {
     if (local2) { kind = 'win'; title = `${nm[o.winner]}の勝ち！`; }
     else if (o.winner === 0) { kind = 'win'; title = '勝利！'; }
     else { kind = 'lose'; title = '負け…'; }
@@ -1220,7 +1329,7 @@ function showResult(){
   t.innerHTML = '';
   [...title].forEach((ch, i) => { const sp = document.createElement('span'); sp.textContent = ch; sp.style.animationDelay = (i * 0.09) + 's'; t.append(sp); });
   const by = o.by, why = o.reason === 'resign' && by !== undefined ? `${nm[by]}が投了` : o.reason === 'time' && by !== undefined ? `${nm[by]}の時間切れ` : o.type === 'draw' ? '同じ局面が3回出ました' : `${G.ply}手で決着`;
-  $('#resS').textContent = cpu && o.type === 'win' ? `CPU（${LEVEL_NAME[settings.level]}）・${why}` : kind === 'lose' && G.n > 2 ? `${nm[o.winner]}の勝ち・${why}` : why;
+  $('#resS').textContent = ui.boss ? `大王の手を${ui.boss.hands}本消した・${G.ply}手` : cpu && o.type === 'win' ? `CPU（${LEVEL_NAME[settings.level]}）・${why}` : kind === 'lose' && G.n > 2 ? `${nm[o.winner]}の勝ち・${why}` : why;
   ui.resShown = {rate: false, coins: false};
   $('#resRows').innerHTML = '';
   el.hidden = false;
@@ -1240,6 +1349,22 @@ function showResult(){
 function updateResult(){
   const rows = $('#resRows'), again = $('#again'), ra = $('#resAgain');
   ra.textContent = again.textContent; ra.disabled = again.disabled; ra.hidden = again.hidden;
+  if (ui.boss) {
+    const bs = bossState(), key = `${ui.boss.dmg}:${bs.dmg}:${bs.down}`;
+    if (ui.resShown.boss !== key) {
+      ui.resShown.boss = key;
+      rows.innerHTML = '';
+      const r1 = document.createElement('div');
+      r1.className = 'res-row'; r1.innerHTML = '<span>与えたダメージ</span><b></b>';
+      r1.querySelector('b').textContent = ui.boss.dmg + (ui.boss.cleared ? `（ボーナス${BOSS_CLEAR_BONUS}込み）` : '');
+      const r2 = document.createElement('div');
+      r2.className = 'res-row'; r2.innerHTML = '<span>みんなの合計</span><b></b>';
+      r2.querySelector('b').textContent = bs.loaded ? `${Math.min(bs.dmg, bs.hp)} / ${bs.hp}` : '…';
+      rows.append(r1, r2);
+      if (bs.down) { const r3 = document.createElement('div'); r3.className = 'res-row up'; r3.textContent = '大王を討伐した！ 報酬を受け取ろう'; rows.append(r3); }
+    }
+    return;
+  }
   // rated: rating counts up (or down), with a tier change on its own line
   if (isRated() && !ui.resShown.rate) {
     const S = normState(net.room.state);
@@ -1363,7 +1488,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/15-1';
+const APP_VERSION = '11/15-2';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -1426,6 +1551,8 @@ const TITLES = [
   {id:'kin', name:'黄金の指', need:'レート1800に届く', key:'maxRate', goal:1800},
   {id:'cpu', name:'CPUキラー', need:'CPU（ふつう以上）に勝つ', key:'cpuNormal', goal:1},
   {id:'strong', name:'さいきょうと互角', need:'CPU（さいきょう）と引き分け', key:'cpuDraw', goal:1},
+  {id:'hunter', name:'ボスハンター', need:'ボス討伐 1回', key:'bossKills', goal:1, boss:true},
+  {id:'killer', name:'黒板消しキラー', need:'ボス討伐 15回', key:'bossKills', goal:15, boss:true},
 ];
 const PLATES = [
   {id:'chalk', name:'黒板', need:'はじめから'},
@@ -1436,8 +1563,10 @@ const PLATES = [
   {id:'sea', name:'水面', need:'レート1600に届く', key:'maxRate', goal:1600},
   {id:'gold', name:'金', need:'レート1700に届く', key:'maxRate', goal:1700},
   {id:'rainbow', name:'虹', need:'称号を10個集める', key:'titles', goal:10},
+  {id:'flag', name:'討伐の旗', need:'ボス討伐 5回', key:'bossKills', goal:5, boss:true},
+  {id:'throne', name:'大王の玉座', need:'ボス討伐 30回', key:'bossKills', goal:30, boss:true},
 ];
-const STAT_KEYS = ['games','wins','best','streak','merges','splits','kos','royale','long','cpuNormal','cpuDraw','dailyDone'];
+const STAT_KEYS = ['games','wins','best','streak','merges','splits','kos','royale','long','cpuNormal','cpuDraw','dailyDone','bossKills','bossHands'];
 function statsOf(p){
   const st = (p && p.st) || {}, o = {};
   for (const k of STAT_KEYS) o[k] = +st[k] || 0;
@@ -1473,6 +1602,7 @@ const DAILY = [
   {id:'d_k5', name:'相手の手を5本消す（CPU対戦でもOK）', key:'kos', goal:5, coins:50},
   {id:'d_cw', name:'CPU（ふつう以上）に1勝', key:'cpuWins', goal:1, coins:30},
   {id:'d_cg', name:'CPUと3試合', key:'cpuGames', goal:3, coins:30},
+  {id:'d_b1', name:'今日のボスに挑戦する', key:'boss', goal:1, coins:40},
 ];
 const MISSIONS = [
   {id:'g1', name:'オンラインで1試合', key:'games', goal:1, coins:50},
@@ -1495,6 +1625,8 @@ const MISSIONS = [
   {id:'r1700', name:'レート1700に届く', key:'maxRate', goal:1700, coins:500},
   {id:'cpu', name:'CPU（ふつう以上）に勝つ', key:'cpuNormal', goal:1, coins:50},
   {id:'dly', name:'デイリーミッションを10個クリア', key:'dailyDone', goal:10, coins:200},
+  {id:'bk1', name:'今日のボスを1回討伐', key:'bossKills', goal:1, coins:100},
+  {id:'bk10', name:'今日のボスを10回討伐', key:'bossKills', goal:10, coins:300},
 ];
 const CHALKS = [
   {id:'auto', name:'いつもの色', price:0},
@@ -1509,13 +1641,21 @@ const CHALKS = [
   {id:'neon', name:'蛍光チョーク', price:400, color:'#d8ff5a', glow:true},
   {id:'gold', name:'金粉チョーク', price:600, color:'#f0d264', grad:'cg-gold', shine:true},
   {id:'rainbow', name:'虹色チョーク', price:1000, color:'#ffd9a8', grad:'cg-rainbow'},
+  // limited: only from the boss reward road
+  {id:'royal', name:'大王の紫', price:0, color:'#c9a2ff', grad:'cg-royal', boss:3},
+  {id:'fire', name:'炎チョーク', price:0, color:'#ff9a5a', grad:'cg-fire', glow:true, boss:10},
+  {id:'star', name:'星くずチョーク', price:0, color:'#a9c4ff', grad:'cg-star', shine:true, boss:20},
 ];
 const chalkId = id => CHALKS.some(c => c.id === id) ? id : 'auto';
 const chalkOf = id => CHALKS.find(c => c.id === id && c.color) || null;
 const myCoins = () => Math.max(0, Math.floor(+((net.profile || {}).coins) || 0));
+function hasChalk(id, prof){
+  const p = prof || net.profile || {}, c = CHALKS.find(x => x.id === id);
+  return !!c && (id === 'auto' || !!(p.owned || {})[id] || (!!c.boss && statsOf(p).bossKills >= c.boss));
+}
 function myChalk(){
   const p = net.profile || {}, id = p.chalk || lsGet('waribashi-chalk') || 'auto';
-  return id === 'auto' || (p.owned || {})[id] ? chalkId(id) : 'auto';
+  return hasChalk(id) ? chalkId(id) : 'auto';
 }
 // The day changes at 4:00 Japan time.
 function dayKey(t){ return new Date((t || serverNow()) + (9 - DAY_RESET_H) * 3600000).toISOString().slice(0, 10); }
@@ -1550,6 +1690,141 @@ function missionState(){
   return {daily, bonusState, normal, readyDaily, readyNormal, day: d.day};
 }
 const myEntry = () => Object.assign({name: typedName(), rating: myRating(), joinedAt: Date.now(), chalk: myChalk()}, myLook());
+
+// ----- Today's boss: 黒板消し大王 -----
+const BOSS_LIVES = 3, BOSS_HAND_DMG = 100, BOSS_CLEAR_BONUS = 300, BOSS_GAME_DMG = 20, BOSS_TRIES = 3, BOSS_REWARD = 100;
+// One twist per weekday of the boss day (index 0 = Sunday). skill = how often the boss plays the best move on its first life.
+const BOSS_DAYS = [
+  {tag:'日曜・本気の日', rule:'大王が本気。読みが鋭い', hp:5000, start:[1, 2], skill:.8},
+  {tag:'月曜・ふつうの日', rule:'いつものルール', hp:3000, start:[1, 1], skill:.45},
+  {tag:'火曜・合成封じ', rule:'合成なし', hp:3000, start:[1, 1], skill:.5, merge:false},
+  {tag:'水曜・きびしい日', rule:'5本以上で消える', hp:3000, start:[1, 1], skill:.5, overflow:'die'},
+  {tag:'木曜・分身封じ', rule:'分身なし', hp:3000, start:[1, 1], skill:.5, split:false},
+  {tag:'金曜・2本スタート', rule:'大王の手が2本ずつで始まる', hp:3000, start:[2, 2], skill:.5},
+  {tag:'土曜・2進数の日', rule:'2進数ルール（31で消える）', hp:5000, start:[1, 1], skill:.5, count:'binary'},
+];
+const BOSS_CHALK = {id:'boss', color:'#d6a8ff'};
+// ?debug&bossday=N picks a weekday's boss for testing.
+const BOSS_FORCE = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('bossday') ? (+q.get('bossday')) % 7 : -1; } catch(e) { return -1; } })();
+const bossDayInfo = day => BOSS_DAYS[BOSS_FORCE >= 0 ? BOSS_FORCE : new Date((day || dayKey()) + 'T00:00:00Z').getUTCDay()];
+const bossRules = b => ({overflow: b.overflow || 'wrap', split: b.split !== false, merge: b.merge !== false, base: b.count === 'binary' ? BIN : 5});
+function bossFace(down){
+  const eyes = down
+    ? '<path d="M36 57l12 12M48 57 36 69M72 57l12 12M84 57 72 69" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/>'
+    : '<path d="M30 50 50 57M90 50 70 57" stroke="#fff" stroke-width="5" stroke-linecap="round"/><circle cx="42" cy="63" r="6" fill="#fff"/><circle cx="78" cy="63" r="6" fill="#fff"/><circle cx="43.5" cy="64" r="2.8" fill="#24183d"/><circle cx="79.5" cy="64" r="2.8" fill="#24183d"/>';
+  return `<svg viewBox="0 0 120 108" aria-hidden="true"><g filter="url(#chalk)">`
+    + `<path d="M28 36 36 12 48 27 60 6 72 27 84 12 92 36Z" fill="#f3d774"/>`
+    + `<circle cx="36" cy="12" r="4" fill="#ff8f8f"/><circle cx="60" cy="6" r="4.5" fill="#9fd0f0"/><circle cx="84" cy="12" r="4" fill="#b8e6a3"/>`
+    + `<rect x="10" y="34" width="100" height="50" rx="12" fill="#7d55c7"/>`
+    + `<rect x="10" y="80" width="100" height="22" rx="7" fill="#dcd9ce"/><path d="M18 87h84M18 94h84" stroke="#a9a59a" stroke-width="2.5"/>`
+    + eyes
+    + (down ? '<path d="M50 77q10-5 20 0" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/>' : '<path d="M48 74q12 6 24 0" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/>')
+    + `</g></svg>`;
+}
+// My part of today's boss (stored in my profile) and everyone's (boss/<day>).
+function myBoss(){
+  const b = (net.profile || {}).boss || {}, day = dayKey();
+  return b.day === day ? {day, tries: +b.tries || 0, dmg: +b.dmg || 0, claimed: !!b.claimed} : {day, tries: 0, dmg: 0, claimed: false};
+}
+function bossState(){
+  const info = bossDayInfo(), d = (net.bossDay === dayKey() && net.bossData) || {}, dmg = Math.max(0, +d.dmg || 0), top = d.top || {};
+  const list = Object.keys(top).map(uid => ({uid, name: String((top[uid] || {}).name || 'ななし').slice(0, 12), dmg: +((top[uid] || {}).dmg) || 0})).filter(x => x.dmg > 0).sort((a, b) => b.dmg - a.dmg);
+  return {info, hp: info.hp, dmg, left: Math.max(0, info.hp - dmg), down: dmg >= info.hp, players: list.length, top: list, loaded: !!net.bossData, err: !!net.bossErr};
+}
+// Reward road: everything unlocked by number of bosses defeated, in order.
+function bossRoad(){
+  const items = [];
+  TITLES.filter(t => t.boss).forEach(t => items.push({n: t.goal, kind: '称号', name: t.name, title: t.id}));
+  PLATES.filter(p => p.boss).forEach(p => items.push({n: p.goal, kind: 'プレート', name: p.name, plate: p.id}));
+  CHALKS.filter(c => c.boss).forEach(c => items.push({n: c.boss, kind: 'チョーク', name: c.name, chalk: c}));
+  return items.sort((a, b) => a.n - b.n);
+}
+function bossDamage(n){
+  if (!net.fb || !net.uid || !n) return;
+  const fb = net.fb, day = dayKey();
+  fb.runTransaction(fb.ref(fb.db, `players/${net.uid}/boss`), cur => {
+    const b = cur && cur.day === day ? Object.assign({}, cur) : {day, tries: 0, dmg: 0};
+    b.dmg = (+b.dmg || 0) + n;
+    return b;
+  }).catch(() => {});
+  fb.update(fb.ref(fb.db, 'boss/' + day), {dmg: fb.increment(n), [`top/${net.uid}/dmg`]: fb.increment(n), [`top/${net.uid}/name`]: typedName()})
+    .catch(() => { net.bossErr = true; render(); });
+}
+async function startBossChallenge(){
+  if (!net.fb || !net.uid) { toast('オンラインにつながっていないとボスに挑戦できません', true); return; }
+  const fb = net.fb, day = dayKey(), info = bossDayInfo(day);
+  let res;
+  try {
+    res = await fb.runTransaction(fb.ref(fb.db, `players/${net.uid}/boss`), cur => {
+      const b = cur && cur.day === day ? Object.assign({}, cur) : {day, tries: 0, dmg: 0};
+      if ((+b.tries || 0) >= BOSS_TRIES) return undefined;
+      b.tries = (+b.tries || 0) + 1;
+      return b;
+    });
+  } catch(e) { toast(errText(e, '挑戦を始められませんでした'), true); return; }
+  if (!res || !res.committed) { toast('今日の挑戦はもう終わりです。4:00に回復します', true); render(); return; }
+  bumpDaily({boss: 1});
+  ui.boss = {day, info, life: 1, hands: 0, dmg: 0};
+  setScreen('game');
+  newBossGame();
+  const body = $('#splashB');
+  body.innerHTML = `<div class="sp-boss">${bossFace(false)}</div>`;
+  showSplash('黒板消し大王があらわれた！', `${info.tag}：${info.rule}`);
+}
+function newBossGame(){
+  clearTimeout(cpuTimer); cpuTimer = null; busy = false;
+  ui.gameSeq = (ui.gameSeq || 0) + 1;
+  hideResult();
+  G = initState({n: 2, first: 0});
+  G.hands[1] = [...ui.boss.info.start];
+  G.seen = {[posKeyOf(G)]: 1};
+  sel = null; panel = null;
+  render(); maybeCpu();
+}
+// After each move in a boss game: count damage, let the boss get up again, end the challenge.
+function bossAfterMove(m){
+  const b = ui.boss;
+  let dmg = 0;
+  const hit = m.kind === 'attack' && m.target === 1 && m.after === 0;
+  if (hit) {
+    b.hands++; b.dmg += BOSS_HAND_DMG; dmg += BOSS_HAND_DMG;
+    setTimeout(() => { const t = handBtns[1] && handBtns[1][m.to]; if (t) { const [x, y] = centerOf(t); floatText(x, y + 34, `${BOSS_HAND_DMG}ダメージ`, '#d6a8ff', true); } }, 120);
+  }
+  if (G.over && G.over.type === 'win' && G.over.winner === 0) {
+    if (b.life < BOSS_LIVES) {
+      b.life++;
+      G = Object.assign({}, G, {over: null, hands: [[...G.hands[0]], [...b.info.start]], turn: 1, seen: {}});
+      G.seen[posKeyOf(G)] = 1;
+      ui.bossMsgUntil = Date.now() + 1800;
+      setTimeout(() => {
+        const seat = $('#seat1');
+        if (!seat) return;
+        const [x, y] = centerOf(seat);
+        dust(x, y, ['#d6a8ff', '#f3d774', '#eceee4'], 44, 150);
+        floatText(x, y - 30, `ダウン！ 残りライフ ${BOSS_LIVES - b.life + 1}`, '#d6a8ff', true);
+        sfx('up');
+      }, 600);   // after the "消えた！" of the last hand
+    } else {
+      b.cleared = true; b.dmg += BOSS_CLEAR_BONUS; dmg += BOSS_CLEAR_BONUS;
+    }
+  }
+  // server writes last: a local write re-renders at once, and the board must already be settled by then
+  if (dmg) bossDamage(dmg);
+  if (hit) bumpStats(st => { st.bossHands = (+st.bossHands || 0) + 1; return st; });
+}
+async function claimBoss(){
+  if (!bossState().down) return 0;
+  const day = dayKey();
+  const res = await profileTx(cur => {
+    const b = cur.boss || {};
+    if (b.day !== day || !(+b.dmg > 0) || b.claimed) return undefined;
+    cur.boss = Object.assign({}, b, {claimed: true});
+    cur.coins = (+cur.coins || 0) + BOSS_REWARD;
+    cur.st = Object.assign({}, cur.st || {}, {bossKills: (+((cur.st || {}).bossKills) || 0) + 1});
+    return cur;
+  });
+  return res && res.committed ? BOSS_REWARD : 0;
+}
 function plateEl(info, size){
   info = info || {};
   const el = document.createElement('div');
@@ -1573,6 +1848,7 @@ const sortedUids = ps => Object.keys(ps || {}).sort((a, b) => (+ps[a].joinedAt |
 
 const BIN = 31;   // binary mode: fingers count 1·2·4·8·16; like the normal game, a full hand (11111 = 31) vanishes, so hands hold 0-30
 function rules(){
+  if (!net.on && ui.boss) return bossRules(ui.boss.info);
   const r = net.on && net.room && net.room.rules;
   if (r) return {overflow: r.overflow === 'die' ? 'die' : 'wrap', split: r.split !== 'off', merge: r.merge !== 'off', base: r.count === 'binary' ? BIN : 5};
   return {overflow: settings.overflow, split: settings.split === 'on', merge: settings.merge === 'on', base: settings.count === 'binary' ? BIN : 5};
@@ -1604,7 +1880,7 @@ function solverFor(r){
   return S;
 }
 const solver = () => solverFor(rules());
-const hintsOn = () => settings.hints === 'on' && !net.on && G && G.n === 2;
+const hintsOn = () => settings.hints === 'on' && !net.on && !ui.boss && G && G.n === 2;
 
 // ===================== Game model (2–4 players) =====================
 // S = {n, hands:[[a,b]…], turn, first, ply, game, over, last, log, seen, limit, turnAt, seats?, names?}
@@ -1743,6 +2019,7 @@ function toLocal(S, seat){
 
 function names(){
   if (net.on && G && G.names) return G.names.map((x, k) => k === 0 ? 'あなた' : (x || '相手'));
+  if (ui.boss) return ['あなた', '黒板消し大王'];
   return settings.mode === 'cpu' ? ['あなた', 'CPU'] : ['下の人', '上の人'];
 }
 
@@ -1785,6 +2062,7 @@ function handSVG(n, top, i, ch, bin){
 // Chalk colour for a seat on the board: mine everywhere; other players' from the room.
 function seatChalk(k){
   if (!G) return null;
+  if (!net.on && ui.boss && k === 1) return BOSS_CHALK;
   if (k === 0) return chalkOf(myChalk());
   if (net.on && G.seats) { const p = ((net.room && net.room.players) || {})[G.seats[k]]; return chalkOf(p && p.chalk); }
   return null;
@@ -1815,7 +2093,7 @@ function ensureBoard(n){
 }
 
 // ===================== Local play (CPU / same device) =====================
-const isHuman = k => net.on ? k === 0 : (settings.mode === '2p' || k === 0);
+const isHuman = k => net.on || ui.boss ? k === 0 : (settings.mode === '2p' || k === 0);
 const interactive = () => !!G && !G.over && !busy && isHuman(G.turn) && !(G.limit && !G.turnAt) && (!net.on || (netPlaying() && !net.busy && alive(G, 0)));
 const liveHands = k => [0, 1].filter(i => G.hands[k][i] > 0);
 const sourceHand = () => { if (sel !== null) return sel; const l = liveHands(G.turn); return l.length === 1 ? l[0] : null; };
@@ -1838,6 +2116,7 @@ function solverMove(m){
 }
 
 function newGame(){
+  if (ui.boss) { newBossGame(); return; }
   clearTimeout(cpuTimer); cpuTimer = null; busy = false;
   ui.gameSeq = (ui.gameSeq || 0) + 1;
   hideResult();
@@ -1846,7 +2125,7 @@ function newGame(){
   render(); maybeCpu();
 }
 function maybeCpu(){
-  if (net.on || !G || G.over || settings.mode !== 'cpu' || G.turn !== 1 || ui.screen !== 'game') return;
+  if (net.on || !G || G.over || (settings.mode !== 'cpu' && !ui.boss) || G.turn !== 1 || ui.screen !== 'game') return;
   clearTimeout(cpuTimer);
   // binary: the table may still be computing; it calls maybeCpu() again when it is done
   cpuTimer = setTimeout(() => { cpuTimer = null; if (!net.on && ui.screen === 'game' && solver().ready) doMove(chooseCpuMove()); }, 700);
@@ -1869,7 +2148,8 @@ function chooseCpuMove(){
     return pick(list);
   };
   let m;
-  if (settings.level === 'strong') m = best();
+  if (ui.boss) m = Math.random() < Math.min(.95, ui.boss.info.skill + (ui.boss.life - 1) * .12) ? best() : randomMove(ms);
+  else if (settings.level === 'strong') m = best();
   else if (settings.level === 'normal') m = Math.random() < 0.6 ? best() : randomMove(ms);
   else { const kill = ms.filter(x => s.res[x.next] === -1 && s.dist[x.next] === 0); m = kill.length && Math.random() < 0.7 ? pick(kill) : randomMove(ms); }
   return m && {...m, target: 1 - G.turn};
@@ -1885,7 +2165,8 @@ async function doMove(m){
   if (online) { if (gen === net.gen) await netMove(m); else render(); return; }
   if (net.on || G !== g0) { render(); return; }
   G = step(G, m, 0);
-  if (G.over) recordCpu(G);
+  if (ui.boss) bossAfterMove(m);
+  else if (G.over) recordCpu(G);
   render(); maybeCpu();
 }
 
@@ -1980,12 +2261,14 @@ function watchGlobal(fb){
   fb.onValue(fb.ref(db, '.info/serverTimeOffset'), s => { net.offset = +s.val() || 0; });
   let firstProfile = true;
   fb.onValue(fb.ref(db, 'players/' + net.uid), s => {
-    const before = unlocked(statsOf(net.profile)), mBefore = firstProfile ? null : missionState();
+    const before = unlocked(statsOf(net.profile)), mBefore = firstProfile ? null : missionState(), prevProfile = net.profile;
     net.profile = s.val();
     const after = unlocked(statsOf(net.profile));
     if (!firstProfile) {
       after.titles.filter(x => !before.titles.includes(x)).forEach(x =>
         celebrate('称号<br>ゲット！', () => plateEl({name: typedName(), title: x, plate: myLook().plate}, 'sm')));
+      CHALKS.filter(c => c.boss && !hasChalk(c.id, prevProfile || {}) && hasChalk(c.id)).forEach(c =>
+        celebrate('チョーク<br>ゲット！', () => { const d = document.createElement('div'); d.innerHTML = '<b></b><span>ショップで「使う」を押すと使えます</span>'; d.querySelector('b').textContent = c.name; return d; }));
       after.plates.filter(x => !before.plates.includes(x)).forEach(x =>
         celebrate('プレート<br>ゲット！', () => plateEl({name: typedName(), title: myLook().title, plate: x}, 'sm')));
       // missions that just became collectable
@@ -2000,8 +2283,24 @@ function watchGlobal(fb){
     firstProfile = false;
     render();
   }, () => {});
+  watchBoss();
   fb.onValue(fb.query(fb.ref(db, 'players'), fb.orderByChild('rp'), fb.limitToLast(50)),
     s => { net.board = s.val() || {}; renderRank(); }, () => { net.board = {}; renderRank(); });
+}
+function watchBoss(){
+  const fb = net.fb;
+  if (!fb) return;
+  if (net.bossOff) { try { net.bossOff(); } catch(e) {} }
+  const day = net.bossDay = dayKey();
+  net.bossData = null; net.bossErr = false;
+  let wasDown = null;
+  net.bossOff = fb.onValue(fb.ref(fb.db, 'boss/' + day), s => {
+    net.bossData = s.val() || {};
+    const bs = bossState();
+    if (wasDown === false && bs.down && myBoss().dmg > 0) celebrate('討伐<br>成功！', () => { const d = document.createElement('div'); d.innerHTML = '<b>みんなで黒板消し大王をたおした！</b><span>ボス画面で報酬を受け取ろう</span>'; return d; });
+    wasDown = bs.down;
+    render();
+  }, () => { net.bossErr = true; net.bossData = {}; render(); });
 }
 const saveName = fb => fb.update(fb.ref(fb.db, 'players/' + net.uid), Object.assign({name: typedName()}, myLook())).catch(() => {});
 // Keep my entry in the lobby's member list in step with my nameplate.
@@ -2327,6 +2626,7 @@ function recordGame(S, newRating, ctx){
   const draw = S.over && S.over.type === 'draw';
   const mine = S.log.filter(e => e.p === seat), count = k => mine.filter(e => e.k === k).length;
   const kos = mine.filter(e => e.k === 'attack' && e.a === 0).length;
+  if (kos) bossDamage(kos * BOSS_GAME_DMG);
   bumpDaily({games: 1, wins: won, rated: newRating ? 1 : 0, custom: newRating ? 0 : 1, merges: count('merge'), splits: count('split'), kos},
     GAME_COINS + (won ? WIN_COINS : 0)).then(g => { rewards.set(key, g); render(); });
   return bumpStats(st => {
@@ -2691,9 +2991,9 @@ async function tryMatch(sg){
 }
 
 // ===================== Screens =====================
-const SCREENS = {home:'#scrHome', cpu:'#scrCpu', plate:'#scrPlate', mission:'#scrMission', shop:'#scrShop', rank:'#scrRank', rules:'#scrRules', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
+const SCREENS = {home:'#scrHome', cpu:'#scrCpu', plate:'#scrPlate', mission:'#scrMission', shop:'#scrShop', rank:'#scrRank', rules:'#scrRules', boss:'#scrBoss', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
 // The tab bar stays on the menu screens and steps aside for matching and play.
-const TABBED = ['home', 'mission', 'shop', 'rank', 'plate', 'rules', 'cpu', 'custom'];
+const TABBED = ['home', 'mission', 'shop', 'rank', 'plate', 'rules', 'cpu', 'custom', 'boss'];
 function showChrome(s){
   const tabs = TABBED.includes(s);
   $('#tabbar').hidden = !tabs;
@@ -2713,6 +3013,7 @@ function setScreen(s){
 function goHome(){
   clearTimeout(cpuTimer); cpuTimer = null;
   hideSplash(); hideResult();
+  ui.boss = null;
   setScreen('home');
 }
 function toast(msg, err){
@@ -2750,6 +3051,7 @@ function render(){
   if (ui.screen === 'mission') renderMission();
   if (ui.screen === 'shop') renderShop();
   if (ui.screen === 'rank') renderRank();
+  if (ui.screen === 'boss') renderBoss();
   if (ui.screen === 'home') renderHome();
   if (ui.screen === 'game') renderGame();
   tick();
@@ -2829,6 +3131,7 @@ const TIPS = [
   'CPU対戦の「解析を表示」で、その局面の勝ち負けがわかる',
 ];
 function renderHome(){
+  renderBossCard();
   const ok = !!FIREBASE_CONFIG, pu = $('#pickup'), msx = missionState();
   let tag = 'デイリー', name, cur = 0, goal = 0, coins = 0, left = '', ready = false, go = 'mission';
   if (!lsGet(NAME_KEY)) { tag = 'はじめに'; name = 'プロフィールで名前と称号を決めよう'; go = 'plate'; }
@@ -2851,6 +3154,77 @@ function renderHome(){
   $('#puCoins').textContent = coins;
   $('#puLeft').textContent = left;
   if (!$('#ticker').textContent) $('#ticker').textContent = TIPS[ui.tip = Math.floor(Math.random() * TIPS.length)];
+}
+function renderBossCard(){
+  const ok = !!FIREBASE_CONFIG, card = $('#goBoss');
+  card.hidden = !ok;
+  if (!ok) return;
+  const bs = bossState(), me = myBoss(), canClaim = bs.down && me.dmg > 0 && !me.claimed;
+  if (!unchanged($('#bcFace'), String(bs.down))) $('#bcFace').innerHTML = bossFace(bs.down);
+  $('#bcTag').textContent = `今日のボス・${bs.info.tag}`;
+  const pct = bs.loaded ? Math.round(bs.left / bs.hp * 100) : 100;
+  $('#bcHp').style.width = pct + '%';
+  $('#bcHpT').textContent = bs.err ? 'HP ?' : `HP ${pct}%`;
+  $('#bcSub').textContent = canClaim ? '討伐成功！ 報酬を受け取ろう' : bs.err ? 'ボスのデータを読めません' : `挑戦 ${me.tries}/${BOSS_TRIES}・参加 ${bs.players}人`;
+  $('#bcStamp').hidden = !bs.down;
+  card.classList.toggle('down', bs.down);
+  card.classList.toggle('claim', canClaim);
+}
+function renderBoss(){
+  const bs = bossState(), me = myBoss(), st = statsOf(net.profile), left = BOSS_TRIES - me.tries, canClaim = bs.down && me.dmg > 0 && !me.claimed;
+  const face = $('#bhFace');
+  if (!unchanged(face, String(bs.down))) face.innerHTML = bossFace(bs.down);
+  $('#bossHero').classList.toggle('down', bs.down);
+  $('#bhTag').textContent = bs.info.tag;
+  $('#bhRule').textContent = `今日のルール：${bs.info.rule}`;
+  const pct = bs.loaded ? Math.round(bs.left / bs.hp * 100) : 100;
+  $('#bhHp').style.width = pct + '%';
+  $('#bhHpT').textContent = bs.err ? 'HP ？' : bs.down ? '討伐成功！' : `HP ${bs.left.toLocaleString()} / ${bs.hp.toLocaleString()}`;
+  $('#bhSub').textContent = `参加 ${bs.players}人・あなたのダメージ ${me.dmg}・のこり ${fmtLeft(msToReset())}`;
+  const go = $('#bossGo');
+  go.disabled = left <= 0 || !net.fb;
+  go.textContent = left > 0 ? `挑戦する（残り${left}回）` : '今日の挑戦は終わり（4:00に回復）';
+  $('#bossClaim').hidden = !canClaim;
+  $('#bossClaim').textContent = `討伐報酬を受け取る（コイン${BOSS_REWARD}）`;
+  $('#bossNote').textContent = bs.err ? 'ボスのデータを読み書きできません。Firebaseのルールに boss を追加してください。'
+    : bs.down && me.claimed ? '今日の報酬は受け取り済み。また明日！' : bs.down && !me.dmg ? '今日の大王はもう倒されました。明日は参加しよう！' : '';
+  // reward road
+  const road = bossRoad(), ol = $('#bossRoad');
+  $('#roadCount').textContent = `討伐 ${st.bossKills}回`;
+  if (!unchanged(ol, JSON.stringify([st.bossKills, typedName()]))) {
+    ol.innerHTML = '';
+    const nextN = (road.find(it => it.n > st.bossKills) || {}).n;
+    road.forEach(it => {
+      const got = st.bossKills >= it.n, li = document.createElement('li');
+      li.className = got ? 'got' : it.n === nextN ? 'next' : '';
+      li.innerHTML = '<span class="rn"></span><span class="ri"></span><b></b><span class="rs"></span>';
+      li.querySelector('.rn').textContent = `${it.n}回`;
+      const ri = li.querySelector('.ri');
+      if (it.chalk) { ri.style.color = it.chalk.color; ri.innerHTML = `<svg viewBox="0 0 100 130" aria-hidden="true">${handSVG(2, false, 0, it.chalk)}</svg>`; }
+      else if (it.plate) ri.innerHTML = `<span class="pswatch pl-${it.plate}"></span>`;
+      else ri.innerHTML = '<span class="tt">称号</span>';
+      const b = li.querySelector('b');
+      b.textContent = it.name;
+      const sm = document.createElement('small'); sm.textContent = `限定${it.kind}`; b.append(sm);
+      li.querySelector('.rs').textContent = got ? '手に入れた' : `あと${it.n - st.bossKills}回`;
+      ol.append(li);
+    });
+  }
+  const top = $('#bossTop');
+  if (!unchanged(top, JSON.stringify(bs.top.slice(0, 10)))) {
+    top.innerHTML = '';
+    if (!bs.top.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = bs.loaded ? 'まだ誰も挑戦していません' : '読み込み中…'; top.append(li); }
+    bs.top.slice(0, 10).forEach((r, i) => {
+      const li = document.createElement('li');
+      if (r.uid === net.uid) li.className = 'me';
+      li.innerHTML = '<span class="pos"></span><span class="who"><span class="rn"></span></span><span class="rt"></span><span class="rec"></span>';
+      li.querySelector('.pos').textContent = i + 1;
+      li.querySelector('.rn').textContent = r.name;
+      li.querySelector('.rt').textContent = r.dmg;
+      li.querySelector('.rec').textContent = 'ダメージ';
+      top.append(li);
+    });
+  }
 }
 function bannerIndex(){ const t = $('#bnTrack'); return Math.round(t.scrollLeft / Math.max(1, t.clientWidth)); }
 function showBanner(i, smooth){
@@ -2932,22 +3306,25 @@ function renderShop(){
   const coins = myCoins(), owned = (net.profile || {}).owned || {}, using = myChalk(), now = Date.now();
   $('#shopCoinsTop').textContent = coins;
   const grid = $('#shopGrid'), armed = ui.buyArm && ui.buyArm.until > now ? ui.buyArm.id : '';
-  if (unchanged(grid, JSON.stringify([coins, owned, using, armed]))) return;
+  const kills = statsOf(net.profile).bossKills;
+  if (unchanged(grid, JSON.stringify([coins, owned, using, armed, kills]))) return;
   grid.innerHTML = '';
   CHALKS.forEach(c => {
-    const have = c.id === 'auto' || owned[c.id], on = using === c.id;
+    const have = hasChalk(c.id), on = using === c.id;
     const el = document.createElement('div');
     el.className = 'item' + (on ? ' on' : '') + (c.glow ? ' glow' : '') + (c.shine ? ' shine' : '');
     if (c.color) el.style.setProperty('--c', c.color);
     el.innerHTML = `<svg viewBox="0 0 100 130" aria-hidden="true">${handSVG(2, false, 0, c)}</svg><b></b><span class="price"></span>`;
     el.querySelector('b').textContent = c.name;
     const pr = el.querySelector('.price');
-    if (have) { pr.className = 'owned'; pr.textContent = c.price ? '持っている' : 'はじめから'; }
+    if (have) { pr.className = 'owned'; pr.textContent = c.boss ? '限定・持っている' : c.price ? '持っている' : 'はじめから'; }
+    else if (c.boss) { pr.className = 'owned'; pr.textContent = `限定：ボス討伐${c.boss}回（${Math.min(kills, c.boss)}/${c.boss}）`; }
     else { pr.className = 'coin'; pr.textContent = c.price; }
     const b = document.createElement('button');
     b.type = 'button';
     if (on) { b.className = 'btn'; b.textContent = '使用中'; b.disabled = true; }
     else if (have) { b.className = 'btn primary'; b.textContent = '使う'; b.addEventListener('click', () => equipChalk(c.id)); }
+    else if (c.boss) { b.className = 'btn'; b.textContent = 'ボスで手に入る'; b.disabled = true; }
     else if (coins < c.price) { b.className = 'btn'; b.textContent = 'コインが足りない'; b.disabled = true; }
     else {
       b.className = 'btn gold'; b.textContent = armed === c.id ? 'もう一度押すと買う' : '買う';
@@ -3070,7 +3447,13 @@ function renderGame(){
     seatEl.classList.toggle('shine', !!(ch && ch.shine));
     const tg = seatEl.querySelector('.tag');
     let tt = '', tc = '';
-    if (out) { tt = '脱落'; tc = 'out'; }
+    const nameP = seatEl.querySelector('.name');
+    let bf = nameP.querySelector('.bface');
+    const bossSeat = !net.on && ui.boss && k === 1;
+    if (bossSeat && !bf) { bf = document.createElement('span'); bf.className = 'bface'; bf.innerHTML = bossFace(false); nameP.prepend(bf); }
+    if (!bossSeat && bf) bf.remove();
+    if (bossSeat) { const left = BOSS_LIVES - ui.boss.life + (G.over && ui.boss.cleared ? 0 : 1); tt = 'ライフ ' + '●'.repeat(Math.max(0, left)) + '○'.repeat(BOSS_LIVES - Math.max(0, left)); tc = 'boss'; }
+    else if (out) { tt = '脱落'; tc = 'out'; }
     else if (net.on && k > 0 && G.seats && !online[G.seats[k]]) { tt = '切断中'; tc = 'off'; }
     else if (isRated() && G.seats) { const rr = Math.round(+((ps[G.seats[k]] || {}).rating)) || BASE_RATE; tt = String(rr); tc = 'rate ' + tierCls(rr); }
     tg.hidden = !tt; tg.textContent = tt; tg.className = 'tag ' + tc;
@@ -3102,7 +3485,7 @@ function renderGame(){
   sb.disabled = !(act && ms.some(m => m.kind !== 'attack'));
   sb.setAttribute('aria-expanded', String(!!panel));
   sb.textContent = panel ? 'やめる' : (r.split && r.merge ? '分身・合成' : r.split ? '分身' : '合成');
-  $('#resetBtn').hidden = net.on;
+  $('#resetBtn').hidden = net.on || !!ui.boss;
   const now = Date.now(), rb = $('#resignBtn'), xb = $('#exitBtn');
   rb.hidden = !(netPlaying() && !G.over && alive(G, 0));
   rb.disabled = net.busy;
@@ -3111,8 +3494,8 @@ function renderGame(){
   xb.textContent = !net.on ? 'ホームへ' : ui.exitArm > now ? 'もう一度押すと投了して退出' : '退出';
   xb.classList.toggle('danger', midGame && ui.exitArm > now);
 
-  $('#anaPanel').hidden = net.on;
-  if (!net.on) renderAnalysis();
+  $('#anaPanel').hidden = net.on || !!ui.boss;
+  if (!net.on && !ui.boss) renderAnalysis();
   renderRoomPanel(nm);
   renderLog(nm);
   boardFx();
@@ -3156,6 +3539,10 @@ function renderStrip(act, ms, nm){
     } else if (net.on) {
       again.textContent = isHost() ? 'ロビーにもどる' : 'ホストを待っています…';
       again.disabled = !isHost() || net.busy;
+    } else if (ui.boss) {
+      const left = BOSS_TRIES - myBoss().tries;
+      again.textContent = left > 0 ? `もう一回挑戦（残り${left}回）` : 'ボス画面へ';
+      ev.textContent = `与えたダメージ ${ui.boss.dmg}`; ev.hidden = false;
     } else again.textContent = 'もう一回';
     return;
   }
@@ -3169,9 +3556,11 @@ function renderStrip(act, ms, nm){
   turn.classList.add('c' + G.turn);
   turn.style.color = (seatChalk(G.turn) || {}).color || '';
   turn.textContent = `${nm[G.turn]}の番`;
+  if (ui.boss) { ev.textContent = `ライフ ${BOSS_LIVES - ui.boss.life + 1}/${BOSS_LIVES}・与えたダメージ ${ui.boss.dmg}`; ev.hidden = false; }
   if (net.on && !net.connected) msg.textContent = 'インターネットにつながっていません';
   else if (net.on && !alive(G, 0)) msg.textContent = 'あなたは脱落しました。最後まで見られます';
   else if (net.on && G.turn !== 0) msg.textContent = G.seats && !(net.room.online || {})[G.seats[G.turn]] ? '接続が切れています（時間切れで脱落）' : '考え中…';
+  else if (ui.boss && Date.now() < (ui.bossMsgUntil || 0)) msg.textContent = '大王が起き上がった！';
   else if (!isHuman(G.turn)) msg.textContent = '考え中…';
   else if (busy || net.busy) msg.textContent = '';
   else if (panel) { const r = rules(); msg.textContent = r.split && r.merge ? '分身か合成を選んでください' : r.split ? '配り方を選んでください' : 'これでよければタップして合成'; }
@@ -3358,6 +3747,7 @@ function tick(){
     const ms = msToReset(), txt = `あと${Math.floor(ms / 3600000)}:${String(Math.floor(ms % 3600000 / 60000)).padStart(2, '0')}`;
     if ($('#tbDailyLeft').textContent !== txt) $('#tbDailyLeft').textContent = txt;
   }
+  if (net.fb && net.uid && net.bossDay && net.bossDay !== dayKey()) { watchBoss(); render(); }
   if (ui.screen === 'home') homeTick(now);
   if (ui.screen === 'mission') {
     $('#dailyNote').textContent = dailyNoteText();
@@ -3384,6 +3774,16 @@ $$('#tabbar .tab').forEach(t => t.addEventListener('click', () => {
 $('#tbRank').addEventListener('click', () => setScreen('rank'));
 $('#tbDaily').addEventListener('click', () => { ui.missionTab = 'daily'; setScreen('mission'); });
 $('#goRules').addEventListener('click', () => setScreen('rules'));
+$('#goBoss').addEventListener('click', () => setScreen('boss'));
+$('#bossGo').addEventListener('click', () => { $('#bossGo').disabled = true; startBossChallenge().finally(() => { if (ui.screen === 'boss') renderBoss(); }); });
+$('#bossClaim').addEventListener('click', async () => {
+  const b = $('#bossClaim'), from = centerOf(b);
+  b.disabled = true;
+  const got = await claimBoss();
+  b.disabled = false;
+  if (got) { flyCoins(from, got); floatText(from[0], from[1] - 10, `+${got}`, 'var(--coin)'); const [x, y] = centerOf($('#bhFace')); dust(x, y, ['#f2cf5b', '#d6a8ff', '#fff6c4'], 40, 140); sfx('win'); }
+  render();
+});
 $('#goRules2').addEventListener('click', () => setScreen('rules'));
 $('#pickup').addEventListener('click', () => { const go = $('#pickup').dataset.go || 'mission'; if (go === 'mission') ui.missionTab = 'daily'; setScreen(go); });
 $$('#bnTrack .bn').forEach(b => b.addEventListener('click', () => {
@@ -3417,7 +3817,7 @@ $('#tabNormal').addEventListener('click', () => { ui.missionTab = 'normal'; rend
 $('#goCustom').addEventListener('click', () => setScreen('custom'));
 $('#goRated').addEventListener('click', () => startSearch());
 $$('[data-home]').forEach(b => b.addEventListener('click', goHome));
-$('#cpuStart').addEventListener('click', () => { setScreen('game'); newGame(); });
+$('#cpuStart').addEventListener('click', () => { ui.boss = null; setScreen('game'); newGame(); });
 $('#settings').addEventListener('change', e => {
   const t = e.target;
   if (!(t.name in OPTIONS) || !OPTIONS[t.name].includes(t.value)) return;
@@ -3476,6 +3876,7 @@ $('#exitBtn').addEventListener('click', () => {
   else { ui.exitArm = Date.now() + 3000; render(); }
 });
 $('#again').addEventListener('click', () => {
+  if (!net.on && ui.boss) { if (BOSS_TRIES - myBoss().tries > 0) startBossChallenge(); else { ui.boss = null; setScreen('boss'); } return; }
   if (isRated()) { leaveRoom().then(() => startSearch()); }
   else if (net.on) { if (isHost()) backToLobby(); }
   else newGame();
