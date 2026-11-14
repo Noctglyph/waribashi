@@ -489,6 +489,61 @@ fieldset:disabled .opts span{cursor:default}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;width:max-content;max-width:calc(100% - 32px);padding:10px 16px;border-radius:12px;background:var(--panel);border:1.5px solid var(--line);box-shadow:0 10px 24px -8px rgba(0,0,0,.7);font-size:14px;text-wrap:pretty}
 .toast.err{border-color:var(--lose);color:var(--lose)}
 
+/* ----- Effects ----- */
+.fx-layer{position:fixed;inset:0;z-index:80;pointer-events:none;overflow:hidden}
+.fx-dust{position:absolute;display:block;border-radius:35%;opacity:.95}
+.fx-float{position:absolute;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:22px;line-height:1;white-space:nowrap;text-shadow:0 2px 0 rgba(0,0,0,.45),0 0 10px rgba(0,0,0,.35)}
+.fx-float.big{font-size:34px}
+.fx-coin{position:absolute;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff6c4 0 18%,#f3cf5a 46%,#b8861d 100%);box-shadow:inset 0 0 0 1.5px #9c7012,0 2px 6px rgba(0,0,0,.4)}
+/* result */
+.result{position:fixed;inset:0;z-index:55;display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-left,0px));background:rgba(20,18,15,.78)}
+.res-in{position:relative;width:min(420px,100%);padding:26px 20px 20px;border-radius:6px;border:10px solid var(--wood);background-color:var(--board);background-image:radial-gradient(ellipse 70% 50% at 50% 20%,rgba(236,238,228,.08),transparent 70%),var(--noise);box-shadow:inset 0 0 60px rgba(0,0,0,.35),0 30px 60px -20px rgba(0,0,0,.8);text-align:center;display:grid;gap:12px;animation:pop .5s cubic-bezier(.2,.9,.3,1.3)}
+.res-t{margin:0;font-family:var(--font-display);font-size:clamp(46px,15vw,72px);line-height:1.1;letter-spacing:.06em;color:var(--you);text-shadow:0 0 22px rgba(243,215,116,.45),0 3px 0 rgba(0,0,0,.35)}
+.result.lose .res-t{text-shadow:0 3px 0 rgba(0,0,0,.35)}
+.fx-conf{position:absolute;top:-16px;display:block;width:7px;height:13px;border-radius:2px}
+.res-t span{display:inline-block;animation:letter .5s cubic-bezier(.2,.9,.3,1.4) both}
+.result.lose .res-t{color:var(--p2)}
+.result.draw .res-t{color:var(--chalk)}
+.res-s{margin:-4px 0 0;color:var(--chalk-soft);font-size:14px}
+.res-rows{display:grid;gap:8px;margin:2px 0}
+.res-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border-radius:10px;background:rgba(0,0,0,.22);border:1px solid var(--line);font-size:15px;animation:rise .4s ease both}
+.res-row b{font-family:var(--font-display);font-weight:400;font-size:22px;font-variant-numeric:tabular-nums}
+.res-row .coin{font-size:20px}
+.res-row.up{border-color:var(--coin);background:rgba(242,207,91,.12);color:var(--coin);font-family:var(--font-display);font-size:20px;justify-content:center}
+.res-row.down{color:var(--chalk-soft);justify-content:center}
+.res-btns{display:grid;gap:8px;margin-top:4px}
+.res-hint{margin:0;font-size:12px;color:var(--chalk-faint)}
+@keyframes letter{from{opacity:0;transform:translateY(-30px) scale(1.6) rotate(-8deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}
+/* unlock / mission banner */
+.achv{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 86px);z-index:60;width:min(420px,calc(100% - 32px));display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px;padding:10px 14px;border-radius:12px;border:2px solid var(--coin);background:var(--panel);box-shadow:0 14px 30px -10px rgba(0,0,0,.8),0 0 0 4px rgba(242,207,91,.12);pointer-events:none;transform:translateX(-50%);animation:drop .45s cubic-bezier(.2,.9,.3,1.3);overflow:hidden}
+.achv::after{content:"";position:absolute;inset:-20% auto -20% -40%;width:28%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.22),transparent);transform:skewX(-18deg);animation:shine 1.6s .3s ease-out both}
+.achv-k{font-family:var(--font-display);font-size:15px;line-height:1.2;color:var(--coin);text-align:center}
+.achv-b{display:grid;gap:4px;min-width:0;font-size:14px}
+.achv-b .plate{max-width:100%}
+.achv.out{animation:lift .35s ease-in both}
+@keyframes drop{from{opacity:0;transform:translate(-50%,-30px)}}
+@keyframes lift{to{opacity:0;transform:translate(-50%,-24px)}}
+/* livelier menus */
+.screen:not(#scrGame){animation:enter .28s ease both}
+@keyframes enter{from{opacity:0;transform:translateY(8px)}}
+.bn::after{content:"";position:absolute;inset:-20% auto -20% -40%;width:26%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.13),transparent);transform:skewX(-18deg);animation:shine 6s ease-in-out infinite;pointer-events:none}
+@keyframes shine{0%,64%{left:-40%}100%{left:130%}}
+.mode.main .mode-go{animation:ring 2.4s ease-in-out infinite}
+@keyframes ring{0%,100%{box-shadow:inset 0 0 0 4px rgba(0,0,0,.18),0 0 0 0 rgba(243,215,116,.45)}55%{box-shadow:inset 0 0 0 4px rgba(0,0,0,.18),0 0 0 12px rgba(243,215,116,0)}}
+.pickup.ready{animation:glowb 1.8s ease-in-out infinite}
+@keyframes glowb{50%{box-shadow:0 0 0 1px var(--coin) inset,0 0 18px rgba(242,207,91,.35)}}
+.tab-badge{animation:beat 1.8s ease-in-out infinite}
+@keyframes beat{0%,70%,100%{transform:scale(1)}80%{transform:scale(1.25)}}
+.tab[aria-current="page"] svg{animation:hop .4s cubic-bezier(.2,.9,.3,1.5)}
+@keyframes hop{40%{transform:translateY(-5px)}}
+.tb-me .coin.bump,#barCoins.bump{animation:bump .25s ease}
+@keyframes bump{50%{transform:scale(1.25)}}
+.mode,.bn,.pickup,.btn,.tab,.tb-box,.tb-me,.chip,.pick{transition:transform .08s ease,border-color .15s ease}
+.mode:active:not(:disabled),.bn:active,.pickup:active,.btn:active:not(:disabled),.tab:active:not(:disabled),.tb-box:active,.tb-me:active,.chip:active:not(:disabled),.pick:active:not(:disabled){transform:scale(.96)}
+.board.shake{animation:shake .35s ease}
+@keyframes shake{20%{transform:translate(-4px,2px)}40%{transform:translate(4px,-2px)}60%{transform:translate(-3px,1px)}80%{transform:translate(2px,0)}}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before{animation:none!important;transition:none!important}
 }
@@ -714,6 +769,18 @@ fieldset:disabled .opts span{cursor:default}
       <h3>プレート <span class="tag mine" id="plateCount"></span></h3>
       <div class="picks plates" id="platePicks"></div>
     </section>
+    <section class="panel">
+      <h3>設定</h3>
+      <div class="settings">
+        <fieldset>
+          <legend>効果音</legend>
+          <div class="opts" id="soundOpts">
+            <label><input type="radio" name="sound" value="on" id="snd-on"><span>オン</span></label>
+            <label><input type="radio" name="sound" value="off" id="snd-off"><span>オフ</span></label>
+          </div>
+        </fieldset>
+      </div>
+    </section>
     <button type="button" class="btn" id="goRules2">遊びかたを見る</button>
     <p class="note center" id="appVer" style="margin:0"></p>
   </section>
@@ -890,6 +957,18 @@ fieldset:disabled .opts span{cursor:default}
     <button type="button" class="tab" id="goProfile" data-tab="plate"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg><span>プロフィール</span></button>
   </div>
 </nav>
+<div class="result" id="result" hidden role="dialog" aria-modal="true" aria-labelledby="resT">
+  <div class="res-in">
+    <p class="res-t" id="resT"></p>
+    <p class="res-s" id="resS"></p>
+    <div class="res-rows" id="resRows"></div>
+    <div class="res-btns">
+      <button type="button" class="btn primary big" id="resAgain">もう一回</button>
+      <button type="button" class="btn" id="resClose">盤面を見る</button>
+    </div>
+  </div>
+</div>
+<div class="achv" id="achv" hidden role="status"><span class="achv-k" id="achvK">NEW</span><div class="achv-b" id="achvB"></div></div>
 <p class="toast" id="toast" role="status" hidden></p>
 <pre class="dbg" id="dbg" hidden></pre>
 
@@ -985,6 +1064,283 @@ const OPTIONS = {mode:['cpu','2p'], level:['weak','normal','strong'], first:['0'
 const DEFAULTS = {mode:'cpu', level:'normal', first:'0', count:'normal', overflow:'wrap', split:'on', merge:'on', hints:'off'};
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
+// ===================== Effects =====================
+// Chalk dust, floating numbers and flying coins live on one fixed layer above everything.
+const fx = {layer: null};
+function fxLayer(){
+  if (!fx.layer) { fx.layer = document.createElement('div'); fx.layer.className = 'fx-layer'; fx.layer.setAttribute('aria-hidden', 'true'); document.body.append(fx.layer); }
+  return fx.layer;
+}
+const centerOf = el => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+const CHALK_COLORS = ['#f3d774', '#f4a6bb', '#9fd0f0', '#c8b4f4', '#eceee4', '#b8e6a3'];
+function dust(x, y, color, n, power){
+  if (reduceMotion.matches) return;
+  const L = fxLayer();
+  for (let i = 0; i < (n || 14); i++) {
+    const d = document.createElement('i'), sz = 3 + Math.random() * 6, c = Array.isArray(color) ? color[i % color.length] : color;
+    d.className = 'fx-dust';
+    d.style.cssText = `left:${x - sz / 2}px;top:${y - sz / 2}px;width:${sz}px;height:${sz}px;background:${c}`;
+    L.append(d);
+    const a = Math.random() * Math.PI * 2, r = (power || 60) * (0.35 + Math.random() * 0.85);
+    const dx = Math.cos(a) * r, dy = Math.sin(a) * r * 0.8;
+    d.animate([{transform: 'translate(0,0) scale(1)', opacity: .95}, {transform: `translate(${dx}px,${dy + 26}px) scale(.3) rotate(${Math.random() * 180}deg)`, opacity: 0}],
+      {duration: 550 + Math.random() * 600, easing: 'cubic-bezier(.15,.7,.3,1)'}).finished.then(() => d.remove(), () => d.remove());
+  }
+}
+function floatText(x, y, text, color, big){
+  if (reduceMotion.matches) return;
+  const t = document.createElement('span');
+  t.className = 'fx-float' + (big ? ' big' : '');
+  t.textContent = text; t.style.left = x + 'px'; t.style.top = y + 'px';
+  if (color === 'var(--coin)') t.style.color = color;
+  else { t.style.color = '#fffdf4'; t.style.textShadow = `0 0 10px ${color || '#eceee4'}, 0 0 4px ${color || '#eceee4'}, 0 2px 0 rgba(0,0,0,.5)`; }
+  fxLayer().append(t);
+  t.animate([{transform: 'translate(-50%,-30%) scale(.6)', opacity: 0}, {transform: 'translate(-50%,-80%) scale(1.1)', opacity: 1, offset: .25},
+    {transform: 'translate(-50%,-150%) scale(1)', opacity: 0}], {duration: 1100, easing: 'ease-out'}).finished.then(() => t.remove(), () => t.remove());
+}
+// Chalk pieces raining down the screen (wins).
+function confetti(n){
+  if (reduceMotion.matches) return;
+  const L = fxLayer(), w = innerWidth, h = innerHeight;
+  for (let i = 0; i < n; i++) {
+    const c = document.createElement('i');
+    c.className = 'fx-conf';
+    c.style.left = (Math.random() * w) + 'px';
+    c.style.background = CHALK_COLORS[i % CHALK_COLORS.length];
+    L.append(c);
+    const drift = (Math.random() - .5) * 120, rot = (Math.random() - .5) * 900;
+    c.animate([{transform: 'translate(0,0) rotate(0)', opacity: 1}, {transform: `translate(${drift}px,${h + 40}px) rotate(${rot}deg)`, opacity: .9}],
+      {duration: 1800 + Math.random() * 1600, delay: Math.random() * 700, easing: 'cubic-bezier(.3,.1,.6,1)', fill: 'backwards'}).finished.then(() => c.remove(), () => c.remove());
+  }
+}
+// Coins fly from a point (or element) up to the coin count in the status bar, which then counts up.
+function flyCoins(from, amount){
+  const to = $('#barCoins');
+  if (!amount || reduceMotion.matches || !to || to.hidden) return;
+  const [x0, y0] = from instanceof Element ? centerOf(from) : from;
+  const r = to.getBoundingClientRect(), x1 = r.left + 9, y1 = r.top + r.height / 2;
+  const n = Math.max(3, Math.min(12, Math.round(amount / 8)));
+  ui.coinHold = performance.now() + 620;
+  for (let i = 0; i < n; i++) {
+    const c = document.createElement('i');
+    c.className = 'fx-coin'; c.style.left = x0 + 'px'; c.style.top = y0 + 'px';
+    fxLayer().append(c);
+    const sx = (Math.random() - .5) * 90, sy = -30 - Math.random() * 50;
+    c.animate([{transform: 'translate(0,0) scale(.4)', opacity: 0}, {transform: `translate(${sx}px,${sy}px) scale(1.1)`, opacity: 1, offset: .3},
+      {transform: `translate(${x1 - x0}px,${y1 - y0}px) scale(.7)`, opacity: .9}],
+      {duration: 780, delay: i * 55, easing: 'cubic-bezier(.4,0,.6,1)', fill: 'backwards'}).finished.then(() => {
+        c.remove();
+        to.classList.remove('bump'); void to.offsetWidth; to.classList.add('bump');
+        if (i % 3 === 0) sfx('coin');
+      }, () => c.remove());
+  }
+}
+// The coin total counts up instead of jumping (and waits for flying coins to land).
+function showCoins(target){
+  const el = $('#barCoins');
+  if (!ui.coinArmed || reduceMotion.matches || target < (ui.coinShown || 0)) {
+    ui.coinShown = ui.coinTarget = target; el.textContent = target;
+    if (net.profile) ui.coinArmed = true;
+    return;
+  }
+  ui.coinTarget = target;
+  if (ui.coinRaf || target === ui.coinShown) return;
+  const tickC = () => {
+    if (performance.now() < (ui.coinHold || 0)) { ui.coinRaf = requestAnimationFrame(tickC); return; }
+    const diff = ui.coinTarget - ui.coinShown;
+    if (diff <= 0) { ui.coinShown = ui.coinTarget; el.textContent = ui.coinTarget; ui.coinRaf = 0; return; }
+    ui.coinShown += Math.max(1, Math.ceil(diff / 7));
+    el.textContent = ui.coinShown;
+    ui.coinRaf = requestAnimationFrame(tickC);
+  };
+  ui.coinRaf = requestAnimationFrame(tickC);
+}
+// A touch lands: chalk dust in the attacker's colour, the number, and a burst when the hand vanishes.
+function hitFx(target, color, m){
+  if (!target) return;
+  const [x, y] = centerOf(target), B = rules().base || 5;
+  target.animate([{transform: 'none'}, {transform: 'scale(1.14) rotate(-5deg)'}, {transform: 'none'}], {duration: 320, easing: 'ease-out'});
+  if (m.after === 0) {
+    dust(x, y, [color, '#eceee4', color], 34, 110);
+    floatText(x, y - 20, '消えた！', color, true);
+    const board = $('#board');
+    board.classList.remove('shake'); void board.offsetWidth; board.classList.add('shake');
+    sfx('vanish');
+  } else {
+    dust(x, y, [color, color, '#eceee4'], 22, 72);
+    floatText(x, y - 24, m.before + m.value >= B ? `${m.before + m.value}→${m.after}` : `+${m.value}`, color);
+    sfx('hit');
+  }
+}
+function shapeFx(p, m){
+  const hs = handBtns[p];
+  if (!hs) return;
+  const color = getComputedStyle(hs[0]).color;
+  if (m.kind === 'merge') { const t = hs[m.into]; if (!t) return; const [x, y] = centerOf(t); dust(x, y, color, 18, 50); floatText(x, y - 24, '合成！', color); }
+  else { hs.forEach(h => { const [x, y] = centerOf(h); dust(x, y, color, 8, 34); }); const [x, y] = centerOf(hs[0].parentElement); floatText(x, y - 10, '分身！', color); }
+  sfx('tap');
+}
+const gameId = () => net.on ? `${net.code}:${net.room && net.room.createdAt}:${G.game || 0}` : `cpu:${ui.gameSeq || 0}`;
+// After every board update: play the effect of a move that arrived from elsewhere (rival, CPU, network).
+function boardFx(){
+  const gid = gameId();
+  if (ui.fxGid !== gid) { ui.fxGid = gid; ui.fxPly = G.ply; if (G.over) ui.resultFor = gid; return; }
+  if (G.ply <= ui.fxPly) { ui.fxPly = G.ply; return; }
+  ui.fxPly = G.ply;
+  if (ui.fxSkip === `${gid}:${G.ply}`) return;   // my own move, already animated
+  const e = (G.log || [])[G.log.length - 1], L = G.last;
+  if (!e || e.n !== G.ply || !L) return;
+  requestAnimationFrame(() => {
+    if (e.k === 'attack') {
+      const t = handBtns[L.target] && handBtns[L.target][L.to], a = handBtns[L.p] && handBtns[L.p][L.from];
+      hitFx(t, a ? getComputedStyle(a).color : '#eceee4', {after: e.a, before: e.b, value: e.v});
+    } else if (e.k === 'merge' || e.k === 'split') shapeFx(L.p, {kind: e.k, into: L.into});
+  });
+}
+
+// ----- Result screen -----
+const LEVEL_NAME = {weak: 'よわい', normal: 'ふつう', strong: 'さいきょう'};
+function maybeResult(){
+  if (!G || !G.over || ui.screen !== 'game') return;
+  const gid = gameId();
+  // a short pause so the last touch (and its chalk burst) can be seen first
+  if (ui.resultFor !== gid) { ui.resultFor = gid; setTimeout(() => { if (ui.screen === 'game' && G && G.over && gameId() === gid) showResult(); }, 450); }
+  else if (!$('#result').hidden) updateResult();
+}
+function showResult(){
+  const el = $('#result'), nm = names(), o = G.over, cpu = !net.on && settings.mode === 'cpu', local2 = !net.on && settings.mode === '2p';
+  let kind = 'draw', title = '引き分け';
+  if (o.type === 'win') {
+    if (local2) { kind = 'win'; title = `${nm[o.winner]}の勝ち！`; }
+    else if (o.winner === 0) { kind = 'win'; title = '勝利！'; }
+    else { kind = 'lose'; title = '負け…'; }
+  }
+  el.className = 'result ' + kind;
+  const t = $('#resT');
+  t.innerHTML = '';
+  [...title].forEach((ch, i) => { const sp = document.createElement('span'); sp.textContent = ch; sp.style.animationDelay = (i * 0.09) + 's'; t.append(sp); });
+  const by = o.by, why = o.reason === 'resign' && by !== undefined ? `${nm[by]}が投了` : o.reason === 'time' && by !== undefined ? `${nm[by]}の時間切れ` : o.type === 'draw' ? '同じ局面が3回出ました' : `${G.ply}手で決着`;
+  $('#resS').textContent = cpu && o.type === 'win' ? `CPU（${LEVEL_NAME[settings.level]}）・${why}` : kind === 'lose' && G.n > 2 ? `${nm[o.winner]}の勝ち・${why}` : why;
+  ui.resShown = {rate: false, coins: false};
+  $('#resRows').innerHTML = '';
+  el.hidden = false;
+  updateResult();
+  clearTimeout(ui.resTimer);
+  ui.resTimer = setTimeout(hideResult, 6500);
+  if (kind === 'win') {
+    sfx('win');
+    if (!reduceMotion.matches) {
+      const [x, y] = centerOf(t);
+      dust(x, y, CHALK_COLORS, 56, 190);
+      confetti(70);
+      setTimeout(() => { if (!el.hidden) { dust(x - 90, y + 30, CHALK_COLORS, 22, 110); dust(x + 90, y + 30, CHALK_COLORS, 22, 110); } }, 380);
+    }
+  } else if (kind === 'lose') sfx('lose');
+}
+function updateResult(){
+  const rows = $('#resRows'), again = $('#again'), ra = $('#resAgain');
+  ra.textContent = again.textContent; ra.disabled = again.disabled; ra.hidden = again.hidden;
+  // rated: rating counts up (or down), with a tier change on its own line
+  if (isRated() && !ui.resShown.rate) {
+    const S = normState(net.room.state);
+    if (S && S.over) {
+      ui.resShown.rate = true;
+      const d = ratingChange(net.room, S, net.seat), t0 = tierOf(d.from), t1 = tierOf(d.to);
+      const row = document.createElement('div');
+      row.className = 'res-row';
+      row.innerHTML = '<span>レート</span><b></b>';
+      const b = row.querySelector('b'), sign = d.delta >= 0 ? '+' : '';
+      const put = v => { b.innerHTML = ''; b.append(rateEl(v, 'span'), ` (${sign}${d.delta})`); };
+      put(d.from);
+      rows.append(row);
+      const t0ms = performance.now(), dur = reduceMotion.matches ? 0 : 900;
+      const run = () => { const f = dur ? Math.min(1, (performance.now() - t0ms) / dur) : 1; put(Math.round(d.from + (d.to - d.from) * f)); if (f < 1) requestAnimationFrame(run); };
+      setTimeout(() => requestAnimationFrame(run), 350);
+      if (t1 !== t0) {
+        const up = document.createElement('div');
+        up.className = 'res-row ' + (t1 > t0 ? 'up' : 'down');
+        up.style.animationDelay = '1.3s';
+        up.textContent = t1 > t0 ? `昇格！ ${TIERS[t0][1]} → ${TIERS[t1][1]}` : `${TIERS[t1][1]}に下がった`;
+        rows.append(up);
+        if (t1 > t0) setTimeout(() => { if (!$('#result').hidden) { const [x, y] = centerOf(up); dust(x, y, ['#f2cf5b', '#fff6c4'], 30, 120); sfx('up'); } }, 1350);
+      }
+    }
+  }
+  // online: coins, once they are in
+  if (net.on && G.seats && !ui.resShown.coins) {
+    const rk = `waribashi-rec:${net.code}:${net.room && net.room.createdAt}:${G.game}`;
+    if (rewards.has(rk)) {
+      ui.resShown.coins = true;
+      const got = rewards.get(rk), row = document.createElement('div');
+      row.className = 'res-row';
+      row.innerHTML = '<span>コイン</span><span class="coin"></span>';
+      row.querySelector('.coin').textContent = got ? `+${got}` : '+0（今日の上限）';
+      rows.append(row);
+      if (got) setTimeout(() => { if (!$('#result').hidden) flyCoins(row.querySelector('.coin'), got); }, 500);
+    }
+  }
+}
+function hideResult(){ clearTimeout(ui.resTimer); $('#result').hidden = true; }
+
+// ----- Unlock / mission banner (one at a time) -----
+const achvQueue = [];
+function celebrate(kind, make){
+  if (achvQueue.length >= 4) return;
+  achvQueue.push([kind, make]);
+  if (achvQueue.length === 1) nextAchv();
+}
+function nextAchv(){
+  const it = achvQueue[0], el = $('#achv');
+  if (!it) return;
+  $('#achvK').innerHTML = it[0];
+  const b = $('#achvB'); b.innerHTML = ''; b.append(typeof it[1] === 'function' ? it[1]() : it[1]);
+  el.classList.remove('out'); el.hidden = false;
+  sfx('unlock');
+  if (!reduceMotion.matches) requestAnimationFrame(() => { const r = el.getBoundingClientRect(); dust(r.left + 30, r.top + r.height / 2, ['#f2cf5b', '#fff6c4'], 14, 50); });
+  setTimeout(() => { el.classList.add('out'); setTimeout(() => { el.hidden = true; el.classList.remove('out'); achvQueue.shift(); nextAchv(); }, 340); }, 3000);
+}
+
+// ----- Sound: small synthesised effects (no audio files). Starts on the first tap. -----
+const sound = {ctx: null, on: true};
+function audio(){
+  if (!sound.on) return null;
+  try {
+    if (!sound.ctx) { const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; sound.ctx = new AC(); }
+    if (sound.ctx.state === 'suspended') sound.ctx.resume().catch(() => {});
+    return sound.ctx;
+  } catch(e) { return null; }
+}
+function tone(ctx, t, f, dur, type, vol, f2){
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = type || 'sine'; o.frequency.setValueAtTime(f, t);
+  if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + dur);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || .12, t + .012); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + dur + .03);
+}
+function noise(ctx, t, dur, vol, freq){
+  const len = Math.max(1, ctx.sampleRate * dur | 0), buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2);
+  const src = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+  src.buffer = buf; f.type = 'bandpass'; f.frequency.value = freq || 2500; f.Q.value = .9; g.gain.value = vol || .3;
+  src.connect(f); f.connect(g); g.connect(ctx.destination); src.start(t);
+}
+function sfx(name){
+  const ctx = audio();
+  if (!ctx || ctx.state !== 'running') return;
+  const t = ctx.currentTime + .01;
+  try {
+    if (name === 'tap') noise(ctx, t, .05, .35, 3400);
+    else if (name === 'hit') { noise(ctx, t, .08, .5, 2000); tone(ctx, t, 170, .14, 'sine', .22, 90); }
+    else if (name === 'vanish') { noise(ctx, t, .4, .4, 1100); tone(ctx, t, 520, .38, 'triangle', .1, 110); }
+    else if (name === 'coin') { tone(ctx, t, 1568, .07, 'square', .035); tone(ctx, t + .06, 2093, .16, 'square', .035); }
+    else if (name === 'win') { [523, 659, 784, 1047].forEach((f, i) => tone(ctx, t + i * .1, f, .26, 'triangle', .14)); tone(ctx, t + .42, 1319, .55, 'triangle', .1); }
+    else if (name === 'lose') { tone(ctx, t, 392, .26, 'triangle', .11); tone(ctx, t + .24, 294, .5, 'triangle', .11); }
+    else if (name === 'unlock') [1319, 1568, 2093].forEach((f, i) => tone(ctx, t + i * .07, f, .22, 'sine', .08));
+    else if (name === 'up') [784, 988, 1175, 1568].forEach((f, i) => tone(ctx, t + i * .08, f, .3, 'triangle', .1));
+    else if (name === 'start') { tone(ctx, t, 659, .12, 'triangle', .1); tone(ctx, t + .1, 988, .3, 'triangle', .1); }
+  } catch(e) {}
+}
+
 // ===== ONLINE CONFIG: Firebase の firebaseConfig をここに貼る =====
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyDXvLIzi9CgPRjk7z7y9ehOj8M0jtwscuQ",
@@ -1007,7 +1363,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/14-3';
+const APP_VERSION = '11/15-1';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -1483,6 +1839,8 @@ function solverMove(m){
 
 function newGame(){
   clearTimeout(cpuTimer); cpuTimer = null; busy = false;
+  ui.gameSeq = (ui.gameSeq || 0) + 1;
+  hideResult();
   G = initState({n: 2, first: +settings.first});
   sel = null; panel = null;
   render(); maybeCpu();
@@ -1520,6 +1878,7 @@ function chooseCpuMove(){
 async function doMove(m){
   if (!m || busy || !G || G.over) return;
   const online = net.on, gen = net.gen, g0 = G;
+  ui.fxSkip = `${gameId()}:${G.ply + 1}`;
   busy = true; sel = null; panel = null; render();
   try { await animateMove(m); } catch(e) {}
   busy = false;
@@ -1545,7 +1904,8 @@ function animateMove(m){
       {transform:`translate(${dx}px,${dy}px) scale(1.06)`, offset:.5},
       {transform:'translate(0,0)'}
     ], {duration:520, easing:'cubic-bezier(.25,.8,.3,1)'});
-    setTimeout(() => t.animate([{transform:'none'},{transform:'scale(1.12) rotate(-4deg)'},{transform:'none'}], {duration:300, easing:'ease-out'}), 230);
+    const color = getComputedStyle(a).color;
+    setTimeout(() => hitFx(t, color, m), 230);
     return anim.finished.finally(() => { a.style.zIndex = ''; });
   }
   if (m.kind === 'merge') {
@@ -1555,9 +1915,11 @@ function animateMove(m){
     a.style.zIndex = 2;
     const anim = a.animate([{transform:'translate(0,0)'},{transform:`translate(${dx}px,0) scale(.9)`, offset:.55},{transform:'translate(0,0)'}],
       {duration:480, easing:'cubic-bezier(.25,.8,.3,1)'});
+    setTimeout(() => shapeFx(p, m), 260);
     return anim.finished.finally(() => { a.style.zIndex = ''; });
   }
   if (m.kind !== 'split' || !handBtns[p]) return Promise.resolve();
+  setTimeout(() => shapeFx(p, m), 200);
   const lift = p === 0 ? -12 : 12;
   return Promise.all(handBtns[p].map((b, i) => b.animate(
     [{transform:'none'},{transform:`translateY(${lift}px)`},{transform:'none'}],
@@ -1569,6 +1931,7 @@ function onHand(k, i){
   if (k === G.turn) {
     if (!G.hands[k][i]) return;
     sel = sel === i ? null : i; panel = null;
+    sfx('tap');
     render(); return;
   }
   const src = sourceHand();
@@ -1617,13 +1980,22 @@ function watchGlobal(fb){
   fb.onValue(fb.ref(db, '.info/serverTimeOffset'), s => { net.offset = +s.val() || 0; });
   let firstProfile = true;
   fb.onValue(fb.ref(db, 'players/' + net.uid), s => {
-    const before = unlocked(statsOf(net.profile));
+    const before = unlocked(statsOf(net.profile)), mBefore = firstProfile ? null : missionState();
     net.profile = s.val();
     const after = unlocked(statsOf(net.profile));
     if (!firstProfile) {
-      const got = after.titles.filter(x => !before.titles.includes(x)).map(x => `称号「${titleName(x)}」`)
-        .concat(after.plates.filter(x => !before.plates.includes(x)).map(x => `プレート「${PLATES.find(q => q.id === x).name}」`));
-      if (got.length) toast(got.join('と') + 'を手に入れた！');
+      after.titles.filter(x => !before.titles.includes(x)).forEach(x =>
+        celebrate('称号<br>ゲット！', () => plateEl({name: typedName(), title: x, plate: myLook().plate}, 'sm')));
+      after.plates.filter(x => !before.plates.includes(x)).forEach(x =>
+        celebrate('プレート<br>ゲット！', () => plateEl({name: typedName(), title: myLook().title, plate: x}, 'sm')));
+      // missions that just became collectable
+      const mAfter = missionState(), was = new Set([...mBefore.daily, ...mBefore.normal].filter(m => m.state !== 'todo').map(m => m.id));
+      [...mAfter.daily, ...mAfter.normal].filter(m => m.state === 'ready' && !was.has(m.id)).slice(0, 2).forEach(m => {
+        const d = document.createElement('div');
+        d.innerHTML = '<b></b><span class="coin"></span>';
+        d.querySelector('b').textContent = m.name; d.querySelector('.coin').textContent = m.coins;
+        celebrate('ミッション<br>達成！', d);
+      });
     }
     firstProfile = false;
     render();
@@ -2019,7 +2391,8 @@ async function claimDaily(id){
     got = m.coins;
     return cur;
   });
-  if (res && res.committed) toast(`コイン +${got}`);
+  if (res && res.committed) { if (reduceMotion.matches) toast(`コイン +${got}`); return got; }
+  return 0;
 }
 async function claimBonus(){
   const uid = net.uid;
@@ -2030,7 +2403,8 @@ async function claimBonus(){
     cur.coins = (+cur.coins || 0) + DAILY_BONUS;
     return cur;
   });
-  if (res && res.committed) toast(`全部クリア！コイン +${DAILY_BONUS}`);
+  if (res && res.committed) { toast(`全部クリア！コイン +${DAILY_BONUS}`); return DAILY_BONUS; }
+  return 0;
 }
 async function claimMission(id){
   const m = MISSIONS.find(x => x.id === id);
@@ -2042,7 +2416,8 @@ async function claimMission(id){
     cur.coins = (+cur.coins || 0) + m.coins;
     return cur;
   });
-  if (res && res.committed) toast(`コイン +${m.coins}`);
+  if (res && res.committed) { if (reduceMotion.matches) toast(`コイン +${m.coins}`); return m.coins; }
+  return 0;
 }
 async function buyChalk(id){
   const c = CHALKS.find(x => x.id === id);
@@ -2055,7 +2430,11 @@ async function buyChalk(id){
     cur.chalk = id;
     return cur;
   });
-  if (res && res.committed) { lsSet('waribashi-chalk', id); toast(`${c.name}を買いました`); updateRoomEntry(); }
+  if (res && res.committed) {
+    lsSet('waribashi-chalk', id); toast(`${c.name}を買いました`); updateRoomEntry(); sfx('unlock');
+    const it = [...$$('#shopGrid .item')].find(x => x.querySelector('b') && x.querySelector('b').textContent === c.name);
+    if (it) { const [x, y] = centerOf(it); dust(x, y, [c.color, '#fff6c4'], 30, 90); }
+  }
   else if (res) toast('コインが足りません', true);
 }
 function equipChalk(id){
@@ -2136,6 +2515,7 @@ function maybeSplash(room, S){
   }
 }
 function showSplash(title, sub){
+  sfx('start');
   $('#splashT').textContent = title;
   $('#splashS').textContent = sub;
   const el = $('#splash');
@@ -2325,13 +2705,14 @@ function setScreen(s){
     ui.screen = s;
     for (const k in SCREENS) $(SCREENS[k]).hidden = k !== s;
     showChrome(s);
+    if (s !== 'game') hideResult();
     try { window.scrollTo(0, 0); } catch(e) {}
   }
   render();
 }
 function goHome(){
   clearTimeout(cpuTimer); cpuTimer = null;
-  hideSplash();
+  hideSplash(); hideResult();
   setScreen('home');
 }
 function toast(msg, err){
@@ -2382,7 +2763,7 @@ function renderChrome(){
   $('#tbRank').hidden = !ok;
   $('#tbDaily').hidden = !ok;
   $('#barCoins').hidden = !ok;
-  $('#barCoins').textContent = coins;
+  showCoins(coins);
   $('#barTier').textContent = tierName(mr);
   $('#barTier').className = 'tb-sub ' + tierCls(mr);
   for (const id of ['#goMission', '#goShop', '#goRank']) $(id).disabled = !ok;
@@ -2512,7 +2893,8 @@ function missionRow(m, onClaim){
     if (m.state === 'ready') b.addEventListener('click', () => {
       b.disabled = true;
       // redraw afterwards either way, so a claim that did not go through gets its button back
-      Promise.resolve(onClaim()).finally(() => { $('#dailyList').dataset.key = ''; $('#normalList').dataset.key = ''; if (ui.screen === 'mission') renderMission(); });
+      const from = centerOf(b);
+      Promise.resolve(onClaim()).then(got => { if (got) { flyCoins(from, got); floatText(from[0], from[1] - 10, `+${got}`, 'var(--coin)'); } }).finally(() => { $('#dailyList').dataset.key = ''; $('#normalList').dataset.key = ''; if (ui.screen === 'mission') renderMission(); });
     });
     li.querySelector('.ms').append(b);
   }
@@ -2733,6 +3115,8 @@ function renderGame(){
   if (!net.on) renderAnalysis();
   renderRoomPanel(nm);
   renderLog(nm);
+  boardFx();
+  maybeResult();
 }
 
 function renderStrip(act, ms, nm){
@@ -3097,6 +3481,13 @@ $('#again').addEventListener('click', () => {
   else newGame();
 });
 $('#splash').addEventListener('click', hideSplash);
+$('#resClose').addEventListener('click', hideResult);
+$('#resAgain').addEventListener('click', () => { hideResult(); $('#again').click(); });
+$('#result').addEventListener('click', e => { if (e.target === $('#result')) hideResult(); });
+sound.on = lsGet('waribashi-sound') !== 'off';
+document.getElementById(sound.on ? 'snd-on' : 'snd-off').checked = true;
+$('#soundOpts').addEventListener('change', e => { sound.on = e.target.value === 'on'; lsSet('waribashi-sound', e.target.value); if (sound.on) { audio(); setTimeout(() => sfx('coin'), 60); } });
+document.addEventListener('pointerdown', () => { if (sound.on) audio(); }, {passive: true});
 document.addEventListener('visibilitychange', async () => {
   if (document.hidden) {
     if (search.on) { ui.resumeSearch = true; const code = await cancelSearch(); if (code) joinRated(code); }
@@ -3106,7 +3497,7 @@ document.addEventListener('visibilitychange', async () => {
   }
 });
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { if (!$('#splash').hidden) hideSplash(); else if (sel !== null || panel) { sel = null; panel = null; render(); } }
+  if (e.key === 'Escape') { if (!$('#result').hidden) hideResult(); else if (!$('#splash').hidden) hideSplash(); else if (sel !== null || panel) { sel = null; panel = null; render(); } }
 });
 
 const today = new Date();
