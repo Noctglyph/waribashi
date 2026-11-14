@@ -58,36 +58,119 @@ body{
   font-family:var(--font-body);font-size:15px;line-height:1.65;line-break:strict;
   padding-left:max(16px,env(safe-area-inset-left,0px));
   padding-right:max(16px,env(safe-area-inset-right,0px));
-  padding-block:14px 56px;
+  padding-block:0 40px;
   -webkit-tap-highlight-color:transparent;
 }
+body.tabs{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:31;background:var(--wall)}
 button{font:inherit;color:inherit;touch-action:manipulation}
 h1,h2,h3{text-wrap:balance}
 
 /* App frame */
-.app{max-width:980px;margin:0 auto;display:grid;gap:18px}
-.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:40px}
-.logo{margin:0;font-family:var(--font-display);font-weight:400;font-size:22px;letter-spacing:.08em}
-.me-chip{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--chalk-soft);min-width:0}
-.me-chip::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--you);flex:none}
-.me-chip .nm{max-width:9em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.me-chip b{font-variant-numeric:tabular-nums}
+.app{max-width:980px;margin:0 auto;display:grid;gap:16px}
+
+/* Status bar (top): rating box, name card with coins, today's missions box */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:stretch;width:100%;max-width:560px;margin:0 auto;padding:10px 0 8px;background:var(--wall)}
+.tb-box{display:grid;justify-items:center;align-content:center;gap:1px;min-width:64px;padding:4px 8px;border-radius:12px;border:2.5px solid var(--wood);background-color:var(--board);background-image:var(--noise);box-shadow:inset 0 0 14px rgba(0,0,0,.3);cursor:pointer;line-height:1.15;color:var(--chalk)}
+.tb-box small{font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--chalk-soft)}
+.tb-box b{font-family:var(--font-display);font-weight:400;font-size:21px;font-variant-numeric:tabular-nums}
+.tb-box .tb-sub{font-size:11px;font-weight:700;color:var(--chalk-soft);font-variant-numeric:tabular-nums}
+.tb-box:focus-visible,.tb-me:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.tb-me{display:grid;align-content:center;gap:0;min-width:0;padding:5px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--panel);text-align:left;cursor:pointer;line-height:1.3}
+.tb-me:hover,.tb-box:hover{border-color:var(--wood-hi)}
+.tb-title{font-size:11px;font-weight:700;color:var(--you);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-me .nm{font-family:var(--font-display);font-size:18px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-me .coin{font-size:13px}
+.tb-daily.ready{border-color:var(--coin)}
+.tb-daily.ready b{color:var(--coin)}
+
+/* Tab bar (bottom): the chalk ledge under the board */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:center;padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));background:linear-gradient(180deg,var(--wood-hi),var(--wood) 30%,#5c3b22);box-shadow:0 -10px 24px -12px rgba(0,0,0,.8)}
+.tabbar-in{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;width:100%;max-width:560px}
+.tab{position:relative;display:grid;justify-items:center;align-content:center;gap:1px;min-height:56px;min-width:0;padding:6px 2px 4px;border:0;border-radius:10px;background:none;color:rgba(255,241,222,.78);cursor:pointer;font-size:11px;font-weight:700;letter-spacing:.02em;white-space:nowrap}
+.tab svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tab[aria-current="page"]{background-color:var(--board);background-image:var(--noise);color:var(--you);box-shadow:inset 0 0 0 2px rgba(0,0,0,.25),inset 0 0 14px rgba(0,0,0,.3)}
+.tab:hover:not(:disabled):not([aria-current="page"]){background:rgba(0,0,0,.14)}
+.tab:focus-visible{outline:2px solid var(--chalk);outline-offset:-2px}
+.tab:disabled{opacity:.4;cursor:default}
+.tab-badge{position:absolute;top:3px;left:calc(50% + 6px);min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--lose);color:#1c1b18;font-size:11px;font-style:normal;line-height:18px;text-align:center}
+body.tabs .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .coin{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--coin);white-space:nowrap}
 .coin::before{content:"";flex:none;width:.95em;height:.95em;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff6c4 0 18%,#f3cf5a 46%,#b8861d 100%);box-shadow:inset 0 0 0 1.5px #9c7012}
 .shead .coin.big{margin-left:auto;font-size:18px}
 .screen{display:grid;gap:16px;min-width:0}
 .narrow{width:100%;max-width:560px;margin:0 auto}
-.shead{display:flex;align-items:center;gap:12px}
+.shead{display:flex;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2px dashed var(--chalk-faint)}
 .shead h2{margin:0;font-family:var(--font-display);font-weight:400;font-size:26px;letter-spacing:.04em}
+.myrank{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;align-items:center;padding:14px 16px;border-radius:12px;border:4px solid var(--wood);background-color:var(--board);background-image:var(--noise);box-shadow:inset 0 0 30px rgba(0,0,0,.3)}
+.myrank .mr-k{font-size:12px;color:var(--chalk-soft);letter-spacing:.06em}
+.myrank .mr-pos{grid-column:2;grid-row:1/span 3;font-family:var(--font-display);font-size:40px;line-height:1;color:var(--you);text-align:right}
+.myrank .mr-pos small{font-size:16px;margin-left:2px}
+.myrank .mr-rate{font-family:var(--font-display);font-size:26px;line-height:1.2}
+.myrank .mr-rec{font-size:13px;color:var(--chalk-soft);font-variant-numeric:tabular-nums}
+.pf-plate{display:block}
 .back{min-height:40px;padding:6px 12px;border-radius:10px;border:1.5px solid var(--line);background:none;color:var(--chalk-soft);font-weight:700;cursor:pointer}
 .back:hover{border-color:var(--chalk-soft)}
 .back:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 
 /* Home */
-.hero{display:grid;gap:4px;padding-block:6px 2px}
-.hero h1{margin:0;font-family:var(--font-display);font-weight:400;font-size:clamp(46px,13vw,64px);line-height:1.05;letter-spacing:.08em}
-.hero p{margin:0;color:var(--chalk-soft);font-size:14px;text-wrap:pretty}
-.modes{display:grid;gap:12px}
+.banners{position:relative;display:grid;gap:8px;min-width:0}
+.bn-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;border-radius:12px;overscroll-behavior-x:contain}
+.bn-track::-webkit-scrollbar{display:none}
+.bn{--c:var(--you);flex:0 0 100%;scroll-snap-align:center;position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px;min-height:172px;min-width:0;padding:14px 14px 14px 18px;border:6px solid var(--wood);border-radius:12px;background-color:var(--board);background-image:radial-gradient(ellipse 70% 60% at 85% 50%,rgba(236,238,228,.07),transparent 70%),var(--noise);box-shadow:inset 0 0 40px rgba(0,0,0,.35);text-align:left;cursor:pointer;color:var(--chalk);overflow:hidden}
+.bn:focus-visible{outline:2px solid var(--chalk);outline-offset:-8px}
+.bn-txt{display:grid;gap:4px;min-width:0;align-content:center}
+.bn-tag{justify-self:start;font-size:11px;font-weight:700;letter-spacing:.12em;line-height:1.7;padding:0 9px;border-radius:999px;background:var(--c);color:#1c1b18}
+.bn-h{font-family:var(--font-display);font-weight:400;font-size:clamp(25px,7.4vw,32px);line-height:1.15;color:var(--c);text-wrap:balance}
+.bn-s{font-size:13px;color:var(--chalk-soft);text-wrap:pretty}
+.bn-art{display:flex;align-items:flex-end;gap:2px;min-width:0}
+.art svg{width:clamp(46px,14vw,62px);height:auto;aspect-ratio:100/130;display:block;overflow:visible}
+.art svg .pm,.art svg .fg{fill:currentColor}
+.art svg .fg{stroke:var(--board);stroke-width:2}
+.art figure{margin:0;display:grid;justify-items:center;gap:2px}
+.art figcaption{font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.1em;color:var(--chalk-soft)}
+.art .glow svg{filter:drop-shadow(0 0 3px var(--c)) drop-shadow(0 0 8px var(--c))}
+.art .shine svg{filter:drop-shadow(0 0 1.5px #fff3c2) drop-shadow(0 0 6px rgba(240,190,80,.55))}
+.coins-art{position:relative;width:104px;height:96px}
+.coins-art i{position:absolute;width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff6c4 0 18%,#f3cf5a 46%,#b8861d 100%);box-shadow:inset 0 0 0 3px #9c7012,0 4px 8px rgba(0,0,0,.35)}
+.coins-art b{position:absolute;right:0;top:0;font-family:var(--font-display);font-weight:400;font-size:26px;color:var(--coin);transform:rotate(-8deg)}
+.podium{display:flex;align-items:flex-end;gap:4px}
+.podium i{display:grid;place-items:start center;width:30px;padding-top:4px;border:2px solid currentColor;border-bottom:0;border-radius:6px 6px 0 0;font-family:var(--font-display);font-style:normal;font-size:16px}
+.bn-dots{display:flex;justify-content:center;gap:2px}
+.bn-dots button{width:26px;height:22px;padding:0;border:0;background:none;cursor:pointer;display:grid;place-items:center}
+.bn-dots button::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--chalk-faint);transition:width .2s ease,background .2s ease}
+.bn-dots button[aria-current="true"]::before{width:20px;border-radius:4px;background:var(--you)}
+.bn-dots button:focus-visible{outline:2px solid var(--chalk);outline-offset:-2px;border-radius:6px}
+.bn-help{position:absolute;top:-6px;right:-4px;z-index:2;display:grid;place-items:center;width:58px;height:58px;border-radius:50%;border:2.5px solid var(--wood);background-color:var(--you);color:#2a2311;font-family:var(--font-display);font-size:14px;line-height:1.1;text-align:center;cursor:pointer;box-shadow:0 6px 12px -4px rgba(0,0,0,.6);transform:rotate(8deg)}
+.bn-help:hover{transform:rotate(0) scale(1.04)}
+.bn-help:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.sec-label{margin:0 0 -8px;font-family:var(--font-display);font-size:15px;letter-spacing:.08em;color:var(--chalk-soft)}
+.pickup{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--panel);text-align:left;cursor:pointer;color:var(--chalk)}
+.pickup:hover{border-color:var(--chalk-soft)}
+.pickup:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.pickup.ready{border-color:var(--coin);box-shadow:0 0 0 1px var(--coin) inset}
+.pu-tag{grid-column:1/-1;justify-self:start;font-size:11px;font-weight:700;letter-spacing:.06em;line-height:1.7;padding:0 9px;border-radius:999px;border:1.5px solid currentColor;color:var(--p2)}
+.pickup.ready .pu-tag{color:var(--coin)}
+.pu-name{grid-column:1;font-size:16px;min-width:0;overflow-wrap:anywhere}
+.pu-prog{grid-column:1;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--chalk-soft);font-variant-numeric:tabular-nums}
+.pu-prog .meter{flex:1;margin:0;height:6px;border-radius:3px}
+.pu-prog .meter i{background:var(--p2)}
+.pickup.ready .pu-prog .meter i{background:var(--coin)}
+.pu-side{grid-column:2;grid-row:2/span 2;display:grid;justify-items:end;gap:2px;font-size:12px;color:var(--chalk-soft);font-variant-numeric:tabular-nums}
+.pu-side .coin{font-size:16px}
+.ticker{display:flex;align-items:center;gap:10px;margin:0;padding:8px 12px;border-radius:999px;background:var(--board-deep);border:1px solid var(--line);font-size:13px;min-width:0}
+.tk-tag{flex:none;font-size:11px;font-weight:700;letter-spacing:.06em;line-height:1.7;padding:0 8px;border-radius:999px;background:var(--p1);color:#1c1b18}
+.tk-t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--chalk-soft);transition:opacity .3s ease}
+.tk-t.fade{opacity:0}
+.modes{display:grid;gap:10px}
+.mode-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mode.main{grid-template-columns:minmax(0,1fr) auto;padding:18px 18px 18px 20px;border-width:5px;min-height:118px}
+.mode.main .mode-k{font-size:34px}
+.mode-go{grid-column:2;grid-row:1/span 3;display:grid;place-items:center;width:76px;height:76px;border-radius:50%;border:3px solid var(--c);color:var(--c);font-family:var(--font-display);font-size:22px;transform:rotate(-8deg);box-shadow:inset 0 0 0 4px rgba(0,0,0,.18)}
+.mode.main:hover:not(:disabled) .mode-go{transform:rotate(0) scale(1.05)}
+.mode-row .mode{grid-template-columns:minmax(0,1fr);align-content:start;padding:12px 14px;min-height:92px}
+.mode-row .mode-k{font-size:21px}
+.mode-row .mode-d{font-size:12px}
 .mode{
   --c:var(--you);
   display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 14px;align-items:center;text-align:left;
@@ -103,7 +186,7 @@ h1,h2,h3{text-wrap:balance}
 .mode-k{grid-column:1;font-family:var(--font-display);font-size:25px;line-height:1.25}
 .mode-d{grid-column:1;font-size:14px;color:var(--chalk-soft);text-wrap:pretty}
 .mode-x{grid-column:1;font-size:13px;font-weight:700;color:var(--c);font-variant-numeric:tabular-nums}
-.mode-n{grid-column:2;grid-row:1/span 3;font-family:var(--font-display);font-size:15px;color:var(--c);border:1.5px dashed currentColor;border-radius:999px;padding:4px 12px;white-space:nowrap}
+
 
 /* Shared bits */
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
@@ -364,15 +447,6 @@ fieldset:disabled .opts span{cursor:default}
 
 /* Splash and toast */
 /* Home shortcuts, missions, shop */
-.subnav{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.mini{position:relative;display:grid;gap:2px;align-content:start;text-align:left;min-height:84px;min-width:0;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--panel);cursor:pointer}
-.mini:hover:not(:disabled){border-color:var(--chalk-soft)}
-.mini:disabled{opacity:.45;cursor:default}
-.mini:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
-.mini-k{font-family:var(--font-display);font-size:20px;line-height:1.3}
-.mini-d{font-size:12px;color:var(--chalk-soft);text-wrap:pretty}
-.mini .coin{font-size:13px;margin-top:2px}
-.pill{position:absolute;top:-9px;right:10px;font-size:12px;font-weight:700;line-height:1.6;padding:0 9px;border-radius:999px;background:var(--lose);color:#1c1b18}
 .seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:12px;background:var(--board-deep);border:1px solid var(--line)}
 .seg button{position:relative;min-height:40px;border:0;border-radius:9px;background:none;color:var(--chalk-soft);font-weight:700;cursor:pointer}
 .seg button[aria-selected="true"]{background:var(--panel);color:var(--chalk);box-shadow:0 1px 0 rgba(0,0,0,.3)}
@@ -439,48 +513,79 @@ fieldset:disabled .opts span{cursor:default}
 </svg>
 
 <div class="app">
-  <header class="bar">
-    <p class="logo">わりばし</p>
-    <p class="me-chip"><span class="nm" id="barName">ななし</span><b id="barRate" hidden></b><span class="coin" id="barCoins" hidden>0</span></p>
+  <header class="topbar">
+    <button type="button" class="tb-box tb-rate" id="tbRank" aria-label="ランキングを見る"><small>RATE</small><b id="barRate">1500</b><span class="tb-sub" id="barTier">緑</span></button>
+    <button type="button" class="tb-me" id="homePlate" aria-label="プロフィールを開く"><span class="tb-title" id="barTitle">ルーキー</span><span class="nm" id="barName">ななし</span><span class="coin" id="barCoins">0</span></button>
+    <button type="button" class="tb-box tb-daily" id="tbDaily" aria-label="今日のミッション"><small>DAILY</small><b id="tbDailyN">0/3</b><span class="tb-sub" id="tbDailyLeft">--:--</span></button>
   </header>
 
   <!-- Home -->
   <section class="screen narrow" id="scrHome">
-    <div class="hero">
-      <h1>わりばし</h1>
-      <p>指の本数を足して、相手の手を消していく教室の手遊び。</p>
+    <div class="banners">
+      <div class="bn-track" id="bnTrack" aria-roledescription="カルーセル" aria-label="おしらせ">
+        <button type="button" class="bn" data-go="bin" style="--c:var(--p2)" aria-label="2進数ルール：CPU対戦で遊ぶ">
+          <span class="bn-txt"><span class="bn-tag">NEW</span><b class="bn-h">2進数ルール<br>登場！</b><span class="bn-s">指1本ずつが 1・2・4・8・16。31で消える</span></span>
+          <span class="bn-art art" id="artBin"></span>
+        </button>
+        <button type="button" class="bn" data-go="mission" style="--c:var(--coin)" aria-label="デイリーミッションを見る">
+          <span class="bn-txt"><span class="bn-tag">毎日4:00更新</span><b class="bn-h">デイリー<br>ミッション</b><span class="bn-s">3つ全部クリアでボーナス50コイン</span></span>
+          <span class="bn-art"><span class="coins-art" aria-hidden="true"><i style="left:4px;top:40px"></i><i style="left:30px;top:50px"></i><i style="left:18px;top:18px"></i><b>+50</b></span></span>
+        </button>
+        <button type="button" class="bn" data-go="shop" style="--c:var(--p1)" aria-label="ショップを見る">
+          <span class="bn-txt"><span class="bn-tag">SHOP</span><b class="bn-h">チョーク<br>全12色</b><span class="bn-s">金粉・虹色・蛍光は相手の画面でも光る</span></span>
+          <span class="bn-art art" id="artShop"></span>
+        </button>
+        <button type="button" class="bn" data-go="rank" style="--c:var(--t7)" aria-label="ランキングを見る">
+          <span class="bn-txt"><span class="bn-tag">RANKING</span><b class="bn-h">めざせ<br>赤レート</b><span class="bn-s">レートは100ごとに色が変わる。2000から赤</span></span>
+          <span class="bn-art"><span class="podium" aria-hidden="true"><i style="height:62px;color:var(--t5)">2</i><i style="height:84px;color:var(--t7)">1</i><i style="height:46px;color:var(--t3)">3</i></span></span>
+        </button>
+      </div>
+      <div class="bn-dots" id="bnDots"></div>
+      <button type="button" class="bn-help" id="goRules">遊び<br>かた</button>
     </div>
-    <button type="button" class="plate-btn" id="homePlate" aria-label="ネームプレートを編集"><span id="homePlateBox"></span><span class="plate-edit">編集</span></button>
-    <p class="note" id="homeNameHint" hidden style="margin:-6px 0 0">プレートをタップして、名前と称号を決めよう。</p>
+    <p class="sec-label">ピックアップ</p>
+    <button type="button" class="pickup" id="pickup">
+      <span class="pu-tag" id="puTag">デイリー</span>
+      <b class="pu-name" id="puName">読み込み中…</b>
+      <span class="pu-prog" id="puProg"><span class="meter"><i id="puMeter"></i></span><span id="puCount"></span></span>
+      <span class="pu-side"><span class="coin" id="puCoins" hidden></span><span id="puLeft"></span></span>
+    </button>
     <div class="modes">
-      <button type="button" class="mode" id="goRated">
+      <button type="button" class="mode main" id="goRated">
         <span class="mode-k">レート戦</span>
-        <span class="mode-d">近い強さの人と1対1。1手30秒。</span>
+        <span class="mode-d">近い強さの人と1対1・1手30秒</span>
         <span class="mode-x" id="homeRate">レート 1500・まだ0戦</span>
-        <span class="mode-n">1対1</span>
+        <span class="mode-go" aria-hidden="true">対戦</span>
       </button>
-      <button type="button" class="mode c2" id="goCustom">
-        <span class="mode-k">カスタムマッチ</span>
-        <span class="mode-d">友達と2〜4人で。部屋番号で集まって、ルールも決められる。</span>
-        <span class="mode-n">2〜4人</span>
-      </button>
-      <button type="button" class="mode c1" id="goCpu">
-        <span class="mode-k">CPU対戦</span>
-        <span class="mode-d">ひとりで練習。この端末で2人で遊ぶこともできる。</span>
-        <span class="mode-n">ひとり</span>
-      </button>
+      <div class="mode-row">
+        <button type="button" class="mode c2" id="goCustom">
+          <span class="mode-k">カスタム</span>
+          <span class="mode-d">友達と2〜4人。部屋番号で集まる</span>
+        </button>
+        <button type="button" class="mode c1" id="goCpu">
+          <span class="mode-k">CPU対戦</span>
+          <span class="mode-d">ひとりで練習。2人で1台も</span>
+        </button>
+      </div>
     </div>
-    <div class="subnav" id="subnav">
-      <button type="button" class="mini" id="goMission"><span class="mini-k">ミッション</span><span class="mini-d" id="missionHint">毎日のお題でコインを集めよう</span><span class="pill" id="missionBadge" hidden></span></button>
-      <button type="button" class="mini" id="goShop"><span class="mini-k">ショップ</span><span class="mini-d">チョークの色を買える</span><span class="coin" id="shopCoins">0</span></button>
-    </div>
+    <p class="ticker"><span class="tk-tag">ヒント</span><span class="tk-t" id="ticker"></span></p>
     <p class="note" id="homeNote" hidden>オンライン対戦はまだ準備中です。</p>
-    <section class="panel" id="rankPanel" hidden>
-      <h2>ランキング</h2>
+  </section>
+
+  <!-- Ranking -->
+  <section class="screen narrow" id="scrRank" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>ランキング</h2></div>
+    <div class="myrank" id="myRank"></div>
+    <section class="panel" id="rankPanel">
       <ol class="rank" id="rank"></ol>
       <p class="note">レート戦を1回以上やった人が載ります。レートは1500（緑）から始まって、強い相手に勝つほど大きく上がります。100ごとに色が変わります。</p>
       <ul class="tiers" id="tierLegend" aria-label="レートの色"></ul>
     </section>
+  </section>
+
+  <!-- Rules -->
+  <section class="screen narrow" id="scrRules" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>遊びかた</h2></div>
     <section class="panel">
       <h2>ルール</h2>
       <ul class="rules">
@@ -494,7 +599,6 @@ fieldset:disabled .opts span{cursor:default}
         <li>オンラインは持ち時間つき。時間切れと投了は脱落。同じ局面が3回出たら引き分け。</li>
       </ul>
     </section>
-    <p class="note center" id="appVer" style="margin:0"></p>
   </section>
 
   <!-- CPU setup -->
@@ -591,8 +695,13 @@ fieldset:disabled .opts span{cursor:default}
 
   <!-- Nameplate editor -->
   <section class="screen narrow" id="scrPlate" hidden>
-    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>ネームプレート</h2></div>
-    <div id="platePreview"></div>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>プロフィール</h2></div>
+    <div class="pf-plate" id="homePlateBox"></div>
+    <section class="panel">
+      <h3>あなたの記録</h3>
+      <dl class="facts" id="myStats"></dl>
+      <p class="note">記録・称号・プレートはオンライン対戦（レート戦とカスタムマッチ）で増えます。CPUの称号はCPU対戦で手に入ります。</p>
+    </section>
     <div class="field">
       <label for="netName">名前</label>
       <input class="input" id="netName" maxlength="12" autocomplete="nickname" placeholder="例：ゆー">
@@ -605,11 +714,8 @@ fieldset:disabled .opts span{cursor:default}
       <h3>プレート <span class="tag mine" id="plateCount"></span></h3>
       <div class="picks plates" id="platePicks"></div>
     </section>
-    <section class="panel">
-      <h3>あなたの記録</h3>
-      <dl class="facts" id="myStats"></dl>
-      <p class="note">記録・称号・プレートはオンライン対戦（レート戦とカスタムマッチ）で増えます。CPUの称号はCPU対戦で手に入ります。</p>
-    </section>
+    <button type="button" class="btn" id="goRules2">遊びかたを見る</button>
+    <p class="note center" id="appVer" style="margin:0"></p>
   </section>
 
   <!-- Custom match entry -->
@@ -775,6 +881,15 @@ fieldset:disabled .opts span{cursor:default}
     <p class="splash-s" id="splashS"></p>
   </div>
 </div>
+<nav class="tabbar" id="tabbar" aria-label="メニュー">
+  <div class="tabbar-in">
+    <button type="button" class="tab" id="goHomeTab" data-tab="home" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h5v-6h3v6h5V10"/></svg><span>ホーム</span></button>
+    <button type="button" class="tab" id="goMission" data-tab="mission"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="m8.5 11 1.6 1.6L13 9.7"/><path d="M8.5 16.5h7"/></svg><span>ミッション</span><i class="tab-badge" id="missionBadge" hidden></i></button>
+    <button type="button" class="tab" id="goShop" data-tab="shop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span>ショップ</span></button>
+    <button type="button" class="tab" id="goRank" data-tab="rank"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3.4 4M16 6h3a3 3 0 0 1-3.4 4"/><path d="M12 13v4M8.5 20h7"/></svg><span>ランキング</span></button>
+    <button type="button" class="tab" id="goProfile" data-tab="plate"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg><span>プロフィール</span></button>
+  </div>
+</nav>
 <p class="toast" id="toast" role="status" hidden></p>
 <pre class="dbg" id="dbg" hidden></pre>
 
@@ -892,7 +1007,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/14-2';
+const APP_VERSION = '11/14-3';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -2196,12 +2311,20 @@ async function tryMatch(sg){
 }
 
 // ===================== Screens =====================
-const SCREENS = {home:'#scrHome', cpu:'#scrCpu', plate:'#scrPlate', mission:'#scrMission', shop:'#scrShop', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
+const SCREENS = {home:'#scrHome', cpu:'#scrCpu', plate:'#scrPlate', mission:'#scrMission', shop:'#scrShop', rank:'#scrRank', rules:'#scrRules', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
+// The tab bar stays on the menu screens and steps aside for matching and play.
+const TABBED = ['home', 'mission', 'shop', 'rank', 'plate', 'rules', 'cpu', 'custom'];
+function showChrome(s){
+  const tabs = TABBED.includes(s);
+  $('#tabbar').hidden = !tabs;
+  document.body.classList.toggle('tabs', tabs);
+  $$('#tabbar .tab').forEach(t => { if (t.dataset.tab === s) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current'); });
+}
 function setScreen(s){
   if (ui.screen !== s) {
     ui.screen = s;
     for (const k in SCREENS) $(SCREENS[k]).hidden = k !== s;
-    $('.logo').style.visibility = s === 'home' ? 'hidden' : '';
+    showChrome(s);
     try { window.scrollTo(0, 0); } catch(e) {}
   }
   render();
@@ -2245,6 +2368,8 @@ function render(){
   if (ui.screen === 'plate') renderPlateEditor();
   if (ui.screen === 'mission') renderMission();
   if (ui.screen === 'shop') renderShop();
+  if (ui.screen === 'rank') renderRank();
+  if (ui.screen === 'home') renderHome();
   if (ui.screen === 'game') renderGame();
   tick();
 }
@@ -2252,17 +2377,22 @@ function render(){
 function renderChrome(){
   const ok = !!FIREBASE_CONFIG, p = net.profile || {}, g = ratedGames(p);
   $('#barName').textContent = typedName();
-  $('#barRate').hidden = !ok;
+  $('#barTitle').textContent = titleName(myLook().title);
   const mr = myRating(), coins = myCoins();
+  $('#tbRank').hidden = !ok;
+  $('#tbDaily').hidden = !ok;
   $('#barCoins').hidden = !ok;
   $('#barCoins').textContent = coins;
-  $('#shopCoins').textContent = coins;
-  $('#goMission').disabled = !ok;
-  $('#goShop').disabled = !ok;
+  $('#barTier').textContent = tierName(mr);
+  $('#barTier').className = 'tb-sub ' + tierCls(mr);
+  for (const id of ['#goMission', '#goShop', '#goRank']) $(id).disabled = !ok;
   const msx = missionState(), nReady = msx.readyDaily + msx.readyNormal;
   $('#missionBadge').hidden = !nReady;
   $('#missionBadge').textContent = `${nReady}`;
-  $('#missionHint').textContent = nReady ? '受け取れるミッションがあります' : '毎日のお題でコインを集めよう';
+  const dDone = msx.daily.filter(m => m.state !== 'todo').length;
+  $('#tbDailyN').textContent = msx.daily.length ? `${dDone}/${msx.daily.length}` : '-';
+  $('#tbDaily').classList.toggle('ready', msx.readyDaily > 0);
+  $('#tbDaily').setAttribute('aria-label', `今日のミッション ${dDone}/${msx.daily.length || 3}`);
   const myCh = chalkOf(myChalk()), radar = $('.radar');
   if (radar.dataset.key !== myChalk()) { radar.dataset.key = myChalk(); $('#radarHand').innerHTML = handSVG(2, false, 0, myCh); }
   $('#radarHand').style.color = myCh ? myCh.color : '';
@@ -2277,7 +2407,6 @@ function renderChrome(){
   const hb = $('#homePlateBox');
   hb.innerHTML = '';
   hb.append(plateEl(Object.assign({name: typedName(), rating: ok ? mr : 0}, myLook()), 'lg'));
-  $('#homeNameHint').hidden = !!lsGet(NAME_KEY);
   $('#goRated').disabled = !ok;
   $('#goCustom').disabled = !ok;
   $('#homeNote').hidden = ok;
@@ -2307,6 +2436,61 @@ function renderCpu(){
   $('#first-1-label').textContent = ln[1];
 }
 
+// ----- Home -----
+const TIPS = [
+  '合成：両手をひとつにまとめられる。1と3なら4！',
+  '分身：両手の合計を配り直せる。消えた手も復活できる',
+  'デイリーミッションは毎朝4:00に新しくなる',
+  '2進数ルールはCPU対戦とカスタムマッチで遊べる',
+  'レート戦は1手30秒。時間切れは負けになるので注意',
+  'チョークの色は対戦相手の画面でも同じ色で見える',
+  '同じ局面が3回出たら引き分け',
+  'CPU対戦の「解析を表示」で、その局面の勝ち負けがわかる',
+];
+function renderHome(){
+  const ok = !!FIREBASE_CONFIG, pu = $('#pickup'), msx = missionState();
+  let tag = 'デイリー', name, cur = 0, goal = 0, coins = 0, left = '', ready = false, go = 'mission';
+  if (!lsGet(NAME_KEY)) { tag = 'はじめに'; name = 'プロフィールで名前と称号を決めよう'; go = 'plate'; }
+  else if (!ok) { tag = 'おしらせ'; name = 'CPU対戦で練習しよう'; go = 'cpu'; }
+  else if (!msx.daily.length) { name = '読み込み中…'; }
+  else {
+    const m = msx.daily.find(x => x.state === 'ready') || msx.daily.find(x => x.state === 'todo');
+    left = `あと${fmtLeft(msToReset())}`;
+    if (m) { name = m.name; cur = m.cur; goal = m.goal; coins = m.coins; ready = m.state === 'ready'; if (ready) tag = '達成！受け取れる'; }
+    else if (msx.bonusState === 'ready') { tag = '達成！受け取れる'; name = '今日のミッションを3つ全部クリア'; cur = goal = 3; coins = DAILY_BONUS; ready = true; }
+    else { tag = 'デイリー'; name = '今日のミッションはぜんぶクリア！'; cur = goal = 3; left = `次は4:00（あと${fmtLeft(msToReset())}）`; }
+  }
+  pu.classList.toggle('ready', ready);
+  pu.dataset.go = go;
+  $('#puTag').textContent = tag;
+  $('#puName').textContent = name;
+  $('#puProg').hidden = !goal;
+  if (goal) { $('#puMeter').style.width = Math.round(Math.min(1, cur / goal) * 100) + '%'; $('#puCount').textContent = `${cur}／${goal}`; }
+  $('#puCoins').hidden = !coins;
+  $('#puCoins').textContent = coins;
+  $('#puLeft').textContent = left;
+  if (!$('#ticker').textContent) $('#ticker').textContent = TIPS[ui.tip = Math.floor(Math.random() * TIPS.length)];
+}
+function bannerIndex(){ const t = $('#bnTrack'); return Math.round(t.scrollLeft / Math.max(1, t.clientWidth)); }
+function showBanner(i, smooth){
+  const t = $('#bnTrack'), n = t.children.length;
+  i = (i + n) % n;
+  try { t.scrollTo({left: i * t.clientWidth, behavior: smooth && !matchMedia('(prefers-reduced-motion: reduce)').matches ? 'smooth' : 'auto'}); } catch(e) { t.scrollLeft = i * t.clientWidth; }
+  markBanner(i);
+}
+function markBanner(i){ $$('#bnDots button').forEach((d, k) => d.setAttribute('aria-current', String(k === i))); }
+// Rotates the banner every 6 s (paused for a while after the player touches it) and the hint line every 8 s.
+function homeTick(now){
+  if (!ui.bnAt) ui.bnAt = now;
+  if (now - ui.bnAt > 6000 && now > (ui.bnHold || 0) && !document.hidden) { ui.bnAt = now; showBanner(bannerIndex() + 1, true); }
+  if (!ui.tipAt) ui.tipAt = now;
+  if (now - ui.tipAt > 8000) {
+    ui.tipAt = now;
+    const el = $('#ticker');
+    el.classList.add('fade');
+    setTimeout(() => { ui.tip = ((ui.tip || 0) + 1) % TIPS.length; el.textContent = TIPS[ui.tip]; el.classList.remove('fade'); }, 300);
+  }
+}
 function dailyNoteText(){
   const earned = Math.min(GAME_COIN_CAP, +dailyOf(net.profile).p.earned || 0);
   return `毎日4:00に新しいお題になります（あと${fmtLeft(msToReset())}）。対戦でもらえるコインは1日${GAME_COIN_CAP}枚まで（今日 ${earned}枚）`;
@@ -2400,9 +2584,6 @@ function renderShop(){
 
 function renderPlateEditor(){
   const ok = !!FIREBASE_CONFIG, u = unlocked(statsOf(net.profile)), st = u.st, look = myLook();
-  const pv = $('#platePreview');
-  pv.innerHTML = '';
-  pv.append(plateEl(Object.assign({name: typedName(), rating: ok ? myRating() : 0}, look), 'lg'));
   $('#titleCount').textContent = `${u.titles.length}/${TITLES.length}`;
   $('#plateCount').textContent = `${u.plates.length}/${PLATES.length}`;
   const prog = item => item.key === 'maxRate' ? `最高 ${st.maxRate}` : `${Math.min(st[item.key] || 0, item.goal)}/${item.goal}`;
@@ -2727,10 +2908,20 @@ function renderAnalysis(){
   $('#aSplit').textContent = `手番側の勝ち ${s.counts.win}・負け ${s.counts.lose}・引き分け ${s.counts.draw}`;
 }
 
+function renderMyRank(rows){
+  const box = $('#myRank'), p = net.profile || {}, mr = myRating(), g = ratedGames(p);
+  const pos = g && rows ? 1 + rows.filter(x => x.rate > mr).length : 0;
+  box.innerHTML = '<span class="mr-k">あなたのレート</span><span class="mr-pos"></span><b class="mr-rate"></b><span class="mr-rec"></span>';
+  box.querySelector('.mr-rate').append(rateEl(mr, 'span'), `（${tierName(mr)}）`);
+  box.querySelector('.mr-pos').innerHTML = pos ? `${pos}<small>位</small>` : '<small>ランク外</small>';
+  box.querySelector('.mr-rec').textContent = g ? `${+p.rw || 0}勝${+p.rl || 0}敗${+p.rd ? (+p.rd) + '分' : ''}` : 'レート戦を1回やるとランキングに載ります';
+}
 function renderRank(){
   const panelEl = $('#rankPanel'), ol = $('#rank');
   panelEl.hidden = !FIREBASE_CONFIG;
+  $('#myRank').hidden = !FIREBASE_CONFIG;
   if (!FIREBASE_CONFIG) return;
+  renderMyRank(null);
   ol.innerHTML = '';
   const empty = t => { const li = document.createElement('li'); li.className = 'empty'; li.textContent = t; ol.append(li); };
   const b = net.board;
@@ -2739,6 +2930,7 @@ function renderRank(){
     .map(r => ({uid: r.uid, name: String(r.p.name || 'ななし').slice(0, 12), title: r.p.title, rate: BASE_RATE + Math.round(+r.p.rp || 0),
       w: +r.p.rw || 0, l: +r.p.rl || 0, d: +r.p.rd || 0}))
     .sort((x, y) => y.rate - x.rate || (y.w - x.w));
+  renderMyRank(rows);
   if (!rows.length) { empty('まだ誰もレート戦をしていません'); return; }
   rows.slice(0, 20).forEach(r => {
     const li = document.createElement('li');
@@ -2778,6 +2970,11 @@ function tick(){
       if (net.timeoutKey !== k) { net.timeoutKey = k; claimTimeout(G.ply, turnRoom); }
     }
   } else c.hidden = true;
+  if (FIREBASE_CONFIG) {
+    const ms = msToReset(), txt = `あと${Math.floor(ms / 3600000)}:${String(Math.floor(ms % 3600000 / 60000)).padStart(2, '0')}`;
+    if ($('#tbDailyLeft').textContent !== txt) $('#tbDailyLeft').textContent = txt;
+  }
+  if (ui.screen === 'home') homeTick(now);
   if (ui.screen === 'mission') {
     $('#dailyNote').textContent = dailyNoteText();
     if (ui.lastDay && ui.lastDay !== dayKey()) render();
@@ -2796,8 +2993,41 @@ setInterval(tick, 250);
 // ===================== Events =====================
 $('#goCpu').addEventListener('click', () => setScreen('cpu'));
 $('#homePlate').addEventListener('click', () => setScreen('plate'));
-$('#goMission').addEventListener('click', () => setScreen('mission'));
-$('#goShop').addEventListener('click', () => { ui.buyArm = null; setScreen('shop'); });
+$$('#tabbar .tab').forEach(t => t.addEventListener('click', () => {
+  if (t.dataset.tab === 'shop') ui.buyArm = null;
+  if (t.dataset.tab === 'home') goHome(); else setScreen(t.dataset.tab);
+}));
+$('#tbRank').addEventListener('click', () => setScreen('rank'));
+$('#tbDaily').addEventListener('click', () => { ui.missionTab = 'daily'; setScreen('mission'); });
+$('#goRules').addEventListener('click', () => setScreen('rules'));
+$('#goRules2').addEventListener('click', () => setScreen('rules'));
+$('#pickup').addEventListener('click', () => { const go = $('#pickup').dataset.go || 'mission'; if (go === 'mission') ui.missionTab = 'daily'; setScreen(go); });
+$$('#bnTrack .bn').forEach(b => b.addEventListener('click', () => {
+  const go = b.dataset.go;
+  if (go === 'bin') { settings.count = 'binary'; saveSettings(); setScreen('cpu'); }
+  else if (FIREBASE_CONFIG || go === 'rank') { if (go === 'mission') ui.missionTab = 'daily'; setScreen(go); }
+}));
+(() => {
+  const t = $('#bnTrack'), dots = $('#bnDots');
+  [...t.children].forEach((b, i) => {
+    const d = document.createElement('button');
+    d.type = 'button'; d.setAttribute('aria-label', `おしらせ ${i + 1}`);
+    d.addEventListener('click', () => { ui.bnHold = Date.now() + 10000; showBanner(i, true); });
+    dots.append(d);
+  });
+  markBanner(0);
+  let raf = 0;
+  t.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => markBanner(bannerIndex())); }, {passive: true});
+  for (const ev of ['pointerdown', 'touchstart', 'wheel']) t.addEventListener(ev, () => { ui.bnHold = Date.now() + 10000; ui.bnAt = Date.now(); }, {passive: true});
+  // art drawn with the same chalk hands as the board
+  const fig = (n, color, cap, cls) => `<figure class="${cls || ''}" style="color:${color};--c:${color}"><svg viewBox="0 0 100 130" aria-hidden="true">${handSVG(n, false, 0, null, true)}</svg>${cap ? `<figcaption>${cap}</figcaption>` : ''}</figure>`;
+  $('#artBin').innerHTML = fig(21, 'var(--p2)', '10101') + fig(10, 'var(--you)', '01010');
+  const ch = id => CHALKS.find(c => c.id === id);
+  $('#artShop').innerHTML = ['gold', 'rainbow', 'neon'].map(id => {
+    const c = ch(id);
+    return `<figure class="${c.glow ? 'glow' : ''}${c.shine ? 'shine' : ''}" style="color:${c.color};--c:${c.color}"><svg viewBox="0 0 100 130" aria-hidden="true">${handSVG(2, false, 0, c)}</svg></figure>`;
+  }).join('');
+})();
 $('#tabDaily').addEventListener('click', () => { ui.missionTab = 'daily'; renderMission(); });
 $('#tabNormal').addEventListener('click', () => { ui.missionTab = 'normal'; renderMission(); });
 $('#goCustom').addEventListener('click', () => setScreen('custom'));
@@ -2895,7 +3125,7 @@ function start(data){
   let room = '';
   try { room = (new URLSearchParams(location.search).get('room') || '').replace(/\D/g, '').slice(0, 4); } catch(e) {}
   for (const k in SCREENS) $(SCREENS[k]).hidden = k !== 'home';
-  $('.logo').style.visibility = 'hidden';
+  showChrome('home');
   if (data && data.G && data.G.hands && data.G.n) { G = data.G; setScreen('game'); maybeCpu(); }
   else render();
   renderRank();
