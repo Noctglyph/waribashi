@@ -1167,7 +1167,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .board-wrap[data-bd="blv50"] .board{border-image:linear-gradient(135deg,#8f6f18,#fff3c2 25%,#c79a2c 50%,#fff6cf 75%,#8a6a12) 1;background-image:radial-gradient(ellipse 70% 45% at 50% -8%,rgba(255,225,140,.22),transparent 70%),radial-gradient(circle at 18% 78%,rgba(255,236,170,.75) 0 1.1px,transparent 1.9px),repeating-linear-gradient(90deg,rgba(255,230,160,.05) 0 1px,transparent 1px 38px),var(--noise);background-size:auto,97px 89px,auto,auto}
 
 /* ===== Folding panels (My page) ===== */
-.fold{padding-block:0}
+.fold{padding-block:0;scroll-margin-top:calc(env(safe-area-inset-top,0px) + 92px)}
 .fold > summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:3px 12px;padding-block:14px;cursor:pointer;border-radius:10px}
 .fold > summary::-webkit-details-marker{display:none}
 .fold > summary::after{content:"";grid-column:2;grid-row:1/span 2;width:9px;height:9px;margin:0 4px 4px 0;border-right:2px solid var(--chalk-soft);border-bottom:2px solid var(--chalk-soft);transform:rotate(45deg);transition:transform .2s}
@@ -1238,6 +1238,25 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .bosshero.angry{border-color:#ff6b8a;box-shadow:0 0 0 3px rgba(255,107,138,.18),inset 0 0 40px rgba(120,0,30,.35)}
 .bosshero.angry .bh-name{color:#ffb3c1}
 .bosscard.angry{border-color:#ff6b8a}
+
+/* ===== My page: chalk and board pickers; shop link ===== */
+.gear{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.gear .gp{position:relative;display:grid;justify-items:center;align-content:start;gap:4px;min-width:0;padding:10px 6px 8px;border-radius:10px;border:1.5px solid var(--line);background:var(--board-deep);color:var(--chalk);cursor:pointer;font:inherit}
+.gear .gp .cf{width:40px}
+.gear .gp .cf svg{width:40px;height:auto;aspect-ratio:100/130;display:block;overflow:visible}
+.gear .gp .cf svg .pm,.gear .gp .cf svg .fg{fill:currentColor}
+.gear .gp .cf svg .fg{stroke:var(--board);stroke-width:2}
+.gear .gp .bsw{width:64px}
+.gear .gp b{font-size:12px;line-height:1.3;text-align:center;min-width:0;overflow-wrap:anywhere}
+.gear .gp small{font-size:10.5px;color:var(--chalk-soft)}
+.gear .gp[aria-pressed="true"]{border-color:var(--you);background:rgba(243,215,116,.08)}
+.gear .gp[aria-pressed="true"] small{color:var(--you);font-weight:700}
+.gear .gp:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.gear-more{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px;font-size:12.5px;color:var(--chalk-soft)}
+.shop-hint{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1.5px dashed var(--line);font-size:13px;color:var(--chalk-soft)}
+.shop-hint span{flex:1;min-width:0}
+.shop-hint .btn{flex:none}
+.item .used{position:absolute;top:8px;left:8px;padding:1px 8px;border-radius:999px;background:var(--you);color:#1c1b18;font-size:10.5px;font-weight:800}
 @media (prefers-reduced-motion:reduce){
   .cfm,.cfm-card{animation:none!important}
   .story,.st-ch.pop,.st-next{animation:none!important}
@@ -1689,6 +1708,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
       <p class="dnote"><span>毎朝4:00に入れ替わり・各1回まで</span><span id="dLeft"></span></p>
       <div class="shop" id="dGrid"></div>
     </div>
+    <p class="shop-hint" id="shopHint" hidden><span id="shopHintT">持っているチョークはマイページで変えられます</span><button type="button" class="btn sm" id="shopToGear">マイページで変える</button></p>
     <div class="shop" id="shopGrid" role="tabpanel" hidden></div>
     <div class="shop" id="shopBoards" role="tabpanel" hidden></div>
   </section>
@@ -1717,6 +1737,16 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
     <details class="panel fold" id="foldPlate" data-fold="plate">
       <summary><h3>プレート <span class="tag mine" id="plateCount"></span></h3><span class="fold-s" id="foldPlateS"></span></summary>
       <div class="picks plates" id="platePicks"></div>
+    </details>
+    <details class="panel fold" id="foldChalk" data-fold="chalk">
+      <summary><h3>チョーク <span class="tag mine" id="chalkCount"></span></h3><span class="fold-s" id="foldChalkS"></span></summary>
+      <div class="gear" id="chalkPicks"></div>
+      <p class="gear-more">ほかのチョークはショップ・ガチャ・イベントなどで手に入ります<button type="button" class="btn sm" data-goshop="chalk">ショップへ</button></p>
+    </details>
+    <details class="panel fold" id="foldBoard" data-fold="board">
+      <summary><h3>黒板 <span class="tag mine" id="boardCount"></span></h3><span class="fold-s" id="foldBoardS"></span></summary>
+      <div class="gear" id="boardPicks"></div>
+      <p class="gear-more">黒板を変えると、自分の盤面の見た目が変わります<button type="button" class="btn sm" data-goshop="board">ショップへ</button></p>
     </details>
     <details class="panel fold" id="foldStamp" data-fold="stamp">
       <summary><h3>スタンプ <span class="tag mine" id="stampCount"></span></h3><span class="fold-s">対戦中に送れるスタンプを8個まで選べます</span></summary>
@@ -2574,7 +2604,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/15-15';
+const APP_VERSION = '11/15-17';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -3536,16 +3566,20 @@ const FEATS = {shop: {lv: 2, name: 'ショップ'}, rated: {lv: 3, name: 'レー
 const SCREEN_FEAT = {shop: 'shop', puzzle: 'puzzle', boss: 'boss', pass: 'pass', event: 'event'};
 // ?noprog (and ?debug without &prog) turns locks and level rewards off, for the older test suites.
 const PROG_ON = (() => { try { const q = new URLSearchParams(location.search); return !q.has('noprog') && (!q.has('debug') || q.has('prog')); } catch(e) { return true; } })();
+// Feature locks are switched off for now (everything open from the start); flip LOCKS_DEFAULT to bring them back.
+// ?debug&prog&locks turns them on for the tests.
+const LOCKS_DEFAULT = false;
+const LOCKS_ON = PROG_ON && (LOCKS_DEFAULT || (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('locks'); } catch(e) { return false; } })());
 const levelOfProfile = p => levelOf(+(((p || {}).lv || {}).xp) || 0);
 function featOpen(f, prof){
   const F = FEATS[f];
-  if (!F || !FIREBASE_CONFIG || !PROG_ON || (!prof && !net.profileLoaded)) return true;
+  if (!F || !FIREBASE_CONFIG || !LOCKS_ON || (!prof && !net.profileLoaded)) return true;
   const p = prof || net.profile || {}, u = p.unl || {};
   return !!u.all || !!u[f] || levelOfProfile(p) >= F.lv;
 }
 // For daily missions: open since before today (no record yet counts as open: old players, offline play).
 function dailyFeatOpen(f, prof, day){
-  if (!FIREBASE_CONFIG || !PROG_ON) return true;
+  if (!FIREBASE_CONFIG || !LOCKS_ON) return true;
   const u = (prof || {}).unl;
   return !u || !!u.all || (!!u[f] && u[f] < day);
 }
@@ -3563,7 +3597,7 @@ function ensureUnl(){
 // Note the day each feature opened, and celebrate it once.
 function checkUnlocks(){
   const p = net.profile || {}, u = p.unl;
-  if (!u || u.all || !PROG_ON || !net.fb) return;
+  if (!u || u.all || !LOCKS_ON || !net.fb) return;
   if (ui.lvClaiming) { setTimeout(checkUnlocks, 700); return; }   // the level-up banner goes first
   const L = levelOfProfile(p), add = {}, names = [];
   ui.unlDone = ui.unlDone || new Set();
@@ -3653,7 +3687,7 @@ function renderLvRoad(){
     const sm = document.createElement('small');
     sm.textContent = r.item ? `限定の${KIND_NAME[r.item.kind]}＋コイン・ジュエル・チケット` : r.tickets ? '＋コイン100・ジュエル50' : '＋コイン100';
     b.append(sm);
-    const fs = u.all ? [] : Object.values(FEATS).filter(F => F.lv === l).map(F => F.name);
+    const fs = u.all || !LOCKS_ON ? [] : Object.values(FEATS).filter(F => F.lv === l).map(F => F.name);
     if (fs.length) { const s2 = document.createElement('small'); s2.className = 'unl'; s2.textContent = `${fs.join('・')}が解放`; b.append(s2); }
     li.querySelector('.rs').textContent = got ? '受け取り済み' : `あと${levelBase(l) - lv.xp}pt`;
     ol.append(li);
@@ -4816,12 +4850,14 @@ async function claimGuideDone(){
 
 // ===================== News =====================
 const NEWS = [
+  {id: 'n13', date: '2026-11-15', tag: 'おしらせ', title: 'チョークと黒板はマイページで変えられます',
+    body: 'ショップには買えるものだけが並ぶようになりました（買ったものは「購入済み」）。\n持っているチョークと黒板は、マイページの「チョーク」「黒板」から選べます。限定アイテムの手に入れかたは図鑑で見られます。'},
   {id: 'n12', date: '2026-11-15', tag: 'アップデート', title: '大王パワーアップ！ 怒りモード・再挑戦・報酬アップ',
     body: '今日のボスのHPが、前の日に参加した人数に合わせて決まるようになりました。\n討伐報酬はコイン200・ジュエル50に。倒すと「怒りの黒板消し大王」が復活し、怒り大王も倒すとジュエル100・かけら20！\nジュエル50で再挑戦でき、いちばん低い回より高いスコアなら入れ替わります。自分のダメージが300・800・1500・2500に届くとコイン・ジュエル・ガチャチケット。前の日のランキングは1位ジュエル200、4〜10位にも50。\nショップでは、買う前に確認の画面が出るようになりました。'},
   {id: 'n11', date: '2026-11-15', tag: 'お試し', title: 'ストーリーがはじまりました（第1章）',
     body: 'ステージ第1章に会話シーンがつきました。いいんちょうとのお話を楽しんでね。章の画面の「ストーリー」からいつでも見られます（NEWがついているのがまだ見ていないお話）。\n第1章はやさしくしました。詰めわりばし風のステージは第2章から少しずつ出てきます。\nほかの章のお話と、キャラを「相棒」にできる機能はこれから追加していきます。'},
   {id: 'n10', date: '2026-11-15', tag: '新機能', title: 'Lv報酬が登場！ これまでのレベルぶんもプレゼント',
-    body: 'レベルが上がるたびにコイン100・ジュエル50がもらえるようになりました。5レベルごとにガチャチケット、Lv10・20・30・50ではここでしか手に入らない称号・プレート・チョーク・黒板も。\nこれまでに上げたレベルのぶんは、まとめて受け取れます。マイページの「Lv報酬」で次の報酬を見られます。\nはじめたばかりの人は、レベルに合わせてショップ・レート戦・ガチャなどが少しずつ開きます（いま遊んでいる人はそのまま全部遊べます）。'},
+    body: 'レベルが上がるたびにコイン100・ジュエル50がもらえるようになりました。5レベルごとにガチャチケット、Lv10・20・30・50ではここでしか手に入らない称号・プレート・チョーク・黒板も。\nこれまでに上げたレベルのぶんは、まとめて受け取れます。マイページの「Lv報酬」で次の報酬を見られます。'},
   {id: 'n9', date: '2026-11-15', tag: '新機能', title: 'ステージモード登場！ 9章90ステージ',
     body: 'ホームの「ステージ」から遊べます。章ごとにルールとCPUのキャラが変わります（分身なし・合成なし・4本や6本で消える星・2進数・ハンデ戦・制限手数など）。\n★は3つ。はじめてクリアでコイン、★1つにつきジュエル10。章の最後のボスに勝つと、その章だけのスタンプがもらえます。★を集めると称号・プレート・黒板も。'},
   {id: 'n8', date: '2026-11-15', tag: 'アップデート', title: 'ジュエル登場！ 1000個プレゼント＆対戦スタンプ',
@@ -5742,9 +5778,9 @@ function watchGlobal(fb){
     const after = unlocked(statsOf(net.profile));
     if (!first) {
       CHALKS.filter(c => !c.price && c.id !== 'auto' && !c.gacha && !hasChalk(c.id, prevProfile || {}) && hasChalk(c.id)).forEach(c =>
-        celebrate('チョーク<br>ゲット！', () => itemBanner(chalkFig(c), c.name, (c.season ? 'シーズン限定' : '限定チョーク') + '。ショップか図鑑で「使う」を押そう')));
+        celebrate('チョーク<br>ゲット！', () => itemBanner(chalkFig(c), c.name, (c.season ? 'シーズン限定' : '限定チョーク') + '。マイページの「チョーク」で選べます')));
       BOARDS.filter(b => !b.price && b.id !== 'bstd' && !b.gacha && !hasBoard(b.id, prevProfile || {}) && hasBoard(b.id)).forEach(b =>
-        celebrate('黒板<br>ゲット！', () => itemBanner(boardSwatch(b.id, chalkOf(myChalk())), b.name, 'ショップか図鑑で「使う」を押そう')));
+        celebrate('黒板<br>ゲット！', () => itemBanner(boardSwatch(b.id, chalkOf(myChalk())), b.name, 'マイページの「黒板」で選べます')));
       const p0 = statsOf(prevProfile || {}).maxRate, p1 = statsOf(net.profile).maxRate;
       if (tierOf(p1) > tierOf(p0) && tierOf(p1) >= 2) celebrate('ランク<br>到達！', () => itemBanner(`<span class="emb r${tierOf(p1)}" style="width:34px;height:34px">${emblemSVG(tierOf(p1), 0)}</span>`, `${RANKS[tierOf(p1)].name}のエンブレム`, '図鑑に記録されました'));
       after.titles.filter(x => !before.titles.includes(x) && !(TITLES.find(t => t.id === x) || {}).gacha).forEach(x =>
@@ -6216,7 +6252,7 @@ async function buyChalk(id){
     return cur;
   });
   if (res && res.committed) {
-    lsSet('waribashi-chalk', id); toast(`${c.name}を買いました`); updateRoomEntry(); sfx('unlock');
+    lsSet('waribashi-chalk', id); toast(`${c.name}を買って使用中にしました。マイページの「チョーク」でいつでも変えられます`); updateRoomEntry(); sfx('unlock');
     const it = [...$$('#shopGrid .item')].find(x => x.querySelector('b') && x.querySelector('b').textContent === c.name);
     if (it) { const [x, y] = centerOf(it); chalkDust(x, y, c, c.color, 34, 100); }
   }
@@ -6234,7 +6270,7 @@ async function buyBoard(id){
     return cur;
   });
   if (res && res.committed) {
-    lsSet('waribashi-board', id); toast(`${b.name}を買いました`); sfx('unlock');
+    lsSet('waribashi-board', id); toast(`${b.name}を買って使用中にしました。マイページの「黒板」でいつでも変えられます`); sfx('unlock');
     const it = [...$$('#shopBoards .item')].find(x => x.querySelector('b') && x.querySelector('b').textContent === b.name);
     if (it) { const [x, y] = centerOf(it); dust(x, y, ['#fff6c4', '#eceee4'], 30, 90, 'star'); }
   }
@@ -6938,6 +6974,48 @@ function renderPass(){
   bl.innerHTML = '';
   for (let t = SEASON_TIERS + 1; t <= SEASON_TIERS + BONUS_TIERS; t++) bl.append(cell(t));
 }
+// Chalk and board pickers in My page: everything I own, the one in use marked.
+function renderGear(){
+  const cur = myChalk(), curB = myBoard(), chalks = CHALKS.filter(c => hasChalk(c.id)), boards = BOARDS.filter(b => hasBoard(b.id));
+  $('#chalkCount').textContent = `${chalks.length}本`;
+  $('#boardCount').textContent = `${boards.length}枚`;
+  $('#foldChalkS').textContent = `いま：${(CHALKS.find(c => c.id === cur) || CHALKS[0]).name}`;
+  $('#foldBoardS').textContent = `いま：${(BOARDS.find(b => b.id === curB) || BOARDS[0]).name}`;
+  const cp = $('#chalkPicks');
+  if (!unchanged(cp, JSON.stringify([cur, chalks.map(c => c.id)]))) {
+    cp.innerHTML = '';
+    chalks.forEach(c => {
+      const b = document.createElement('button'), on = c.id === cur;
+      b.type = 'button'; b.className = 'gp'; b.dataset.id = c.id; b.setAttribute('aria-pressed', String(on));
+      b.innerHTML = chalkFig(c.id === 'auto' ? null : c) + '<b></b><small></small>';
+      b.querySelector('b').textContent = c.name;
+      b.querySelector('small').textContent = on ? '使用中' : c.fx ? 'エフェクト' : '';
+      b.addEventListener('click', () => { if (!on) { equipChalk(c.id); toast(`${c.name}にしました`); } });
+      cp.append(b);
+    });
+  }
+  const bp = $('#boardPicks');
+  if (!unchanged(bp, JSON.stringify([curB, boards.map(b => b.id), cur]))) {
+    bp.innerHTML = '';
+    boards.forEach(x => {
+      const b = document.createElement('button'), on = x.id === curB;
+      b.type = 'button'; b.className = 'gp'; b.dataset.id = x.id; b.setAttribute('aria-pressed', String(on));
+      b.innerHTML = boardSwatch(x.id, chalkOf(cur)) + '<b></b><small></small>';
+      b.querySelector('b').textContent = x.name;
+      b.querySelector('small').textContent = on ? '使用中' : '';
+      b.addEventListener('click', () => { if (!on) { equipBoard(x.id); toast(`${x.name}にしました`); } });
+      bp.append(b);
+    });
+  }
+}
+// Open My page on one of its panels.
+function openFold(id){
+  setScreen('plate');
+  const d = $(id);
+  if (!d) return;
+  d.open = true;
+  setTimeout(() => d.scrollIntoView({behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start'}), 60);
+}
 // One-line summaries on the folded panels of My page.
 function renderFolds(){
   const p = net.profile || {}, st = statsOf(p), look = myLook(), lv = myLevel(), paid = Math.max(1, +p.lvr || 1), nx = Math.max(lv.level, paid) + 1, r = lvReward(nx);
@@ -7194,6 +7272,8 @@ function renderShop(){
   $('#shopNote').textContent = {gacha: 'ジュエルで引けるガチャ。ここでしか出ないアイテムがあります（お金はかかりません）。ジュエルはログイン・ミッション・イベントなどでもらえます。', daily: '毎日ちがう品物がお得な値段で並びます。',
     board: '黒板を変えると、対戦するときの自分の盤面の見た目が変わります（相手の画面はそのまま）。',
     chalk: 'チョークを変えると、自分の手がその色になります。対戦相手の画面でも同じに見えます。エフェクトチョークは光ったり、星や花びらが舞ったりします。'}[tab];
+  $('#shopHint').hidden = !(tab === 'chalk' || tab === 'board');
+  $('#shopHintT').textContent = `持っている${boards ? '黒板' : 'チョーク'}は、マイページで変えられます`;
   if (tab === 'gacha') { renderGacha(); return; }
   if (tab === 'daily') { renderDaily(); return; }
   const grid = boards ? $('#shopBoards') : $('#shopGrid'), armed = ui.buyArm && ui.buyArm.until > now ? ui.buyArm.id : '';
@@ -7202,7 +7282,7 @@ function renderShop(){
   grid.innerHTML = '';
   (boards ? BOARDS : CHALKS).forEach(c => {
     const have = boards ? hasBoard(c.id) : hasChalk(c.id), on = using === c.id, lim = isLimited(c);
-    if (!have && (c.gacha || c.event || !shownItem(c, have))) return;   // gacha and event items, other months' season items: only once owned
+    if (!(c.price > 0) || lim || c.gacha || c.event) return;   // the shop lists only what it sells; the rest is in My page and the book
     const el = document.createElement('div');
     el.className = 'item' + (on ? ' on' : '') + (boards ? ' bitem' : '');
     if (!boards && c.color) el.style.setProperty('--c', c.color);
@@ -7221,8 +7301,7 @@ function renderShop(){
     else { pr.className = 'coin'; pr.textContent = c.price; }
     const b = document.createElement('button');
     b.type = 'button';
-    if (on) { b.className = 'btn'; b.textContent = '使用中'; b.disabled = true; }
-    else if (have) { b.className = 'btn primary'; b.textContent = '使う'; b.addEventListener('click', () => boards ? equipBoard(c.id) : equipChalk(c.id)); }
+    if (have) { b.className = 'btn'; b.textContent = '購入済み'; b.disabled = true; if (on) el.insertAdjacentHTML('beforeend', '<span class="used">使用中</span>'); }
     else if (c.event) { b.className = 'btn'; b.disabled = true; b.textContent = 'イベントで手に入る'; }
     else if (lim) { b.className = 'btn'; b.disabled = true; b.textContent = c.boss ? 'ボスで手に入る' : c.rate ? 'ランクで手に入る' : c.season ? 'シーズンパスで手に入る' : c.stars ? 'ステージで手に入る' : c.lvl ? 'レベルで手に入る' : '図鑑で手に入る'; }
     else if (coins < c.price) { b.className = 'btn'; b.textContent = 'コインが足りない'; b.disabled = true; }
@@ -7264,6 +7343,7 @@ function renderPlateEditor(){
       sp.append(b);
     });
   }
+  renderGear();
   const prog = item => item.key === 'maxRate' ? `最高 ${st.maxRate}` : `${Math.min(st[item.key] || 0, item.goal)}/${item.goal}`;
   const meter = f => { const m = document.createElement('span'); m.className = 'meter'; m.innerHTML = '<i></i>'; m.firstChild.style.width = Math.round(f * 100) + '%'; return m; };
   const tp = $('#titlePicks');
@@ -7809,6 +7889,8 @@ $('#bossClaim').addEventListener('click', async () => {
   render();
 });
 $('#goRules2').addEventListener('click', () => setScreen('rules'));
+$('#shopToGear').addEventListener('click', () => openFold(ui.shopTab === 'board' ? '#foldBoard' : '#foldChalk'));
+$$('[data-goshop]').forEach(b => b.addEventListener('click', () => { ui.shopTab = b.dataset.goshop; setScreen('shop'); }));
 // folded panels remember whether they were open
 $$('details.fold').forEach(d => {
   if (lsGet('waribashi-fold-' + d.dataset.fold) === '1') d.open = true;
