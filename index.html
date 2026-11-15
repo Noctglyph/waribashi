@@ -1180,7 +1180,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 
   <!-- Friends -->
   <section class="screen narrow" id="scrFriends" hidden>
-    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>フレンド</h2></div>
+    <div class="shead"><h2>フレンド</h2></div>
     <div class="seg" role="tablist" aria-label="フレンドとランキング">
       <button type="button" role="tab" id="tabFr" aria-selected="true" aria-controls="frPanel">フレンド</button>
       <button type="button" role="tab" id="tabFrRank" aria-selected="false" aria-controls="frRankPanel">ランキング</button>
@@ -1218,7 +1218,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 
   <!-- Events hub -->
   <section class="screen narrow" id="scrEvents" hidden>
-    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>イベント</h2></div>
+    <div class="shead"><h2>イベント</h2></div>
     <div class="evlist" id="evList"></div>
   </section>
 
@@ -1408,7 +1408,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 
   <!-- Missions -->
   <section class="screen narrow" id="scrMission" hidden>
-    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>ミッション</h2><span class="coin big" id="missionCoins">0</span></div>
+    <div class="shead"><h2>ミッション</h2><span class="coin big" id="missionCoins">0</span></div>
     <div class="seg" role="tablist" aria-label="ミッションの種類" id="missionTabs">
       <button type="button" role="tab" id="tabGuide" aria-selected="false" aria-controls="guidePanel" hidden>はじめて</button>
       <button type="button" role="tab" id="tabDaily" aria-selected="true" aria-controls="dailyPanel">デイリー</button>
@@ -1430,7 +1430,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 
   <!-- Shop -->
   <section class="screen narrow" id="scrShop" hidden>
-    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>ショップ</h2><span class="coin big" id="shopCoinsTop">0</span></div>
+    <div class="shead"><h2>ショップ</h2><span class="coin big" id="shopCoinsTop">0</span></div>
     <div class="seg four" role="tablist" aria-label="ショップの種類">
       <button type="button" role="tab" id="tabShopGacha" aria-selected="true" aria-controls="shopGacha">ガチャ</button>
       <button type="button" role="tab" id="tabShopDaily" aria-selected="false" aria-controls="shopDaily">日替わり</button>
@@ -1463,7 +1463,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 
   <!-- Nameplate editor -->
   <section class="screen narrow" id="scrPlate" hidden>
-    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>マイページ</h2></div>
+    <div class="shead"><h2>マイページ</h2></div>
     <div class="lvcard" id="lvCard"><span class="lv-n"><small>Lv.</small><span id="lvN">1</span></span><b id="lvNext"></b><div class="ph-xp"><span class="meter"><i id="lvXp"></i></span><span id="lvXpT"></span></div></div>
     <div class="pf-plate" id="homePlateBox"></div>
     <div class="myrank" id="pfRank"></div>
@@ -2238,7 +2238,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/15-6';
+const APP_VERSION = '11/15-7';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -5178,8 +5178,17 @@ function showChrome(s){
   const cur = TAB_OF[s] || s;
   $$('#tabbar .tab').forEach(t => { if (t.dataset.tab === cur) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current'); });
 }
-function setScreen(s){
+// Back buttons return to the screen you came from; the tab screens start a fresh trail.
+const ROOTS = ['home', 'events', 'mission', 'shop', 'friends', 'plate'], NO_RETURN = ['game', 'search', 'lobby'];
+function setScreen(s, back){
   if (ui.screen !== s) {
+    const h = ui.hist || (ui.hist = []);
+    if (ROOTS.includes(s)) h.length = 0;
+    else if (!back) {
+      const i = h.lastIndexOf(s);
+      if (i >= 0) h.length = i;
+      else if (!NO_RETURN.includes(ui.screen)) h.push(ui.screen);
+    }
     ui.screen = s;
     for (const k in SCREENS) $(SCREENS[k]).hidden = k !== s;
     showChrome(s);
@@ -5187,6 +5196,13 @@ function setScreen(s){
     try { window.scrollTo(0, 0); } catch(e) {}
   }
   render();
+}
+function goBack(){
+  const h = ui.hist || [];
+  let to = h.pop();
+  while (to && (NO_RETURN.includes(to) || to === ui.screen)) to = h.pop();
+  to = to || TAB_OF[ui.screen] || 'home';
+  if (to === 'home') goHome(); else setScreen(to, true);
 }
 function goHome(){
   clearTimeout(cpuTimer); cpuTimer = null;
@@ -6395,7 +6411,7 @@ $('#tabGuide').addEventListener('click', () => { ui.missionTab = 'guide'; render
 $('#tabNormal').addEventListener('click', () => { ui.missionTab = 'normal'; renderMission(); });
 $('#goCustom').addEventListener('click', () => setScreen('custom'));
 $('#goRated').addEventListener('click', () => startSearch());
-$$('[data-home]').forEach(b => b.addEventListener('click', goHome));
+$$('[data-home]').forEach(b => b.addEventListener('click', goBack));
 $('#cpuStart').addEventListener('click', () => { ui.boss = null; ui.puzzle = null; setScreen('game'); newGame(); });
 $('#settings').addEventListener('change', e => {
   const t = e.target;
