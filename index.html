@@ -801,8 +801,17 @@ fieldset:disabled .opts span{cursor:default}
         <p class="note">このコードを友達に教えて、登録してもらおう。</p>
       </section>
       <section class="panel">
-        <h3>フレンドを追加</h3>
-        <div class="addrow"><input class="input" id="frCode" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="例：AB23CD" aria-label="友達のフレンドコード"><button type="button" class="btn primary" id="frAdd">追加</button></div>
+        <h3>フレンド申請を送る</h3>
+        <div class="addrow"><input class="input" id="frCode" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="例：AB23CD" aria-label="友達のフレンドコード"><button type="button" class="btn primary" id="frAdd">申請</button></div>
+        <p class="note">相手が承認するとフレンドになります。オンラインかどうかは、フレンドにだけ見えます。</p>
+      </section>
+      <section class="panel" id="frInBox" hidden>
+        <h3>届いたフレンド申請 <span class="tag mine" id="frInCount"></span></h3>
+        <ol class="frlist" id="frInList"></ol>
+      </section>
+      <section class="panel" id="frOutBox" hidden>
+        <h3>申請中</h3>
+        <ol class="frlist" id="frOutList"></ol>
       </section>
       <section class="panel">
         <h3>フレンド <span class="tag mine" id="frCount">0人</span></h3>
@@ -1705,7 +1714,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/15-3';
+const APP_VERSION = '11/15-4';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -1944,50 +1953,110 @@ async function ensureCode(){
   } catch(e) { net.friendErr = true; dbg('friend code: ' + (e && e.message)); render(); }
   finally { ui.codeBusy = false; }
 }
+// Online status lives in presence/<uid>, which only accepted friends can read (see the database rules).
 function presence(on){
   if (!net.fb || !net.uid) return;
   const fb = net.fb;
   ui.presenceAt = Date.now();
-  fb.update(fb.ref(fb.db, 'players/' + net.uid), {online: on, seen: serverNow()}).catch(() => {});
-  if (on && !ui.presenceArmed) { ui.presenceArmed = true; try { fb.onDisconnect(fb.ref(fb.db, `players/${net.uid}/online`)).remove(); } catch(e) {} }
+  fb.update(fb.ref(fb.db, 'presence/' + net.uid), {online: on, seen: serverNow()}).catch(() => {});
+  if (on && !ui.presenceArmed) { ui.presenceArmed = true; try { fb.onDisconnect(fb.ref(fb.db, `presence/${net.uid}/online`)).remove(); } catch(e) {} }
 }
-const friendIds = () => Object.keys(((net.profile || {}).friends) || {}).filter(k => (net.profile.friends[k]));
+const friendIds = () => Object.keys(net.frList || {}).filter(k => net.frList[k] === true);
 const isOnline = p => !!(p && p.online && serverNow() - (+p.seen || 0) < ONLINE_FRESH);
 function ago(t){
   const m = Math.floor((serverNow() - (+t || 0)) / 60000);
   return !t ? '' : m < 1 ? 'さっき' : m < 60 ? `${m}分前` : m < 1440 ? `${Math.floor(m / 60)}時間前` : `${Math.floor(m / 1440)}日前`;
 }
-// Keep one listener per friend's profile.
-function watchFriends(){
-  if (!net.fb) return;
-  net.friendOffs = net.friendOffs || {};
-  net.friends = net.friends || {};
-  const want = new Set(friendIds());
-  for (const id of Object.keys(net.friendOffs)) if (!want.has(id)) { try { net.friendOffs[id](); } catch(e) {} delete net.friendOffs[id]; delete net.friends[id]; }
-  for (const id of want) if (!net.friendOffs[id]) {
-    net.friendOffs[id] = net.fb.onValue(net.fb.ref(net.fb.db, 'players/' + id), snap => { net.friends[id] = snap.val() || {}; if (['friends', 'home'].includes(ui.screen)) render(); }, () => {});
+// friends/<me>: accepted friends · requests/<me>: requests to me · outbox/<me>: requests I sent and are waiting on
+function watchFriendData(){
+  const fb = net.fb, me = net.uid;
+  if (!fb || net.frWatching) return;
+  net.frWatching = true;
+  Object.assign(net, {frList: {}, frIn: {}, frOut: {}, people: {}, pres: {}, outState: {}, peopleOffs: {}, presOffs: {}, outOffs: {}});
+  let firstIn = true;
+  fb.onValue(fb.ref(fb.db, 'friends/' + me), snap => { net.frList = snap.val() || {}; net.frLoaded = true; syncPeople(); tidyOutbox(); render(); }, () => { net.frErr = true; render(); });
+  fb.onValue(fb.ref(fb.db, 'requests/' + me), snap => {
+    const prev = net.frIn;
+    net.frIn = snap.val() || {};
+    if (!firstIn) Object.keys(net.frIn).filter(k => !prev[k]).forEach(k => celebrate('フレンド<br>申請！', () => {
+      const d = document.createElement('div'); d.innerHTML = '<b></b><span>フレンド画面で承認できます</span>';
+      d.querySelector('b').textContent = `${String((net.frIn[k] || {}).name || 'ななし').slice(0, 12)}さんから申請が届いた`; return d; }));
+    firstIn = false;
+    syncPeople(); render();
+  }, () => { net.frErr = true; render(); });
+  fb.onValue(fb.ref(fb.db, 'outbox/' + me), snap => { net.frOut = snap.val() || {}; syncPeople(); tidyOutbox(); render(); }, () => {});
+}
+// One listener per person on screen: profile (public), presence (friends only), and whether my request to them still stands.
+function syncPeople(){
+  const fb = net.fb, me = net.uid, friends = new Set(friendIds());
+  const outs = Object.keys(net.frOut || {}).filter(id => !friends.has(id));
+  const sync = (offs, ids, path, store) => {
+    for (const id of Object.keys(offs)) if (!ids.has(id)) { try { offs[id](); } catch(e) {} delete offs[id]; delete store[id]; }
+    for (const id of ids) if (!offs[id]) offs[id] = fb.onValue(fb.ref(fb.db, path(id)), snap => {
+      store[id] = snap.val();
+      if (store === net.outState) tidyOutbox();
+      if (['friends', 'home'].includes(ui.screen)) render();
+    }, () => { store[id] = null; });
+  };
+  sync(net.peopleOffs, new Set([...friends, ...Object.keys(net.frIn || {}), ...outs]), id => 'players/' + id, net.people);
+  sync(net.presOffs, friends, id => 'presence/' + id, net.pres);
+  sync(net.outOffs, new Set(outs), id => `requests/${id}/${me}`, net.outState);
+}
+// Requests that turned into friendships, or were turned down, leave my outbox.
+function tidyOutbox(){
+  const fb = net.fb, gone = {}, friends = new Set(friendIds());
+  if (!fb || !net.frLoaded) return;
+  for (const [id, at] of Object.entries(net.frOut || {})) {
+    if (friends.has(id)) gone[id] = null;
+    else if (net.outState[id] === null && serverNow() - (+at || 0) > 5000) gone[id] = null;
   }
+  if (Object.keys(gone).length) fb.update(fb.ref(fb.db, 'outbox/' + net.uid), gone).catch(() => {});
 }
-async function addFriend(raw){
+async function lookupCode(raw){
   const code = String(raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
-  if (code.length !== 6) { toast('フレンドコードは6文字です', true); return false; }
-  if (code === (net.profile || {}).code) { toast('それはあなたのコードです', true); return false; }
-  if (!net.fb) return false;
+  if (code.length !== 6) { toast('フレンドコードは6文字です', true); return null; }
+  if (code === (net.profile || {}).code) { toast('それはあなたのコードです', true); return null; }
+  if (!net.fb) return null;
   const uid = await readOnce('codes/' + code, 7000);
-  if (uid === undefined) { toast('うまく通信できませんでした。もう一度試してね', true); return false; }
-  if (!uid || typeof uid !== 'string') { toast('そのコードの人は見つかりません', true); return false; }
-  if (uid === net.uid) { toast('それはあなたのコードです', true); return false; }
-  if (friendIds().includes(uid)) { toast('もうフレンドです'); return true; }
-  if (friendIds().length >= MAX_FRIENDS) { toast(`フレンドは${MAX_FRIENDS}人までです`, true); return false; }
-  await net.fb.update(net.fb.ref(net.fb.db, `players/${net.uid}/friends`), {[uid]: true}).catch(() => {});
-  toast('フレンドに追加しました');
-  return true;
+  if (uid === undefined) { toast('うまく通信できませんでした。もう一度試してね', true); return null; }
+  if (!uid || typeof uid !== 'string') { toast('そのコードの人は見つかりません', true); return null; }
+  if (uid === net.uid) { toast('それはあなたのコードです', true); return null; }
+  return uid;
 }
-function removeFriend(uid){
-  if (!net.fb) return;
-  net.fb.update(net.fb.ref(net.fb.db, `players/${net.uid}/friends`), {[uid]: null}).catch(() => {});
+async function sendRequest(raw){
+  const uid = await lookupCode(raw);
+  if (!uid) return false;
+  if (friendIds().includes(uid)) { toast('もうフレンドです'); return true; }
+  if ((net.frIn || {})[uid]) { await acceptRequest(uid); return true; }
+  if ((net.frOut || {})[uid]) { toast('もう申請しています。返事を待ってね'); return true; }
+  if (friendIds().length >= MAX_FRIENDS) { toast(`フレンドは${MAX_FRIENDS}人までです`, true); return false; }
+  const fb = net.fb, me = net.uid;
+  return fb.update(fb.ref(fb.db), {[`requests/${uid}/${me}`]: {name: typedName(), at: serverNow()}, [`outbox/${me}/${uid}`]: serverNow()})
+    .then(() => { toast('フレンド申請を送りました'); return true; }, () => { toast('申請を送れませんでした（Firebaseのルールを確認してね）', true); return false; });
+}
+function acceptRequest(from){
+  const fb = net.fb, me = net.uid;
+  if (friendIds().length >= MAX_FRIENDS) { toast(`フレンドは${MAX_FRIENDS}人までです`, true); return Promise.resolve(); }
+  const upd = {[`friends/${me}/${from}`]: true, [`friends/${from}/${me}`]: true, [`requests/${me}/${from}`]: null};
+  if ((net.frOut || {})[from]) { upd[`requests/${from}/${me}`] = null; upd[`outbox/${me}/${from}`] = null; }
+  return fb.update(fb.ref(fb.db), upd).then(() => { toast('フレンドになりました'); sfx('unlock'); }, () => toast('承認できませんでした（Firebaseのルールを確認してね）', true));
+}
+function declineRequest(from){ net.fb.update(net.fb.ref(net.fb.db, 'requests/' + net.uid), {[from]: null}).catch(() => {}); }
+function cancelRequest(to){ net.fb.update(net.fb.ref(net.fb.db), {[`requests/${to}/${net.uid}`]: null, [`outbox/${net.uid}/${to}`]: null}).catch(() => {}); }
+function removeFriend(uid){ net.fb.update(net.fb.ref(net.fb.db), {[`friends/${net.uid}/${uid}`]: null, [`friends/${uid}/${net.uid}`]: null}).catch(() => {}); }
+// The previous version kept one-way follows and online status in the public profile: turn follows into requests, clear the rest.
+function migrateFriends(){
+  const p = net.profile || {}, fb = net.fb, me = net.uid;
+  if (!fb || !(p.friends || p.online !== undefined || p.seen !== undefined)) return;
+  const upd = {[`players/${me}/friends`]: null, [`players/${me}/online`]: null, [`players/${me}/seen`]: null};
+  Object.keys(p.friends || {}).filter(id => p.friends[id] && id !== me).slice(0, MAX_FRIENDS).forEach(id => {
+    upd[`requests/${id}/${me}`] = {name: typedName(), at: serverNow()};
+    upd[`outbox/${me}/${id}`] = serverNow();
+  });
+  fb.update(fb.ref(fb.db), upd).catch(() => fb.update(fb.ref(fb.db, 'players/' + me), {friends: null, online: null, seen: null}).catch(() => {}));
 }
 async function inviteFriend(uid){
+  if (!friendIds().includes(uid)) return;
   if (net.on && !(net.room && net.room.kind === 'custom' && net.room.status === 'lobby')) { toast('いまは誘えません（対戦中）', true); return; }
   if (!net.on) await netCreate();
   if (!net.on || !net.code) { toast('部屋を作れませんでした', true); return; }
@@ -2802,12 +2871,13 @@ function watchGlobal(fb){
   fb.onValue(fb.ref(db, '.info/serverTimeOffset'), s => { net.offset = +s.val() || 0; });
   let firstProfile = true;
   fb.onValue(fb.ref(db, 'players/' + net.uid), s => {
-    const before = unlocked(statsOf(net.profile)), mBefore = firstProfile ? null : missionState(), prevProfile = net.profile;
+    const first = firstProfile;
+    firstProfile = false;
+    const before = unlocked(statsOf(net.profile)), mBefore = first ? null : missionState(), prevProfile = net.profile;
     net.profile = s.val();
     net.profileLoaded = true;
     if (!(net.profile || {}).code) setTimeout(ensureCode, 600);
-    watchFriends();
-    if (firstProfile) { setTimeout(checkLogin, 400); presence(true); watchInvites(); }
+    if (first) { setTimeout(checkLogin, 400); setTimeout(() => { presence(true); watchInvites(); watchFriendData(); migrateFriends(); }, 0); }
     else {
       const l0 = levelOf(+(((prevProfile || {}).lv || {}).xp) || 0), l1 = levelOf(+(((net.profile || {}).lv || {}).xp) || 0);
       if (l1 > l0) celebrate('レベル<br>アップ！', () => { const d = document.createElement('div'); d.innerHTML = `<b>Lv.${l1} になった！</b><span>これからもどんどん遊ぼう</span>`; return d; });
@@ -2815,7 +2885,7 @@ function watchGlobal(fb){
         celebrate('チョーク<br>ゲット！', () => { const d = document.createElement('div'); d.innerHTML = '<b></b><span>シーズン限定。ショップで「使う」を押そう</span>'; d.querySelector('b').textContent = c.name; return d; }));
     }
     const after = unlocked(statsOf(net.profile));
-    if (!firstProfile) {
+    if (!first) {
       after.titles.filter(x => !before.titles.includes(x)).forEach(x =>
         celebrate('称号<br>ゲット！', () => plateEl({name: typedName(), title: x, plate: myLook().plate}, 'sm')));
       CHALKS.filter(c => c.boss && !hasChalk(c.id, prevProfile || {}) && hasChalk(c.id)).forEach(c =>
@@ -2831,7 +2901,6 @@ function watchGlobal(fb){
         celebrate('ミッション<br>達成！', d);
       });
     }
-    firstProfile = false;
     render();
   }, () => {});
   watchBoss();
@@ -3632,7 +3701,7 @@ function renderChrome(){
   for (const id of ['#goMission', '#goShop', '#goEvents', '#goFriends']) $(id).disabled = !ok;
   const lv = myLevel();
   $('#barLv').textContent = `Lv.${lv.level}`;
-  const inv = liveInvites().length;
+  const inv = liveInvites().length + Object.keys(net.frIn || {}).length;
   $('#friendBadge').hidden = !inv;
   $('#friendBadge').textContent = `${inv}`;
   const evN = eventBadgeCount();
@@ -3724,41 +3793,83 @@ function renderHome(){
   $('#puLeft').textContent = left;
   if (!$('#ticker').textContent) $('#ticker').textContent = TIPS[ui.tip = Math.floor(Math.random() * TIPS.length)];
 }
+function personPlate(id, fallbackName){
+  const fp = (net.people || {})[id] || {}, rated = ratedGames(fp) > 0;
+  return plateEl({name: fp.name || fallbackName, title: titleId(fp.title), plate: plateId(fp.plate), rating: rated ? BASE_RATE + Math.round(+fp.rp || 0) : 0}, 'sm');
+}
+function smallBtn(text, cls, fn){
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'btn' + (cls ? ' ' + cls : ''); b.textContent = text;
+  b.addEventListener('click', fn);
+  return b;
+}
 function renderFriends(){
   const rankTab = ui.frTab === 'rank';
   $('#tabFr').setAttribute('aria-selected', String(!rankTab));
   $('#tabFrRank').setAttribute('aria-selected', String(rankTab));
   $('#frPanel').hidden = rankTab;
   $('#frRankPanel').hidden = !rankTab;
-  const p = net.profile || {};
+  const p = net.profile || {}, people = net.people || {}, pres = net.pres || {};
   $('#myCode').textContent = p.code || (net.friendErr ? '取得できません' : '作成中…');
-  const ids = friendIds(), fr = net.friends || {};
+  const ids = friendIds(), inIds = Object.keys(net.frIn || {}), outIds = Object.keys(net.frOut || {}).filter(id => !ids.includes(id));
+  const nameOf = id => String((people[id] || {}).name || ((net.frIn || {})[id] || {}).name || 'ななし').slice(0, 12);
+  // requests to me
+  $('#frInBox').hidden = !inIds.length;
+  $('#frInCount').textContent = `${inIds.length}件`;
+  const il = $('#frInList');
+  if (!unchanged(il, JSON.stringify(inIds.map(id => [id, nameOf(id), (people[id] || {}).title, (people[id] || {}).plate, (people[id] || {}).rp])))) {
+    il.innerHTML = '';
+    inIds.forEach(id => {
+      const li = document.createElement('li');
+      li.append(personPlate(id, nameOf(id)));
+      const st = document.createElement('div'); st.className = 'fr-st'; st.textContent = `${ago((net.frIn[id] || {}).at)}に申請`; li.append(st);
+      const bx = document.createElement('div'); bx.className = 'fr-b';
+      bx.append(smallBtn('承認', 'primary', e => { e.currentTarget.disabled = true; acceptRequest(id); }), smallBtn('拒否', '', () => declineRequest(id)));
+      li.append(bx);
+      il.append(li);
+    });
+  }
+  // requests I sent
+  $('#frOutBox').hidden = !outIds.length;
+  const ol2 = $('#frOutList');
+  if (!unchanged(ol2, JSON.stringify(outIds.map(id => [id, nameOf(id)])))) {
+    ol2.innerHTML = '';
+    outIds.forEach(id => {
+      const li = document.createElement('li');
+      li.append(personPlate(id, nameOf(id)));
+      const st = document.createElement('div'); st.className = 'fr-st'; st.textContent = '返事を待っています'; li.append(st);
+      const bx = document.createElement('div'); bx.className = 'fr-b';
+      bx.append(smallBtn('取り消し', '', () => cancelRequest(id)));
+      li.append(bx);
+      ol2.append(li);
+    });
+  }
+  // friends
   $('#frCount').textContent = `${ids.length}人`;
-  const rows = ids.map(id => ({id, p: fr[id] || {}})).sort((a, b) => (isOnline(b.p) - isOnline(a.p)) || ((+b.p.seen || 0) - (+a.p.seen || 0)));
-  const ol = $('#frList');
-  const key = JSON.stringify([rows.map(r => [r.id, r.p.name, r.p.title, r.p.plate, r.p.rp, isOnline(r.p), ago(r.p.seen), !!((r.p.friends || {})[net.uid])]), ui.frArm]);
-  if (!unchanged(ol, key)) {
-    ol.innerHTML = '';
-    if (!rows.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = 'まだフレンドがいません。友達のコードを入れて追加しよう。'; ol.append(li); }
-    rows.forEach(({id, p: fp}) => {
-      const li = document.createElement('li'), on = isOnline(fp), rated = ratedGames(fp) > 0;
-      li.append(plateEl({name: fp.name, title: titleId(fp.title), plate: plateId(fp.plate), rating: rated ? BASE_RATE + Math.round(+fp.rp || 0) : 0}, 'sm'));
+  const rows = ids.map(id => ({id, p: people[id] || {}, on: isOnline(pres[id]), seen: (pres[id] || {}).seen}))
+    .sort((a, b) => (b.on - a.on) || ((+b.seen || 0) - (+a.seen || 0)));
+  const fl = $('#frList');
+  if (!unchanged(fl, JSON.stringify([rows.map(r => [r.id, r.p.name, r.p.title, r.p.plate, r.p.rp, r.on, ago(r.seen)]), ui.frArm]))) {
+    fl.innerHTML = '';
+    if (!rows.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = 'まだフレンドがいません。友達のコードで申請しよう。'; fl.append(li); }
+    rows.forEach(({id, on, seen}) => {
+      const li = document.createElement('li');
+      li.append(personPlate(id, nameOf(id)));
       const st = document.createElement('div');
       st.className = 'fr-st' + (on ? ' on' : '');
       st.innerHTML = '<span class="dot"></span><span></span>';
-      st.lastChild.textContent = on ? 'オンライン' : fp.seen ? `最終ログイン ${ago(fp.seen)}` : '—';
-      if ((fp.friends || {})[net.uid]) { const t = document.createElement('span'); t.className = 'tag mine'; t.textContent = '相互'; st.append(t); }
+      st.lastChild.textContent = on ? 'オンライン' : seen ? `最終ログイン ${ago(seen)}` : 'オフライン';
       li.append(st);
       const bx = document.createElement('div'); bx.className = 'fr-b';
-      const inv = document.createElement('button'); inv.type = 'button'; inv.className = 'btn primary'; inv.textContent = '誘う';
-      inv.addEventListener('click', () => { inv.disabled = true; inviteFriend(id).finally(() => { inv.disabled = false; }); });
-      const rm = document.createElement('button'); rm.type = 'button'; rm.className = 'btn';
+      const inv = smallBtn('誘う', 'primary', () => { inv.disabled = true; inviteFriend(id).finally(() => { inv.disabled = false; }); });
       const armed = ui.frArm && ui.frArm.id === id && ui.frArm.until > Date.now();
-      rm.textContent = armed ? '本当に外す' : '外す';
-      rm.addEventListener('click', () => { if (ui.frArm && ui.frArm.id === id && ui.frArm.until > Date.now()) { ui.frArm = null; removeFriend(id); } else { ui.frArm = {id, until: Date.now() + 3000}; renderFriends(); } });
+      const rm = smallBtn(armed ? '本当に外す' : '外す', '', () => {
+        if (ui.frArm && ui.frArm.id === id && ui.frArm.until > Date.now()) { ui.frArm = null; removeFriend(id); }
+        else { ui.frArm = {id, until: Date.now() + 3000}; renderFriends(); }
+      });
       bx.append(inv, rm);
       li.append(bx);
-      ol.append(li);
+      fl.append(li);
     });
   }
   // friend ranking: friends and me by rating
@@ -4471,6 +4582,7 @@ function tick(){
   if (net.fb && net.uid && net.bossDay && net.bossDay !== dayKey()) { watchBoss(); render(); }
   if (net.profileLoaded && ui.loginChecked && ui.loginChecked !== dayKey()) checkLogin();
   if (net.profileLoaded && !document.hidden && now - (ui.presenceAt || 0) > PRESENCE_MS) presence(true);
+  if (net.frLoaded && now - (ui.tidyAt || 0) > 3000) { ui.tidyAt = now; tidyOutbox(); }
   if (net.invites && $('#invite').hidden && now - (ui.inviteAt || 0) > 1000) { ui.inviteAt = now; maybeShowInvite(); }
   if (ui.screen === 'home') homeTick(now);
   if (ui.screen === 'mission') {
@@ -4506,7 +4618,7 @@ $('#copyCode').addEventListener('click', () => { const c = (net.profile || {}).c
 $('#frAdd').addEventListener('click', async () => {
   const b = $('#frAdd'), typed = $('#frCode').value;
   b.disabled = true;
-  if (await addFriend(typed) && $('#frCode').value === typed) $('#frCode').value = '';
+  if (await sendRequest(typed) && $('#frCode').value === typed) $('#frCode').value = '';
   b.disabled = false; render();
 });
 $('#frCode').addEventListener('keydown', e => { if (e.key === 'Enter') $('#frAdd').click(); });
