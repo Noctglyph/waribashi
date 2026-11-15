@@ -1139,6 +1139,28 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .bgmset{display:grid;grid-template-columns:auto minmax(0,1fr) 3em;gap:10px;align-items:center;font-size:14px}
 .bgmset input[type=range]{width:100%;accent-color:var(--you)}
 .bgmset output{font-variant-numeric:tabular-nums;color:var(--chalk-soft);text-align:right}
+
+/* ===== Level locks and level rewards ===== */
+[data-feat]{position:relative}
+.lockb{position:absolute;top:8px;right:8px;z-index:4;display:inline-flex;align-items:center;gap:4px;padding:3px 9px 3px 7px;border-radius:999px;background:rgba(18,17,15,.86);border:1.5px solid rgba(236,238,228,.35);color:var(--chalk);font-size:11.5px;font-weight:700;line-height:1.2;letter-spacing:0;white-space:nowrap;pointer-events:none}
+.lockb::before{content:"";flex:none;width:10px;height:12px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 12'%3E%3Cpath d='M2 5V3.6a3 3 0 0 1 6 0V5h.6c.2 0 .4.2.4.4v6.2c0 .2-.2.4-.4.4H1.4c-.2 0-.4-.2-.4-.4V5.4c0-.2.2-.4.4-.4zm1.5 0h3V3.6a1.5 1.5 0 0 0-3 0z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 12'%3E%3Cpath d='M2 5V3.6a3 3 0 0 1 6 0V5h.6c.2 0 .4.2.4.4v6.2c0 .2-.2.4-.4.4H1.4c-.2 0-.4-.2-.4-.4V5.4c0-.2.2-.4.4-.4zm1.5 0h3V3.6a1.5 1.5 0 0 0-3 0z'/%3E%3C/svg%3E") center/contain no-repeat}
+[data-feat].locked > :not(.lockb){opacity:.4}
+[data-feat].locked{cursor:default;box-shadow:none}
+[data-feat].locked .tab-badge,[data-feat].locked .ev-badge,[data-feat].locked .dot{display:none}
+.tab .lockb{top:1px;right:auto;left:calc(50% + 2px);padding:1px 6px 1px 5px;font-size:10px;gap:3px}
+.tab .lockb::before{width:8px;height:10px}
+.seg .lockb{top:-7px;right:-2px;padding:1px 6px 1px 5px;font-size:10px;gap:3px}
+.seg .lockb::before{width:8px;height:10px}
+.bosscard .lockb,.mode .lockb{top:10px;right:10px}
+.bn .lockb{top:auto;bottom:12px;right:14px}
+.lv-unl{font-size:12px;color:var(--chalk-soft)}
+.lv-unl b{color:var(--you);font-weight:700}
+#lvRoad li.now{border-color:var(--you);box-shadow:0 0 0 1px var(--you) inset}
+#lvRoad .ri .lvr{display:grid;place-items:center;gap:1px;font-size:11px}
+#lvRoad b small.unl{color:var(--you)}
+.pl-plv20{background-color:#2c3b30;background-image:radial-gradient(ellipse 40% 34% at 82% 30%,rgba(255,255,255,.13),transparent 70%),radial-gradient(ellipse 28% 20% at 62% 76%,rgba(255,255,255,.08),transparent 70%),linear-gradient(90deg,#6b4a2a 0 6px,#8a6238 6px 7px,transparent 7px),linear-gradient(160deg,#36493b,#22302a);--pf:#f1f3e8;--pa:#e9d39a;--pe:#121a15}
+.board-wrap[data-bd="blv50"]{--board:#1d1b2e;--wood:#a8862e;--wood-hi:#fff0b8}
+.board-wrap[data-bd="blv50"] .board{border-image:linear-gradient(135deg,#8f6f18,#fff3c2 25%,#c79a2c 50%,#fff6cf 75%,#8a6a12) 1;background-image:radial-gradient(ellipse 70% 45% at 50% -8%,rgba(255,225,140,.22),transparent 70%),radial-gradient(circle at 18% 78%,rgba(255,236,170,.75) 0 1.1px,transparent 1.9px),repeating-linear-gradient(90deg,rgba(255,230,160,.05) 0 1px,transparent 1px 38px),var(--noise);background-size:auto,97px 89px,auto,auto}
 @media (prefers-reduced-motion:reduce){
   .res-stars i.on{animation:none!important}
   .stampb{animation:none!important}
@@ -1213,19 +1235,19 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
   <section class="screen narrow" id="scrHome">
     <div class="banners">
       <div class="bn-track" id="bnTrack" aria-roledescription="カルーセル" aria-label="おしらせ">
-        <button type="button" class="bn" data-go="event" id="bnEvent" aria-label="イベントを開く">
+        <button type="button" class="bn" data-go="event" id="bnEvent" aria-label="イベントを開く" data-feat="event">
           <span class="bn-txt"><span class="bn-tag" id="bnEvTag">EVENT</span><b class="bn-h" id="bnEvH">イベント</b><span class="bn-s" id="bnEvS"></span></span>
           <span class="bn-art art" id="artEvent"></span>
         </button>
-        <button type="button" class="bn" data-go="gacha" id="bnGacha" aria-label="ガチャを開く">
+        <button type="button" class="bn" data-go="gacha" id="bnGacha" aria-label="ガチャを開く" data-feat="gacha">
           <span class="bn-txt"><span class="bn-tag" id="bnGaTag">GACHA</span><b class="bn-h" id="bnGaH">チョーク<br>ガチャ</b><span class="bn-s" id="bnGaS">ここでしか出ないチョーク・黒板。ダブりはかけらに</span></span>
           <span class="bn-art art" id="artGacha"></span>
         </button>
-        <button type="button" class="bn" data-go="puzzle" style="--c:var(--p2)" aria-label="詰めわりばしを開く">
+        <button type="button" class="bn" data-go="puzzle" style="--c:var(--p2)" aria-label="詰めわりばしを開く" data-feat="puzzle">
           <span class="bn-txt"><span class="bn-tag">毎日1問</span><b class="bn-h">詰めわりばし</b><span class="bn-s">3手で勝てる？ 解けたら結果をシェアしよう</span></span>
           <span class="bn-art"><span class="ev-icon" style="--c:var(--p2);width:84px;height:84px;font-size:38px" aria-hidden="true">詰</span></span>
         </button>
-        <button type="button" class="bn" data-go="pass" id="bnPass" aria-label="シーズンパスを開く">
+        <button type="button" class="bn" data-go="pass" id="bnPass" aria-label="シーズンパスを開く" data-feat="pass">
           <span class="bn-txt"><span class="bn-tag">SEASON</span><b class="bn-h" id="bnPassH">シーズンパス</b><span class="bn-s">今月だけのプレート・称号・黒板・エフェクトチョーク</span></span>
           <span class="bn-art art" id="artPass"></span>
         </button>
@@ -1237,7 +1259,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
           <span class="bn-txt"><span class="bn-tag">毎日4:00更新</span><b class="bn-h">デイリー<br>ミッション</b><span class="bn-s">3つ全部クリアでボーナス50コイン</span></span>
           <span class="bn-art"><span class="coins-art" aria-hidden="true"><i style="left:4px;top:40px"></i><i style="left:30px;top:50px"></i><i style="left:18px;top:18px"></i><b>+50</b></span></span>
         </button>
-        <button type="button" class="bn" data-go="shop" style="--c:#b9a0ff" aria-label="ショップを見る">
+        <button type="button" class="bn" data-go="shop" style="--c:#b9a0ff" aria-label="ショップを見る" data-feat="shop">
           <span class="bn-txt"><span class="bn-tag">NEW</span><b class="bn-h">エフェクト<br>チョーク</b><span class="bn-s">宇宙・雷・オーロラ。光って動くチョークが登場</span></span>
           <span class="bn-art art" id="artShop"></span>
         </button>
@@ -1261,7 +1283,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
       <span class="pu-prog" id="puProg"><span class="meter"><i id="puMeter"></i></span><span id="puCount"></span></span>
       <span class="pu-side"><span class="coin" id="puCoins" hidden></span><span id="puLeft"></span></span>
     </button>
-    <button type="button" class="bosscard" id="goBoss" aria-label="今日のボス">
+    <button type="button" class="bosscard" id="goBoss" aria-label="今日のボス" data-feat="boss">
       <span class="bc-face" id="bcFace"></span>
       <span class="bc-txt"><span class="bc-tag" id="bcTag">今日のボス</span><b class="bc-name">黒板消し大王</b>
         <span class="bc-hp"><span class="meter"><i id="bcHp" style="width:100%"></i></span><span id="bcHpT">HP --</span></span>
@@ -1269,7 +1291,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
       <span class="bc-stamp" id="bcStamp" hidden>討伐！</span>
     </button>
     <div class="modes">
-      <button type="button" class="mode main" id="goRated">
+      <button type="button" class="mode main" id="goRated" data-feat="rated">
         <span class="mode-k">レート戦</span>
         <span class="mode-d">近い強さの人と1対1・1手30秒</span>
         <span class="mode-x" id="homeRate">レート 1500・まだ0戦</span>
@@ -1551,7 +1573,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
   <section class="screen narrow" id="scrShop" hidden>
     <div class="shead"><h2>ショップ</h2><span class="coin big" id="shopCoinsTop">0</span></div>
     <div class="seg four" role="tablist" aria-label="ショップの種類">
-      <button type="button" role="tab" id="tabShopGacha" aria-selected="true" aria-controls="shopGacha">ガチャ</button>
+      <button type="button" role="tab" id="tabShopGacha" aria-selected="true" aria-controls="shopGacha" data-feat="gacha">ガチャ</button>
       <button type="button" role="tab" id="tabShopDaily" aria-selected="false" aria-controls="shopDaily">日替わり</button>
       <button type="button" role="tab" id="tabShopChalk" aria-selected="false" aria-controls="shopGrid">チョーク</button>
       <button type="button" role="tab" id="tabShopBoard" aria-selected="false" aria-controls="shopBoards">黒板</button>
@@ -1584,6 +1606,12 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
   <section class="screen narrow" id="scrPlate" hidden>
     <div class="shead"><h2>マイページ</h2></div>
     <div class="lvcard" id="lvCard"><span class="lv-n"><small>Lv.</small><span id="lvN">1</span></span><b id="lvNext"></b><div class="ph-xp"><span class="meter"><i id="lvXp"></i></span><span id="lvXpT"></span></div></div>
+    <p class="lv-unl" id="lvUnl" hidden></p>
+    <section class="panel" id="lvRoadBox" hidden>
+      <h3>Lv報酬 <span class="tag mine" id="lvRoadT"></span></h3>
+      <ol class="road" id="lvRoad"></ol>
+      <p class="note" style="margin:10px 0 0">レベルが上がるたびにコイン100・ジュエル50。5レベルごとにガチャチケット1枚、Lv10・20・30・50では限定アイテム。上がったときに自動で受け取ります。</p>
+    </section>
     <div class="pf-plate" id="homePlateBox"></div>
     <div class="myrank" id="pfRank"></div>
     <button type="button" class="bookbtn" id="goBook"><span class="bb-ic" aria-hidden="true">図</span><span class="bb-t"><b>わりばし図鑑</b><small>チョーク・黒板・称号・プレート・エンブレム</small></span><span class="bb-p" id="bookPct">0%</span></button>
@@ -1898,7 +1926,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
     <button type="button" class="tab" id="goHomeTab" data-tab="home" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h5v-6h3v6h5V10"/></svg><span>ホーム</span></button>
     <button type="button" class="tab" id="goEvents" data-tab="events"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4"/><path d="M6 4.5c4-2 7 2 12 0v8c-5 2-8-2-12 0"/></svg><span>イベント</span><i class="tab-badge" id="eventBadge" hidden></i></button>
     <button type="button" class="tab" id="goMission" data-tab="mission"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="m8.5 11 1.6 1.6L13 9.7"/><path d="M8.5 16.5h7"/></svg><span>ミッション</span><i class="tab-badge" id="missionBadge" hidden></i></button>
-    <button type="button" class="tab" id="goShop" data-tab="shop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span>ショップ</span></button>
+    <button type="button" class="tab" id="goShop" data-tab="shop" data-feat="shop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span>ショップ</span></button>
     <button type="button" class="tab" id="goFriends" data-tab="friends"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3.2"/><path d="M3 19a6 6 0 0 1 12 0"/><circle cx="16.5" cy="8" r="2.6"/><path d="M15.5 13.2A5 5 0 0 1 21 18"/></svg><span>フレンド</span><i class="tab-badge" id="friendBadge" hidden></i></button>
     <button type="button" class="tab" id="goProfile" data-tab="plate"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg><span>マイページ</span></button>
   </div>
@@ -2350,7 +2378,7 @@ function hideResult(){ clearTimeout(ui.resTimer); $('#result').hidden = true; }
 // ----- Unlock / mission banner (one at a time) -----
 const achvQueue = [];
 function celebrate(kind, make){
-  if (achvQueue.length >= 4) return;
+  if (achvQueue.length >= 6) return;
   achvQueue.push([kind, make]);
   if (achvQueue.length === 1) nextAchv();
 }
@@ -2429,7 +2457,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/15-9';
+const APP_VERSION = '11/15-10';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -2633,14 +2661,14 @@ const DAILY = [
   {id:'d_g3', name:'オンラインで3試合遊ぶ', key:'games', goal:3, coins:60},
   {id:'d_w1', name:'オンラインで1勝する', key:'wins', goal:1, coins:50},
   {id:'d_w2', name:'オンラインで2勝する', key:'wins', goal:2, coins:80},
-  {id:'d_r2', name:'レート戦を2試合', key:'rated', goal:2, coins:60},
+  {id:'d_r2', name:'レート戦を2試合', key:'rated', goal:2, coins:60, feat:'rated'},
   {id:'d_c1', name:'カスタムマッチを1試合', key:'custom', goal:1, coins:40},
   {id:'d_m3', name:'合成を3回する（CPU対戦でもOK）', key:'merges', goal:3, coins:40},
   {id:'d_s3', name:'分身を3回する（CPU対戦でもOK）', key:'splits', goal:3, coins:40},
   {id:'d_k5', name:'相手の手を5本消す（CPU対戦でもOK）', key:'kos', goal:5, coins:50},
   {id:'d_cw', name:'CPU（ふつう以上）に1勝', key:'cpuWins', goal:1, coins:30},
   {id:'d_cg', name:'CPUと3試合', key:'cpuGames', goal:3, coins:30},
-  {id:'d_b1', name:'今日のボスに挑戦する', key:'boss', goal:1, coins:40},
+  {id:'d_b1', name:'今日のボスに挑戦する', key:'boss', goal:1, coins:40, feat:'boss'},
 ];
 const MISSIONS = [
   {id:'g1', name:'オンラインで1試合', key:'games', goal:1, coins:50},
@@ -2693,6 +2721,8 @@ const CHALKS = [
   {id:'legend', name:'レジェンドチョーク', price:0, color:'#ffb35a', grad:'cg-legend', fx:'legend', fxc:'#ffd36b', fxc2:'#ff7a4a', g:'rgba(255,80,50,.85)', rate:2000},
   // limited: the collection book at 75%
   {id:'prism', name:'プリズムチョーク', price:0, color:'#fff2fb', grad:'cg-prism', fx:'prism', fxc:'#ffc6ec', fxc2:'#b9f0ff', g:'rgba(255,255,255,.7)', book:75},
+  // limited: the level 30 reward
+  {id:'silver', name:'銀粉チョーク', price:0, color:'#e3e9f0', fx:'glitter', fxc:'#ffffff', fxc2:'#cdd6e2', g:'rgba(215,228,242,.75)', lvl:30},
 ];
 // One limited chalk per month: tier 30 of that month's season pass.
 const SEASON_THEMES = {1:['初日の出','#ff9a5a','#ffe08a'], 2:['梅','#ff8fb0','#fff0f4'], 3:['菜の花','#f3e25b','#b8e66a'], 4:['桜吹雪','#ffc2d6','#fff7fa'],
@@ -2723,6 +2753,7 @@ const BOARDS = [
   {id:'bdia', name:'ダイヤの黒板', price:0, rate:1750},
   {id:'blegend', name:'伝説の黒板', price:0, rate:2000},
   {id:'bst200', name:'星空の教室', price:0, stars:200},
+  {id:'blv50', name:'殿堂の黒板', price:0, lvl:50},
 ];
 for (let m = 1; m <= 12; m++) BOARDS.push({id: 'bm' + m, name: `${SEASON_THEMES[m][0]}の黒板`, price: 0, season: m});
 // ----- Battle stamps: fixed phrases with a chalk face (no free text) -----
@@ -2828,6 +2859,8 @@ GACHA.forEach(it => addItem(it, {gacha: it.rar, need: `ガチャ（${it.rar}）`
 EVENT_TPL.forEach((t, i) => t.items.forEach(it => addItem(it, {event: i + 1,
   need: it.rank ? `イベント「${t.name}」で${it.rank}位以内` : it.kind === 'chalk' ? `イベント「${t.name}」の交換所` : `イベント「${t.name}」の累計pt報酬`, evrank: it.rank || 0})));
 TITLES.push({id: 'tdebut', name: 'わりばしデビュー', need: 'はじめてガイドを全部クリア', own: 'tdebut'});
+TITLES.push({id: 'tlv10', name: 'わりばしの常連', need: 'Lv10の報酬', own: 'tlv10', lvl: 10});
+PLATES.push({id: 'plv20', name: '年季の入った黒板', need: 'Lv20の報酬', own: 'plv20', lvl: 20});
 // ----- Stage mode: nine chapters, each with its own rule and CPU character -----
 const STAGE_N = 10;
 const STAGE_CH = [
@@ -2867,9 +2900,9 @@ function myBoard(){
   const p = net.profile || {}, id = p.board || lsGet('waribashi-board') || 'bstd';
   return hasBoard(id) ? id : 'bstd';
 }
-const isLimited = c => !!(c.boss || c.rate || c.season || c.book || c.event || c.stars);
+const isLimited = c => !!(c.boss || c.rate || c.season || c.book || c.event || c.stars || c.lvl);
 function howToGet(c, kind){
-  return c.gacha ? `ガチャ（${c.gacha}）・かけら${SHARD_COST[c.gacha]}` : c.event || c.stage ? c.need : c.stars ? `ステージで★${c.stars}` : c.boss ? `ボス討伐${c.boss}回` : c.rate ? `${RANKS[tierOf(c.rate)].name}に届く（レート${c.rate}）` : c.season ? `${c.season}月のシーズンパス${kind === 'board' ? 22 : 30}段`
+  return c.gacha ? `ガチャ（${c.gacha}）・かけら${SHARD_COST[c.gacha]}` : c.event || c.stage ? c.need : c.lvl ? `Lv${c.lvl}の報酬` : c.stars ? `ステージで★${c.stars}` : c.boss ? `ボス討伐${c.boss}回` : c.rate ? `${RANKS[tierOf(c.rate)].name}に届く（レート${c.rate}）` : c.season ? `${c.season}月のシーズンパス${kind === 'board' ? 22 : 30}段`
     : c.book ? `図鑑${c.book}%の報酬` : c.price ? `ショップ・${c.price}コイン` : 'はじめから';
 }
 // Other months' season items and other events' items appear only once owned.
@@ -2933,10 +2966,11 @@ function msToReset(){ return 86400000 - ((serverNow() + (9 - DAY_RESET_H) * 3600
 function hashStr(str){ let h = 2166136261; for (const ch of str) { h ^= ch.codePointAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
 function seeded(seed){ return () => { seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 // Each player gets their own three missions a day (different kinds).
-function todaysDaily(uid, day){
+// Missions for a feature the player opened today or not yet are left out (so the day's list never changes mid-day).
+function todaysDaily(uid, day, prof){
   const rnd = seeded(hashStr(String(uid) + '|' + day)), pool = DAILY.slice(), out = [], keys = new Set();
   for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
-  for (const m of pool) { if (keys.has(m.key)) continue; keys.add(m.key); out.push(m); if (out.length === 3) break; }
+  for (const m of pool) { if (keys.has(m.key) || (m.feat && !dailyFeatOpen(m.feat, prof, day))) continue; keys.add(m.key); out.push(m); if (out.length === 3) break; }
   return out;
 }
 function dailyOf(p){
@@ -2946,7 +2980,7 @@ function dailyOf(p){
 // What can be collected right now: today's missions, today's bonus, and regular missions.
 function missionState(){
   const p = net.profile || {}, d = dailyOf(p), st = statsOf(p), done = p.done || {};
-  const daily = net.uid ? todaysDaily(net.uid, d.day).map(m => {
+  const daily = net.uid ? todaysDaily(net.uid, d.day, p).map(m => {
     const cur = Math.min(+d.p[m.key] || 0, m.goal);
     return Object.assign({}, m, {cur, state: d.claimed[m.id] ? 'done' : cur >= m.goal ? 'ready' : 'todo'});
   }) : [];
@@ -3375,6 +3409,144 @@ function cpuReact(){
 }
 
 
+
+
+// ===================== Level rewards and feature unlocks =====================
+// New players open features as they level up; players from before this update keep everything (unl.all).
+const FEATS = {shop: {lv: 2, name: 'ショップ'}, rated: {lv: 3, name: 'レート戦'}, gacha: {lv: 3, name: 'ガチャ'}, puzzle: {lv: 3, name: '詰めわりばし'},
+  boss: {lv: 4, name: '大王ボス'}, pass: {lv: 4, name: 'シーズンパス'}, event: {lv: 5, name: '期間限定イベント'}};
+const SCREEN_FEAT = {shop: 'shop', puzzle: 'puzzle', boss: 'boss', pass: 'pass', event: 'event'};
+// ?noprog (and ?debug without &prog) turns locks and level rewards off, for the older test suites.
+const PROG_ON = (() => { try { const q = new URLSearchParams(location.search); return !q.has('noprog') && (!q.has('debug') || q.has('prog')); } catch(e) { return true; } })();
+const levelOfProfile = p => levelOf(+(((p || {}).lv || {}).xp) || 0);
+function featOpen(f, prof){
+  const F = FEATS[f];
+  if (!F || !FIREBASE_CONFIG || !PROG_ON || (!prof && !net.profileLoaded)) return true;
+  const p = prof || net.profile || {}, u = p.unl || {};
+  return !!u.all || !!u[f] || levelOfProfile(p) >= F.lv;
+}
+// For daily missions: open since before today (no record yet counts as open: old players, offline play).
+function dailyFeatOpen(f, prof, day){
+  if (!FIREBASE_CONFIG || !PROG_ON) return true;
+  const u = (prof || {}).unl;
+  return !u || !!u.all || (!!u[f] && u[f] < day);
+}
+const lockText = f => `${FEATS[f].name}はLv${FEATS[f].lv}で遊べるようになります（いまLv${myLevel().level}）`;
+function lockToast(f){ toast(lockText(f)); }
+// The first time this account is seen with this version: an account with history keeps everything open.
+function ensureUnl(){
+  const p = net.profile || {};
+  if (!net.fb || !net.uid || p.unl || ui.unlAsk) return;
+  const l = p.login || {}, old = (!!l.day && l.day !== dayKey()) || (+l.total || 0) >= 2 || levelOfProfile(p) >= 3 || statsOf(p).games > 0;
+  ui.unlAsk = true;
+  net.fb.runTransaction(net.fb.ref(net.fb.db, `players/${net.uid}/unl`), cur => cur ? undefined : old ? {all: true} : {v: 1})
+    .catch(() => {}).finally(() => setTimeout(() => { ui.unlAsk = false; }, 5000));
+}
+// Note the day each feature opened, and celebrate it once.
+function checkUnlocks(){
+  const p = net.profile || {}, u = p.unl;
+  if (!u || u.all || !PROG_ON || !net.fb) return;
+  if (ui.lvClaiming) { setTimeout(checkUnlocks, 700); return; }   // the level-up banner goes first
+  const L = levelOfProfile(p), add = {}, names = [];
+  ui.unlDone = ui.unlDone || new Set();
+  for (const [f, F] of Object.entries(FEATS)) if (L >= F.lv && !u[f] && !ui.unlDone.has(f)) { add[f] = dayKey(); names.push(F.name); ui.unlDone.add(f); }
+  if (!names.length) return;
+  net.fb.update(net.fb.ref(net.fb.db, `players/${net.uid}/unl`), add).catch(() => {});
+  celebrate('新機能<br>解放！', () => { const d = document.createElement('div'); d.innerHTML = '<b></b><span>さっそく遊んでみよう</span>'; d.firstChild.textContent = `${names.join('・')}が遊べるようになった！`; return d; });
+}
+// What a level gives.
+const LV_ITEMS = {10: {kind: 'title', id: 'tlv10'}, 20: {kind: 'plate', id: 'plv20'}, 30: {kind: 'chalk', id: 'silver'}, 50: {kind: 'board', id: 'blv50'}};
+const lvReward = L => ({coins: 100, jewels: 50, tickets: L % 5 === 0 ? 1 : 0, item: LV_ITEMS[L] || null});
+const lvItemName = it => (it.kind === 'title' ? TITLES : it.kind === 'plate' ? PLATES : it.kind === 'chalk' ? CHALKS : BOARDS).find(x => x.id === it.id).name;
+const KIND_NAME = {title: '称号', plate: 'プレート', chalk: 'チョーク', board: '黒板'};
+// Pay every level above the last one paid (players/<uid>/lvr), in one transaction.
+async function claimLevels(){
+  if (ui.lvClaiming || !PROG_ON || !net.fb || !net.uid || !net.profileLoaded) return;
+  const p = net.profile || {};
+  if (levelOfProfile(p) <= (+p.lvr || 1)) return;
+  ui.lvClaiming = true;
+  let got = null;
+  try {
+    const res = await profileTx(cur => {
+      const L = levelOfProfile(cur), from = +cur.lvr || 1;
+      if (L <= from) return undefined;
+      got = {from: from + 1, to: L, coins: 0, jewels: 0, tickets: 0, items: []};
+      const owned = Object.assign({}, cur.owned || {});
+      for (let l = from + 1; l <= L; l++) {
+        const r = lvReward(l);
+        got.coins += r.coins; got.jewels += r.jewels; got.tickets += r.tickets;
+        if (r.item) { owned[r.item.id] = true; got.items.push(r.item); }
+      }
+      cur.lvr = L;
+      cur.coins = (+cur.coins || 0) + got.coins;
+      cur.jewels = (+cur.jewels || 0) + got.jewels;
+      if (got.tickets) cur.tickets = (+cur.tickets || 0) + got.tickets;
+      if (got.items.length) cur.owned = owned;
+      return cur;
+    });
+    if (res && res.committed && got) {
+      const g = got, parts = [`コイン+${g.coins}`, `ジュエル+${g.jewels}`].concat(g.tickets ? [`チケット+${g.tickets}`] : [], g.items.map(it => `${KIND_NAME[it.kind]}「${lvItemName(it)}」`));
+      celebrate('レベル<br>アップ！', () => {
+        const d = document.createElement('div');
+        d.innerHTML = '<b></b><span></span>';
+        d.firstChild.textContent = g.from === g.to ? `Lv.${g.to} になった！` : `Lv.${g.from}〜${g.to} の報酬をまとめてゲット！`;
+        d.lastChild.textContent = parts.join('・');
+        return d;
+      });
+    }
+  } finally { ui.lvClaiming = false; }
+}
+// Lock badges on every [data-feat] control.
+function applyLock(el){
+  const f = el.dataset.feat, open = featOpen(f);
+  el.classList.toggle('locked', !open);
+  let b = el.querySelector(':scope > .lockb');
+  if (!open && !b) { b = document.createElement('span'); b.className = 'lockb'; el.append(b); }
+  if (!open) { const t = el.classList.contains('tab') || el.closest('.seg') ? `Lv${FEATS[f].lv}` : `Lv${FEATS[f].lv}で解放`; if (b.textContent !== t) b.textContent = t; }
+  if (open && b) b.remove();
+}
+function renderLocks(){ document.querySelectorAll('[data-feat]').forEach(applyLock); }
+// The level road in My page: the next few levels and the big ones further on.
+function renderLvRoad(){
+  const box = $('#lvRoadBox'), ok = !!FIREBASE_CONFIG && net.profileLoaded;
+  box.hidden = !ok;
+  const lv = myLevel(), p = net.profile || {}, u = p.unl || {}, paid = Math.max(1, +p.lvr || 1);
+  const nextF = Object.entries(FEATS).filter(([f]) => !featOpen(f)).sort((a, b) => a[1].lv - b[1].lv);
+  const un = $('#lvUnl');
+  un.hidden = !ok || !nextF.length;
+  if (nextF.length) { const L = nextF[0][1].lv; un.innerHTML = '<b></b><span></span>'; un.firstChild.textContent = `Lv${L}で解放：`; un.lastChild.textContent = nextF.filter(([, F]) => F.lv === L).map(([, F]) => F.name).join('・'); }
+  if (!ok) return;
+  $('#lvRoadT').textContent = `いまLv.${lv.level}`;
+  const ol = $('#lvRoad');
+  if (unchanged(ol, JSON.stringify([lv.level, paid, Math.floor(lv.xp / 50), myChalk(), !!u.all]))) return;
+  ol.innerHTML = '';
+  const levels = [];
+  for (let l = Math.max(2, lv.level - 1); l <= lv.level + 4; l++) levels.push(l);
+  [10, 20, 30, 50].forEach(l => { if (l > lv.level + 4) levels.push(l); });
+  levels.forEach(l => {
+    const r = lvReward(l), got = l <= paid, li = document.createElement('li');
+    li.className = got ? 'got' : l === lv.level + 1 ? 'next' : '';
+    li.innerHTML = '<span class="rn"></span><span class="ri"></span><b></b><span class="rs"></span>';
+    li.querySelector('.rn').textContent = `Lv.${l}`;
+    const ri = li.querySelector('.ri'), b = li.querySelector('b');
+    if (r.item) { ri.innerHTML = itemArt(r.item.kind, r.item.id); b.textContent = lvItemName(r.item); }
+    else if (r.tickets) { ri.innerHTML = '<span class="lvr"><span class="tkt">1</span></span>'; b.textContent = 'ガチャチケット'; }
+    else { ri.innerHTML = '<span class="lvr"><span class="jwl">50</span></span>'; b.textContent = 'ジュエル50'; }
+    const sm = document.createElement('small');
+    sm.textContent = r.item ? `限定の${KIND_NAME[r.item.kind]}＋コイン・ジュエル・チケット` : r.tickets ? '＋コイン100・ジュエル50' : '＋コイン100';
+    b.append(sm);
+    const fs = u.all ? [] : Object.values(FEATS).filter(F => F.lv === l).map(F => F.name);
+    if (fs.length) { const s2 = document.createElement('small'); s2.className = 'unl'; s2.textContent = `${fs.join('・')}が解放`; b.append(s2); }
+    li.querySelector('.rs').textContent = got ? '受け取り済み' : `あと${levelBase(l) - lv.xp}pt`;
+    ol.append(li);
+  });
+}
+document.addEventListener('click', e => {
+  const el = e.target.closest && e.target.closest('[data-feat]');
+  if (!el || featOpen(el.dataset.feat)) return;
+  e.preventDefault(); e.stopImmediatePropagation();
+  lockToast(el.dataset.feat);
+}, true);
 
 // ===================== BGM: bgm/home.mp3, bgm/battle.mp3, bgm/boss.mp3 (silent if a file is missing) =====================
 const BGM_FILES = {home: 'bgm/home.mp3', battle: 'bgm/battle.mp3', boss: 'bgm/boss.mp3'};
@@ -4195,18 +4367,19 @@ const evPtMax = p => Math.max(0, ...Object.values((p && p.evs) || {}).map(v => +
 const GUIDE = [
   {d: 1, id: 'name', name: 'マイページで名前を決める', ok: p => !!(p.name && p.name !== 'ななし'), coins: 50},
   {d: 1, id: 'cpu', name: 'CPU（ふつう以上）に1勝する', ok: (p, st) => st.cpuNormal >= 1, coins: 100},
-  {d: 1, id: 'rated', name: 'レート戦を1試合する', ok: p => ratedGames(p) >= 1, coins: 100},
+  {d: 1, id: 'stage', name: 'ステージ1-1をクリアする', ok: p => +((((p.stage || {}).s) || {})['1-1']) > 0, coins: 100},
   {d: 2, id: 'daily', name: 'デイリーミッションを3つクリア', ok: (p, st) => st.dailyDone >= 3, tickets: 1},
-  {d: 2, id: 'gacha', name: 'ガチャを1回引く', ok: (p, st) => st.gachaPulls >= 1, coins: 150},
-  {d: 3, id: 'puz', name: '詰めわりばしに正解する', ok: (p, st) => st.puzzles >= 1, coins: 100},
-  {d: 3, id: 'boss', name: 'ボスの手を1本消す', ok: (p, st) => st.bossHands >= 1, coins: 100},
+  {d: 2, id: 'rated', name: 'レート戦を1試合する', ok: p => ratedGames(p) >= 1, coins: 100, feat: 'rated'},
+  {d: 3, id: 'gacha', name: 'ガチャを1回引く', ok: (p, st) => st.gachaPulls >= 1, coins: 150, feat: 'gacha'},
+  {d: 3, id: 'puz', name: '詰めわりばしに正解する', ok: (p, st) => st.puzzles >= 1, coins: 100, feat: 'puzzle'},
+  {d: 4, id: 'boss', name: 'ボスの手を1本消す', ok: (p, st) => st.bossHands >= 1, coins: 100, feat: 'boss'},
   {d: 4, id: 'chalk', name: 'チョークを変える', ok: p => !!p.chalk && p.chalk !== 'auto', coins: 100},
-  {d: 4, id: 'friend', name: 'フレンドを1人つくる', ok: () => friendIds().length >= 1, tickets: 1},
+  {d: 5, id: 'friend', name: 'フレンドを1人つくる', ok: () => friendIds().length >= 1, tickets: 1},
   {d: 5, id: 'win3', name: 'オンライン対戦で3勝', ok: (p, st) => st.wins >= 3, tickets: 2},
   {d: 5, id: 'board', name: '黒板を変える', ok: p => !!p.board && p.board !== 'bstd', coins: 150},
-  {d: 6, id: 'pass', name: 'シーズンパスを5段にする', ok: p => passTierOf(p) >= 5, coins: 200},
-  {d: 6, id: 'event', name: 'イベントptを300ためる', ok: p => evPtMax(p) >= 300, coins: 200},
-  {d: 7, id: 'gold', name: 'ゴールドに届く（レート1550）', ok: (p, st) => st.maxRate >= 1550, tickets: 2},
+  {d: 6, id: 'pass', name: 'シーズンパスを5段にする', ok: p => passTierOf(p) >= 5, coins: 200, feat: 'pass'},
+  {d: 6, id: 'event', name: 'イベントptを300ためる', ok: p => evPtMax(p) >= 300, coins: 200, feat: 'event'},
+  {d: 7, id: 'gold', name: 'ゴールドに届く（レート1550）', ok: (p, st) => st.maxRate >= 1550, tickets: 2, feat: 'rated'},
   {d: 7, id: 'book', name: '図鑑を30%にする', ok: p => bookPct(bookItems(p)) >= 30, coins: 300},
 ];
 const GUIDE_DONE = {tickets: 5, jewels: 300, title: 'tdebut'};
@@ -4255,6 +4428,8 @@ async function claimGuideDone(){
 
 // ===================== News =====================
 const NEWS = [
+  {id: 'n10', date: '2026-11-15', tag: '新機能', title: 'Lv報酬が登場！ これまでのレベルぶんもプレゼント',
+    body: 'レベルが上がるたびにコイン100・ジュエル50がもらえるようになりました。5レベルごとにガチャチケット、Lv10・20・30・50ではここでしか手に入らない称号・プレート・チョーク・黒板も。\nこれまでに上げたレベルのぶんは、まとめて受け取れます。マイページの「Lv報酬」で次の報酬を見られます。\nはじめたばかりの人は、レベルに合わせてショップ・レート戦・ガチャなどが少しずつ開きます（いま遊んでいる人はそのまま全部遊べます）。'},
   {id: 'n9', date: '2026-11-15', tag: '新機能', title: 'ステージモード登場！ 9章90ステージ',
     body: 'ホームの「ステージ」から遊べます。章ごとにルールとCPUのキャラが変わります（分身なし・合成なし・4本や6本で消える星・2進数・ハンデ戦・制限手数など）。\n★は3つ。はじめてクリアでコイン、★1つにつきジュエル10。章の最後のボスに勝つと、その章だけのスタンプがもらえます。★を集めると称号・プレート・黒板も。'},
   {id: 'n8', date: '2026-11-15', tag: 'アップデート', title: 'ジュエル登場！ 1000個プレゼント＆対戦スタンプ',
@@ -5072,11 +5247,9 @@ function watchGlobal(fb){
     net.profile = s.val();
     net.profileLoaded = true;
     if (!(net.profile || {}).code) setTimeout(ensureCode, 600);
-    if (first) { setTimeout(checkLogin, 400); setTimeout(() => { presence(true); watchInvites(); watchFriendData(); migrateFriends(); ensureGuide(); }, 0); }
-    else {
-      const l0 = levelOf(+(((prevProfile || {}).lv || {}).xp) || 0), l1 = levelOf(+(((net.profile || {}).lv || {}).xp) || 0);
-      if (l1 > l0) celebrate('レベル<br>アップ！', () => { const d = document.createElement('div'); d.innerHTML = `<b>Lv.${l1} になった！</b><span>これからもどんどん遊ぼう</span>`; return d; });
-    }
+    if (first) { ensureUnl(); setTimeout(checkLogin, 400); setTimeout(() => { presence(true); watchInvites(); watchFriendData(); migrateFriends(); ensureGuide(); }, 0); setTimeout(claimLevels, 1500); }
+    else if (levelOfProfile(net.profile) > levelOfProfile(prevProfile)) claimLevels();
+    checkUnlocks();
     const after = unlocked(statsOf(net.profile));
     if (!first) {
       CHALKS.filter(c => !c.price && c.id !== 'auto' && !c.gacha && !hasChalk(c.id, prevProfile || {}) && hasChalk(c.id)).forEach(c =>
@@ -5502,7 +5675,7 @@ async function claimDaily(id){
   const uid = net.uid;
   let got = 0;
   const res = await profileTx(cur => {
-    const d = dailyOf(cur), m = todaysDaily(uid, d.day).find(x => x.id === id);
+    const d = dailyOf(cur), m = todaysDaily(uid, d.day, cur).find(x => x.id === id);
     if (!m || d.claimed[id] || (+d.p[m.key] || 0) < m.goal) return undefined;
     cur.daily = {day: d.day, p: d.p, claimed: Object.assign({}, d.claimed, {[id]: true}), bonus: d.bonus};
     cur.coins = (+cur.coins || 0) + m.coins;
@@ -5516,7 +5689,7 @@ async function claimDaily(id){
 async function claimBonus(){
   const uid = net.uid;
   const res = await profileTx(cur => {
-    const d = dailyOf(cur), list = todaysDaily(uid, d.day);
+    const d = dailyOf(cur), list = todaysDaily(uid, d.day, cur);
     if (d.bonus || !list.every(m => d.claimed[m.id])) return undefined;
     cur.daily = {day: d.day, p: d.p, claimed: d.claimed, bonus: true};
     cur.coins = (+cur.coins || 0) + DAILY_BONUS;
@@ -5678,6 +5851,7 @@ function hideSplash(){ clearTimeout(ui.splashTimer); $('#splash').hidden = true;
 // A shared queue; whoever finds a partner makes the room and marks both entries in one transaction.
 async function startSearch(keepTimer){
   if (search.on || net.on || net.connecting) return;
+  if (!featOpen('rated')) { lockToast('rated'); return; }
   ui.resumeSearch = false;
   if (!keepTimer) ui.searchSince = Date.now();
   setScreen('search');
@@ -5852,6 +6026,7 @@ function showChrome(s){
 // Back buttons return to the screen you came from; the tab screens start a fresh trail.
 const ROOTS = ['home', 'events', 'mission', 'shop', 'friends', 'plate'], NO_RETURN = ['game', 'search', 'lobby'];
 function setScreen(s, back){
+  if (SCREEN_FEAT[s] && !featOpen(SCREEN_FEAT[s])) { lockToast(SCREEN_FEAT[s]); return; }
   setTimeout(bgmUpdate, 0);
   if (ui.screen !== s) {
     const h = ui.hist || (ui.hist = []);
@@ -5935,6 +6110,7 @@ function render(){
 }
 
 function renderChrome(){
+  renderLocks();
   const ok = !!FIREBASE_CONFIG, p = net.profile || {}, g = ratedGames(p);
   $('#barName').textContent = typedName();
   $('#barTitle').textContent = titleName(myLook().title);
@@ -6020,6 +6196,7 @@ const TIPS = [
   'CPU対戦の「解析を表示」で、その局面の勝ち負けがわかる',
   'ガチャでダブったアイテムはかけらに。かけら交換所で好きなアイテムと交換できる',
   'ステージの★3は「最短で勝つ」などの条件つき。何回でも挑戦できる',
+  'レベルが上がるたびにコイン100・ジュエル50。Lv10・20・30・50は限定アイテム',
   'イベント中は特効のチョークや黒板を使うとptが多くたまる',
   '日替わりショップは毎朝4:00に入れ替わる。ガチャチケットがお得',
 ];
@@ -6181,11 +6358,12 @@ function renderFriends(){
 function eventBadgeCount(){
   if (!FIREBASE_CONFIG || !net.profileLoaded) return 0;
   const bs = bossState(), me = myBoss();
-  return (bs.down && me.dmg > 0 && !me.claimed ? 1 : 0) + (myLevel().ready ? 1 : 0) + (myPuzzle().solved ? 0 : 1) + (evReady() ? 1 : 0);
+  return (featOpen('boss') && bs.down && me.dmg > 0 && !me.claimed ? 1 : 0) + (featOpen('pass') && myLevel().ready ? 1 : 0) + (featOpen('puzzle') && !myPuzzle().solved ? 1 : 0) + (featOpen('event') && evReady() ? 1 : 0);
 }
 function evCard(o){
   const b = document.createElement('button');
   b.type = 'button'; b.className = 'evcard' + (o.cls ? ' ' + o.cls : ''); b.dataset.go = o.go;
+  if (FEATS[o.go]) b.dataset.feat = o.go;
   if (o.color) b.style.setProperty('--c', o.color);
   b.innerHTML = '<span class="ev-art"></span><span class="ev-tag"></span><b class="ev-h"></b><span class="ev-s"></span>';
   b.querySelector('.ev-art').innerHTML = o.art;
@@ -6195,12 +6373,13 @@ function evCard(o){
   if (o.meter !== undefined) { const m = document.createElement('span'); m.className = 'ev-meter'; m.innerHTML = '<span class="meter"><i></i></span><span></span>'; m.querySelector('i').style.width = Math.round(o.meter * 100) + '%'; m.lastChild.textContent = o.meterT || ''; b.append(m); }
   if (o.badge) { const g = document.createElement('span'); g.className = 'ev-badge'; g.textContent = o.badge; b.append(g); }
   b.addEventListener('click', () => { if (o.go === 'login') { const l = myLogin(); if (l.count) showLogin(l, true); } else setScreen(o.go); });
+  if (b.dataset.feat) applyLock(b);
   return b;
 }
 function renderEvents(){
   const list = $('#evList'), bs = bossState(), me = myBoss(), lv = myLevel(), pz = puzzleOf(), mp = myPuzzle(), lg = myLogin(), th = SEASON_THEMES[seasonMonth()];
   const ev = eventNow(), evv = myEv(ev), evRank = (watchEventTop(ev), myEventRank());
-  const key = JSON.stringify([bs.dmg, bs.down, me, lv.sxp, lv.ready, mp, lg, dayKey(), ev, evv, evRank, myChalk()]);
+  const key = JSON.stringify([bs.dmg, bs.down, me, lv.sxp, lv.ready, mp, lg, dayKey(), ev, evv, evRank, myChalk(), Object.keys(FEATS).map(f => featOpen(f))]);
   if (unchanged(list, key)) return;
   list.innerHTML = '';
   if (ev) {
@@ -6270,6 +6449,7 @@ function renderPass(){
 }
 function renderLevel(){
   const lv = myLevel();
+  renderLvRoad();
   $('#lvN').textContent = lv.level;
   $('#lvNext').textContent = `次のレベルまで ${lv.need - lv.into} ポイント`;
   $('#lvXp').style.width = Math.round(lv.into / lv.need * 100) + '%';
@@ -6432,10 +6612,12 @@ function renderMission(){
   if (showG) {
     $('#guideDay').textContent = `はじめてガイド・${Math.min(7, gs.day)}日目`;
     const gl = $('#guideList');
-    if (!unchanged(gl, JSON.stringify([gs.day, gs.list.map(m => m.state), gs.finished]))) {
+    const lk = m => m.feat && !featOpen(m.feat);
+    if (!unchanged(gl, JSON.stringify([gs.day, gs.list.map(m => m.state + (lk(m) ? 'L' : '')), gs.finished]))) {
       gl.innerHTML = '';
       gs.list.forEach(m => gl.append(missionRow({name: m.name, cur: m.state === 'ready' || m.state === 'done' ? 1 : 0, goal: 1, coins: m.coins, tickets: m.tickets,
-        state: m.state === 'locked' ? 'todo' : m.state, locked: m.state === 'locked', label: m.state === 'locked' ? `${m.d}日目に解放` : m.state === 'todo' ? 'まだ' : '達成！'}, () => claimGuide(m.id))));
+        state: m.state === 'locked' ? 'todo' : m.state, locked: m.state === 'locked' || (m.state === 'todo' && lk(m)),
+        label: m.state === 'locked' ? `${m.d}日目に解放` : m.state === 'todo' && lk(m) ? `Lv${FEATS[m.feat].lv}で解放` : m.state === 'todo' ? 'まだ' : '達成！'}, () => claimGuide(m.id))));
       gl.append(missionRow({name: 'ぜんぶクリア：チケット×5＋ジュエル300＋称号「わりばしデビュー」', cur: gs.claimedN, goal: GUIDE.length, tickets: GUIDE_DONE.tickets,
         state: gs.finished ? 'done' : gs.all ? 'ready' : 'todo', bonus: true}, claimGuideDone));
     }
@@ -6463,7 +6645,9 @@ function renderMission(){
 }
 function renderShop(){
   const coins = myCoins(), p = net.profile || {}, owned = p.owned || {}, now = Date.now();
-  const tab = ['gacha', 'daily', 'chalk', 'board'].includes(ui.shopTab) ? ui.shopTab : 'gacha', boards = tab === 'board';
+  let tab = ['gacha', 'daily', 'chalk', 'board'].includes(ui.shopTab) ? ui.shopTab : 'gacha';
+  if (tab === 'gacha' && !featOpen('gacha')) tab = 'daily';
+  const boards = tab === 'board';
   $('#shopCoinsTop').textContent = coins;
   [['#tabShopGacha', 'gacha'], ['#tabShopDaily', 'daily'], ['#tabShopChalk', 'chalk'], ['#tabShopBoard', 'board']].forEach(([id, t]) => $(id).setAttribute('aria-selected', String(tab === t)));
   $('#shopGacha').hidden = tab !== 'gacha'; $('#shopDaily').hidden = tab !== 'daily';
@@ -6497,13 +6681,14 @@ function renderShop(){
     else if (c.season) { pr.className = 'owned'; pr.textContent = `限定：今月のシーズンパス${boards ? 22 : 30}段`; }
     else if (c.book) { pr.className = 'owned'; pr.textContent = `限定：図鑑${c.book}%の報酬`; }
     else if (c.stars) { pr.className = 'owned'; pr.textContent = `限定：ステージで★${c.stars}（${Math.min(st.stageStars, c.stars)}/${c.stars}）`; }
+    else if (c.lvl) { pr.className = 'owned'; pr.textContent = `限定：Lv${c.lvl}の報酬（いまLv${myLevel().level}）`; }
     else { pr.className = 'coin'; pr.textContent = c.price; }
     const b = document.createElement('button');
     b.type = 'button';
     if (on) { b.className = 'btn'; b.textContent = '使用中'; b.disabled = true; }
     else if (have) { b.className = 'btn primary'; b.textContent = '使う'; b.addEventListener('click', () => boards ? equipBoard(c.id) : equipChalk(c.id)); }
     else if (c.event) { b.className = 'btn'; b.disabled = true; b.textContent = 'イベントで手に入る'; }
-    else if (lim) { b.className = 'btn'; b.disabled = true; b.textContent = c.boss ? 'ボスで手に入る' : c.rate ? 'ランクで手に入る' : c.season ? 'シーズンパスで手に入る' : c.stars ? 'ステージで手に入る' : '図鑑で手に入る'; }
+    else if (lim) { b.className = 'btn'; b.disabled = true; b.textContent = c.boss ? 'ボスで手に入る' : c.rate ? 'ランクで手に入る' : c.season ? 'シーズンパスで手に入る' : c.stars ? 'ステージで手に入る' : c.lvl ? 'レベルで手に入る' : '図鑑で手に入る'; }
     else if (coins < c.price) { b.className = 'btn'; b.textContent = 'コインが足りない'; b.disabled = true; }
     else {
       b.className = 'btn gold'; b.textContent = armed === c.id ? 'もう一度押すと買う' : '買う';
