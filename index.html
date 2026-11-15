@@ -1174,7 +1174,38 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .fold[open]{padding-bottom:16px}
 .fold[open] > summary{margin-bottom:6px}
 .fold[open] .fold-s{white-space:normal}
+
+/* ===== Story scenes ===== */
+.story{position:fixed;inset:0;z-index:58;display:grid;grid-template-rows:auto minmax(0,1fr) auto;padding:calc(env(safe-area-inset-top,0px) + 12px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 16px) max(16px,env(safe-area-inset-left,0px));background-color:var(--board);background-image:radial-gradient(ellipse 70% 50% at 50% 30%,rgba(236,238,228,.07),transparent 70%),radial-gradient(ellipse 120% 80% at 50% 120%,rgba(0,0,0,.45),transparent 60%),var(--noise);cursor:pointer;-webkit-user-select:none;user-select:none;animation:stIn .35s ease-out}
+@keyframes stIn{from{opacity:0}to{opacity:1}}
+.st-top{display:flex;align-items:center;gap:10px;min-height:40px}
+.st-chap{margin:0;flex:1;min-width:0;font-family:var(--font-display);font-size:15px;letter-spacing:.06em;color:var(--chalk-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st-skip{flex:none;min-height:36px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:rgba(0,0,0,.25);color:var(--chalk);font-weight:700;font-size:13px;cursor:pointer}
+.st-stage{position:relative;z-index:0;display:grid;place-items:end center;min-height:0;margin-bottom:-34px;overflow:hidden}
+.st-ch{position:absolute;bottom:0;left:50%;translate:-50% 0;height:min(100%,680px);aspect-ratio:2/3;display:grid;place-items:end center;transform-origin:50% 100%;transition:opacity .25s,transform .25s}
+.st-ch .chara{width:100%;height:100%;overflow:visible}
+.st-ch img{width:100%;height:100%;object-fit:contain;object-position:bottom}
+.st-ch .cav{width:58%;height:auto;aspect-ratio:1;margin-bottom:22%}
+.st-ch.dim{opacity:.38;transform:scale(.97)}
+.st-ch.gone{opacity:0;transform:translateY(14px)}
+.st-ch.pop{animation:stPop .3s cubic-bezier(.2,.9,.3,1.4)}
+@keyframes stPop{0%{transform:translateY(6px) scale(.98)}100%{transform:none}}
+.st-box{position:relative;z-index:1;width:min(600px,100%);justify-self:center;min-height:118px;padding:22px 18px 16px;border-radius:14px;border:2.5px solid rgba(236,238,228,.55);background:rgba(16,22,19,.82);box-shadow:0 12px 30px -10px rgba(0,0,0,.8)}
+.st-name{position:absolute;top:-15px;left:14px;padding:3px 14px;border-radius:999px;background:var(--sc,var(--chalk));color:#1c1b18;font-size:14px;font-weight:800;letter-spacing:.04em}
+.st-name:empty{display:none}
+.st-text{margin:0;font-size:16.5px;line-height:1.75;color:var(--chalk);text-wrap:pretty;min-height:3.5em;white-space:pre-wrap}
+.st-box.narr .st-text{color:var(--chalk-soft);font-style:normal}
+.st-box.me .st-text{color:#fff6dc}
+.st-next{position:absolute;right:14px;bottom:8px;font-size:12px;color:var(--chalk-soft);animation:stBlink 1s steps(2) infinite}
+@keyframes stBlink{50%{opacity:0}}
+.ch-story{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ch-story > span{font-size:12.5px;color:var(--chalk-soft);margin-right:2px}
+.ch-story .btn.sm[disabled]{opacity:.45}
+.chhero .chbust{grid-row:1/span 3;width:84px;height:84px;border-radius:50%;overflow:hidden;background:rgba(0,0,0,.22);box-shadow:inset 0 0 0 2px var(--cc)}
+.chhero .chbust .chara{width:100%;height:100%}
 @media (prefers-reduced-motion:reduce){
+  .story,.st-ch.pop,.st-next{animation:none!important}
+  .st-ch{transition:none}
   .fold > summary::after{transition:none}
   .res-stars i.on{animation:none!important}
   .stampb{animation:none!important}
@@ -1692,6 +1723,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
   <section class="screen narrow" id="scrChapter" hidden>
     <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2 id="chTitle">第1章</h2><span class="stars big" id="chStars">★0</span></div>
     <div class="chhero" id="chHero"></div>
+    <div class="ch-story" id="chStory" hidden></div>
     <ol class="stgrid" id="stgGrid"></ol>
     <section class="panel stdetail" id="stDetail"></section>
   </section>
@@ -1969,6 +2001,11 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
   <div class="row"><button type="button" class="btn" id="inviteNo">あとで</button><button type="button" class="btn primary" id="inviteYes">参加する</button></div>
 </div>
 <div class="achv" id="achv" hidden role="status"><span class="achv-k" id="achvK">NEW</span><div class="achv-b" id="achvB"></div></div>
+<div class="story" id="story" role="dialog" aria-modal="true" aria-label="ストーリー" hidden>
+  <div class="st-top"><p class="st-chap" id="stChap"></p><button type="button" class="st-skip" id="stSkip">スキップ</button></div>
+  <div class="st-stage"><div class="st-ch gone" id="stCh"></div></div>
+  <div class="st-box" id="stBox"><b class="st-name" id="stName"></b><p class="st-text" id="stText" aria-live="polite"></p><span class="st-next" aria-hidden="true">▼</span></div>
+</div>
 <p class="toast" id="toast" role="status" hidden></p>
 <pre class="dbg" id="dbg" hidden></pre>
 
@@ -2295,6 +2332,8 @@ function updateResult(){
         rows.append(row);
         if (rw.coins && !ui.resShown.stageFly) { ui.resShown.stageFly = true; setTimeout(() => { if (!$('#result').hidden) flyCoins(row.querySelector('.coin'), rw.coins); }, 400); }
         if (rw.stamp) { const st = document.createElement('div'); st.className = 'res-row up'; st.innerHTML = stampHTML(STAMPS.find(x => x.id === rw.stamp)); st.prepend('スタンプゲット！ '); rows.append(st); }
+        const ek = `${sg.c}e`;
+        if (rw.first && sg.boss && STORY[ek] && !storySeen(ek) && !ui.storyQueued) { ui.storyQueued = true; setTimeout(() => { ui.storyQueued = false; if (!$('#result').hidden && $('#story').hidden) playStory(ek); }, 2200); }
       } else if (r.won && rw && rw.none) { const n = document.createElement('div'); n.className = 'res-row'; n.textContent = 'この★はもう持っています'; rows.append(n); }
       if (r.won) {
         const re = document.createElement('button'); re.type = 'button'; re.className = 'btn sm'; re.textContent = 'もう一回（★をねらう）';
@@ -2470,7 +2509,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/15-11';
+const APP_VERSION = '11/15-12';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -2887,6 +2926,7 @@ const STAGE_CH = [
   {name: '制限手数', who: 'とけい先生', face: 'fire', c: '#ffd36b', rule: {}, desc: '決められた手数のうちに勝つ', limit: true},
   {name: '最強の教室', who: '黒板の王', face: 'crown', c: '#f2cf5b', rule: {}, desc: 'いろんなルールで、さいきょうCPU', mix: true},
 ];
+['iincho', 'katabutsu', 'barabara', 'girigiri', 'pipo', 'robo', 'bancho', 'tokei', 'king'].forEach((id, i) => { STAGE_CH[i].id = id; });
 const STAGE_STAMPS = [['st_ikuzo', 'いくぞ！', 'fire', '#ffb35a'], ['st_majime', 'まじめにいこう', 'bow', '#b8e6a3'], ['st_barabara', 'バラバラだ…', 'sweat', '#f4a6bb'],
   ['st_girigiri', 'ギリギリ！', 'shock', '#ffa48c'], ['st_pipo', 'ピポパポ', 'think', '#c8b4f4'], ['st_zero1', '0と1の世界', 'think', '#9fc8ff'],
   ['st_hande', 'ハンデ上等！', 'smug', '#ff9a5a'], ['st_saitan', '最短で決める', 'star', '#ffd36b'], ['st_saikyo', '最強の称号', 'crown', '#f2cf5b']];
@@ -3617,6 +3657,219 @@ function bgmUpdate(){
   bgm.src = src; bgm.gain = gain;
 }
 
+// ===== CHARA-START =====
+// Full-body chalk drawings for the story and partners. viewBox 0 0 200 300; white chalk lines over coloured chalk smudges.
+// Expressions: normal, smile, sad (くやしい), surprise.
+const CH_LINE = '#f3f2ea', CH_DARK = '#1f2b25';
+const chFill = (op, col) => `fill="${col || 'currentColor'}" fill-opacity="${op}"`;
+function chFace(o, ex){
+  // o: {l:[x,y], r:[x,y], m:[x,y], size, sharp, glasses, cheek}
+  const [lx, ly] = o.l, [rx, ry] = o.r, [mx, my] = o.m, k = o.size || 1, out = [];
+  const eye = (x, y, side) => {
+    if (ex === 'smile') return `<path d="M${x - 6 * k} ${y + 2 * k}Q${x} ${y - 6 * k} ${x + 6 * k} ${y + 2 * k}"/>`;
+    if (ex === 'sad') { const d = side < 0 ? 1 : -1; return `<path d="M${x - 6 * k * d} ${y - 5 * k}L${x + 5 * k * d} ${y}L${x - 6 * k * d} ${y + 5 * k}"/>`; }
+    if (ex === 'surprise') return `<circle cx="${x}" cy="${y}" r="${6.5 * k}" ${chFill(.12, '#fff')}/><circle cx="${x}" cy="${y}" r="${1.8 * k}" fill="${CH_LINE}" stroke="none"/>`;
+    if (o.sharp) return `<path d="M${x - 8 * k} ${y - 2 * k}L${x + 8 * k} ${y - 3 * k}"/><circle cx="${x + side * 1.5}" cy="${y + 1.5 * k}" r="${2.4 * k}" fill="${CH_LINE}" stroke="none"/>`;
+    if (o.big) return `<ellipse cx="${x}" cy="${y}" rx="${8 * k}" ry="${11 * k}" fill="${CH_LINE}" fill-opacity=".9"/><ellipse cx="${x + side * 2}" cy="${y + 2}" rx="${3.6 * k}" ry="${5.4 * k}" fill="${CH_DARK}" stroke="none"/><circle cx="${x - side * 2 - 1}" cy="${y - 4 * k}" r="${1.8 * k}" fill="#fff" stroke="none"/>`;
+    if (o.cute) return `<ellipse cx="${x}" cy="${y}" rx="${4.2 * k}" ry="${5.6 * k}" fill="${CH_LINE}" stroke="none"/><circle cx="${x - 1.4}" cy="${y - 2.2}" r="1.5" fill="${CH_DARK}" stroke="none"/>`;
+    return `<ellipse cx="${x}" cy="${y}" rx="${2.8 * k}" ry="${4 * k}" fill="${CH_LINE}" stroke="none"/>`;
+  };
+  out.push(eye(lx, ly, -1), eye(rx, ry, 1));
+  // brows
+  const bw = 7 * k, bh = 13 * k;
+  if (ex === 'sad') out.push(`<path d="M${lx - bw} ${ly - bh + 2}L${lx + bw} ${ly - bh + 6}M${rx + bw} ${ry - bh + 2}L${rx - bw} ${ry - bh + 6}"/>`);
+  else if (ex === 'surprise') out.push(`<path d="M${lx - bw} ${ly - bh - 2}Q${lx} ${ly - bh - 7} ${lx + bw} ${ly - bh - 2}M${rx - bw} ${ry - bh - 2}Q${rx} ${ry - bh - 7} ${rx + bw} ${ry - bh - 2}"/>`);
+  else if (o.sharp) out.push(`<path d="M${lx - bw - 2} ${ly - bh + 1}L${lx + bw} ${ly - bh + 5}M${rx + bw + 2} ${ry - bh + 1}L${rx - bw} ${ry - bh + 5}" stroke-width="4.2"/>`);
+  // mouth
+  if (ex === 'smile') out.push(`<path d="M${mx - 9} ${my - 2}Q${mx} ${my + 11} ${mx + 9} ${my - 2}Z" ${chFill(.22, '#fff')}/>`);
+  else if (ex === 'sad') out.push(`<path d="M${mx - 9} ${my + 2}L${mx - 6} ${my - 2}L${mx - 3} ${my + 2}L${mx} ${my - 2}L${mx + 3} ${my + 2}L${mx + 6} ${my - 2}L${mx + 9} ${my + 2}"/>`);
+  else if (ex === 'surprise') out.push(`<ellipse cx="${mx}" cy="${my + 2}" rx="4.5" ry="6" ${chFill(.18, '#fff')}/>`);
+  else out.push(o.smirk ? `<path d="M${mx - 8} ${my + 1}Q${mx + 2} ${my + 5} ${mx + 10} ${my - 4}"/>` : `<path d="M${mx - 6} ${my}Q${mx} ${my + 5} ${mx + 6} ${my}"/>`);
+  // extras
+  if (ex === 'smile' || (ex === 'normal' && o.cheek)) out.push(`<ellipse cx="${lx - 4}" cy="${ly + 13 * k}" rx="6" ry="3.4" fill="#ff9ec4" fill-opacity=".45" stroke="none"/><ellipse cx="${rx + 4}" cy="${ry + 13 * k}" rx="6" ry="3.4" fill="#ff9ec4" fill-opacity=".45" stroke="none"/>`);
+  if (ex === 'sad') out.push(`<path d="M${rx + 9} ${ry + 6}q-3 6 0 8q3-2 0-8z" fill="#9fd8ff" fill-opacity=".8" stroke="#9fd8ff" stroke-width="1.6"/>`);
+  if (ex === 'surprise') out.push(`<path d="M${rx + 22} ${ry - 18}q-5 8 0 11q5-3 0-11z" fill="#9fd8ff" fill-opacity=".7" stroke="#9fd8ff" stroke-width="1.6"/>`);
+  return out.join('');
+}
+
+const CHARA_ART = {
+  // 第1章 いいんちょう: bob hair, square glasses, armband, clipboard
+  iincho: ex => `
+    <path d="M52 84Q50 32 100 28Q150 32 148 84L150 130Q128 140 122 120L78 120Q72 140 50 130Z" ${chFill(.62)}/>
+    <path d="M60 80Q58 128 100 132Q142 128 140 80" ${chFill(.14, "#fff")}/>
+    <path d="M56 80Q62 40 100 38Q138 40 144 80Q130 64 116 70Q110 58 100 64Q88 56 82 70Q68 62 56 80Z" ${chFill(.72)}/>
+    <path d="M128 52l4 6 7 1-5 5 1 7-7-3-6 3 1-7-5-5 7-1z" fill="#f3d774" fill-opacity=".8" stroke="#f3d774" stroke-width="2"/>
+    <rect x="68" y="84" width="26" height="19" rx="6"/><rect x="106" y="84" width="26" height="19" rx="6"/><path d="M94 92h12M68 90l-7-3M132 90l7-3"/>
+    ${chFace({l: [81, 94], r: [119, 94], m: [100, 116], cute: true}, ex)}
+    <path d="M92 131v8M108 131v8"/>
+    <path d="M68 146Q100 134 132 146L140 216H60Z" fill="#3f5f86" fill-opacity=".55"/>
+    <path d="M86 139L100 162L114 139"/>
+    <path d="M100 152l-12-6v12zM100 152l12-6v12z" fill="#ff9ec4" fill-opacity=".55" stroke="#ff9ec4" stroke-width="2.4"/>
+    <path d="M100 166v42" stroke-dasharray="1 9" stroke-width="4"/>
+    <path d="M70 150Q52 174 56 204"/><path d="M58 158l16 4-3 13-16-4z" fill="#f3d774" fill-opacity=".55" stroke="#f3d774" stroke-width="2.4"/>
+    <circle cx="57" cy="209" r="7" ${chFill(.06, '#fff')}/>
+    <path d="M130 150Q148 168 136 186"/>
+    <g transform="rotate(-10 128 196)"><rect x="112" y="172" width="34" height="44" rx="4" fill="#d9b98a" fill-opacity=".35" stroke="#d9b98a"/><rect x="122" y="168" width="14" height="8" rx="2" ${chFill(.3, '#fff')}/><path d="M118 186h22M118 196h22M118 206h14" stroke-width="2"/></g>
+    <circle cx="134" cy="188" r="7" ${chFill(.06, '#fff')}/>
+    <path d="M64 214L54 252H146L136 214Z" ${chFill(.6)}/><path d="M80 216L72 252M100 216V252M120 216L128 252" stroke-width="2.4"/>
+    <path d="M82 252V282M118 252V282"/><path d="M80 268h6M116 268h6" stroke-width="2"/>
+    <ellipse cx="79" cy="287" rx="11" ry="5" ${chFill(.35, '#8b5a3c')}/><ellipse cx="121" cy="287" rx="11" ry="5" ${chFill(.35, '#8b5a3c')}/>`,
+  // 第5章 ピポ星人: egg head, antennae, big eyes, six fingers
+  pipo: ex => `
+    <ellipse cx="100" cy="296" rx="44" ry="5" fill="currentColor" fill-opacity=".18" stroke="none"/>
+    <g transform="translate(0 30)">
+    <path d="M82 56Q76 30 64 20M118 56Q124 30 136 20"/>
+    <circle cx="62" cy="17" r="7" fill="#f3d774" fill-opacity=".75" stroke="#f3d774"/><circle cx="138" cy="17" r="7" fill="#9fd8ff" fill-opacity=".75" stroke="#9fd8ff"/>
+    <path d="M100 46Q150 46 152 98Q152 142 100 144Q48 142 48 98Q50 46 100 46Z" ${chFill(.6)}/>
+    <path d="M62 70Q72 56 88 54" stroke-width="2.4" opacity=".7"/>
+    ${chFace({l: [80, 98], r: [120, 98], m: [100, 126], big: true, size: 1.05}, ex)}
+    <path d="M74 150Q100 140 126 150Q138 196 124 210H76Q62 196 74 150Z" ${chFill(.32, '#fff')}/>
+    <path d="M78 176H122" stroke="#f3d774" stroke-width="4"/>
+    <path d="M100 156l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" fill="#f3d774" fill-opacity=".85" stroke="#f3d774" stroke-width="1.6"/>
+    <path d="M74 158Q54 150 46 128"/>
+    <circle cx="44" cy="122" r="8" ${chFill(.12, '#fff')}/>
+    <path d="M38 116l-6-8M41 113l-3-10M45 112l0-10M49 113l3-9M52 117l6-6M53 122l8-2" stroke-width="2.6"/>
+    <path d="M126 160Q146 176 146 196"/>
+    <circle cx="146" cy="202" r="7" ${chFill(.12, '#fff')}/>
+    <path d="M140 207l-4 6M143 209l-1 7M147 209l1 7M151 207l3 6M153 203l6 3M139 203l-6 3" stroke-width="2.4"/>
+    <path d="M88 210L86 238M112 210L114 238"/>
+    <ellipse cx="84" cy="243" rx="11" ry="6" ${chFill(.6)}/><ellipse cx="116" cy="243" rx="11" ry="6" ${chFill(.6)}/>
+    </g>`,
+  // 第7章 くせもの番長: pompadour, long gakuran, hands in pockets, plaster on the cheek
+  bancho: ex => `
+    <path d="M56 84Q44 40 86 30Q120 18 162 40Q146 38 138 46Q150 58 144 84Q128 58 102 60Q78 58 56 84Z" ${chFill(.75)}/>
+    <path d="M70 46Q100 30 140 38" stroke-width="2.2" opacity=".6"/>
+    <path d="M60 84L62 112Q72 134 100 136Q128 134 138 112L140 84" ${chFill(.14, "#fff")}/>
+    ${chFace({l: [81, 100], r: [119, 100], m: [101, 120], sharp: true, smirk: true}, ex)}
+    <g transform="rotate(-18 128 112)"><rect x="118" y="106" width="20" height="9" rx="3" fill="#f6e3c8" fill-opacity=".55" stroke="#f6e3c8" stroke-width="2"/><path d="M124 108v5M128 108v5M132 108v5" stroke-width="1.4"/></g>
+    ${ex === 'normal' ? '<path d="M111 119L134 110" stroke="#b8e6a3" stroke-width="2.6"/>' : ''}
+    <path d="M84 136Q100 146 116 136L116 128Q100 138 84 128Z" ${chFill(.25, '#fff')}/>
+    <path d="M64 146Q100 138 136 146L152 266H48Z" fill="#59607a" fill-opacity=".6"/>
+    <path d="M66 150L52 262M134 150L148 262" stroke="currentColor" stroke-width="3"/>
+    <path d="M90 142L100 250L110 142" ${chFill(.3, '#fff')}/>
+    <circle cx="88" cy="160" r="2.6" fill="#f3d774" stroke="none"/><circle cx="89" cy="184" r="2.6" fill="#f3d774" stroke="none"/><circle cx="90" cy="208" r="2.6" fill="#f3d774" stroke="none"/><circle cx="91" cy="232" r="2.6" fill="#f3d774" stroke="none"/>
+    <path d="M66 150Q50 190 64 222"/><path d="M134 150Q150 190 136 222"/>
+    <path d="M58 216Q66 226 74 216M126 216Q134 226 142 216" stroke-width="2.4"/>
+    <path d="M78 266L72 286H90L94 266M106 266L110 286H128L122 266" fill="#59607a" fill-opacity=".6"/>
+    <ellipse cx="80" cy="290" rx="13" ry="5" ${chFill(.3, '#fff')}/><ellipse cx="120" cy="290" rx="13" ry="5" ${chFill(.3, '#fff')}/>`,
+};
+function charaSVG(id, ex, color){
+  const f = CHARA_ART[id];
+  if (!f) return '';
+  return `<svg viewBox="0 0 200 300" class="chara" aria-hidden="true" style="color:${color}"><g filter="url(#chalk)" fill="none" stroke="${CH_LINE}" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">${f(ex || 'normal')}</g></svg>`;
+}
+// ===== CHARA-END =====
+
+// ===================== Story scenes =====================
+// Lines: [who, expression, text]. who: a character id, 'me' (the player) or 'n' (narration). {name} = the player's name.
+// Keys: <chapter>s = before the first stage, <chapter>b = before the boss, <chapter>e = after the first boss clear.
+const STORY = {
+  '1s': [
+    ['n', '', '「わりばし学園」――ここでは、手遊び「わりばし」の強さがすべてを決める。'],
+    ['n', '', '転校初日。教室の前で、メガネの女の子が待っていた。'],
+    ['iincho', 'normal', 'あなたが転校生の{name}さんね。わたしはこのクラスの委員長。'],
+    ['iincho', 'smile', 'この学園では、あいさつ代わりに「わりばし」で勝負するのがきまりなの。'],
+    ['me', '', '（……あいさつ代わりに？）'],
+    ['iincho', 'normal', 'ルールはかんたん。相手の手をタッチして、指の数を足していくの。\nちょうど5本になった手は消えちゃう。'],
+    ['iincho', 'smile', '相手の両手を消したら勝ち！ まずは軽く、1回やってみましょ。'],
+  ],
+  '1b': [
+    ['iincho', 'surprise', 'えっ……もうここまで来たの！？'],
+    ['iincho', 'sad', 'まだ転校してきたばかりなのに……。'],
+    ['iincho', 'normal', 'でも、このクラスでいちばん強いのはわたし。委員長として、負けるわけにはいかないわ。'],
+    ['iincho', 'smile', '本気でいくわよ、{name}さん！'],
+  ],
+  '1e': [
+    ['iincho', 'sad', 'うそ……わたしが負けるなんて……。'],
+    ['iincho', 'surprise', '……でも、今の手。分身で数をそろえてから一気に消すなんて、どこで覚えたの？'],
+    ['me', '', '（なんとなく、だけど……）'],
+    ['iincho', 'smile', 'ふふっ、楽しかった！ あなた、けっこう強いのね。'],
+    ['iincho', 'normal', 'となりの教室には「かたぶつ先生」がいるわ。分身を禁止してくる、ちょっとこわい先生よ。'],
+    ['iincho', 'smile', '困ったら、いつでもわたしに声をかけてね。がんばって、{name}さん！'],
+    ['n', '', '第2章「分身できない」に進めるようになった！'],
+  ],
+};
+const STORY_PARTS = [['s', 'はじまり'], ['b', 'ボス戦の前'], ['e', 'クリア後']];
+const CHARA_BUST = {iincho: '44 18 112 112', pipo: '36 42 128 128', bancho: '40 24 120 120'};   // the head-and-shoulders crop
+const storySeen = k => !!(((net.profile || {}).story || {})[k]) || lsGet('waribashi-story-' + k) === '1';
+function markStory(k){
+  lsSet('waribashi-story-' + k, '1');
+  if (net.fb && net.uid) net.fb.update(net.fb.ref(net.fb.db, `players/${net.uid}/story`), {[k]: true}).catch(() => {});
+}
+// A character's stand: a drawing in chara/<id>_<expression>.png wins over the built-in chalk drawing.
+const charaPng = {};
+function charaStand(id, ex){
+  const ch = STAGE_CH.find(x => x.id === id);
+  if (!ch) return '';
+  if (charaPng[id] === undefined) {
+    charaPng[id] = 'probe';
+    const im = new Image();
+    im.onload = () => { charaPng[id] = true; };
+    im.onerror = () => { charaPng[id] = false; };
+    im.src = `chara/${id}_normal.png`;
+  }
+  if (charaPng[id] === true) return `<img src="chara/${id}_${ex || 'normal'}.png" alt="">`;
+  return CHARA_ART[id] ? charaSVG(id, ex, ch.c) : avatarHTML(ch);
+}
+// Play one scene. Resolves when it ends or is skipped.
+function playStory(key, opts){
+  const lines = STORY[key];
+  if (!lines) return Promise.resolve();
+  opts = opts || {};
+  const box = $('#story'), chEl = $('#stCh'), c = +key.match(/^\d+/)[0], chap = STAGE_CH[c - 1];
+  $('#stChap').textContent = `${(STORY_PARTS.find(p => key.endsWith(p[0])) || [, ''])[1]}｜第${c}章「${chap.name}」`;
+  box.hidden = false;
+  hideSplash();
+  let i = -1, shown = '', typing = null, cur = null;
+  return new Promise(done => {
+    const finish = () => {
+      clearInterval(typing);
+      box.hidden = true;
+      box.removeEventListener('click', onTap);
+      $('#stSkip').removeEventListener('click', onSkip);
+      document.removeEventListener('keydown', onKey);
+      if (!opts.replay) markStory(key);
+      render();
+      done();
+    };
+    const show = () => {
+      i++;
+      if (i >= lines.length) { finish(); return; }
+      const [who, ex, raw] = lines[i], text = raw.replace(/\{name\}/g, typedName()), ch = STAGE_CH.find(x => x.id === who);
+      const sb = $('#stBox');
+      sb.className = 'st-box' + (who === 'n' ? ' narr' : who === 'me' ? ' me' : '');
+      $('#stName').textContent = who === 'n' ? '' : who === 'me' ? typedName() : ch ? ch.who : '';
+      sb.style.setProperty('--sc', who === 'me' ? 'var(--you)' : ch ? ch.c : 'var(--chalk)');
+      if (ch) {
+        const k = who + ':' + ex;
+        if (cur !== k) { chEl.innerHTML = charaStand(who, ex); chEl.classList.remove('pop'); void chEl.offsetWidth; chEl.classList.add('pop'); }
+        if (!cur || cur.split(':')[0] !== who) chEl.classList.remove('gone');
+        chEl.classList.remove('dim');
+        cur = k;
+      } else if (cur) chEl.classList.add('dim');
+      const t = $('#stText');
+      shown = text;
+      clearInterval(typing);
+      if (reduceMotion.matches || opts.instant) { t.textContent = text; typing = null; return; }
+      let n = 0;
+      t.textContent = '';
+      typing = setInterval(() => { n += 1; t.textContent = text.slice(0, n); if (n >= text.length) { clearInterval(typing); typing = null; } }, 32);
+      sfx('tap');
+    };
+    const next = () => { if (typing) { clearInterval(typing); typing = null; $('#stText').textContent = shown; } else show(); };
+    const onTap = e => { if (e.target.closest('#stSkip')) return; next(); };
+    const onSkip = e => { e.stopPropagation(); finish(); };
+    const onKey = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); next(); } else if (e.key === 'Escape') finish(); };
+    chEl.className = 'st-ch gone'; chEl.innerHTML = '';
+    box.addEventListener('click', onTap);
+    $('#stSkip').addEventListener('click', onSkip);
+    document.addEventListener('keydown', onKey);
+    show();
+  });
+}
+// The scene that belongs before a stage, if it has not been seen.
+const storyBefore = (c, n) => n === 1 ? `${c}s` : n === STAGE_N ? `${c}b` : null;
+
 // ===================== Stage mode =====================
 const STAGE_LEVEL = {weak: 'よわい', normal: 'ふつう', strong: 'さいきょう'};
 const HANDICAP = [[[1, 1], [2, 2]], [[1, 1], [1, 3]], [[1, 1], [2, 3]], [[1, 2], [3, 3]], [[1, 1], [3, 3]], [[1, 1], [2, 4]]];
@@ -3705,6 +3958,8 @@ async function startStage(c, n){
   }
   const plan = stagePlan(st);
   if (!plan) { toast('ステージを作れませんでした', true); return; }
+  const sk = storyBefore(c, n);
+  if (sk && STORY[sk] && !storySeen(sk)) await playStory(sk);
   ui.boss = null; ui.puzzle = null;
   ui.stage = Object.assign({}, st, plan, {mine: [...plan.mine], his: [...plan.his]});
   setScreen('game');
@@ -3810,10 +4065,22 @@ function renderChapter(){
   const hero = $('#chHero');
   hero.style.setProperty('--cc', ch.c);
   if (!unchanged(hero, String(c))) {
-    hero.innerHTML = avatarHTML(ch) + '<span class="ch-k"></span><b></b><small></small>';
+    hero.innerHTML = (CHARA_BUST[ch.id] ? `<span class="chbust">${charaSVG(ch.id, 'normal', ch.c).replace('viewBox="0 0 200 300"', `viewBox="${CHARA_BUST[ch.id]}"`)}</span>` : avatarHTML(ch)) + '<span class="ch-k"></span><b></b><small></small>';
     hero.querySelector('.ch-k').textContent = `第${c}章・相手は${ch.who}`;
     hero.querySelector('b').textContent = ch.name;
     hero.querySelector('small').textContent = `${ch.desc}。10面目のボスに勝つとスタンプ「${STAGE_STAMPS[c - 1][1]}」`;
+  }
+  const sbox = $('#chStory'), parts = STORY_PARTS.filter(([p]) => STORY[c + p]);
+  sbox.hidden = !parts.length;
+  if (parts.length && !unchanged(sbox, JSON.stringify([c, parts.map(([p]) => storySeen(c + p))]))) {
+    sbox.innerHTML = '<span>ストーリー</span>';
+    parts.forEach(([p, label]) => {
+      const b = document.createElement('button'), seen = storySeen(c + p);
+      b.type = 'button'; b.className = 'btn sm'; b.dataset.st = c + p; b.disabled = !seen;
+      b.textContent = seen ? label : `${label}（まだ）`;
+      b.addEventListener('click', () => playStory(c + p, {replay: true}));
+      sbox.append(b);
+    });
   }
   const grid = $('#stgGrid');
   grid.style.setProperty('--cc', ch.c);
@@ -4441,6 +4708,8 @@ async function claimGuideDone(){
 
 // ===================== News =====================
 const NEWS = [
+  {id: 'n11', date: '2026-11-15', tag: 'お試し', title: 'ストーリーがはじまりました（第1章）',
+    body: 'ステージ第1章に会話シーンがつきました。いいんちょうとのお話を楽しんでね。章の画面からいつでも見返せます。\nほかの章のお話と、キャラを「相棒」にできる機能はこれから追加していきます。'},
   {id: 'n10', date: '2026-11-15', tag: '新機能', title: 'Lv報酬が登場！ これまでのレベルぶんもプレゼント',
     body: 'レベルが上がるたびにコイン100・ジュエル50がもらえるようになりました。5レベルごとにガチャチケット、Lv10・20・30・50ではここでしか手に入らない称号・プレート・チョーク・黒板も。\nこれまでに上げたレベルのぶんは、まとめて受け取れます。マイページの「Lv報酬」で次の報酬を見られます。\nはじめたばかりの人は、レベルに合わせてショップ・レート戦・ガチャなどが少しずつ開きます（いま遊んでいる人はそのまま全部遊べます）。'},
   {id: 'n9', date: '2026-11-15', tag: '新機能', title: 'ステージモード登場！ 9章90ステージ',
