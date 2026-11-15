@@ -2509,7 +2509,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/15-12';
+const APP_VERSION = '11/15-13';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -3868,7 +3868,9 @@ function playStory(key, opts){
   });
 }
 // The scene that belongs before a stage, if it has not been seen.
-const storyBefore = (c, n) => n === 1 ? `${c}s` : n === STAGE_N ? `${c}b` : null;
+const storyBefore = (c, n) => [`${c}s`].concat(n === STAGE_N ? [`${c}b`] : []).filter(k => STORY[k] && !storySeen(k));
+// A scene can be watched once the story has reached it.
+const storyReached = (c, p) => p === 's' ? stageOpen(c, 1) : p === 'b' ? stageOpen(c, STAGE_N) : (+stageStars()[`${c}-${STAGE_N}`] || 0) > 0;
 
 // ===================== Stage mode =====================
 const STAGE_LEVEL = {weak: 'よわい', normal: 'ふつう', strong: 'さいきょう'};
@@ -3881,13 +3883,23 @@ function stageDef(c, n){
   let rule = Object.assign({}, base, ch.rule);
   if (ch.alien) rule.base = n % 2 ? 6 : 4;
   if (ch.mix) { const src = STAGE_CH[(n - 1) % 7]; rule = Object.assign({}, base, src.rule, src.alien ? {base: n % 2 ? 6 : 4} : {}); }
-  const level = ch.mix ? 'strong' : n <= 3 ? 'weak' : n <= 6 ? 'normal' : 'strong', boss = n === STAGE_N;
-  const first = ch.handicap && n % 2 === 0 ? 1 : 0;
-  // strong stages start from a position that is a win for me with best play (picked with the solver), d = its length in plies
-  const dr = level !== 'strong' ? null : boss ? [9, 15] : ch.mix ? [3 + n, 5 + n] : n === 7 ? [3, 5] : n === 8 ? [5, 7] : [7, 9];
+  const boss = n === STAGE_N, first = ch.handicap && n % 2 === 0 ? 1 : 0, L = stageLevel(c, n), level = L.level;
+  // strong stages start from a position that is a win for me with best play (picked with the solver), d = its length in plies;
+  // a strong stage with no range is the normal start against a CPU that plays its best move with probability "skill"
+  const dr = level !== 'strong' || L.open ? null : L.dr || (boss ? [9, 15] : ch.mix ? [3 + n, 5 + n] : n === 7 ? [3, 5] : n === 8 ? [5, 7] : [7, 9]);
   const fixed = level !== 'strong' && ch.handicap ? HANDICAP[(n - 1) % HANDICAP.length] : null;
-  return {id: `${c}-${n}`, c, n, ch, rule, level, boss, first, dr, fixed, coins: boss ? 200 : level === 'weak' ? 50 : level === 'normal' ? 80 : 120};
+  return {id: `${c}-${n}`, c, n, ch, rule, level, boss, first, dr, fixed, skill: L.skill || 0, open: !!L.open,
+    coins: boss ? 200 : level === 'weak' ? 50 : level === 'normal' ? 80 : 120};
 }
+// How hard each stage is. Chapter 1 is a gentle start (no puzzles), chapters 2-3 bring in short puzzles,
+// 4-8 climb to long ones, and chapter 9 is strong all the way.
+function stageLevel(c, n){
+  if (STAGE_CH[c - 1].mix) return {level: 'strong'};
+  if (c === 1) return n <= 4 ? {level: 'weak'} : n <= 7 ? {level: 'normal', skill: .3} : n <= 9 ? {level: 'normal', skill: .45} : {level: 'strong', skill: .6, open: true};
+  if (c <= 3) return n <= 3 ? {level: 'weak'} : n <= 7 ? {level: 'normal', skill: .5} : n <= 9 ? {level: 'strong', dr: n === 8 ? [3, 5] : [5, 7]} : {level: 'strong', dr: [5, 9]};
+  return n <= 3 ? {level: 'weak'} : n <= 6 ? {level: 'normal'} : {level: 'strong'};
+}
+const levelLabel = st => st.boss ? 'ボス' : STAGE_LEVEL[st.level];
 // A winning start for me, the same on every device (seeded by the stage id).
 // At most one hand already gone, so the start still looks like a game. null when the rule has no such win (e.g. no merging, or a real handicap with the CPU to move).
 function pickStart(st){
@@ -3924,6 +3936,7 @@ function stagePlan(st){
 function makePlan(st){
   let mine = [1, 1], his = [1, 1], best = 0, hard = 0;
   const fixed = st.fixed || (st.ch.handicap ? HANDICAP[(st.n - 1) % HANDICAP.length] : null);
+  if (st.open) hard = st.skill;
   if (st.dr) {
     if (!solverFor(st.rule).ready) return null;
     const p = pickStart(st);
@@ -3958,14 +3971,13 @@ async function startStage(c, n){
   }
   const plan = stagePlan(st);
   if (!plan) { toast('ステージを作れませんでした', true); return; }
-  const sk = storyBefore(c, n);
-  if (sk && STORY[sk] && !storySeen(sk)) await playStory(sk);
+  for (const k of storyBefore(c, n)) await playStory(k);
   ui.boss = null; ui.puzzle = null;
   ui.stage = Object.assign({}, st, plan, {mine: [...plan.mine], his: [...plan.his]});
   setScreen('game');
   newStageGame();
   $('#splashB').innerHTML = `<div class="sp-boss" style="display:grid;place-items:center">${avatarHTML(st.ch, 'xl')}</div>`;
-  showSplash(`${st.id}「${st.ch.name}」`, `${st.ch.who}（${STAGE_LEVEL[st.level]}）・${ruleShort(st.rule)}` + (plan.limit ? `・${plan.limit}手以内` : ''));
+  showSplash(`${st.id}「${st.ch.name}」`, `${st.ch.who}（${levelLabel(st)}）・${ruleShort(st.rule)}` + (plan.limit ? `・${plan.limit}手以内` : ''));
 }
 function newStageGame(){
   clearTimeout(cpuTimer); cpuTimer = null; busy = false;
@@ -4072,13 +4084,13 @@ function renderChapter(){
   }
   const sbox = $('#chStory'), parts = STORY_PARTS.filter(([p]) => STORY[c + p]);
   sbox.hidden = !parts.length;
-  if (parts.length && !unchanged(sbox, JSON.stringify([c, parts.map(([p]) => storySeen(c + p))]))) {
+  if (parts.length && !unchanged(sbox, JSON.stringify([c, parts.map(([p]) => [storySeen(c + p), storyReached(c, p)])]))) {
     sbox.innerHTML = '<span>ストーリー</span>';
     parts.forEach(([p, label]) => {
-      const b = document.createElement('button'), seen = storySeen(c + p);
-      b.type = 'button'; b.className = 'btn sm'; b.dataset.st = c + p; b.disabled = !seen;
-      b.textContent = seen ? label : `${label}（まだ）`;
-      b.addEventListener('click', () => playStory(c + p, {replay: true}));
+      const b = document.createElement('button'), seen = storySeen(c + p), reached = storyReached(c, p);
+      b.type = 'button'; b.className = 'btn sm' + (reached && !seen ? ' gold' : ''); b.dataset.st = c + p; b.disabled = !reached;
+      b.textContent = !reached ? `${label}（まだ）` : seen ? label : `${label} NEW`;
+      b.addEventListener('click', () => playStory(c + p, {replay: seen}));
       sbox.append(b);
     });
   }
@@ -4100,7 +4112,7 @@ function renderChapter(){
   if (unchanged(box, JSON.stringify([st.id, !!plan, got, stageOpen(c, n, s)]))) return;
   box.innerHTML = '<h3></h3><dl class="facts"></dl><ul class="stconds"></ul><p class="note"></p>';
   box.querySelector('h3').textContent = `${st.id}${st.boss ? '（ボス）' : ''}`;
-  const facts = [['相手', `${ch.who}（${STAGE_LEVEL[st.level]}）`], ['ルール', ruleShort(st.rule)]];
+  const facts = [['相手', `${ch.who}（${levelLabel(st)}）`], ['ルール', ruleShort(st.rule)]];
   if (plan) facts.push(['はじまり', `あなた ${plan.mine.join('・')}／相手 ${plan.his.join('・')}・${st.first ? '相手が先手' : 'あなたが先手'}`]);
   if (plan && plan.limit) facts.push(['手数', `${plan.limit}手以内に勝てないと負け`]);
   facts.forEach(([k, v]) => { const d = document.createElement('div'); d.innerHTML = '<dt></dt><dd></dd>'; d.firstChild.textContent = k; d.lastChild.textContent = v; box.querySelector('.facts').append(d); });
@@ -4709,7 +4721,7 @@ async function claimGuideDone(){
 // ===================== News =====================
 const NEWS = [
   {id: 'n11', date: '2026-11-15', tag: 'お試し', title: 'ストーリーがはじまりました（第1章）',
-    body: 'ステージ第1章に会話シーンがつきました。いいんちょうとのお話を楽しんでね。章の画面からいつでも見返せます。\nほかの章のお話と、キャラを「相棒」にできる機能はこれから追加していきます。'},
+    body: 'ステージ第1章に会話シーンがつきました。いいんちょうとのお話を楽しんでね。章の画面の「ストーリー」からいつでも見られます（NEWがついているのがまだ見ていないお話）。\n第1章はやさしくしました。詰めわりばし風のステージは第2章から少しずつ出てきます。\nほかの章のお話と、キャラを「相棒」にできる機能はこれから追加していきます。'},
   {id: 'n10', date: '2026-11-15', tag: '新機能', title: 'Lv報酬が登場！ これまでのレベルぶんもプレゼント',
     body: 'レベルが上がるたびにコイン100・ジュエル50がもらえるようになりました。5レベルごとにガチャチケット、Lv10・20・30・50ではここでしか手に入らない称号・プレート・チョーク・黒板も。\nこれまでに上げたレベルのぶんは、まとめて受け取れます。マイページの「Lv報酬」で次の報酬を見られます。\nはじめたばかりの人は、レベルに合わせてショップ・レート戦・ガチャなどが少しずつ開きます（いま遊んでいる人はそのまま全部遊べます）。'},
   {id: 'n9', date: '2026-11-15', tag: '新機能', title: 'ステージモード登場！ 9章90ステージ',
@@ -5405,7 +5417,7 @@ function chooseCpuMove(){
   else if (ui.stage) {
     const lv = ui.stage.level;
     if (lv === 'strong') m = !ui.stage.hard || Math.random() < ui.stage.hard ? best() : randomMove(ms);
-    else if (lv === 'normal') m = Math.random() < 0.6 ? best() : randomMove(ms);
+    else if (lv === 'normal') m = Math.random() < (ui.stage.skill || 0.6) ? best() : randomMove(ms);
     else { const kill = ms.filter(x => s.res[x.next] === -1 && s.dist[x.next] === 0); m = kill.length && Math.random() < 0.7 ? pick(kill) : randomMove(ms); }
   }
   else if (settings.level === 'strong') m = best();
