@@ -86,8 +86,8 @@ h1,h2,h3{text-wrap:balance}
 
 /* Tab bar (bottom): the chalk ledge under the board */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:center;padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));background:linear-gradient(180deg,var(--wood-hi),var(--wood) 30%,#5c3b22);box-shadow:0 -10px 24px -12px rgba(0,0,0,.8)}
-.tabbar-in{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;width:100%;max-width:560px}
-.tab{position:relative;display:grid;justify-items:center;align-content:center;gap:1px;min-height:56px;min-width:0;padding:6px 2px 4px;border:0;border-radius:10px;background:none;color:rgba(255,241,222,.78);cursor:pointer;font-size:11px;font-weight:700;letter-spacing:.02em;white-space:nowrap}
+.tabbar-in{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px;width:100%;max-width:600px}
+.tab{position:relative;display:grid;justify-items:center;align-content:center;gap:1px;min-height:56px;min-width:0;padding:6px 1px 4px;border:0;border-radius:10px;background:none;color:rgba(255,241,222,.78);cursor:pointer;font-size:10.5px;font-weight:700;letter-spacing:0;white-space:nowrap}
 .tab svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .tab[aria-current="page"]{background-color:var(--board);background-image:var(--noise);color:var(--you);box-shadow:inset 0 0 0 2px rgba(0,0,0,.25),inset 0 0 14px rgba(0,0,0,.3)}
 .tab:hover:not(:disabled):not([aria-current="page"]){background:rgba(0,0,0,.14)}
@@ -489,6 +489,96 @@ fieldset:disabled .opts span{cursor:default}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;width:max-content;max-width:calc(100% - 32px);padding:10px 16px;border-radius:12px;background:var(--panel);border:1.5px solid var(--line);box-shadow:0 10px 24px -8px rgba(0,0,0,.7);font-size:14px;text-wrap:pretty}
 .toast.err{border-color:var(--lose);color:var(--lose)}
 
+/* ----- Events hub ----- */
+.evlist{display:grid;gap:12px}
+.evcard{--c:var(--you);position:relative;display:grid;grid-template-columns:72px minmax(0,1fr);gap:4px 14px;align-items:center;width:100%;padding:12px 16px 12px 12px;border-radius:12px;border:4px solid var(--wood);background-color:var(--board);background-image:radial-gradient(ellipse 60% 70% at 12% 50%,rgba(236,238,228,.08),transparent 70%),var(--noise);box-shadow:inset 0 0 30px rgba(0,0,0,.3);text-align:left;cursor:pointer;color:var(--chalk)}
+.evcard:focus-visible{outline:2px solid var(--chalk);outline-offset:3px}
+.evcard.boss{background-color:#2c2346}
+.ev-art{grid-row:1/span 3;display:grid;place-items:center;width:72px;height:72px}
+.ev-art svg{width:100%;height:auto;overflow:visible}
+.ev-icon{display:grid;place-items:center;width:62px;height:62px;border-radius:50%;border:3px solid var(--c);color:var(--c);font-family:var(--font-display);font-size:26px;transform:rotate(-6deg)}
+.ev-tag{justify-self:start;font-size:11px;font-weight:700;line-height:1.7;padding:0 9px;border-radius:999px;background:var(--c);color:#1c1b18}
+.ev-h{font-family:var(--font-display);font-weight:400;font-size:22px;line-height:1.2;min-width:0}
+.ev-s{font-size:12px;color:var(--chalk-soft);min-width:0}
+.ev-badge{position:absolute;top:-8px;right:10px;font-size:12px;font-weight:700;line-height:1.7;padding:0 10px;border-radius:999px;background:var(--lose);color:#1c1b18;animation:beat 1.8s ease-in-out infinite}
+.ev-meter{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--chalk-soft);font-variant-numeric:tabular-nums}
+.ev-meter .meter{flex:1;height:7px;margin:0;border-radius:4px}
+.ev-meter .meter i{background:var(--c)}
+/* login stamps */
+.result.login .res-t{font-size:clamp(30px,9vw,40px)}
+.stamps{list-style:none;margin:4px 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.stamp{position:relative;display:grid;justify-items:center;gap:2px;padding:8px 2px 6px;border-radius:10px;border:1.5px dashed var(--chalk-faint);background:rgba(0,0,0,.18);font-size:11px;color:var(--chalk-soft)}
+.stamp b{font-family:var(--font-display);font-weight:400;font-size:15px;color:var(--chalk)}
+.stamp .coin{font-size:12px}
+.stamp.big{grid-column:span 2;border-color:var(--coin)}
+.stamp.done::after{content:"済";position:absolute;inset:50% auto auto 50%;display:grid;place-items:center;width:40px;height:40px;margin:-20px 0 0 -20px;border:3px solid var(--lose);border-radius:50%;color:var(--lose);font-family:var(--font-display);font-size:18px;transform:rotate(-14deg);background:rgba(28,27,24,.35)}
+.stamp.today::after{animation:stamp .5s cubic-bezier(.2,.9,.3,1.4) .35s both}
+@keyframes stamp{from{opacity:0;transform:scale(2.4) rotate(-30deg)}}
+.lg-got{margin:0;font-size:15px}
+/* season pass */
+.passhero{display:grid;gap:8px;padding:16px;border-radius:8px;border:6px solid var(--wood);background-color:var(--board);background-image:radial-gradient(ellipse 70% 60% at 85% 30%,var(--sc2,rgba(255,191,90,.18)),transparent 70%),var(--noise);box-shadow:inset 0 0 40px rgba(0,0,0,.35)}
+.ph-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.ph-name{margin:0;font-family:var(--font-display);font-weight:400;font-size:24px;color:var(--sc,var(--you))}
+.ph-left{font-size:12px;color:var(--chalk-soft)}
+.ph-lv{display:flex;align-items:baseline;gap:6px;font-family:var(--font-display)}
+.ph-lv b{font-size:44px;font-weight:400;line-height:1;color:var(--sc,var(--you))}
+.ph-lv span{font-size:16px;color:var(--chalk-soft)}
+.ph-xp{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--chalk-soft);font-variant-numeric:tabular-nums}
+.ph-xp .meter{flex:1;height:9px;margin:0;border-radius:5px}
+.ph-xp .meter i{background:var(--sc,var(--you))}
+.passlist{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:8px}
+.pt{display:grid;justify-items:center;gap:3px;padding:8px 4px;border-radius:10px;border:1.5px solid var(--line);background:var(--board-deep);font-size:12px;color:var(--chalk-soft);text-align:center}
+.pt b{font-family:var(--font-display);font-weight:400;font-size:14px;color:var(--chalk)}
+.pt .coin{font-size:13px}
+.pt.ready{border-color:var(--coin);box-shadow:0 0 0 1px var(--coin) inset}
+.pt.done{opacity:.5}
+.pt.special{border-style:double;border-width:3px}
+.pt svg{width:28px;height:auto;aspect-ratio:100/130;overflow:visible}
+.pt svg .pm,.pt svg .fg{fill:currentColor}
+.pt svg .fg{stroke:var(--board-deep);stroke-width:2}
+.lvcard{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:center;padding:12px 16px;border-radius:12px;background:var(--panel);border:1.5px solid var(--line)}
+.lvcard .lv-n{grid-row:1/span 2;font-family:var(--font-display);font-size:34px;line-height:1;color:var(--you)}
+.lvcard .lv-n small{font-size:14px;margin-right:2px;color:var(--chalk-soft)}
+.lvcard .ph-xp .meter i{background:var(--you)}
+.tb-title b{font-weight:700;color:var(--chalk);margin-right:4px}
+/* puzzle */
+.puzhero{display:grid;justify-items:center;gap:8px;padding:16px;border-radius:8px;border:6px solid var(--wood);background-color:var(--board);background-image:var(--noise);box-shadow:inset 0 0 40px rgba(0,0,0,.35);text-align:center}
+.pz-num{margin:0;font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--chalk-soft)}
+.pz-title{margin:0;font-family:var(--font-display);font-weight:400;font-size:30px;line-height:1.2;color:var(--p2)}
+.pz-rule{margin:0;font-size:13px;color:var(--chalk-soft)}
+.pz-board{display:grid;gap:4px;width:min(260px,100%)}
+.pz-row{display:flex;align-items:center;justify-content:center;gap:16px}
+.pz-row figure{margin:0;display:grid;justify-items:center;gap:0}
+.pz-row svg{width:46px;height:auto;aspect-ratio:100/130;overflow:visible}
+.pz-row svg .pm,.pz-row svg .fg{fill:currentColor}
+.pz-row svg .fg{stroke:var(--board);stroke-width:2}
+.pz-row figcaption{font-family:var(--font-display);font-size:18px;line-height:1}
+.pz-row figcaption small{display:block;font:700 10px/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.08em;color:var(--chalk-soft)}
+.pz-row .who{font-size:12px;color:var(--chalk-soft);min-width:3em}
+.pz-line{border:0;border-top:2px dashed var(--chalk-faint);margin:2px 0;width:100%}
+.pz-state{margin:0;font-size:14px}
+.pz-state b{color:var(--coin)}
+.share{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+
+/* ----- Friends ----- */
+.codebox{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border-radius:12px;border:4px solid var(--wood);background-color:var(--board);background-image:var(--noise)}
+.codebox b{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:28px;letter-spacing:.18em;color:var(--you);user-select:all}
+.addrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.addrow .input{text-transform:uppercase;letter-spacing:.14em;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.frlist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.frlist li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center;padding:8px 10px;border-radius:12px;background:var(--board-deep);border:1.5px solid var(--line)}
+.frlist li.empty{display:block;border-style:dashed;color:var(--chalk-soft);font-size:13px}
+.frlist .fr-st{grid-column:1;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--chalk-soft)}
+.frlist .dot{width:9px;height:9px;border-radius:50%;background:var(--chalk-faint)}
+.frlist .on .dot{background:#7fe08a;box-shadow:0 0 8px #7fe08a}
+.frlist .on{color:#a8f0b0}
+.frlist .fr-b{grid-column:2;grid-row:1/span 2;display:grid;gap:6px}
+.frlist .fr-b .btn{min-height:36px;padding:4px 12px;font-size:13px}
+.invite{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:62;width:min(420px,calc(100% - 32px));display:grid;gap:10px;padding:14px;border-radius:12px;border:2px solid var(--p2);background:var(--panel);box-shadow:0 14px 30px -10px rgba(0,0,0,.8),0 0 0 4px rgba(159,208,240,.15);transform:translateX(-50%);animation:rise2 .45s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes rise2{from{opacity:0;transform:translate(-50%,30px)}}
+.invite p{margin:0;font-size:15px}
+.invite .row{justify-content:flex-end}
+
 /* ----- Today's boss ----- */
 .bosscard{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:center;width:100%;padding:12px 16px 12px 12px;border-radius:12px;border:5px solid var(--wood);background-color:#2c2346;background-image:radial-gradient(ellipse 60% 70% at 18% 50%,rgba(201,162,255,.18),transparent 70%),var(--noise);box-shadow:inset 0 0 36px rgba(0,0,0,.35);text-align:left;cursor:pointer;color:var(--chalk);overflow:hidden}
 .bosscard:focus-visible{outline:2px solid var(--chalk);outline-offset:3px}
@@ -625,7 +715,7 @@ fieldset:disabled .opts span{cursor:default}
 <div class="app">
   <header class="topbar">
     <button type="button" class="tb-box tb-rate" id="tbRank" aria-label="ランキングを見る"><small>RATE</small><b id="barRate">1500</b><span class="tb-sub" id="barTier">緑</span></button>
-    <button type="button" class="tb-me" id="homePlate" aria-label="プロフィールを開く"><span class="tb-title" id="barTitle">ルーキー</span><span class="nm" id="barName">ななし</span><span class="coin" id="barCoins">0</span></button>
+    <button type="button" class="tb-me" id="homePlate" aria-label="プロフィールを開く"><span class="tb-title"><b id="barLv">Lv.1</b><span id="barTitle">ルーキー</span></span><span class="nm" id="barName">ななし</span><span class="coin" id="barCoins">0</span></button>
     <button type="button" class="tb-box tb-daily" id="tbDaily" aria-label="今日のミッション"><small>DAILY</small><b id="tbDailyN">0/3</b><span class="tb-sub" id="tbDailyLeft">--:--</span></button>
   </header>
 
@@ -633,6 +723,14 @@ fieldset:disabled .opts span{cursor:default}
   <section class="screen narrow" id="scrHome">
     <div class="banners">
       <div class="bn-track" id="bnTrack" aria-roledescription="カルーセル" aria-label="おしらせ">
+        <button type="button" class="bn" data-go="puzzle" style="--c:var(--p2)" aria-label="詰めわりばしを開く">
+          <span class="bn-txt"><span class="bn-tag">毎日1問</span><b class="bn-h">詰めわりばし</b><span class="bn-s">3手で勝てる？ 解けたら結果をシェアしよう</span></span>
+          <span class="bn-art"><span class="ev-icon" style="--c:var(--p2);width:84px;height:84px;font-size:38px" aria-hidden="true">詰</span></span>
+        </button>
+        <button type="button" class="bn" data-go="pass" id="bnPass" aria-label="シーズンパスを開く">
+          <span class="bn-txt"><span class="bn-tag">SEASON</span><b class="bn-h" id="bnPassH">シーズンパス</b><span class="bn-s">遊ぶほど段が上がる。30段で限定チョーク</span></span>
+          <span class="bn-art art" id="artPass"></span>
+        </button>
         <button type="button" class="bn" data-go="bin" style="--c:var(--p2)" aria-label="2進数ルール：CPU対戦で遊ぶ">
           <span class="bn-txt"><span class="bn-tag">NEW</span><b class="bn-h">2進数ルール<br>登場！</b><span class="bn-s">指1本ずつが 1・2・4・8・16。31で消える</span></span>
           <span class="bn-art art" id="artBin"></span>
@@ -687,6 +785,86 @@ fieldset:disabled .opts span{cursor:default}
     </div>
     <p class="ticker"><span class="tk-tag">ヒント</span><span class="tk-t" id="ticker"></span></p>
     <p class="note" id="homeNote" hidden>オンライン対戦はまだ準備中です。</p>
+  </section>
+
+  <!-- Friends -->
+  <section class="screen narrow" id="scrFriends" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>フレンド</h2></div>
+    <div class="seg" role="tablist" aria-label="フレンドとランキング">
+      <button type="button" role="tab" id="tabFr" aria-selected="true" aria-controls="frPanel">フレンド</button>
+      <button type="button" role="tab" id="tabFrRank" aria-selected="false" aria-controls="frRankPanel">ランキング</button>
+    </div>
+    <div id="frPanel" role="tabpanel" style="display:grid;gap:16px">
+      <section class="panel">
+        <h3>あなたのフレンドコード</h3>
+        <div class="codebox"><b id="myCode">------</b><button type="button" class="btn sm" id="copyCode">コピー</button></div>
+        <p class="note">このコードを友達に教えて、登録してもらおう。</p>
+      </section>
+      <section class="panel">
+        <h3>フレンドを追加</h3>
+        <div class="addrow"><input class="input" id="frCode" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="例：AB23CD" aria-label="友達のフレンドコード"><button type="button" class="btn primary" id="frAdd">追加</button></div>
+      </section>
+      <section class="panel">
+        <h3>フレンド <span class="tag mine" id="frCount">0人</span></h3>
+        <ol class="frlist" id="frList"></ol>
+        <p class="note">「誘う」を押すと、カスタムマッチの部屋ができて、相手の画面にお誘いが届きます。</p>
+      </section>
+    </div>
+    <div id="frRankPanel" role="tabpanel" hidden style="display:grid;gap:16px">
+      <section class="panel"><h3>フレンド内ランキング</h3><ol class="rank" id="frRank"></ol></section>
+      <button type="button" class="btn" id="goRankAll">全国ランキングを見る</button>
+    </div>
+  </section>
+
+  <!-- Events hub -->
+  <section class="screen narrow" id="scrEvents" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>イベント</h2></div>
+    <div class="evlist" id="evList"></div>
+  </section>
+
+  <!-- Season pass -->
+  <section class="screen narrow" id="scrPass" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>シーズンパス</h2></div>
+    <div class="passhero" id="passHero">
+      <div class="ph-top"><p class="ph-name" id="phName"></p><span class="ph-left" id="phLeft"></span></div>
+      <div class="ph-lv"><b id="phLv">0</b><span>/ 30 段</span></div>
+      <div class="ph-xp"><span class="meter"><i id="phXp"></i></span><span id="phXpT"></span></div>
+    </div>
+    <button type="button" class="btn gold big" id="passClaim" hidden>まとめて受け取る</button>
+    <ol class="passlist" id="passList"></ol>
+    <section class="panel">
+      <h3>ポイントのため方</h3>
+      <ul class="rules">
+        <li>オンライン対戦 30（勝つと +20）・CPU対戦 10（勝つと +10）</li>
+        <li>デイリーミッション 20・通常ミッション 30・ログイン 20</li>
+        <li>ボスに挑戦 20（手を1本消すごとに +5）・詰めわりばし正解 40</li>
+        <li>100ポイントで1段。30段で、そのシーズンだけの限定チョーク。シーズンは毎月1日の4:00に切り替わります。</li>
+        <li>ポイントはプレイヤーレベルにもたまります（マイページで見られます）。</li>
+      </ul>
+    </section>
+  </section>
+
+  <!-- Daily puzzle -->
+  <section class="screen narrow" id="scrPuzzle" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>詰めわりばし</h2></div>
+    <div class="puzhero">
+      <p class="pz-num" id="pzNum"></p>
+      <h3 class="pz-title" id="pzTitle"></h3>
+      <p class="pz-rule" id="pzRule"></p>
+      <div class="pz-board" id="pzBoard"></div>
+      <p class="pz-state" id="pzState"></p>
+    </div>
+    <button type="button" class="btn primary big" id="pzGo">挑戦する</button>
+    <div class="share"><button type="button" class="btn" id="pzShare" hidden>結果をシェア</button></div>
+    <section class="panel">
+      <h3>遊びかた</h3>
+      <ul class="rules">
+        <li>「3手詰め」は、あなた→相手→あなたの3手で、相手の手を両方とも消すパズル。5手詰め・7手詰めはもう1往復・2往復多い。</li>
+        <li>相手はいちばん粘る手を打ってきます。手数のうちに勝てなくなる手を打った時点で失敗。</li>
+        <li>何回でもやり直せます。その日はじめて正解するとコイン30枚。毎日続けると連続記録が伸びます。</li>
+        <li>曜日でむずかしさが変わります（月・火・木は3手、水・金は5手、土・日は7手）。毎朝4:00に新しい問題。</li>
+      </ul>
+    </section>
   </section>
 
   <!-- Today's boss -->
@@ -849,7 +1027,8 @@ fieldset:disabled .opts span{cursor:default}
 
   <!-- Nameplate editor -->
   <section class="screen narrow" id="scrPlate" hidden>
-    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>プロフィール</h2></div>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>マイページ</h2></div>
+    <div class="lvcard" id="lvCard"><span class="lv-n"><small>Lv.</small><span id="lvN">1</span></span><b id="lvNext"></b><div class="ph-xp"><span class="meter"><i id="lvXp"></i></span><span id="lvXpT"></span></div></div>
     <div class="pf-plate" id="homePlateBox"></div>
     <section class="panel">
       <h3>あなたの記録</h3>
@@ -1050,10 +1229,11 @@ fieldset:disabled .opts span{cursor:default}
 <nav class="tabbar" id="tabbar" aria-label="メニュー">
   <div class="tabbar-in">
     <button type="button" class="tab" id="goHomeTab" data-tab="home" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h5v-6h3v6h5V10"/></svg><span>ホーム</span></button>
+    <button type="button" class="tab" id="goEvents" data-tab="events"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4"/><path d="M6 4.5c4-2 7 2 12 0v8c-5 2-8-2-12 0"/></svg><span>イベント</span><i class="tab-badge" id="eventBadge" hidden></i></button>
     <button type="button" class="tab" id="goMission" data-tab="mission"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="m8.5 11 1.6 1.6L13 9.7"/><path d="M8.5 16.5h7"/></svg><span>ミッション</span><i class="tab-badge" id="missionBadge" hidden></i></button>
     <button type="button" class="tab" id="goShop" data-tab="shop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span>ショップ</span></button>
-    <button type="button" class="tab" id="goRank" data-tab="rank"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3.4 4M16 6h3a3 3 0 0 1-3.4 4"/><path d="M12 13v4M8.5 20h7"/></svg><span>ランキング</span></button>
-    <button type="button" class="tab" id="goProfile" data-tab="plate"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg><span>プロフィール</span></button>
+    <button type="button" class="tab" id="goFriends" data-tab="friends"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3.2"/><path d="M3 19a6 6 0 0 1 12 0"/><circle cx="16.5" cy="8" r="2.6"/><path d="M15.5 13.2A5 5 0 0 1 21 18"/></svg><span>フレンド</span><i class="tab-badge" id="friendBadge" hidden></i></button>
+    <button type="button" class="tab" id="goProfile" data-tab="plate"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg><span>マイページ</span></button>
   </div>
 </nav>
 <div class="result" id="result" hidden role="dialog" aria-modal="true" aria-labelledby="resT">
@@ -1066,6 +1246,19 @@ fieldset:disabled .opts span{cursor:default}
       <button type="button" class="btn" id="resClose">盤面を見る</button>
     </div>
   </div>
+</div>
+<div class="result login" id="loginBox" hidden role="dialog" aria-modal="true" aria-labelledby="loginT">
+  <div class="res-in">
+    <p class="res-t" id="loginT">ログインボーナス</p>
+    <p class="res-s" id="loginS"></p>
+    <ol class="stamps" id="stamps"></ol>
+    <p class="lg-got" id="loginGotP"><span class="coin" id="loginGot"></span> を受け取りました</p>
+    <button type="button" class="btn primary big" id="loginOk">OK</button>
+  </div>
+</div>
+<div class="invite" id="invite" hidden role="dialog" aria-labelledby="inviteT">
+  <p id="inviteT"></p>
+  <div class="row"><button type="button" class="btn" id="inviteNo">あとで</button><button type="button" class="btn primary" id="inviteYes">参加する</button></div>
 </div>
 <div class="achv" id="achv" hidden role="status"><span class="achv-k" id="achvK">NEW</span><div class="achv-b" id="achvB"></div></div>
 <p class="toast" id="toast" role="status" hidden></p>
@@ -1279,7 +1472,7 @@ function shapeFx(p, m){
   else { hs.forEach(h => { const [x, y] = centerOf(h); dust(x, y, color, 8, 34); }); const [x, y] = centerOf(hs[0].parentElement); floatText(x, y - 10, '分身！', color); }
   sfx('tap');
 }
-const gameId = () => net.on ? `${net.code}:${net.room && net.room.createdAt}:${G.game || 0}` : `${ui.boss ? 'boss' : 'cpu'}:${ui.gameSeq || 0}`;
+const gameId = () => net.on ? `${net.code}:${net.room && net.room.createdAt}:${G.game || 0}` : `${ui.boss ? 'boss' : ui.puzzle ? 'puz' : 'cpu'}:${ui.gameSeq || 0}`;
 // After every board update: play the effect of a move that arrived from elsewhere (rival, CPU, network).
 function boardFx(){
   const gid = gameId();
@@ -1318,7 +1511,8 @@ function maybeResult(){
 function showResult(){
   const el = $('#result'), nm = names(), o = G.over, cpu = !net.on && settings.mode === 'cpu', local2 = !net.on && settings.mode === '2p';
   let kind = 'draw', title = '引き分け';
-  if (ui.boss) { kind = ui.boss.cleared ? 'win' : o.type === 'draw' ? 'draw' : 'lose'; title = ui.boss.cleared ? '討伐！' : o.type === 'draw' ? '引き分け' : 'やられた…'; }
+  if (ui.puzzle) { kind = ui.puzzle.state === 'solved' ? 'win' : 'lose'; title = kind === 'win' ? '正解！' : '失敗…'; }
+  else if (ui.boss) { kind = ui.boss.cleared ? 'win' : o.type === 'draw' ? 'draw' : 'lose'; title = ui.boss.cleared ? '討伐！' : o.type === 'draw' ? '引き分け' : 'やられた…'; }
   else if (o.type === 'win') {
     if (local2) { kind = 'win'; title = `${nm[o.winner]}の勝ち！`; }
     else if (o.winner === 0) { kind = 'win'; title = '勝利！'; }
@@ -1329,13 +1523,13 @@ function showResult(){
   t.innerHTML = '';
   [...title].forEach((ch, i) => { const sp = document.createElement('span'); sp.textContent = ch; sp.style.animationDelay = (i * 0.09) + 's'; t.append(sp); });
   const by = o.by, why = o.reason === 'resign' && by !== undefined ? `${nm[by]}が投了` : o.reason === 'time' && by !== undefined ? `${nm[by]}の時間切れ` : o.type === 'draw' ? '同じ局面が3回出ました' : `${G.ply}手で決着`;
-  $('#resS').textContent = ui.boss ? `大王の手を${ui.boss.hands}本消した・${G.ply}手` : cpu && o.type === 'win' ? `CPU（${LEVEL_NAME[settings.level]}）・${why}` : kind === 'lose' && G.n > 2 ? `${nm[o.winner]}の勝ち・${why}` : why;
+  $('#resS').textContent = ui.puzzle ? `詰めわりばし #${ui.puzzle.num}（${ui.puzzle.d}手詰め）・${ui.puzzle.attempt}回目` : ui.boss ? `大王の手を${ui.boss.hands}本消した・${G.ply}手` : cpu && o.type === 'win' ? `CPU（${LEVEL_NAME[settings.level]}）・${why}` : kind === 'lose' && G.n > 2 ? `${nm[o.winner]}の勝ち・${why}` : why;
   ui.resShown = {rate: false, coins: false};
   $('#resRows').innerHTML = '';
   el.hidden = false;
   updateResult();
   clearTimeout(ui.resTimer);
-  ui.resTimer = setTimeout(hideResult, 6500);
+  if (!ui.puzzle) ui.resTimer = setTimeout(hideResult, 6500);
   if (kind === 'win') {
     sfx('win');
     if (!reduceMotion.matches) {
@@ -1349,6 +1543,29 @@ function showResult(){
 function updateResult(){
   const rows = $('#resRows'), again = $('#again'), ra = $('#resAgain');
   ra.textContent = again.textContent; ra.disabled = again.disabled; ra.hidden = again.hidden;
+  if (ui.puzzle) {
+    const pz = ui.puzzle, mp = myPuzzle(), key = `${pz.state}:${pz.reward}:${mp.streak}`;
+    if (ui.resShown.puz !== key) {
+      ui.resShown.puz = key;
+      rows.innerHTML = '';
+      if (pz.state === 'solved') {
+        if (pz.reward) {
+          const r = document.createElement('div'); r.className = 'res-row'; r.innerHTML = '<span>コイン</span><span class="coin"></span>';
+          r.querySelector('.coin').textContent = `+${pz.reward}`; rows.append(r);
+          if (!ui.resShown.puzFly) { ui.resShown.puzFly = true; setTimeout(() => { if (!$('#result').hidden) flyCoins(r.querySelector('.coin'), pz.reward); }, 400); }
+        }
+        const r2 = document.createElement('div'); r2.className = 'res-row'; r2.innerHTML = '<span>連続正解</span><b></b>';
+        r2.querySelector('b').textContent = `${Math.max(1, mp.streak)}日`; rows.append(r2);
+        const sh = document.createElement('button'); sh.type = 'button'; sh.className = 'btn gold'; sh.textContent = '結果をシェア';
+        sh.addEventListener('click', sharePuzzle); rows.append(sh);
+      } else if (pz.attempt >= 3) {
+        const h = puzzleHint();
+        if (h) { const r = document.createElement('div'); r.className = 'res-row down'; r.textContent = `ヒント：最初の手は「${h}」`; rows.append(r); }
+      }
+    }
+    clearTimeout(ui.resTimer);   // stay until closed: the share button lives here
+    return;
+  }
   if (ui.boss) {
     const bs = bossState(), key = `${ui.boss.dmg}:${bs.dmg}:${bs.down}`;
     if (ui.resShown.boss !== key) {
@@ -1488,7 +1705,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/15-2';
+const APP_VERSION = '11/15-3';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -1551,6 +1768,10 @@ const TITLES = [
   {id:'kin', name:'黄金の指', need:'レート1800に届く', key:'maxRate', goal:1800},
   {id:'cpu', name:'CPUキラー', need:'CPU（ふつう以上）に勝つ', key:'cpuNormal', goal:1},
   {id:'strong', name:'さいきょうと互角', need:'CPU（さいきょう）と引き分け', key:'cpuDraw', goal:1},
+  {id:'puz10', name:'詰めの名人', need:'詰めわりばしに10回正解', key:'puzzles', goal:10},
+  {id:'login30', name:'皆勤賞', need:'30日ログイン', key:'loginDays', goal:30},
+  {id:'season10', name:'シーズン戦士', need:'シーズンパス10段', key:'seasonBest', goal:10},
+  {id:'season30', name:'シーズンマスター', need:'シーズンパス30段', key:'seasonBest', goal:30},
   {id:'hunter', name:'ボスハンター', need:'ボス討伐 1回', key:'bossKills', goal:1, boss:true},
   {id:'killer', name:'黒板消しキラー', need:'ボス討伐 15回', key:'bossKills', goal:15, boss:true},
 ];
@@ -1566,7 +1787,7 @@ const PLATES = [
   {id:'flag', name:'討伐の旗', need:'ボス討伐 5回', key:'bossKills', goal:5, boss:true},
   {id:'throne', name:'大王の玉座', need:'ボス討伐 30回', key:'bossKills', goal:30, boss:true},
 ];
-const STAT_KEYS = ['games','wins','best','streak','merges','splits','kos','royale','long','cpuNormal','cpuDraw','dailyDone','bossKills','bossHands'];
+const STAT_KEYS = ['games','wins','best','streak','merges','splits','kos','royale','long','cpuNormal','cpuDraw','dailyDone','bossKills','bossHands','seasonBest','puzzles','loginDays'];
 function statsOf(p){
   const st = (p && p.st) || {}, o = {};
   for (const k of STAT_KEYS) o[k] = +st[k] || 0;
@@ -1646,6 +1867,11 @@ const CHALKS = [
   {id:'fire', name:'炎チョーク', price:0, color:'#ff9a5a', grad:'cg-fire', glow:true, boss:10},
   {id:'star', name:'星くずチョーク', price:0, color:'#a9c4ff', grad:'cg-star', shine:true, boss:20},
 ];
+// One limited chalk per month: tier 30 of that month's season pass.
+const SEASON_THEMES = {1:['初日の出','#ff9a5a','#ffe08a'], 2:['梅','#ff8fb0','#fff0f4'], 3:['菜の花','#f3e25b','#b8e66a'], 4:['桜吹雪','#ffc2d6','#fff7fa'],
+  5:['若葉風','#8be08a','#e8ffd9'], 6:['紫陽花','#8a9bff','#d7b5ff'], 7:['夏空','#5bc0ff','#e9fbff'], 8:['花火','#ff5f8f','#ffd36b'],
+  9:['お月見','#f6dc83','#fffbe3'], 10:['秋桜','#ff9ec4','#c4a6ff'], 11:['紅葉','#e8552f','#ffbf5a'], 12:['雪','#dfefff','#9fc8ff']};
+for (let m = 1; m <= 12; m++) CHALKS.push({id: 'sea' + m, name: `${SEASON_THEMES[m][0]}チョーク`, price: 0, color: SEASON_THEMES[m][1], grad: 'cg-sea' + m, season: m, shine: m === 12 || m === 9});
 const chalkId = id => CHALKS.some(c => c.id === id) ? id : 'auto';
 const chalkOf = id => CHALKS.find(c => c.id === id && c.color) || null;
 const myCoins = () => Math.max(0, Math.floor(+((net.profile || {}).coins) || 0));
@@ -1690,6 +1916,311 @@ function missionState(){
   return {daily, bonusState, normal, readyDaily, readyNormal, day: d.day};
 }
 const myEntry = () => Object.assign({name: typedName(), rating: myRating(), joinedAt: Date.now(), chalk: myChalk()}, myLook());
+
+// ----- Friends -----
+const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', MAX_FRIENDS = 50;
+const PRESENCE_MS = 60000, ONLINE_FRESH = 3 * 60000, INVITE_TTL = 3 * 60000;
+// One read with a time limit (a plain get() can hang).
+function readOnce(path, ms){
+  return new Promise(res => {
+    const fb = net.fb;
+    let done = false, off = null;
+    const finish = v => { if (done) return; done = true; clearTimeout(t); setTimeout(() => { try { off && off(); } catch(e) {} }, 0); res(v); };
+    const t = setTimeout(() => finish(undefined), ms || 6000);
+    off = fb.onValue(fb.ref(fb.db, path), snap => finish(snap.val()), () => finish(undefined));
+  });
+}
+async function ensureCode(){
+  if (!net.fb || !net.uid || !net.profileLoaded || ui.codeBusy || (net.profile || {}).code) return;
+  ui.codeBusy = true;
+  const fb = net.fb;
+  try {
+    for (let i = 0; i < 6; i++) {
+      let code = '';
+      for (let k = 0; k < 6; k++) code += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)];
+      const res = await fb.runTransaction(fb.ref(fb.db, 'codes/' + code), cur => cur === null ? net.uid : undefined);
+      if (res && res.committed && res.snapshot.val() === net.uid) { await fb.update(fb.ref(fb.db, 'players/' + net.uid), {code}); break; }
+    }
+  } catch(e) { net.friendErr = true; dbg('friend code: ' + (e && e.message)); render(); }
+  finally { ui.codeBusy = false; }
+}
+function presence(on){
+  if (!net.fb || !net.uid) return;
+  const fb = net.fb;
+  ui.presenceAt = Date.now();
+  fb.update(fb.ref(fb.db, 'players/' + net.uid), {online: on, seen: serverNow()}).catch(() => {});
+  if (on && !ui.presenceArmed) { ui.presenceArmed = true; try { fb.onDisconnect(fb.ref(fb.db, `players/${net.uid}/online`)).remove(); } catch(e) {} }
+}
+const friendIds = () => Object.keys(((net.profile || {}).friends) || {}).filter(k => (net.profile.friends[k]));
+const isOnline = p => !!(p && p.online && serverNow() - (+p.seen || 0) < ONLINE_FRESH);
+function ago(t){
+  const m = Math.floor((serverNow() - (+t || 0)) / 60000);
+  return !t ? '' : m < 1 ? 'さっき' : m < 60 ? `${m}分前` : m < 1440 ? `${Math.floor(m / 60)}時間前` : `${Math.floor(m / 1440)}日前`;
+}
+// Keep one listener per friend's profile.
+function watchFriends(){
+  if (!net.fb) return;
+  net.friendOffs = net.friendOffs || {};
+  net.friends = net.friends || {};
+  const want = new Set(friendIds());
+  for (const id of Object.keys(net.friendOffs)) if (!want.has(id)) { try { net.friendOffs[id](); } catch(e) {} delete net.friendOffs[id]; delete net.friends[id]; }
+  for (const id of want) if (!net.friendOffs[id]) {
+    net.friendOffs[id] = net.fb.onValue(net.fb.ref(net.fb.db, 'players/' + id), snap => { net.friends[id] = snap.val() || {}; if (['friends', 'home'].includes(ui.screen)) render(); }, () => {});
+  }
+}
+async function addFriend(raw){
+  const code = String(raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+  if (code.length !== 6) { toast('フレンドコードは6文字です', true); return false; }
+  if (code === (net.profile || {}).code) { toast('それはあなたのコードです', true); return false; }
+  if (!net.fb) return false;
+  const uid = await readOnce('codes/' + code, 7000);
+  if (uid === undefined) { toast('うまく通信できませんでした。もう一度試してね', true); return false; }
+  if (!uid || typeof uid !== 'string') { toast('そのコードの人は見つかりません', true); return false; }
+  if (uid === net.uid) { toast('それはあなたのコードです', true); return false; }
+  if (friendIds().includes(uid)) { toast('もうフレンドです'); return true; }
+  if (friendIds().length >= MAX_FRIENDS) { toast(`フレンドは${MAX_FRIENDS}人までです`, true); return false; }
+  await net.fb.update(net.fb.ref(net.fb.db, `players/${net.uid}/friends`), {[uid]: true}).catch(() => {});
+  toast('フレンドに追加しました');
+  return true;
+}
+function removeFriend(uid){
+  if (!net.fb) return;
+  net.fb.update(net.fb.ref(net.fb.db, `players/${net.uid}/friends`), {[uid]: null}).catch(() => {});
+}
+async function inviteFriend(uid){
+  if (net.on && !(net.room && net.room.kind === 'custom' && net.room.status === 'lobby')) { toast('いまは誘えません（対戦中）', true); return; }
+  if (!net.on) await netCreate();
+  if (!net.on || !net.code) { toast('部屋を作れませんでした', true); return; }
+  await net.fb.update(net.fb.ref(net.fb.db, 'invites/' + uid), {[net.uid]: {code: net.code, name: typedName(), at: serverNow()}})
+    .then(() => toast('お誘いを送りました'), () => toast('お誘いを送れませんでした（Firebaseのルールを確認してね）', true));
+}
+function watchInvites(){
+  net.fb.onValue(net.fb.ref(net.fb.db, 'invites/' + net.uid), snap => { net.invites = snap.val() || {}; maybeShowInvite(); renderChrome(); }, () => {});
+}
+const liveInvites = () => Object.entries(net.invites || {}).filter(([, v]) => v && v.code && serverNow() - (+v.at || 0) < INVITE_TTL).sort((a, b) => b[1].at - a[1].at);
+function dropInvite(from){ if (net.fb && from) net.fb.update(net.fb.ref(net.fb.db, 'invites/' + net.uid), {[from]: null}).catch(() => {}); }
+function maybeShowInvite(){
+  const box = $('#invite');
+  if (!box.hidden || net.on || ['game', 'search', 'lobby'].includes(ui.screen)) return;
+  for (const [k, v] of Object.entries(net.invites || {})) if (!v || serverNow() - (+v.at || 0) >= INVITE_TTL) dropInvite(k);
+  const list = liveInvites();
+  if (!list.length) return;
+  const [from, v] = list[0];
+  ui.invite = {from, code: v.code};
+  $('#inviteT').textContent = `${String(v.name || 'ななし').slice(0, 12)}さんから、カスタムマッチのお誘いが届いたよ`;
+  box.hidden = false;
+  sfx('unlock');
+}
+
+// ----- Levels and the monthly season pass -----
+const SEASON_TIERS = 30, SEASON_STEP = 100;
+const XP = {online: 30, onlineWin: 20, cpu: 10, cpuWin: 10, daily: 20, mission: 30, login: 20, boss: 20, bossHand: 5, puzzle: 40};
+const seasonId = () => dayKey().slice(0, 7);
+const seasonMonth = () => +dayKey().slice(5, 7);
+const levelOf = xp => Math.floor((1 + Math.sqrt(1 + 0.08 * Math.max(0, xp))) / 2);   // reaching level L takes 50·L·(L-1)
+const levelBase = L => 50 * L * (L - 1);
+function seasonReward(t){ return t === SEASON_TIERS ? {chalk: true} : {coins: t % 10 === 0 ? 150 : t % 5 === 0 ? 80 : 30}; }
+function daysLeftInSeason(){
+  const [y, m, d] = dayKey().split('-').map(Number);
+  return Math.round((Date.UTC(y, m, 1) - Date.UTC(y, m - 1, d)) / 86400000);
+}
+function myLevel(){
+  const v = (net.profile || {}).lv || {}, xp = +v.xp || 0, L = levelOf(xp);
+  const sid = seasonId(), sxp = v.sid === sid ? +v.sxp || 0 : 0, claimed = v.sid === sid ? v.claimed || {} : {};
+  const tier = Math.min(SEASON_TIERS, Math.floor(sxp / SEASON_STEP));
+  let ready = 0;
+  for (let t = 1; t <= tier; t++) if (!claimed['t' + t]) ready++;
+  return {xp, level: L, into: xp - levelBase(L), need: 100 * L, sxp, tier, claimed, ready};
+}
+function addXP(n){
+  if (!net.fb || !net.uid || !n) return;
+  const fb = net.fb, sid = seasonId();
+  let before = 0, after = 0;
+  fb.runTransaction(fb.ref(fb.db, `players/${net.uid}/lv`), cur => {
+    const v = Object.assign({}, cur || {});
+    before = +v.xp || 0; v.xp = after = before + n;
+    if (v.sid !== sid) { v.sid = sid; v.sxp = 0; v.claimed = {}; }
+    v.sxp = (+v.sxp || 0) + n;
+    return v;
+  }).catch(() => {});
+}
+async function claimSeason(){
+  const sid = seasonId(), month = seasonMonth();
+  let coins = 0, chalk = false;
+  const res = await profileTx(cur => {
+    const v = cur.lv || {};
+    if (v.sid !== sid) return undefined;
+    const reached = Math.min(SEASON_TIERS, Math.floor((+v.sxp || 0) / SEASON_STEP)), claimed = Object.assign({}, v.claimed || {});
+    coins = 0; chalk = false;
+    for (let t = 1; t <= reached; t++) if (!claimed['t' + t]) { claimed['t' + t] = true; const r = seasonReward(t); if (r.chalk) chalk = true; else coins += r.coins; }
+    if (!coins && !chalk) return undefined;
+    cur.lv = Object.assign({}, v, {claimed});
+    cur.coins = (+cur.coins || 0) + coins;
+    if (chalk) cur.owned = Object.assign({}, cur.owned || {}, {['sea' + month]: true});
+    cur.st = Object.assign({}, cur.st || {}, {seasonBest: Math.max(+((cur.st || {}).seasonBest) || 0, reached)});
+    return cur;
+  });
+  return res && res.committed ? {coins, chalk} : null;
+}
+
+// ----- Login bonus: a 7-day stamp card, plus how many days in a row -----
+const LOGIN_REWARDS = [30, 30, 50, 50, 80, 80, 150];
+function myLogin(){
+  const l = (net.profile || {}).login || {}, day = dayKey(), yday = dayKey(serverNow() - 86400000);
+  return {count: +l.count || 0, streak: l.day === day || l.day === yday ? +l.streak || 0 : 0, today: l.day === day, total: +l.total || 0};
+}
+async function checkLogin(){
+  if (!net.fb || !net.uid || !net.profileLoaded || ui.loginChecked === dayKey()) return;
+  const day = ui.loginChecked = dayKey(), yday = dayKey(serverNow() - 86400000), fb = net.fb;
+  let got = null;
+  try {
+    const res = await fb.runTransaction(fb.ref(fb.db, 'players/' + net.uid), cur => {
+      const p = Object.assign({}, cur || {}), l = p.login || {};
+      got = null;
+      if (l.day === day) return undefined;
+      const count = ((+l.count || 0) % 7) + 1, streak = l.day === yday ? (+l.streak || 0) + 1 : 1;
+      p.login = {day, count, streak, total: (+l.total || 0) + 1};
+      p.coins = (+p.coins || 0) + LOGIN_REWARDS[count - 1];
+      p.st = Object.assign({}, p.st || {}, {loginDays: (+((p.st || {}).loginDays) || 0) + 1});
+      got = p.login;
+      return p;
+    });
+    if (res && res.committed && got) { addXP(XP.login); ui.loginShow = got; render(); }
+  } catch(e) {}
+}
+function showLogin(l, replay){
+  const box = $('#loginBox'), ol = $('#stamps');
+  $('#loginGotP').hidden = !!replay;
+  $('#loginS').textContent = `連続ログイン ${l.streak}日目`;
+  ol.innerHTML = '';
+  LOGIN_REWARDS.forEach((c, i) => {
+    const li = document.createElement('li');
+    li.className = 'stamp' + (i === 6 ? ' big' : '') + (i < l.count ? ' done' : '') + (i === l.count - 1 ? ' today' : '');
+    li.innerHTML = `<span>${i + 1}日目</span><span class="coin">${c}</span>`;
+    ol.append(li);
+  });
+  $('#loginGot').textContent = LOGIN_REWARDS[l.count - 1];
+  box.hidden = false;
+  if (!replay) {
+    sfx('unlock');
+    setTimeout(() => { if (!box.hidden) { const t = ol.children[l.count - 1]; if (t) flyCoins(t, LOGIN_REWARDS[l.count - 1]); } }, 900);
+  } else ol.querySelectorAll('.today').forEach(x => x.classList.remove('today'));
+  clearTimeout(ui.loginTimer);
+  ui.loginTimer = setTimeout(hideLogin, 4200);
+}
+function hideLogin(){ clearTimeout(ui.loginTimer); $('#loginBox').hidden = true; }
+
+// ----- Daily puzzle: 詰めわりばし -----
+// Positions where the side to move wins in exactly d plies with one right first move, for several rule sets (precomputed).
+const PUZ = {"rules":[[5,"wrap",1,1],[5,"wrap",1,0],[5,"wrap",0,1],[5,"wrap",0,0],[5,"die",1,1],[5,"die",1,0],[5,"die",0,1],[5,"die",0,0],[31,"wrap",1,1],[31,"die",1,1]],"pool":{"3":[[0,0,3,0,3],[0,0,3,1,2],[0,1,2,0,1],[1,0,3,0,3],[1,0,3,1,2],[2,0,1,0,1],[2,0,1,2,4],[2,0,2,0,2],[2,0,2,3,4],[2,0,3,0,3],[2,0,3,1,2],[2,0,4,0,4],[2,0,4,1,3],[2,1,2,0,1],[2,1,3,0,3],[2,2,4,0,2],[2,3,4,0,4],[3,0,1,0,1],[3,0,1,2,4],[3,0,2,0,2],[3,0,2,3,4],[3,0,3,0,3],[3,0,3,1,2],[3,0,4,0,4],[3,0,4,1,3],[4,0,3,1,2],[4,0,3,1,3],[4,0,3,1,4],[4,1,2,0,1],[5,0,3,1,2],[5,0,3,1,3],[5,0,3,1,4],[6,0,1,0,1],[6,0,1,0,2],[6,0,1,2,4],[6,0,1,3,4],[6,0,2,2,3],[6,0,2,2,4],[6,0,3,1,2],[6,0,3,1,3],[6,0,3,1,4],[6,1,2,0,2],[6,1,2,2,3],[6,1,2,3,4],[6,1,3,0,1],[6,1,3,2,4],[6,1,3,3,4],[6,1,4,1,4],[6,1,4,2,4],[6,1,4,3,4],[6,2,3,2,3],[6,2,3,2,4],[6,2,4,1,3],[6,2,4,1,4],[6,2,4,2,3],[6,2,4,2,4],[6,3,4,1,2],[6,3,4,1,3],[6,3,4,1,4],[7,0,1,0,1],[7,0,1,0,2],[7,0,1,2,4],[7,0,1,3,4],[7,0,2,2,3],[7,0,2,2,4],[7,0,3,1,2],[7,0,3,1,3],[7,0,3,1,4],[7,1,2,0,1],[7,1,2,0,2],[7,1,2,2,3],[7,1,2,3,4],[7,1,3,0,1],[7,1,3,2,4],[7,1,3,3,4],[7,1,4,1,4],[7,1,4,2,4],[7,1,4,3,4],[7,2,3,2,3],[7,2,3,2,4],[7,2,4,1,3],[7,2,4,1,4],[7,2,4,2,3],[7,2,4,2,4],[7,3,4,1,2],[7,3,4,1,3],[7,3,4,1,4],[8,0,29,0,3],[8,0,29,1,2],[8,1,28,0,1],[8,2,27,0,1],[8,3,26,0,1],[8,4,25,0,1],[8,5,24,0,1],[8,6,23,0,1],[8,7,22,0,1],[8,8,21,0,1],[8,9,20,0,1],[8,10,19,0,1],[8,11,18,0,1],[8,12,17,0,1],[8,13,16,0,1],[8,14,15,0,1],[9,0,29,1,2],[9,0,29,1,3],[9,0,29,1,4],[9,0,29,1,5],[9,0,29,1,6],[9,0,29,1,7],[9,0,29,1,8],[9,0,29,1,9],[9,0,29,1,10],[9,0,29,1,11],[9,0,29,1,12],[9,0,29,1,13],[9,0,29,1,14],[9,0,29,1,15],[9,0,29,1,16],[9,0,29,1,17],[9,0,29,1,18],[9,0,29,1,19],[9,0,29,1,20],[9,0,29,1,21],[9,0,29,1,22],[9,0,29,1,23],[9,0,29,1,24],[9,0,29,1,25],[9,0,29,1,26],[9,0,29,1,27],[9,0,29,1,28],[9,0,29,1,29],[9,0,29,1,30],[9,1,28,0,1],[9,2,27,0,1],[9,3,26,0,1],[9,4,25,0,1],[9,5,24,0,1],[9,6,23,0,1],[9,7,22,0,1],[9,8,21,0,1],[9,9,20,0,1],[9,10,19,0,1],[9,11,18,0,1],[9,12,17,0,1],[9,13,16,0,1],[9,14,15,0,1]],"5":[[0,0,2,0,1],[2,1,4,0,2],[2,1,4,0,3],[2,2,3,0,1],[2,2,3,0,4],[3,1,4,0,2],[3,1,4,0,3],[3,2,3,0,1],[3,2,3,0,4],[4,0,2,0,1],[6,1,2,1,3],[6,1,3,1,2],[6,1,3,1,3],[6,1,3,2,3],[6,1,4,1,3],[6,1,4,2,3],[6,2,3,1,2],[7,1,2,1,3],[7,1,3,1,2],[7,1,3,1,3],[7,1,3,2,3],[7,1,4,1,3],[7,1,4,2,3],[7,2,3,1,2],[8,1,27,0,5],[8,1,27,1,4],[8,1,27,1,30],[8,2,26,0,6],[8,2,26,0,30],[8,2,26,1,5],[8,2,26,1,29],[8,3,25,0,7],[8,3,25,0,29],[8,3,25,1,6],[8,3,25,1,28],[8,4,24,0,8],[8,4,24,0,28],[8,4,24,1,7],[8,4,24,1,27],[8,5,23,0,9],[8,5,23,0,27],[8,5,23,1,8],[8,5,23,1,26],[8,6,22,0,10],[8,6,22,0,26],[8,6,22,1,9],[8,6,22,1,25],[8,7,21,0,11],[8,7,21,0,25],[8,7,21,1,10],[8,7,21,1,24],[8,8,20,0,12],[8,8,20,0,24],[8,8,20,1,11],[8,8,20,1,23],[8,9,19,0,13],[8,9,19,0,23],[8,9,19,1,12],[8,9,19,1,22],[8,10,18,0,14],[8,10,18,0,22],[8,10,18,1,13],[8,10,18,1,21],[8,11,17,0,15],[8,11,17,0,21],[8,11,17,1,14],[8,11,17,1,20],[8,12,16,0,16],[8,12,16,0,20],[8,12,16,1,15],[8,12,16,1,19],[8,13,15,0,17],[8,13,15,0,19],[8,13,15,1,16],[8,13,15,1,18],[9,1,27,1,4],[9,1,27,1,5],[9,1,27,1,6],[9,1,27,1,7],[9,1,27,1,8],[9,1,27,1,9],[9,1,27,1,10],[9,1,27,1,11],[9,1,27,1,12],[9,1,27,1,13],[9,1,27,1,14],[9,1,27,1,15],[9,1,27,1,16],[9,1,27,1,17],[9,1,27,1,18],[9,1,27,1,19],[9,1,27,1,20],[9,1,27,1,21],[9,1,27,1,22],[9,1,27,1,23],[9,1,27,1,24],[9,1,27,1,25],[9,1,27,1,26],[9,1,27,1,27],[9,1,27,1,28],[9,1,27,1,29],[9,2,26,1,5],[9,2,26,1,6],[9,2,26,1,7],[9,2,26,1,8],[9,2,26,1,9],[9,2,26,1,10],[9,2,26,1,11],[9,2,26,1,12],[9,2,26,1,13],[9,2,26,1,14],[9,2,26,1,15],[9,2,26,1,16],[9,2,26,1,17],[9,2,26,1,18],[9,2,26,1,19],[9,2,26,1,20],[9,2,26,1,21],[9,2,26,1,22],[9,2,26,1,23],[9,2,26,1,24],[9,2,26,1,25],[9,2,26,1,26],[9,2,26,1,27],[9,2,26,1,28],[9,3,25,1,6],[9,3,25,1,7],[9,3,25,1,8],[9,3,25,1,9],[9,3,25,1,10],[9,3,25,1,11],[9,3,25,1,12],[9,3,25,1,13],[9,3,25,1,14],[9,3,25,1,15],[9,3,25,1,16],[9,3,25,1,17],[9,3,25,1,18],[9,3,25,1,19],[9,3,25,1,20],[9,3,25,1,21],[9,3,25,1,22],[9,3,25,1,23],[9,3,25,1,24],[9,3,25,1,25],[9,3,25,1,26],[9,3,25,1,27],[9,4,24,1,7],[9,4,24,1,8],[9,4,24,1,9],[9,4,24,1,10],[9,4,24,1,11],[9,4,24,1,12],[9,4,24,1,13],[9,4,24,1,14],[9,4,24,1,15],[9,4,24,1,16],[9,4,24,1,17],[9,4,24,1,18],[9,4,24,1,19],[9,4,24,1,20],[9,4,24,1,21],[9,4,24,1,22],[9,4,24,1,23],[9,4,24,1,24],[9,4,24,1,25],[9,4,24,1,26],[9,5,23,1,8],[9,5,23,1,9],[9,5,23,1,10],[9,5,23,1,11],[9,5,23,1,12],[9,5,23,1,13],[9,5,23,1,14],[9,5,23,1,15],[9,5,23,1,16],[9,5,23,1,17],[9,5,23,1,18],[9,5,23,1,19],[9,5,23,1,20],[9,5,23,1,21],[9,5,23,1,22],[9,5,23,1,23],[9,5,23,1,24],[9,5,23,1,25],[9,6,22,1,9],[9,6,22,1,10],[9,6,22,1,11],[9,6,22,1,12],[9,6,22,1,13],[9,6,22,1,14],[9,6,22,1,15],[9,6,22,1,16],[9,6,22,1,17],[9,6,22,1,18],[9,6,22,1,19],[9,6,22,1,20],[9,6,22,1,21],[9,6,22,1,22],[9,6,22,1,23],[9,6,22,1,24],[9,7,21,1,10],[9,7,21,1,11],[9,7,21,1,12],[9,7,21,1,13],[9,7,21,1,14],[9,7,21,1,15],[9,7,21,1,16],[9,7,21,1,17],[9,7,21,1,18],[9,7,21,1,19],[9,7,21,1,20],[9,7,21,1,21],[9,7,21,1,22],[9,7,21,1,23],[9,8,20,1,11],[9,8,20,1,12],[9,8,20,1,13],[9,8,20,1,14],[9,8,20,1,15],[9,8,20,1,16],[9,8,20,1,17],[9,8,20,1,18],[9,8,20,1,19],[9,8,20,1,20],[9,8,20,1,21],[9,8,20,1,22],[9,9,19,1,12],[9,9,19,1,13],[9,9,19,1,14],[9,9,19,1,15],[9,9,19,1,16],[9,9,19,1,17],[9,9,19,1,18],[9,9,19,1,19],[9,9,19,1,20],[9,9,19,1,21],[9,10,18,1,13],[9,10,18,1,14],[9,10,18,1,15],[9,10,18,1,16],[9,10,18,1,17],[9,10,18,1,18],[9,10,18,1,19],[9,10,18,1,20],[9,11,17,1,14],[9,11,17,1,15],[9,11,17,1,16],[9,11,17,1,17],[9,11,17,1,18],[9,11,17,1,19],[9,12,16,1,15],[9,12,16,1,16],[9,12,16,1,17],[9,12,16,1,18],[9,13,15,1,16],[9,13,15,1,17]],"7":[[0,0,1,1,4],[0,2,4,0,2],[0,2,4,0,4],[0,2,4,1,3],[2,1,2,2,3],[2,1,2,2,4],[2,1,3,1,2],[2,1,3,1,4],[2,2,4,1,4],[2,2,4,3,4],[2,3,4,1,3],[2,3,4,2,3],[3,1,2,0,1],[3,1,2,2,3],[3,1,2,2,4],[3,1,3,0,3],[3,1,3,1,2],[3,1,3,1,4],[3,2,4,0,2],[3,2,4,1,4],[3,2,4,3,4],[3,3,4,0,4],[3,3,4,1,3],[3,3,4,2,3],[4,0,1,1,4],[4,2,4,1,2],[8,0,27,0,5],[8,0,27,1,4],[8,1,26,0,6],[8,1,26,1,5],[8,1,26,1,30],[8,2,25,0,7],[8,2,25,0,30],[8,2,25,1,6],[8,2,25,1,29],[8,3,24,0,8],[8,3,24,0,29],[8,3,24,1,7],[8,3,24,1,28],[8,4,23,0,9],[8,4,23,0,28],[8,4,23,1,8],[8,4,23,1,27],[8,5,22,0,10],[8,5,22,0,27],[8,5,22,1,9],[8,5,22,1,26],[8,6,21,0,11],[8,6,21,0,26],[8,6,21,1,10],[8,6,21,1,25],[8,7,20,0,12],[8,7,20,0,25],[8,7,20,1,11],[8,7,20,1,24],[8,8,19,0,13],[8,8,19,0,24],[8,8,19,1,12],[8,8,19,1,23],[8,9,18,0,14],[8,9,18,0,23],[8,9,18,1,13],[8,9,18,1,22],[8,10,17,0,15],[8,10,17,0,22],[8,10,17,1,14],[8,10,17,1,21],[8,11,16,0,16],[8,11,16,0,21],[8,11,16,1,15],[8,11,16,1,20],[8,12,15,0,17],[8,12,15,0,20],[8,12,15,1,16],[8,12,15,1,19],[8,13,14,0,19],[8,13,14,1,17],[8,13,14,1,18],[8,28,30,0,2],[8,28,30,0,4],[8,28,30,1,3],[9,0,27,1,4],[9,0,27,1,5],[9,0,27,1,6],[9,0,27,1,7],[9,0,27,1,8],[9,0,27,1,9],[9,0,27,1,10],[9,0,27,1,11],[9,0,27,1,12],[9,0,27,1,13],[9,0,27,1,14],[9,0,27,1,15],[9,0,27,1,16],[9,0,27,1,17],[9,0,27,1,18],[9,0,27,1,19],[9,0,27,1,20],[9,0,27,1,21],[9,0,27,1,22],[9,0,27,1,23],[9,0,27,1,24],[9,0,27,1,25],[9,0,27,1,26],[9,0,27,1,27],[9,0,27,1,28],[9,0,27,1,29],[9,0,27,1,30],[9,1,26,1,5],[9,1,26,1,6],[9,1,26,1,7],[9,1,26,1,8],[9,1,26,1,9],[9,1,26,1,10],[9,1,26,1,11],[9,1,26,1,12],[9,1,26,1,13],[9,1,26,1,14],[9,1,26,1,15],[9,1,26,1,16],[9,1,26,1,17],[9,1,26,1,18],[9,1,26,1,19],[9,1,26,1,20],[9,1,26,1,21],[9,1,26,1,22],[9,1,26,1,23],[9,1,26,1,24],[9,1,26,1,25],[9,1,26,1,26],[9,1,26,1,27],[9,1,26,1,28],[9,1,26,1,29],[9,2,25,1,6],[9,2,25,1,7],[9,2,25,1,8],[9,2,25,1,9],[9,2,25,1,10],[9,2,25,1,11],[9,2,25,1,12],[9,2,25,1,13],[9,2,25,1,14],[9,2,25,1,15],[9,2,25,1,16],[9,2,25,1,17],[9,2,25,1,18],[9,2,25,1,19],[9,2,25,1,20],[9,2,25,1,21],[9,2,25,1,22],[9,2,25,1,23],[9,2,25,1,24],[9,2,25,1,25],[9,2,25,1,26],[9,2,25,1,27],[9,2,25,1,28],[9,3,24,1,7],[9,3,24,1,8],[9,3,24,1,9],[9,3,24,1,10],[9,3,24,1,11],[9,3,24,1,12],[9,3,24,1,13],[9,3,24,1,14],[9,3,24,1,15],[9,3,24,1,16],[9,3,24,1,17],[9,3,24,1,18],[9,3,24,1,19],[9,3,24,1,20],[9,3,24,1,21],[9,3,24,1,22],[9,3,24,1,23],[9,3,24,1,24],[9,3,24,1,25],[9,3,24,1,26],[9,3,24,1,27],[9,4,23,1,8],[9,4,23,1,9],[9,4,23,1,10],[9,4,23,1,11],[9,4,23,1,12],[9,4,23,1,13],[9,4,23,1,14],[9,4,23,1,15],[9,4,23,1,16],[9,4,23,1,17],[9,4,23,1,18],[9,4,23,1,19],[9,4,23,1,20],[9,4,23,1,21],[9,4,23,1,22],[9,4,23,1,23],[9,4,23,1,24],[9,4,23,1,25],[9,4,23,1,26],[9,5,22,1,9],[9,5,22,1,10],[9,5,22,1,11],[9,5,22,1,12],[9,5,22,1,13],[9,5,22,1,14],[9,5,22,1,15],[9,5,22,1,16],[9,5,22,1,17],[9,5,22,1,18],[9,5,22,1,19],[9,5,22,1,20],[9,5,22,1,21],[9,5,22,1,22],[9,5,22,1,23],[9,5,22,1,24],[9,5,22,1,25],[9,6,21,1,10],[9,6,21,1,11],[9,6,21,1,12],[9,6,21,1,13],[9,6,21,1,14],[9,6,21,1,15],[9,6,21,1,16],[9,6,21,1,17],[9,6,21,1,18],[9,6,21,1,19],[9,6,21,1,20],[9,6,21,1,21],[9,6,21,1,22],[9,6,21,1,23],[9,6,21,1,24],[9,7,20,1,11],[9,7,20,1,12],[9,7,20,1,13],[9,7,20,1,14],[9,7,20,1,15],[9,7,20,1,16],[9,7,20,1,17],[9,7,20,1,18],[9,7,20,1,19],[9,7,20,1,20],[9,7,20,1,21],[9,7,20,1,22],[9,7,20,1,23],[9,8,19,1,12],[9,8,19,1,13],[9,8,19,1,14],[9,8,19,1,15],[9,8,19,1,16],[9,8,19,1,17],[9,8,19,1,18],[9,8,19,1,19],[9,8,19,1,20],[9,8,19,1,21],[9,8,19,1,22],[9,9,18,1,13],[9,9,18,1,14],[9,9,18,1,15],[9,9,18,1,16],[9,9,18,1,17],[9,9,18,1,18],[9,9,18,1,19],[9,9,18,1,20],[9,9,18,1,21],[9,10,17,1,14],[9,10,17,1,15],[9,10,17,1,16],[9,10,17,1,17],[9,10,17,1,18],[9,10,17,1,19],[9,10,17,1,20],[9,11,16,1,15],[9,11,16,1,16],[9,11,16,1,17],[9,11,16,1,18],[9,11,16,1,19],[9,12,15,1,16],[9,12,15,1,17],[9,12,15,1,18],[9,13,14,1,17],[9,28,30,1,2]]}};
+const PUZ_START = '2026-11-15', PUZ_COINS = 30;
+const PUZ_LEN = [7, 3, 3, 5, 3, 5, 7];   // plies by weekday (0 = Sunday)
+const PUZ_FORCE = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('puzzle') ? q.get('puzzle') : ''; } catch(e) { return ''; } })();
+function puzzleOf(day){
+  day = day || dayKey();
+  const rnd = seeded(hashStr('puzzle|' + day));
+  let d = PUZ_LEN[new Date(day + 'T00:00:00Z').getUTCDay()], e;
+  if (PUZ_FORCE) { const [fd, fi] = PUZ_FORCE.split(':').map(Number); d = fd; e = PUZ.pool[d][fi % PUZ.pool[d].length]; }
+  else {
+    const list = PUZ.pool[d], small = list.filter(x => x[0] < 8), big = list.filter(x => x[0] >= 8);
+    const src = small.length && (rnd() < .65 || !big.length) ? small : big;
+    e = src[Math.floor(rnd() * src.length)];
+  }
+  const [base, overflow, split, merge] = PUZ.rules[e[0]];
+  const me = [e[1], e[2]], op = [e[3], e[4]];
+  if (rnd() < .5) me.reverse();
+  if (rnd() < .5) op.reverse();
+  const num = Math.round((Date.parse(day + 'T00:00:00Z') - Date.parse(PUZ_START + 'T00:00:00Z')) / 86400000) + 1;
+  return {day, num, d, me, op, rules: {base, overflow, split: !!split, merge: !!merge}};
+}
+const ruleShort = r => `${r.base === BIN ? '2進数・' : ''}${vanishText(r.base === BIN, r.overflow === 'die')}・分身${r.split ? 'あり' : 'なし'}・合成${r.merge ? 'あり' : 'なし'}`;
+function myPuzzle(){
+  const p = (net.profile || {}).puzzle || {}, day = dayKey(), yday = dayKey(serverNow() - 86400000), today = p.day === day;
+  return {tries: today ? +p.tries || 0 : 0, solved: today && !!p.solved, at: today ? +p.at || 0 : 0, streak: p.last === day || p.last === yday ? +p.streak || 0 : 0};
+}
+async function startPuzzle(){
+  const pz = puzzleOf(), S = solverFor(pz.rules);
+  if (!S.ready) {
+    toast('問題を準備しています…');
+    const t0 = Date.now();
+    while (!S.ready && Date.now() - t0 < 15000) await new Promise(r => setTimeout(r, 120));
+    if (!S.ready) { toast('準備できませんでした。もう一度押してね', true); return; }
+  }
+  ui.boss = null;
+  ui.puzzle = Object.assign({}, pz, {left: pz.d, state: 'play', attempt: myPuzzle().tries + 1, reward: 0});
+  if (net.fb && net.uid) {
+    const day = pz.day;
+    net.fb.runTransaction(net.fb.ref(net.fb.db, `players/${net.uid}/puzzle`), cur => {
+      const p = Object.assign({}, cur || {});
+      if (p.day !== day) { p.day = day; p.tries = 0; p.solved = false; p.at = 0; }
+      p.tries = (+p.tries || 0) + 1;
+      return p;
+    }).catch(() => {});
+  }
+  setScreen('game');
+  newPuzzleGame();
+}
+function newPuzzleGame(){
+  clearTimeout(cpuTimer); cpuTimer = null; busy = false;
+  ui.gameSeq = (ui.gameSeq || 0) + 1;
+  hideResult();
+  G = initState({n: 2, first: 0});
+  G.hands = [[...ui.puzzle.me], [...ui.puzzle.op]];
+  G.seen = {[posKeyOf(G)]: 1};
+  sel = null; panel = null;
+  render();
+}
+// After every move in a puzzle: still a forced win in the plies that are left?
+function puzzleAfterMove(){
+  const pz = ui.puzzle;
+  pz.left--;
+  if (G.over) { if (G.over.type === 'win' && G.over.winner === 0) puzzleSolved(); else pz.state = 'fail'; return; }
+  if (G.turn === 1) {
+    const s = solver(), id = stateIdx(1);
+    if (!(s.res[id] === -1 && s.dist[id] <= pz.left)) { pz.state = 'fail'; G = Object.assign({}, G, {over: {type: 'puzzle'}}); }
+  }
+}
+function puzzleSolved(){
+  const pz = ui.puzzle;
+  pz.state = 'solved';
+  if (!net.fb || !net.uid || myPuzzle().solved) return;
+  const day = pz.day, yday = dayKey(serverNow() - 86400000), at = pz.attempt;
+  profileTx(cur => {
+    const p = Object.assign({}, cur.puzzle || {});
+    if (p.day === day && p.solved) return undefined;
+    const streak = p.last === yday ? (+p.streak || 0) + 1 : 1;
+    cur.puzzle = Object.assign(p, {day, solved: true, last: day, streak, at, tries: Math.max(+p.tries || 0, at)});
+    cur.coins = (+cur.coins || 0) + PUZ_COINS;
+    cur.st = Object.assign({}, cur.st || {}, {puzzles: (+((cur.st || {}).puzzles) || 0) + 1});
+    return cur;
+  }).then(r => { if (r && r.committed) { pz.reward = PUZ_COINS; addXP(XP.puzzle); render(); } });
+}
+// The winning first move, in words (shown after a few misses).
+function puzzleHint(){
+  const pz = puzzleOf(), S = solverFor(pz.rules);
+  if (!S.ready) return '';
+  const ms = genMoves(pz.me[0], pz.me[1], pz.op[0], pz.op[1], pz.rules);
+  const m = ms.find(x => S.res[x.next] === -1 && S.dist[x.next] === pz.d - 1);
+  if (!m) return '';
+  const side = i => i === 0 ? '左' : '右';
+  return m.kind === 'attack' ? `${side(m.from)}の${m.value}で、相手の${side(m.to)}の${m.before}にタッチ`
+    : m.kind === 'merge' ? `合成して ${m.hands[m.into]} にする` : `分身して ${m.hands[0]} と ${m.hands[1]} にする`;
+}
+function copyText(text){
+  try { if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text); } catch(e) {}
+  return new Promise((res, rej) => {
+    const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.append(ta); ta.select();
+    try { document.execCommand('copy') ? res() : rej(); } catch(e) { rej(e); } finally { ta.remove(); }
+  });
+}
+function sharePuzzle(){
+  const pz = puzzleOf(), mp = myPuzzle();
+  const text = `わりばし詰め #${pz.num}（${pz.d}手詰め）${mp.solved ? `${mp.at || mp.tries}回目で正解！` : '挑戦中…'}${mp.streak > 1 ? ` 連続${mp.streak}日` : ''}`;
+  const url = location.origin + location.pathname;
+  if (navigator.share) navigator.share({text, url}).catch(() => {});
+  else copyText(text + '\n' + url).then(() => toast('結果をコピーしました。SNSに貼ってね'), () => toast(text));
+}
 
 // ----- Today's boss: 黒板消し大王 -----
 const BOSS_LIVES = 3, BOSS_HAND_DMG = 100, BOSS_CLEAR_BONUS = 300, BOSS_GAME_DMG = 20, BOSS_TRIES = 3, BOSS_REWARD = 100;
@@ -1764,6 +2295,8 @@ async function startBossChallenge(){
   } catch(e) { toast(errText(e, '挑戦を始められませんでした'), true); return; }
   if (!res || !res.committed) { toast('今日の挑戦はもう終わりです。4:00に回復します', true); render(); return; }
   bumpDaily({boss: 1});
+  addXP(XP.boss);
+  ui.puzzle = null;
   ui.boss = {day, info, life: 1, hands: 0, dmg: 0};
   setScreen('game');
   newBossGame();
@@ -1810,7 +2343,7 @@ function bossAfterMove(m){
   }
   // server writes last: a local write re-renders at once, and the board must already be settled by then
   if (dmg) bossDamage(dmg);
-  if (hit) bumpStats(st => { st.bossHands = (+st.bossHands || 0) + 1; return st; });
+  if (hit) { bumpStats(st => { st.bossHands = (+st.bossHands || 0) + 1; return st; }); addXP(XP.bossHand); }
 }
 async function claimBoss(){
   if (!bossState().down) return 0;
@@ -1849,6 +2382,7 @@ const sortedUids = ps => Object.keys(ps || {}).sort((a, b) => (+ps[a].joinedAt |
 const BIN = 31;   // binary mode: fingers count 1·2·4·8·16; like the normal game, a full hand (11111 = 31) vanishes, so hands hold 0-30
 function rules(){
   if (!net.on && ui.boss) return bossRules(ui.boss.info);
+  if (!net.on && ui.puzzle) return ui.puzzle.rules;
   const r = net.on && net.room && net.room.rules;
   if (r) return {overflow: r.overflow === 'die' ? 'die' : 'wrap', split: r.split !== 'off', merge: r.merge !== 'off', base: r.count === 'binary' ? BIN : 5};
   return {overflow: settings.overflow, split: settings.split === 'on', merge: settings.merge === 'on', base: settings.count === 'binary' ? BIN : 5};
@@ -1880,7 +2414,7 @@ function solverFor(r){
   return S;
 }
 const solver = () => solverFor(rules());
-const hintsOn = () => settings.hints === 'on' && !net.on && !ui.boss && G && G.n === 2;
+const hintsOn = () => settings.hints === 'on' && !net.on && !ui.boss && !ui.puzzle && G && G.n === 2;
 
 // ===================== Game model (2–4 players) =====================
 // S = {n, hands:[[a,b]…], turn, first, ply, game, over, last, log, seen, limit, turnAt, seats?, names?}
@@ -2020,6 +2554,7 @@ function toLocal(S, seat){
 function names(){
   if (net.on && G && G.names) return G.names.map((x, k) => k === 0 ? 'あなた' : (x || '相手'));
   if (ui.boss) return ['あなた', '黒板消し大王'];
+  if (ui.puzzle) return ['あなた', '相手'];
   return settings.mode === 'cpu' ? ['あなた', 'CPU'] : ['下の人', '上の人'];
 }
 
@@ -2093,7 +2628,7 @@ function ensureBoard(n){
 }
 
 // ===================== Local play (CPU / same device) =====================
-const isHuman = k => net.on || ui.boss ? k === 0 : (settings.mode === '2p' || k === 0);
+const isHuman = k => net.on || ui.boss || ui.puzzle ? k === 0 : (settings.mode === '2p' || k === 0);
 const interactive = () => !!G && !G.over && !busy && isHuman(G.turn) && !(G.limit && !G.turnAt) && (!net.on || (netPlaying() && !net.busy && alive(G, 0)));
 const liveHands = k => [0, 1].filter(i => G.hands[k][i] > 0);
 const sourceHand = () => { if (sel !== null) return sel; const l = liveHands(G.turn); return l.length === 1 ? l[0] : null; };
@@ -2117,6 +2652,7 @@ function solverMove(m){
 
 function newGame(){
   if (ui.boss) { newBossGame(); return; }
+  if (ui.puzzle) { newPuzzleGame(); return; }
   clearTimeout(cpuTimer); cpuTimer = null; busy = false;
   ui.gameSeq = (ui.gameSeq || 0) + 1;
   hideResult();
@@ -2125,7 +2661,7 @@ function newGame(){
   render(); maybeCpu();
 }
 function maybeCpu(){
-  if (net.on || !G || G.over || (settings.mode !== 'cpu' && !ui.boss) || G.turn !== 1 || ui.screen !== 'game') return;
+  if (net.on || !G || G.over || (settings.mode !== 'cpu' && !ui.boss && !ui.puzzle) || G.turn !== 1 || ui.screen !== 'game') return;
   clearTimeout(cpuTimer);
   // binary: the table may still be computing; it calls maybeCpu() again when it is done
   cpuTimer = setTimeout(() => { cpuTimer = null; if (!net.on && ui.screen === 'game' && solver().ready) doMove(chooseCpuMove()); }, 700);
@@ -2148,7 +2684,11 @@ function chooseCpuMove(){
     return pick(list);
   };
   let m;
-  if (ui.boss) m = Math.random() < Math.min(.95, ui.boss.info.skill + (ui.boss.life - 1) * .12) ? best() : randomMove(ms);
+  if (ui.puzzle) {
+    // the longest defence (and the quickest win, if the puzzle side ever slips)
+    const sc = x => s.res[x.next] === -1 ? 9000 - s.dist[x.next] : s.res[x.next] === 0 ? 5000 : 1000 + s.dist[x.next];
+    m = ms.reduce((a, b) => sc(b) > sc(a) ? b : a);
+  } else if (ui.boss) m = Math.random() < Math.min(.95, ui.boss.info.skill + (ui.boss.life - 1) * .12) ? best() : randomMove(ms);
   else if (settings.level === 'strong') m = best();
   else if (settings.level === 'normal') m = Math.random() < 0.6 ? best() : randomMove(ms);
   else { const kill = ms.filter(x => s.res[x.next] === -1 && s.dist[x.next] === 0); m = kill.length && Math.random() < 0.7 ? pick(kill) : randomMove(ms); }
@@ -2166,6 +2706,7 @@ async function doMove(m){
   if (net.on || G !== g0) { render(); return; }
   G = step(G, m, 0);
   if (ui.boss) bossAfterMove(m);
+  else if (ui.puzzle) puzzleAfterMove();
   else if (G.over) recordCpu(G);
   render(); maybeCpu();
 }
@@ -2263,6 +2804,16 @@ function watchGlobal(fb){
   fb.onValue(fb.ref(db, 'players/' + net.uid), s => {
     const before = unlocked(statsOf(net.profile)), mBefore = firstProfile ? null : missionState(), prevProfile = net.profile;
     net.profile = s.val();
+    net.profileLoaded = true;
+    if (!(net.profile || {}).code) setTimeout(ensureCode, 600);
+    watchFriends();
+    if (firstProfile) { setTimeout(checkLogin, 400); presence(true); watchInvites(); }
+    else {
+      const l0 = levelOf(+(((prevProfile || {}).lv || {}).xp) || 0), l1 = levelOf(+(((net.profile || {}).lv || {}).xp) || 0);
+      if (l1 > l0) celebrate('レベル<br>アップ！', () => { const d = document.createElement('div'); d.innerHTML = `<b>Lv.${l1} になった！</b><span>これからもどんどん遊ぼう</span>`; return d; });
+      CHALKS.filter(c => c.season && !((prevProfile || {}).owned || {})[c.id] && ((net.profile || {}).owned || {})[c.id]).forEach(c =>
+        celebrate('チョーク<br>ゲット！', () => { const d = document.createElement('div'); d.innerHTML = '<b></b><span>シーズン限定。ショップで「使う」を押そう</span>'; d.querySelector('b').textContent = c.name; return d; }));
+    }
     const after = unlocked(statsOf(net.profile));
     if (!firstProfile) {
       after.titles.filter(x => !before.titles.includes(x)).forEach(x =>
@@ -2627,6 +3178,7 @@ function recordGame(S, newRating, ctx){
   const mine = S.log.filter(e => e.p === seat), count = k => mine.filter(e => e.k === k).length;
   const kos = mine.filter(e => e.k === 'attack' && e.a === 0).length;
   if (kos) bossDamage(kos * BOSS_GAME_DMG);
+  addXP(XP.online + (won ? XP.onlineWin : 0));
   bumpDaily({games: 1, wins: won, rated: newRating ? 1 : 0, custom: newRating ? 0 : 1, merges: count('merge'), splits: count('split'), kos},
     GAME_COINS + (won ? WIN_COINS : 0)).then(g => { rewards.set(key, g); render(); });
   return bumpStats(st => {
@@ -2691,7 +3243,7 @@ async function claimDaily(id){
     got = m.coins;
     return cur;
   });
-  if (res && res.committed) { if (reduceMotion.matches) toast(`コイン +${got}`); return got; }
+  if (res && res.committed) { addXP(XP.daily); if (reduceMotion.matches) toast(`コイン +${got}`); return got; }
   return 0;
 }
 async function claimBonus(){
@@ -2703,7 +3255,7 @@ async function claimBonus(){
     cur.coins = (+cur.coins || 0) + DAILY_BONUS;
     return cur;
   });
-  if (res && res.committed) { toast(`全部クリア！コイン +${DAILY_BONUS}`); return DAILY_BONUS; }
+  if (res && res.committed) { addXP(XP.daily); toast(`全部クリア！コイン +${DAILY_BONUS}`); return DAILY_BONUS; }
   return 0;
 }
 async function claimMission(id){
@@ -2716,7 +3268,7 @@ async function claimMission(id){
     cur.coins = (+cur.coins || 0) + m.coins;
     return cur;
   });
-  if (res && res.committed) { if (reduceMotion.matches) toast(`コイン +${m.coins}`); return m.coins; }
+  if (res && res.committed) { addXP(XP.mission); if (reduceMotion.matches) toast(`コイン +${m.coins}`); return m.coins; }
   return 0;
 }
 async function buyChalk(id){
@@ -2748,6 +3300,7 @@ function equipChalk(id){
 function recordCpu(S){
   if (settings.mode !== 'cpu' || !S.over) return;
   const won = S.over.type === 'win' && S.over.winner === 0, draw = S.over.type === 'draw';
+  addXP(XP.cpu + (won ? XP.cpuWin : 0));
   const mine = S.log.filter(e => e.p === 0);
   bumpDaily({cpuGames: 1, cpuWins: won && settings.level !== 'weak' ? 1 : 0, merges: mine.filter(e => e.k === 'merge').length,
     splits: mine.filter(e => e.k === 'split').length, kos: mine.filter(e => e.k === 'attack' && e.a === 0).length});
@@ -2991,14 +3544,16 @@ async function tryMatch(sg){
 }
 
 // ===================== Screens =====================
-const SCREENS = {home:'#scrHome', cpu:'#scrCpu', plate:'#scrPlate', mission:'#scrMission', shop:'#scrShop', rank:'#scrRank', rules:'#scrRules', boss:'#scrBoss', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
+const SCREENS = {home:'#scrHome', cpu:'#scrCpu', plate:'#scrPlate', mission:'#scrMission', shop:'#scrShop', rank:'#scrRank', rules:'#scrRules', boss:'#scrBoss', events:'#scrEvents', pass:'#scrPass', puzzle:'#scrPuzzle', friends:'#scrFriends', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
 // The tab bar stays on the menu screens and steps aside for matching and play.
-const TABBED = ['home', 'mission', 'shop', 'rank', 'plate', 'rules', 'cpu', 'custom', 'boss'];
+const TABBED = ['home', 'events', 'mission', 'shop', 'friends', 'plate', 'rank', 'rules', 'cpu', 'custom', 'boss', 'pass', 'puzzle'];
+const TAB_OF = {boss: 'events', pass: 'events', puzzle: 'events', rank: 'friends'};
 function showChrome(s){
   const tabs = TABBED.includes(s);
   $('#tabbar').hidden = !tabs;
   document.body.classList.toggle('tabs', tabs);
-  $$('#tabbar .tab').forEach(t => { if (t.dataset.tab === s) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current'); });
+  const cur = TAB_OF[s] || s;
+  $$('#tabbar .tab').forEach(t => { if (t.dataset.tab === cur) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current'); });
 }
 function setScreen(s){
   if (ui.screen !== s) {
@@ -3013,7 +3568,7 @@ function setScreen(s){
 function goHome(){
   clearTimeout(cpuTimer); cpuTimer = null;
   hideSplash(); hideResult();
-  ui.boss = null;
+  ui.boss = null; ui.puzzle = null;
   setScreen('home');
 }
 function toast(msg, err){
@@ -3052,6 +3607,12 @@ function render(){
   if (ui.screen === 'shop') renderShop();
   if (ui.screen === 'rank') renderRank();
   if (ui.screen === 'boss') renderBoss();
+  if (ui.screen === 'events') renderEvents();
+  if (ui.screen === 'friends') renderFriends();
+  if (ui.screen === 'pass') renderPass();
+  if (ui.screen === 'puzzle') renderPuzzle();
+  if (ui.screen === 'plate') renderLevel();
+  if (ui.loginShow && ui.screen === 'home' && $('#result').hidden && $('#splash').hidden) { const l = ui.loginShow; ui.loginShow = null; showLogin(l); }
   if (ui.screen === 'home') renderHome();
   if (ui.screen === 'game') renderGame();
   tick();
@@ -3068,7 +3629,15 @@ function renderChrome(){
   showCoins(coins);
   $('#barTier').textContent = tierName(mr);
   $('#barTier').className = 'tb-sub ' + tierCls(mr);
-  for (const id of ['#goMission', '#goShop', '#goRank']) $(id).disabled = !ok;
+  for (const id of ['#goMission', '#goShop', '#goEvents', '#goFriends']) $(id).disabled = !ok;
+  const lv = myLevel();
+  $('#barLv').textContent = `Lv.${lv.level}`;
+  const inv = liveInvites().length;
+  $('#friendBadge').hidden = !inv;
+  $('#friendBadge').textContent = `${inv}`;
+  const evN = eventBadgeCount();
+  $('#eventBadge').hidden = !evN;
+  $('#eventBadge').textContent = `${evN}`;
   const msx = missionState(), nReady = msx.readyDaily + msx.readyNormal;
   $('#missionBadge').hidden = !nReady;
   $('#missionBadge').textContent = `${nReady}`;
@@ -3154,6 +3723,144 @@ function renderHome(){
   $('#puCoins').textContent = coins;
   $('#puLeft').textContent = left;
   if (!$('#ticker').textContent) $('#ticker').textContent = TIPS[ui.tip = Math.floor(Math.random() * TIPS.length)];
+}
+function renderFriends(){
+  const rankTab = ui.frTab === 'rank';
+  $('#tabFr').setAttribute('aria-selected', String(!rankTab));
+  $('#tabFrRank').setAttribute('aria-selected', String(rankTab));
+  $('#frPanel').hidden = rankTab;
+  $('#frRankPanel').hidden = !rankTab;
+  const p = net.profile || {};
+  $('#myCode').textContent = p.code || (net.friendErr ? '取得できません' : '作成中…');
+  const ids = friendIds(), fr = net.friends || {};
+  $('#frCount').textContent = `${ids.length}人`;
+  const rows = ids.map(id => ({id, p: fr[id] || {}})).sort((a, b) => (isOnline(b.p) - isOnline(a.p)) || ((+b.p.seen || 0) - (+a.p.seen || 0)));
+  const ol = $('#frList');
+  const key = JSON.stringify([rows.map(r => [r.id, r.p.name, r.p.title, r.p.plate, r.p.rp, isOnline(r.p), ago(r.p.seen), !!((r.p.friends || {})[net.uid])]), ui.frArm]);
+  if (!unchanged(ol, key)) {
+    ol.innerHTML = '';
+    if (!rows.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = 'まだフレンドがいません。友達のコードを入れて追加しよう。'; ol.append(li); }
+    rows.forEach(({id, p: fp}) => {
+      const li = document.createElement('li'), on = isOnline(fp), rated = ratedGames(fp) > 0;
+      li.append(plateEl({name: fp.name, title: titleId(fp.title), plate: plateId(fp.plate), rating: rated ? BASE_RATE + Math.round(+fp.rp || 0) : 0}, 'sm'));
+      const st = document.createElement('div');
+      st.className = 'fr-st' + (on ? ' on' : '');
+      st.innerHTML = '<span class="dot"></span><span></span>';
+      st.lastChild.textContent = on ? 'オンライン' : fp.seen ? `最終ログイン ${ago(fp.seen)}` : '—';
+      if ((fp.friends || {})[net.uid]) { const t = document.createElement('span'); t.className = 'tag mine'; t.textContent = '相互'; st.append(t); }
+      li.append(st);
+      const bx = document.createElement('div'); bx.className = 'fr-b';
+      const inv = document.createElement('button'); inv.type = 'button'; inv.className = 'btn primary'; inv.textContent = '誘う';
+      inv.addEventListener('click', () => { inv.disabled = true; inviteFriend(id).finally(() => { inv.disabled = false; }); });
+      const rm = document.createElement('button'); rm.type = 'button'; rm.className = 'btn';
+      const armed = ui.frArm && ui.frArm.id === id && ui.frArm.until > Date.now();
+      rm.textContent = armed ? '本当に外す' : '外す';
+      rm.addEventListener('click', () => { if (ui.frArm && ui.frArm.id === id && ui.frArm.until > Date.now()) { ui.frArm = null; removeFriend(id); } else { ui.frArm = {id, until: Date.now() + 3000}; renderFriends(); } });
+      bx.append(inv, rm);
+      li.append(bx);
+      ol.append(li);
+    });
+  }
+  // friend ranking: friends and me by rating
+  const me = {id: net.uid, p: Object.assign({}, p, {name: typedName()})};
+  const list = [me, ...rows].map(r => ({id: r.id, name: String(r.p.name || 'ななし').slice(0, 12), title: r.p.title, rate: BASE_RATE + Math.round(+r.p.rp || 0), w: +r.p.rw || 0, l: +r.p.rl || 0, d: +r.p.rd || 0}))
+    .sort((a, b) => b.rate - a.rate);
+  const rk = $('#frRank');
+  if (!unchanged(rk, JSON.stringify(list))) {
+    rk.innerHTML = '';
+    list.forEach(r => {
+      const li = document.createElement('li');
+      if (r.id === net.uid) li.className = 'me';
+      li.innerHTML = '<span class="pos"></span><span class="who"><span class="rn"></span><small></small></span><span class="rt"></span><span class="rec"></span>';
+      li.querySelector('.pos').textContent = 1 + list.filter(x => x.rate > r.rate).length;
+      li.querySelector('.rn').textContent = r.id === net.uid ? `${r.name}（あなた）` : r.name;
+      li.querySelector('.rn').classList.add(tierCls(r.rate));
+      li.querySelector('.who small').textContent = titleName(r.title);
+      li.querySelector('.rt').textContent = r.rate;
+      li.querySelector('.rt').classList.add(tierCls(r.rate));
+      li.querySelector('.rec').textContent = r.w + r.l + r.d ? `${r.w}勝${r.l}敗${r.d ? r.d + '分' : ''}` : 'レート戦まだ';
+      rk.append(li);
+    });
+  }
+}
+function eventBadgeCount(){
+  if (!FIREBASE_CONFIG || !net.profileLoaded) return 0;
+  const bs = bossState(), me = myBoss();
+  return (bs.down && me.dmg > 0 && !me.claimed ? 1 : 0) + (myLevel().ready ? 1 : 0) + (myPuzzle().solved ? 0 : 1);
+}
+function evCard(o){
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'evcard' + (o.cls ? ' ' + o.cls : ''); b.dataset.go = o.go;
+  if (o.color) b.style.setProperty('--c', o.color);
+  b.innerHTML = '<span class="ev-art"></span><span class="ev-tag"></span><b class="ev-h"></b><span class="ev-s"></span>';
+  b.querySelector('.ev-art').innerHTML = o.art;
+  b.querySelector('.ev-tag').textContent = o.tag;
+  b.querySelector('.ev-h').textContent = o.title;
+  b.querySelector('.ev-s').textContent = o.sub;
+  if (o.meter !== undefined) { const m = document.createElement('span'); m.className = 'ev-meter'; m.innerHTML = '<span class="meter"><i></i></span><span></span>'; m.querySelector('i').style.width = Math.round(o.meter * 100) + '%'; m.lastChild.textContent = o.meterT || ''; b.append(m); }
+  if (o.badge) { const g = document.createElement('span'); g.className = 'ev-badge'; g.textContent = o.badge; b.append(g); }
+  b.addEventListener('click', () => { if (o.go === 'login') { const l = myLogin(); if (l.count) showLogin(l, true); } else setScreen(o.go); });
+  return b;
+}
+function renderEvents(){
+  const list = $('#evList'), bs = bossState(), me = myBoss(), lv = myLevel(), pz = puzzleOf(), mp = myPuzzle(), lg = myLogin(), th = SEASON_THEMES[seasonMonth()];
+  const key = JSON.stringify([bs.dmg, bs.down, me, lv.sxp, lv.ready, mp, lg, dayKey()]);
+  if (unchanged(list, key)) return;
+  list.innerHTML = '';
+  list.append(evCard({go: 'boss', cls: 'boss', color: '#c9a2ff', art: bossFace(bs.down), tag: `今日のボス・${bs.info.tag}`, title: '黒板消し大王',
+    sub: bs.down ? (me.dmg > 0 && !me.claimed ? '討伐成功！ 報酬を受け取ろう' : '討伐成功！ また明日') : `挑戦 ${me.tries}/${BOSS_TRIES}・参加 ${bs.players}人`,
+    meter: bs.loaded ? bs.left / bs.hp : 1, meterT: bs.down ? '0%' : `HP ${bs.loaded ? Math.round(bs.left / bs.hp * 100) : 100}%`, badge: bs.down && me.dmg > 0 && !me.claimed ? '報酬' : ''}));
+  list.append(evCard({go: 'puzzle', color: 'var(--p2)', art: '<span class="ev-icon">詰</span>', tag: `毎日1問・#${pz.num}`, title: `詰めわりばし（${pz.d}手詰め）`,
+    sub: mp.solved ? `正解！（${mp.at || mp.tries}回目）・連続${mp.streak}日` : mp.tries ? `挑戦中（${mp.tries}回）` : 'まだ挑戦していません', badge: mp.solved ? '' : 'NEW'}));
+  list.append(evCard({go: 'pass', color: th[1], art: `<span class="ev-icon" style="font-size:20px">${seasonMonth()}月</span>`, tag: `シーズンパス・あと${daysLeftInSeason()}日`, title: `「${th[0]}」シーズン`,
+    sub: `${lv.tier}/${SEASON_TIERS}段・30段で${th[0]}チョーク`, meter: lv.tier / SEASON_TIERS, meterT: `${lv.tier}/${SEASON_TIERS}`, badge: lv.ready ? `受け取り ${lv.ready}` : ''}));
+  list.append(evCard({go: 'login', color: 'var(--coin)', art: '<span class="ev-icon" style="--c:var(--lose)">済</span>', tag: 'ログインボーナス', title: `${lg.count || 0}/7日目`,
+    sub: `連続ログイン ${lg.streak}日・7日目はコイン150`}));
+}
+function renderPass(){
+  const lv = myLevel(), th = SEASON_THEMES[seasonMonth()], month = seasonMonth(), hero = $('#passHero');
+  hero.style.setProperty('--sc', th[1]); hero.style.setProperty('--sc2', th[1] + '33');
+  $('#phName').textContent = `${month}月シーズン「${th[0]}」`;
+  $('#phLeft').textContent = `のこり${daysLeftInSeason()}日`;
+  $('#phLv').textContent = lv.tier;
+  const into = lv.tier >= SEASON_TIERS ? SEASON_STEP : lv.sxp % SEASON_STEP;
+  $('#phXp').style.width = Math.round(into / SEASON_STEP * 100) + '%';
+  $('#phXpT').textContent = lv.tier >= SEASON_TIERS ? 'コンプリート！' : `次の段まで ${SEASON_STEP - into}`;
+  $('#passClaim').hidden = !lv.ready;
+  $('#passClaim').textContent = `まとめて受け取る（${lv.ready}段ぶん）`;
+  const ol = $('#passList');
+  if (unchanged(ol, JSON.stringify([lv.tier, lv.claimed, month]))) return;
+  ol.innerHTML = '';
+  for (let t = 1; t <= SEASON_TIERS; t++) {
+    const r = seasonReward(t), got = !!lv.claimed['t' + t], li = document.createElement('li');
+    li.className = 'pt' + (got ? ' done' : t <= lv.tier ? ' ready' : '') + (r.chalk || t % 10 === 0 ? ' special' : '');
+    const c = CHALKS.find(x => x.id === 'sea' + month);
+    li.innerHTML = `<b>${t}段</b>` + (r.chalk ? `<span style="color:${c.color}"><svg viewBox="0 0 100 130" aria-hidden="true">${handSVG(2, false, 0, c)}</svg></span><span>${c.name}</span>` : `<span class="coin">${r.coins}</span>`)
+      + `<span>${got ? '受け取り済み' : t <= lv.tier ? '受け取れる' : `あと${t * SEASON_STEP - lv.sxp}`}</span>`;
+    ol.append(li);
+  }
+}
+function renderLevel(){
+  const lv = myLevel();
+  $('#lvN').textContent = lv.level;
+  $('#lvNext').textContent = `次のレベルまで ${lv.need - lv.into} ポイント`;
+  $('#lvXp').style.width = Math.round(lv.into / lv.need * 100) + '%';
+  $('#lvXpT').textContent = `${lv.into}/${lv.need}`;
+}
+function renderPuzzle(){
+  const pz = puzzleOf(), mp = myPuzzle();
+  $('#pzNum').textContent = `#${pz.num}・${pz.day.slice(5).replace('-', '/')}`;
+  $('#pzTitle').textContent = `今日は${pz.d}手詰め`;
+  $('#pzRule').textContent = `ルール：${ruleShort(pz.rules)}`;
+  const box = $('#pzBoard');
+  if (!unchanged(box, pz.day + PUZ_FORCE)) {
+    const bin = pz.rules.base === BIN;
+    const fig = (n, color) => `<figure style="color:${color}"><svg viewBox="0 0 100 130" aria-hidden="true">${handSVG(n, false, 0, null, bin)}</svg><figcaption>${n === 0 ? '×' : n}${bin && n ? `<small>${bits(n)}</small>` : ''}</figcaption></figure>`;
+    box.innerHTML = `<div class="pz-row"><span class="who">相手</span>${fig(pz.op[0], 'var(--p1)')}${fig(pz.op[1], 'var(--p1)')}</div><hr class="pz-line"><div class="pz-row"><span class="who">あなた</span>${fig(pz.me[0], 'var(--you)')}${fig(pz.me[1], 'var(--you)')}</div>`;
+  }
+  $('#pzState').innerHTML = mp.solved ? `<b>正解！</b>（${mp.at || mp.tries}回目）・連続${mp.streak}日` : mp.tries ? `挑戦 ${mp.tries}回・まだ解けていません` : 'まだ挑戦していません';
+  $('#pzGo').textContent = mp.solved ? 'もう一度解く（練習）' : mp.tries ? 'もう一度挑戦' : '挑戦する';
+  $('#pzShare').hidden = !mp.solved;
 }
 function renderBossCard(){
   const ok = !!FIREBASE_CONFIG, card = $('#goBoss');
@@ -3311,6 +4018,7 @@ function renderShop(){
   grid.innerHTML = '';
   CHALKS.forEach(c => {
     const have = hasChalk(c.id), on = using === c.id;
+    if (c.season && !have && c.season !== seasonMonth()) return;   // other months' season chalks: only once owned
     const el = document.createElement('div');
     el.className = 'item' + (on ? ' on' : '') + (c.glow ? ' glow' : '') + (c.shine ? ' shine' : '');
     if (c.color) el.style.setProperty('--c', c.color);
@@ -3319,12 +4027,14 @@ function renderShop(){
     const pr = el.querySelector('.price');
     if (have) { pr.className = 'owned'; pr.textContent = c.boss ? '限定・持っている' : c.price ? '持っている' : 'はじめから'; }
     else if (c.boss) { pr.className = 'owned'; pr.textContent = `限定：ボス討伐${c.boss}回（${Math.min(kills, c.boss)}/${c.boss}）`; }
+    else if (c.season) { pr.className = 'owned'; pr.textContent = `限定：今月のシーズンパス30段`; }
     else { pr.className = 'coin'; pr.textContent = c.price; }
     const b = document.createElement('button');
     b.type = 'button';
     if (on) { b.className = 'btn'; b.textContent = '使用中'; b.disabled = true; }
     else if (have) { b.className = 'btn primary'; b.textContent = '使う'; b.addEventListener('click', () => equipChalk(c.id)); }
     else if (c.boss) { b.className = 'btn'; b.textContent = 'ボスで手に入る'; b.disabled = true; }
+    else if (c.season) { b.className = 'btn'; b.textContent = 'シーズンパスで手に入る'; b.disabled = true; }
     else if (coins < c.price) { b.className = 'btn'; b.textContent = 'コインが足りない'; b.disabled = true; }
     else {
       b.className = 'btn gold'; b.textContent = armed === c.id ? 'もう一度押すと買う' : '買う';
@@ -3452,7 +4162,8 @@ function renderGame(){
     const bossSeat = !net.on && ui.boss && k === 1;
     if (bossSeat && !bf) { bf = document.createElement('span'); bf.className = 'bface'; bf.innerHTML = bossFace(false); nameP.prepend(bf); }
     if (!bossSeat && bf) bf.remove();
-    if (bossSeat) { const left = BOSS_LIVES - ui.boss.life + (G.over && ui.boss.cleared ? 0 : 1); tt = 'ライフ ' + '●'.repeat(Math.max(0, left)) + '○'.repeat(BOSS_LIVES - Math.max(0, left)); tc = 'boss'; }
+    if (!net.on && ui.puzzle && k === 1) { tt = `${ui.puzzle.d}手詰め`; tc = 'boss'; }
+    else if (bossSeat) { const left = BOSS_LIVES - ui.boss.life + (G.over && ui.boss.cleared ? 0 : 1); tt = 'ライフ ' + '●'.repeat(Math.max(0, left)) + '○'.repeat(BOSS_LIVES - Math.max(0, left)); tc = 'boss'; }
     else if (out) { tt = '脱落'; tc = 'out'; }
     else if (net.on && k > 0 && G.seats && !online[G.seats[k]]) { tt = '切断中'; tc = 'off'; }
     else if (isRated() && G.seats) { const rr = Math.round(+((ps[G.seats[k]] || {}).rating)) || BASE_RATE; tt = String(rr); tc = 'rate ' + tierCls(rr); }
@@ -3485,7 +4196,7 @@ function renderGame(){
   sb.disabled = !(act && ms.some(m => m.kind !== 'attack'));
   sb.setAttribute('aria-expanded', String(!!panel));
   sb.textContent = panel ? 'やめる' : (r.split && r.merge ? '分身・合成' : r.split ? '分身' : '合成');
-  $('#resetBtn').hidden = net.on || !!ui.boss;
+  $('#resetBtn').hidden = net.on || !!ui.boss || !!ui.puzzle;
   const now = Date.now(), rb = $('#resignBtn'), xb = $('#exitBtn');
   rb.hidden = !(netPlaying() && !G.over && alive(G, 0));
   rb.disabled = net.busy;
@@ -3494,8 +4205,8 @@ function renderGame(){
   xb.textContent = !net.on ? 'ホームへ' : ui.exitArm > now ? 'もう一度押すと投了して退出' : '退出';
   xb.classList.toggle('danger', midGame && ui.exitArm > now);
 
-  $('#anaPanel').hidden = net.on || !!ui.boss;
-  if (!net.on && !ui.boss) renderAnalysis();
+  $('#anaPanel').hidden = net.on || !!ui.boss || !!ui.puzzle;
+  if (!net.on && !ui.boss && !ui.puzzle) renderAnalysis();
   renderRoomPanel(nm);
   renderLog(nm);
   boardFx();
@@ -3511,6 +4222,15 @@ function renderStrip(act, ms, nm){
   const got = rk && (G.over || !alive(G, 0)) && rewards.has(rk) ? rewards.get(rk) : null;
   rw.hidden = got === null;
   if (got !== null) rw.textContent = got ? `コイン +${got}` : `コイン +0（対戦でもらえるのは1日${GAME_COIN_CAP}枚まで）`;
+  if (G.over && ui.puzzle) {
+    const ok = ui.puzzle.state === 'solved';
+    turn.textContent = ok ? '正解！' : '失敗…';
+    turn.classList.add('big');
+    msg.textContent = ok ? `${ui.puzzle.d}手詰めクリア（${ui.puzzle.attempt}回目）` : 'その手では詰みませんでした';
+    sp.hidden = true; again.hidden = false; again.disabled = false; ev.hidden = true;
+    again.textContent = ok ? 'もう一度解く' : 'もう一度挑戦';
+    return;
+  }
   if (G.over) {
     if (G.over.type === 'win') {
       const w = G.over.winner;
@@ -3556,6 +4276,7 @@ function renderStrip(act, ms, nm){
   turn.classList.add('c' + G.turn);
   turn.style.color = (seatChalk(G.turn) || {}).color || '';
   turn.textContent = `${nm[G.turn]}の番`;
+  if (ui.puzzle) { ev.textContent = `${ui.puzzle.d}手詰め・のこり${ui.puzzle.left}手（${ruleShort(ui.puzzle.rules)}）`; ev.hidden = false; }
   if (ui.boss) { ev.textContent = `ライフ ${BOSS_LIVES - ui.boss.life + 1}/${BOSS_LIVES}・与えたダメージ ${ui.boss.dmg}`; ev.hidden = false; }
   if (net.on && !net.connected) msg.textContent = 'インターネットにつながっていません';
   else if (net.on && !alive(G, 0)) msg.textContent = 'あなたは脱落しました。最後まで見られます';
@@ -3748,6 +4469,9 @@ function tick(){
     if ($('#tbDailyLeft').textContent !== txt) $('#tbDailyLeft').textContent = txt;
   }
   if (net.fb && net.uid && net.bossDay && net.bossDay !== dayKey()) { watchBoss(); render(); }
+  if (net.profileLoaded && ui.loginChecked && ui.loginChecked !== dayKey()) checkLogin();
+  if (net.profileLoaded && !document.hidden && now - (ui.presenceAt || 0) > PRESENCE_MS) presence(true);
+  if (net.invites && $('#invite').hidden && now - (ui.inviteAt || 0) > 1000) { ui.inviteAt = now; maybeShowInvite(); }
   if (ui.screen === 'home') homeTick(now);
   if (ui.screen === 'mission') {
     $('#dailyNote').textContent = dailyNoteText();
@@ -3775,6 +4499,34 @@ $('#tbRank').addEventListener('click', () => setScreen('rank'));
 $('#tbDaily').addEventListener('click', () => { ui.missionTab = 'daily'; setScreen('mission'); });
 $('#goRules').addEventListener('click', () => setScreen('rules'));
 $('#goBoss').addEventListener('click', () => setScreen('boss'));
+$('#tabFr').addEventListener('click', () => { ui.frTab = 'list'; renderFriends(); });
+$('#tabFrRank').addEventListener('click', () => { ui.frTab = 'rank'; renderFriends(); });
+$('#goRankAll').addEventListener('click', () => setScreen('rank'));
+$('#copyCode').addEventListener('click', () => { const c = (net.profile || {}).code; if (c) copyText(c).then(() => toast('コードをコピーしました'), () => toast(c)); });
+$('#frAdd').addEventListener('click', async () => {
+  const b = $('#frAdd'), typed = $('#frCode').value;
+  b.disabled = true;
+  if (await addFriend(typed) && $('#frCode').value === typed) $('#frCode').value = '';
+  b.disabled = false; render();
+});
+$('#frCode').addEventListener('keydown', e => { if (e.key === 'Enter') $('#frAdd').click(); });
+$('#inviteYes').addEventListener('click', () => { const iv = ui.invite; $('#invite').hidden = true; if (!iv) return; dropInvite(iv.from); netJoin(iv.code); });
+$('#inviteNo').addEventListener('click', () => { const iv = ui.invite; $('#invite').hidden = true; ui.invite = null; if (iv) dropInvite(iv.from); });
+$('#pzGo').addEventListener('click', () => startPuzzle());
+$('#pzShare').addEventListener('click', sharePuzzle);
+$('#loginOk').addEventListener('click', hideLogin);
+$('#loginBox').addEventListener('click', e => { if (e.target === $('#loginBox')) hideLogin(); });
+$('#passClaim').addEventListener('click', async () => {
+  const b = $('#passClaim'), from = centerOf(b);
+  b.disabled = true;
+  const got = await claimSeason();
+  b.disabled = false;
+  if (got) {
+    if (got.coins) { flyCoins(from, got.coins); floatText(from[0], from[1] - 10, `+${got.coins}`, 'var(--coin)'); }
+    sfx('unlock'); const [x, y] = centerOf($('#passHero')); dust(x, y, CHALK_COLORS, 30, 120);
+  }
+  render();
+});
 $('#bossGo').addEventListener('click', () => { $('#bossGo').disabled = true; startBossChallenge().finally(() => { if (ui.screen === 'boss') renderBoss(); }); });
 $('#bossClaim').addEventListener('click', async () => {
   const b = $('#bossClaim'), from = centerOf(b);
@@ -3806,6 +4558,10 @@ $$('#bnTrack .bn').forEach(b => b.addEventListener('click', () => {
   // art drawn with the same chalk hands as the board
   const fig = (n, color, cap, cls) => `<figure class="${cls || ''}" style="color:${color};--c:${color}"><svg viewBox="0 0 100 130" aria-hidden="true">${handSVG(n, false, 0, null, true)}</svg>${cap ? `<figcaption>${cap}</figcaption>` : ''}</figure>`;
   $('#artBin').innerHTML = fig(21, 'var(--p2)', '10101') + fig(10, 'var(--you)', '01010');
+  const sea = CHALKS.find(c => c.id === 'sea' + seasonMonth()), th = SEASON_THEMES[seasonMonth()];
+  $('#bnPass').style.setProperty('--c', th[1]);
+  $('#bnPassH').innerHTML = `${seasonMonth()}月シーズン<br>「${th[0]}」`;
+  $('#artPass').innerHTML = `<figure class="shine" style="color:${sea.color};--c:${sea.color}"><svg viewBox="0 0 100 130" aria-hidden="true">${handSVG(2, false, 0, sea)}</svg></figure>`;
   const ch = id => CHALKS.find(c => c.id === id);
   $('#artShop').innerHTML = ['gold', 'rainbow', 'neon'].map(id => {
     const c = ch(id);
@@ -3817,7 +4573,7 @@ $('#tabNormal').addEventListener('click', () => { ui.missionTab = 'normal'; rend
 $('#goCustom').addEventListener('click', () => setScreen('custom'));
 $('#goRated').addEventListener('click', () => startSearch());
 $$('[data-home]').forEach(b => b.addEventListener('click', goHome));
-$('#cpuStart').addEventListener('click', () => { ui.boss = null; setScreen('game'); newGame(); });
+$('#cpuStart').addEventListener('click', () => { ui.boss = null; ui.puzzle = null; setScreen('game'); newGame(); });
 $('#settings').addEventListener('change', e => {
   const t = e.target;
   if (!(t.name in OPTIONS) || !OPTIONS[t.name].includes(t.value)) return;
@@ -3876,6 +4632,7 @@ $('#exitBtn').addEventListener('click', () => {
   else { ui.exitArm = Date.now() + 3000; render(); }
 });
 $('#again').addEventListener('click', () => {
+  if (!net.on && ui.puzzle) { startPuzzle(); return; }
   if (!net.on && ui.boss) { if (BOSS_TRIES - myBoss().tries > 0) startBossChallenge(); else { ui.boss = null; setScreen('boss'); } return; }
   if (isRated()) { leaveRoom().then(() => startSearch()); }
   else if (net.on) { if (isHost()) backToLobby(); }
@@ -3890,6 +4647,7 @@ document.getElementById(sound.on ? 'snd-on' : 'snd-off').checked = true;
 $('#soundOpts').addEventListener('change', e => { sound.on = e.target.value === 'on'; lsSet('waribashi-sound', e.target.value); if (sound.on) { audio(); setTimeout(() => sfx('coin'), 60); } });
 document.addEventListener('pointerdown', () => { if (sound.on) audio(); }, {passive: true});
 document.addEventListener('visibilitychange', async () => {
+  if (net.profileLoaded) presence(!document.hidden);
   if (document.hidden) {
     if (search.on) { ui.resumeSearch = true; const code = await cancelSearch(); if (code) joinRated(code); }
   } else if (ui.resumeSearch) {
@@ -3905,6 +4663,16 @@ const today = new Date();
 $('#date').innerHTML = `<span class="tcy">${today.getMonth()+1}</span>月<span class="tcy">${today.getDate()}</span>日（${'日月火水木金土'[today.getDay()]}）`;
 $('#radarHand').innerHTML = handSVG(2, false, 0, null);
 $('#appVer').textContent = `バージョン ${APP_VERSION}`;
+(() => {
+  const defs = document.getElementById('cg-gold').parentNode, NS = 'http://www.w3.org/2000/svg';
+  for (let m = 1; m <= 12; m++) {
+    const g = document.createElementNS(NS, 'linearGradient'), [, c1, c2] = SEASON_THEMES[m];
+    g.id = 'cg-sea' + m; g.setAttribute('gradientUnits', 'userSpaceOnUse');
+    g.setAttribute('x1', '0'); g.setAttribute('y1', '0'); g.setAttribute('x2', '100'); g.setAttribute('y2', '130');
+    [[0, c1], [.45, c2], [.7, c1], [1, c2]].forEach(([o, c]) => { const st = document.createElementNS(NS, 'stop'); st.setAttribute('offset', o); st.setAttribute('stop-color', c); g.append(st); });
+    defs.append(g);
+  }
+})();
 dbg('debug on, version ' + APP_VERSION);
 TIERS.forEach(([min], i) => {
   const li = document.createElement('li');
