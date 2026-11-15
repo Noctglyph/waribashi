@@ -37,14 +37,20 @@ body{margin:0}
   --lose:#ffa48c;
   --wood:#7a5131;
   --wood-hi:#9c6b43;
-  --t0:#b4b4ac;
-  --t1:#cf9e6e;
-  --t2:#8fd18a;
-  --t3:#7fd8dc;
-  --t4:#93b4ff;
-  --t5:#f0d264;
-  --t6:#ffad66;
-  --t7:#ff7d7d;
+  --t0:#d9a271;
+  --t1:#cfd8e3;
+  --t2:#f2cf5b;
+  --t3:#7fe0d4;
+  --t4:#9fc8ff;
+  --t5:#d0a2ff;
+  --t6:#ff8a6b;
+  --t7:#ff8a6b;
+  --m-star:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 0C11 7 13 9 20 10C13 11 11 13 10 20C9 13 7 11 0 10C7 9 9 7 10 0Z'/%3E%3C/svg%3E");
+  --m-petal:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 19C3 13 3 6 7 2C8.5 3.5 9.3 4 10 4C10.7 4 11.5 3.5 13 2C17 6 17 13 10 19Z'/%3E%3C/svg%3E");
+  --m-leaf:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M2 18C2 8 8 2 18 2C18 12 12 18 2 18Z'/%3E%3C/svg%3E");
+  --m-flake:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 1.5v17M2.6 5.75l14.8 8.5M2.6 14.25l14.8-8.5' stroke='%23000' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E");
+  --m-dot:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cdefs%3E%3CradialGradient id='g'%3E%3Cstop offset='0'/%3E%3Cstop offset='.45' stop-opacity='.8'/%3E%3Cstop offset='1' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='10' cy='10' r='10' fill='url(%23g)'/%3E%3C/svg%3E");
+  --m-bolt:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M12 0L3 11.5h6L7 20l10-12.5h-6z'/%3E%3C/svg%3E");
   --coin:#f2cf5b;
   --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   --font-display:"Yusei Magic","Hiragino Maru Gothic ProN","BIZ UDPGothic","Meiryo",sans-serif;
@@ -128,6 +134,11 @@ body.tabs .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .art svg .pm,.art svg .fg{fill:currentColor}
 .art svg .fg{stroke:var(--board);stroke-width:2}
 .art figure{margin:0;display:grid;justify-items:center;gap:2px}
+.art .cf{width:auto}
+.art .cf svg{width:clamp(46px,14vw,62px)}
+#artShop svg{width:clamp(36px,10.5vw,48px)}
+#artRank .podium i{width:40px;padding-top:6px}
+#artRank .podium svg{width:30px;height:30px}
 .art figcaption{font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.1em;color:var(--chalk-soft)}
 .art .glow svg{filter:drop-shadow(0 0 3px var(--c)) drop-shadow(0 0 8px var(--c))}
 .art .shine svg{filter:drop-shadow(0 0 1.5px #fff3c2) drop-shadow(0 0 6px rgba(240,190,80,.55))}
@@ -683,6 +694,208 @@ fieldset:disabled .opts span{cursor:default}
 @media (prefers-reduced-motion:reduce){
   *,*::before{animation:none!important;transition:none!important}
 }
+
+/* ===== Ranks: an emblem per rank (the metal gradients are defs rk0-rk6) ===== */
+.emb{display:inline-block;width:1.3em;height:1.3em;vertical-align:-.3em;flex:none;line-height:0}
+.emb svg{width:100%;height:100%;display:block;overflow:visible}
+.emb.r5 svg{filter:drop-shadow(0 0 3px rgba(200,150,255,.6))}
+.emb.r6 svg{filter:drop-shadow(0 0 4px rgba(255,130,80,.75))}
+.tb-rate{grid-template-columns:auto auto;justify-items:start;align-content:center;column-gap:6px;padding:4px 10px 4px 7px}
+.tb-rate .emb{grid-row:1/span 2;width:30px;height:30px;align-self:center}
+.tb-rate b{line-height:1.05}
+.tb-rate .tb-sub{font-size:10px;white-space:nowrap}
+.mode-x .emb{margin-right:3px}
+.myrank{grid-template-columns:auto minmax(0,1fr) auto}
+.myrank .mr-emb{grid-column:1;grid-row:1/span 4;width:64px;height:64px;align-self:center}
+.myrank .mr-k,.myrank .mr-rate,.myrank .mr-next,.myrank .mr-rec{grid-column:2;min-width:0}
+.myrank .mr-pos{grid-column:3;grid-row:1/span 4}
+.myrank .mr-rate .rk{font-size:17px;margin-left:8px;white-space:nowrap}
+.mr-next{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
+.mr-next small{font-size:12px;color:var(--chalk-soft);white-space:nowrap}
+.rank .rt .emb{margin-right:4px}
+.pl-rate .emb{width:1.15em;height:1.15em;margin:0 3px 0 -4px;vertical-align:-.22em}
+.tiers li{display:inline-flex;align-items:center;gap:5px;padding:2px 10px 2px 5px}
+.tiers .emb{width:22px;height:22px}
+.res-row .emb{width:22px;height:22px;margin-right:4px}
+.rankup{position:fixed;inset:0;z-index:75;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 45%,rgba(58,46,30,.96),rgba(12,10,9,.97) 70%);cursor:pointer;animation:ruFade .25s ease}
+.ru-in{display:grid;justify-items:center;gap:8px;text-align:center}
+.ru-k{font-size:13px;font-weight:700;letter-spacing:.3em;color:var(--chalk-soft)}
+.ru-emb{position:relative;width:140px;height:140px;animation:ruPop .8s cubic-bezier(.2,.9,.3,1.35) both}
+.ru-emb::before{content:"";position:absolute;inset:-70%;z-index:-1;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(255,240,190,.3) 0 7deg,transparent 7deg 22deg);-webkit-mask:radial-gradient(circle,#000 22%,transparent 68%);mask:radial-gradient(circle,#000 22%,transparent 68%);animation:ruSpin 10s linear infinite}
+.ru-emb svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 14px var(--c))}
+.ru-t{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,8vw,40px);line-height:1.2;color:var(--c);text-shadow:0 0 18px var(--c)}
+.ru-s{font-size:13px;color:var(--chalk-soft)}
+@keyframes ruPop{0%{transform:scale(.2) rotate(-30deg);opacity:0}100%{transform:none;opacity:1}}
+@keyframes ruSpin{to{transform:rotate(1turn)}}
+@keyframes ruFade{from{opacity:0}}
+
+/* ===== Effect chalks: [data-fx] on the holder; .hs is the hand drawing, .fxo the particle layer over it ===== */
+.cf{position:relative;display:inline-block;width:64px;line-height:0;color:var(--c)}
+.cf svg{width:100%;height:auto;aspect-ratio:100/130;display:block;overflow:visible}
+.cf svg .pm,.cf svg .fg{fill:currentColor}
+.cf svg .fg{stroke:var(--board);stroke-width:2}
+.fxo{position:absolute;inset:0;pointer-events:none;z-index:1;display:none}
+[data-fx] .fxo{display:block}
+.hand.dead .fxo{display:none}
+.fxo::before,.fxo::after{content:"";position:absolute;inset:-6% -9%;opacity:0;background:var(--fxc,#fff);
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-image:var(--fm),var(--fm),var(--fm),var(--fm),var(--fm);mask-image:var(--fm),var(--fm),var(--fm),var(--fm),var(--fm);
+  animation:var(--fa) var(--fd) ease-in-out infinite}
+.fxo::before{-webkit-mask-position:14% 16%,86% 12%,74% 54%,16% 62%,50% 90%;mask-position:14% 16%,86% 12%,74% 54%,16% 62%,50% 90%;-webkit-mask-size:14%,10%,12%,9%,11%;mask-size:14%,10%,12%,9%,11%}
+.fxo::after{background:var(--fxc2,var(--fxc,#fff));animation-delay:calc(var(--fd) / -2);-webkit-mask-position:44% 4%,92% 38%,6% 36%,60% 76%,28% 94%;mask-position:44% 4%,92% 38%,6% 36%,60% 76%,28% 94%;-webkit-mask-size:10%,13%,9%,11%,12%;mask-size:10%,13%,9%,11%,12%}
+[data-fx]{--fm:var(--m-star);--fa:fxTw;--fd:2.6s;--g:var(--c)}
+[data-fx="petal"],[data-fx="leaf"],[data-fx="snow"],[data-fx="ice"]{--fa:fxFall;--fd:4.4s}
+[data-fx="petal"]{--fm:var(--m-petal)}
+[data-fx="leaf"]{--fm:var(--m-leaf)}
+[data-fx="snow"],[data-fx="ice"]{--fm:var(--m-flake)}
+[data-fx="ember"],[data-fx="legend"]{--fm:var(--m-dot);--fa:fxRise;--fd:2.2s}
+[data-fx="shimmer"]{--fm:var(--m-dot);--fd:3s}
+[data-fx="thunder"]{--fm:var(--m-bolt);--fa:fxFlash;--fd:2.8s}
+[data-fx="firework"]{--fd:1.8s}
+[data-fx="cosmos"]{--fd:3.2s}
+[data-fx="pulse"] .fxo,[data-fx="aurora"] .fxo{display:none}
+[data-fx] .hs{filter:drop-shadow(0 0 2px var(--g)) drop-shadow(0 0 7px var(--g))}
+[data-fx="pulse"] .hs,[data-fx="cosmos"] .hs,[data-fx="ice"] .hs,[data-fx="shimmer"] .hs,[data-fx="diamond"] .hs{animation:fxPulse 2.6s ease-in-out infinite;will-change:filter}
+[data-fx="hue"] .hs,[data-fx="prism"] .hs{animation:fxHue 6s linear infinite;will-change:filter}
+[data-fx="aurora"] .hs{animation:fxAur 7s ease-in-out infinite;will-change:filter}
+[data-fx="thunder"] .hs{animation:fxBolt 2.8s linear infinite;will-change:filter}
+[data-fx="ember"] .hs,[data-fx="legend"] .hs{animation:fxFire 1.5s ease-in-out infinite;will-change:filter}
+.radar .fxo{inset:16%}
+@keyframes fxPulse{0%,100%{filter:drop-shadow(0 0 2px var(--g)) drop-shadow(0 0 5px var(--g))}50%{filter:drop-shadow(0 0 4px var(--g)) drop-shadow(0 0 15px var(--g))}}
+@keyframes fxHue{from{filter:hue-rotate(0deg) drop-shadow(0 0 4px var(--g))}to{filter:hue-rotate(360deg) drop-shadow(0 0 4px var(--g))}}
+@keyframes fxAur{0%,100%{filter:hue-rotate(-35deg) drop-shadow(0 0 4px var(--g))}50%{filter:hue-rotate(50deg) drop-shadow(0 0 13px var(--g))}}
+@keyframes fxBolt{0%,84%,100%{filter:drop-shadow(0 0 3px var(--g)) brightness(1)}86%{filter:drop-shadow(0 0 12px #fff) brightness(1.6)}88%{filter:drop-shadow(0 0 4px var(--g)) brightness(1)}90%{filter:drop-shadow(0 0 15px #fff) brightness(1.5)}93%{filter:drop-shadow(0 0 3px var(--g)) brightness(1)}}
+@keyframes fxFire{0%,100%{filter:drop-shadow(0 -2px 4px var(--g)) drop-shadow(0 0 8px var(--g))}50%{filter:drop-shadow(0 -5px 8px var(--g)) drop-shadow(0 0 15px var(--g))}}
+@keyframes fxTw{0%,100%{opacity:0;transform:scale(.7)}50%{opacity:1;transform:scale(1)}}
+@keyframes fxFall{0%{opacity:0;transform:translateY(-16%) rotate(-6deg)}20%,75%{opacity:1}100%{opacity:0;transform:translateY(16%) rotate(8deg)}}
+@keyframes fxRise{0%{opacity:0;transform:translateY(14%)}25%,70%{opacity:1}100%{opacity:0;transform:translateY(-20%)}}
+@keyframes fxFlash{0%,82%,100%{opacity:0}84%,88%{opacity:1}86%{opacity:.25}}
+.fx-dust.s-star{border-radius:0;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+.fx-dust.s-petal{border-radius:80% 0 80% 0}
+.fx-dust.s-leaf{border-radius:0 85% 0 85%}
+.fx-dust.s-flake{border-radius:50%;box-shadow:0 0 6px 1px currentColor}
+.fx-dust.s-ember,.fx-dust.s-glow{border-radius:50%;box-shadow:0 0 8px 2px currentColor}
+.fx-dust.s-spark{border-radius:2px;box-shadow:0 0 6px currentColor}
+.fx-ring{position:absolute;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;border:3px solid currentColor;box-shadow:0 0 14px currentColor,inset 0 0 10px currentColor}
+.item .fxtag{font-size:10px;font-weight:700;letter-spacing:.08em;line-height:1.6;padding:0 7px;border-radius:999px;background:rgba(255,255,255,.1);color:var(--chalk-soft);margin-top:-4px}
+
+/* ===== Board themes (my own board only): they set the board, frame and ledge colours ===== */
+.board-wrap[data-bd="bnight"]{--board:#16203d;--wood:#2c355f;--wood-hi:#47518a}
+.board-wrap[data-bd="bnight"] .board{background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.75) 0 1px,transparent 1.7px),radial-gradient(circle at 70% 60%,rgba(255,255,255,.5) 0 .9px,transparent 1.6px),radial-gradient(circle at 45% 80%,rgba(255,236,170,.7) 0 1.2px,transparent 2px),radial-gradient(ellipse 60% 40% at 82% 8%,rgba(150,170,255,.16),transparent 70%),var(--noise);background-size:97px 83px,131px 109px,173px 151px,auto,auto}
+.board-wrap[data-bd="bsakura"]{--board:#3b2533;--wood:#b9798e;--wood-hi:#e6b0c2}
+.board-wrap[data-bd="bsakura"] .board{background-image:radial-gradient(ellipse 5px 3px at 30% 40%,rgba(255,190,212,.55) 60%,transparent 76%),radial-gradient(ellipse 4px 2.5px at 70% 75%,rgba(255,220,232,.45) 60%,transparent 76%),radial-gradient(ellipse 70% 45% at 90% 0%,rgba(255,170,200,.2),transparent 70%),radial-gradient(ellipse 60% 40% at 0% 100%,rgba(255,170,200,.14),transparent 70%),var(--noise);background-size:113px 97px,151px 137px,auto,auto,auto}
+.board-wrap[data-bd="bgold"]{--wood:#b88a2a;--wood-hi:#f3d77d}
+.board-wrap[data-bd="bgold"] .board,.board-wrap[data-bd="blegend"] .board{border-image:linear-gradient(135deg,#8f5f12,#ffefb0 24%,#b47a1c 50%,#fff3c2 76%,#8a5a10) 1}
+.board-wrap[data-bd="bcosmos"]{--board:#130f2c;--wood:#352862;--wood-hi:#5a48a3}
+.board-wrap[data-bd="bcosmos"] .board{background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.85) 0 1px,transparent 1.7px),radial-gradient(circle at 70% 60%,rgba(200,220,255,.6) 0 .9px,transparent 1.6px),radial-gradient(circle at 45% 80%,rgba(255,236,170,.75) 0 1.3px,transparent 2px),radial-gradient(ellipse 55% 40% at 18% 28%,rgba(255,90,200,.22),transparent 70%),radial-gradient(ellipse 50% 45% at 84% 72%,rgba(70,200,255,.2),transparent 70%),radial-gradient(ellipse 40% 30% at 60% 12%,rgba(150,110,255,.2),transparent 70%),var(--noise);background-size:89px 77px,127px 113px,163px 149px,auto,auto,auto,auto}
+.board-wrap[data-bd="bboss"]{--board:#24163a;--wood:#4b2b84;--wood-hi:#7d55c7}
+.board-wrap[data-bd="bboss"] .board{background-image:repeating-linear-gradient(100deg,rgba(255,255,255,.03) 0 22px,transparent 22px 48px),radial-gradient(ellipse 70% 50% at 50% 0%,rgba(200,150,255,.18),transparent 70%),var(--noise)}
+.board-wrap[data-bd="bdia"]{--board:#10233d;--wood:#5f88bd;--wood-hi:#cfe4ff}
+.board-wrap[data-bd="bdia"] .board{background-image:radial-gradient(circle at 30% 40%,rgba(255,255,255,.8) 0 1px,transparent 1.8px),repeating-linear-gradient(60deg,rgba(160,210,255,.06) 0 2px,transparent 2px 46px),repeating-linear-gradient(-60deg,rgba(160,210,255,.06) 0 2px,transparent 2px 46px),radial-gradient(ellipse 60% 40% at 80% 10%,rgba(160,210,255,.18),transparent 70%),var(--noise);background-size:71px 67px,auto,auto,auto,auto}
+.board-wrap[data-bd="blegend"]{--board:#28111a;--wood:#9a6a1c;--wood-hi:#f3d77d}
+.board-wrap[data-bd="blegend"] .board{background-image:radial-gradient(circle at 30% 60%,rgba(255,180,90,.6) 0 1.2px,transparent 2px),radial-gradient(ellipse 80% 50% at 50% 112%,rgba(255,90,50,.3),transparent 70%),radial-gradient(ellipse 50% 30% at 50% -6%,rgba(255,210,110,.16),transparent 70%),var(--noise);background-size:83px 71px,auto,auto,auto}
+.bsw{width:100%;max-width:118px}
+.bsw .board{border-width:5px;padding:7px 0;place-items:center;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25),inset 0 0 18px rgba(0,0,0,.3)}
+.bsw svg{width:30px;height:auto;aspect-ratio:100/130;display:block;overflow:visible}
+.bsw svg .pm,.bsw svg .fg{fill:currentColor}
+.bsw svg .fg{stroke:var(--board);stroke-width:2}
+.bsw .tray{height:6px;margin:-1px -2px 0}
+.bsw .tray::before{left:16%;width:15px;top:-2px;height:4px}
+.bsw .tray::after{left:calc(16% + 19px);width:9px;top:-2px;height:4px}
+.item.bitem .bsw{width:100%;max-width:150px}
+.item.bitem .bsw .board{padding:12px 0}
+.item.bitem .bsw svg{width:38px}
+.pswatch{display:block;width:56px;height:30px;border-radius:6px;border:2px solid var(--pe)}
+.tt{font-family:var(--font-display);font-size:13px;line-height:1.5;color:var(--you);padding:1px 8px;border:1.5px solid currentColor;border-radius:6px;white-space:nowrap}
+.road .ri .cf{width:30px}
+.road .ri .bsw{width:40px}
+.road .ri .bsw .board{border-width:3px;padding:4px 0}
+.road .ri .bsw svg{width:12px}
+.road .ri .bsw .tray{display:none}
+
+/* ===== Season pass: this month's set, rewards with pictures, bonus tiers ===== */
+.passset{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.ps-c{display:grid;justify-items:center;align-content:start;gap:4px;padding:10px 4px 8px;border-radius:10px;border:1.5px solid var(--line);background:var(--board-deep);text-align:center;min-width:0}
+.ps-c.got{border-color:var(--sc,var(--coin));box-shadow:0 0 0 1px var(--sc,var(--coin)) inset}
+.ps-c .ps-t{font-size:11px;font-weight:700;line-height:1.6;padding:0 8px;border-radius:999px;background:var(--sc,var(--coin));color:#1c1b18}
+.ps-c .ps-a{display:grid;place-items:center;height:52px;width:100%}
+.ps-c .cf{width:36px}
+.ps-c .bsw{width:64px}
+.ps-c b{font-size:12px;line-height:1.3;overflow-wrap:anywhere}
+.ps-c small{font-size:10.5px;color:var(--chalk-soft)}
+.pt .pt-art{display:grid;place-items:center;min-height:38px}
+.pt .pt-art .cf{width:28px}
+.pt .pt-art .bsw{width:64px}
+.pt .pt-art .bsw svg{width:20px}
+.pt .pt-art .pswatch{width:60px;height:28px}
+.pt .pt-n{font-size:11.5px;font-weight:700;line-height:1.3;color:var(--chalk);overflow-wrap:anywhere}
+.pt .pt-n:empty{display:none}
+.pt.special{border-color:var(--sc,var(--coin));background:linear-gradient(160deg,rgba(255,255,255,.07),transparent 60%),var(--board-deep)}
+.pt.big .coin{font-size:15px}
+.pt.bonus{border-style:dashed}
+.pass-h{margin:4px 0 -6px;font-family:var(--font-display);font-weight:400;font-size:19px}
+
+/* ===== Collection book ===== */
+.bookhero{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 16px;align-items:center;padding:16px;border-radius:12px;border:4px solid var(--wood);background-color:var(--board);background-image:var(--noise);box-shadow:inset 0 0 30px rgba(0,0,0,.3)}
+.bk-ring{--p:0;position:relative;grid-row:1/span 3;width:88px;height:88px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--you) calc(var(--p) * 1%),rgba(236,238,228,.12) 0)}
+.bk-ring::before{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--board)}
+.bk-ring b{position:relative;font-family:var(--font-display);font-weight:400;font-size:24px;color:var(--you)}
+.bk-ring.sm{width:92px;height:92px}
+.bookhero .bk-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--chalk-soft)}
+.bookhero .bk-count{font-family:var(--font-display);font-weight:400;font-size:28px;line-height:1.2}
+.bookhero .bk-s{margin:0;font-size:12.5px;color:var(--chalk-soft);text-wrap:pretty}
+.miles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.mile{display:grid;justify-items:center;align-content:start;gap:4px;padding:10px 4px 8px;border-radius:10px;border:1.5px solid var(--line);background:var(--board-deep);text-align:center;min-width:0}
+.mile .ml-p{font-family:var(--font-display);font-size:20px;line-height:1.1;color:var(--you)}
+.mile .ml-a{display:grid;place-items:center;height:40px}
+.mile .ml-a .cf{width:28px}
+.mile .ml-a .pswatch{width:48px;height:26px}
+.mile .ml-r{font-size:11px;line-height:1.35;color:var(--chalk-soft);overflow-wrap:anywhere}
+.mile .btn{width:100%;min-height:34px;font-size:12.5px;padding:0 4px}
+.mile.ready{border-color:var(--coin);box-shadow:0 0 0 1px var(--coin) inset}
+.mile.done{opacity:.6}
+.seg.five{grid-template-columns:repeat(5,minmax(0,1fr))}
+.seg.five button{font-size:12.5px;min-height:38px;padding:0 2px}
+.book{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}
+.bk{position:relative;display:grid;justify-items:center;align-content:start;gap:4px;min-width:0;padding:12px 6px 9px;border-radius:10px;border:1.5px solid var(--line);background:var(--board-deep);text-align:center;color:var(--chalk);font:inherit}
+button.bk{cursor:pointer}
+button.bk:hover{border-color:var(--chalk-soft)}
+button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.bk.on{border-color:var(--you);box-shadow:0 0 0 1px var(--you) inset}
+.bk .bk-a{display:grid;place-items:center;height:62px;width:100%}
+.bk .cf{width:42px}
+.bk .bsw{width:86px}
+.bk .bsw svg{width:24px}
+.bk .pswatch{width:76px;height:36px}
+.bk .emb{width:50px;height:50px}
+.bk .bk-n{font-size:12.5px;font-weight:700;line-height:1.3;overflow-wrap:anywhere}
+.bk .bk-n:empty{display:none}
+.bk .tt{white-space:normal;font-size:12px;line-height:1.35;max-width:100%;overflow-wrap:anywhere}
+.bk .bk-h{font-size:10.5px;line-height:1.4;color:var(--chalk-soft);text-wrap:pretty}
+.bk .lim{position:absolute;top:5px;left:5px;font-size:9.5px;font-weight:700;line-height:1.6;padding:0 6px;border-radius:999px;background:var(--lose);color:#2a1a14}
+.bk .use{position:absolute;top:5px;right:5px;font-size:9.5px;font-weight:700;line-height:1.6;padding:0 6px;border-radius:999px;background:var(--you);color:#1c1b18}
+.bk.lock .bk-a{filter:brightness(0) opacity(.42)}
+.bk.lock .bk-n{color:var(--chalk-faint)}
+.bookbtn{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;padding:12px 14px;border-radius:12px;border:2px solid #9c6b43;background:linear-gradient(160deg,#5e3e24,#3b2514);color:#fff1d6;text-align:left;cursor:pointer;font:inherit}
+.bookbtn:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.bb-ic{width:42px;height:42px;border-radius:8px;display:grid;place-items:center;font-family:var(--font-display);font-size:22px;background:#2e1c0e;color:var(--coin);box-shadow:inset 0 0 0 2px rgba(242,207,91,.4)}
+.bb-t{display:grid;min-width:0}
+.bb-t b{font-family:var(--font-display);font-weight:400;font-size:20px;line-height:1.2}
+.bb-t small{font-size:11px;color:rgba(255,241,214,.72)}
+.bb-p{font-family:var(--font-display);font-size:24px;color:var(--coin)}
+.ab-item{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center}
+.ab-item .ab-art .cf{width:30px}
+.ab-item .ab-art .bsw{width:58px}
+.ab-item .ab-art .bsw svg{width:16px}
+.ab-t{display:grid;gap:2px;min-width:0}
+.ab-t span{font-size:12px;color:var(--chalk-soft)}
+.pl-pdia{background-color:#173a7a;background-image:linear-gradient(115deg,rgba(255,255,255,0) 30%,rgba(255,255,255,.3) 45%,rgba(255,255,255,0) 60%),repeating-linear-gradient(60deg,rgba(255,255,255,.07) 0 9px,transparent 9px 18px),repeating-linear-gradient(-60deg,rgba(255,255,255,.07) 0 9px,transparent 9px 18px),linear-gradient(160deg,#3a72d6,#16306a);--pf:#f2f8ff;--pa:#bfe0ff;--pe:#0e2453}
+.pl-plgd{background-color:#5a1220;background-image:radial-gradient(ellipse 55% 130% at 100% 50%,rgba(255,190,90,.5),transparent 60%),radial-gradient(circle at 12% 20%,rgba(255,220,140,.7) 0 1.5px,transparent 2.5px),linear-gradient(115deg,#3a0a14,#8f1f2a 45%,#c43a2a 72%,#e8a23a);--pf:#fff4e0;--pa:#ffd36b;--pe:#2a0810}
+.pl-pbook{background-color:#5a3b22;background-image:linear-gradient(90deg,rgba(0,0,0,.28) 0 7px,rgba(242,207,91,.5) 7px 8.5px,transparent 8.5px),repeating-linear-gradient(0deg,rgba(255,230,190,.05) 0 2px,transparent 2px 6px),linear-gradient(160deg,#7a5130,#4a2e18);--pf:#fff1d6;--pa:#f2cf5b;--pe:#2e1c0e}
+@media (prefers-reduced-motion:reduce){
+  [data-fx] .hs,.fxo::before,.fxo::after,.ru-emb,.ru-emb::before,.rankup{animation:none!important}
+  [data-fx] .fxo::before{opacity:.85}
+}
 </style>
 </head>
 <body>
@@ -707,6 +920,32 @@ fieldset:disabled .opts span{cursor:default}
   <linearGradient id="cg-star" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="130">
     <stop offset="0" stop-color="#2a3a8f"/><stop offset=".3" stop-color="#8ea8ff"/><stop offset=".5" stop-color="#f2f5ff"/><stop offset=".7" stop-color="#7d95ff"/><stop offset="1" stop-color="#2a3a8f"/>
   </linearGradient>
+  <linearGradient id="cg-ice" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="130">
+    <stop offset="0" stop-color="#eafbff"/><stop offset=".32" stop-color="#9fe3ff"/><stop offset=".52" stop-color="#ffffff"/><stop offset=".78" stop-color="#7cc8f0"/><stop offset="1" stop-color="#d8f6ff"/>
+  </linearGradient>
+  <linearGradient id="cg-thunder" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="80" y2="130">
+    <stop offset="0" stop-color="#fffbe0"/><stop offset=".3" stop-color="#ffe14a"/><stop offset=".5" stop-color="#fff7b8"/><stop offset=".72" stop-color="#ffc21f"/><stop offset="1" stop-color="#fff3a0"/>
+  </linearGradient>
+  <radialGradient id="cg-neb1" gradientUnits="userSpaceOnUse" cx="28" cy="78" r="58"><stop offset="0" stop-color="#ff6ad5" stop-opacity=".85"/><stop offset=".55" stop-color="#8a4dff" stop-opacity=".4"/><stop offset="1" stop-color="#2a1f6e" stop-opacity="0"/></radialGradient>
+  <radialGradient id="cg-neb2" gradientUnits="userSpaceOnUse" cx="74" cy="34" r="50"><stop offset="0" stop-color="#4fd8ff" stop-opacity=".8"/><stop offset=".6" stop-color="#4a5bff" stop-opacity=".3"/><stop offset="1" stop-color="#2a1f6e" stop-opacity="0"/></radialGradient>
+  <pattern id="cg-cosmos" patternUnits="userSpaceOnUse" width="100" height="130">
+    <rect width="100" height="130" fill="#3a2a90"/><rect width="100" height="130" fill="url(#cg-neb1)"/><rect width="100" height="130" fill="url(#cg-neb2)"/>
+    <g fill="#fff"><circle cx="22" cy="18" r="1.4"/><circle cx="58" cy="12" r="1"/><circle cx="40" cy="40" r="1.6"/><circle cx="70" cy="58" r="1.2"/><circle cx="18" cy="66" r="1"/><circle cx="50" cy="80" r="1.5"/><circle cx="34" cy="100" r="1.1"/><circle cx="62" cy="110" r="1.3"/><circle cx="80" cy="86" r="1"/><circle cx="28" cy="48" r=".8"/><circle cx="56" cy="64" r=".8"/><circle cx="44" cy="120" r=".9"/></g>
+    <path d="M47 28c.6 3.4 1.6 4.4 5 5-3.4.6-4.4 1.6-5 5-.6-3.4-1.6-4.4-5-5 3.4-.6 4.4-1.6 5-5ZM27 84c.5 2.6 1.2 3.3 3.8 3.8-2.6.5-3.3 1.2-3.8 3.8-.5-2.6-1.2-3.3-3.8-3.8 2.6-.5 3.3-1.2 3.8-3.8Z" fill="#ffe9a8"/>
+  </pattern>
+  <linearGradient id="cg-aurora" gradientUnits="userSpaceOnUse" x1="0" y1="130" x2="100" y2="0">
+    <stop offset="0" stop-color="#5dffb0"/><stop offset=".35" stop-color="#4fe0ff"/><stop offset=".65" stop-color="#b38bff"/><stop offset="1" stop-color="#7dffc4"/>
+  </linearGradient>
+  <linearGradient id="cg-diamond" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="130">
+    <stop offset="0" stop-color="#f2f9ff"/><stop offset=".25" stop-color="#a8d4ff"/><stop offset=".42" stop-color="#ffffff"/><stop offset=".6" stop-color="#7fb5f5"/><stop offset=".8" stop-color="#e6f3ff"/><stop offset="1" stop-color="#9cc8ff"/>
+  </linearGradient>
+  <linearGradient id="cg-legend" gradientUnits="userSpaceOnUse" x1="50" y1="130" x2="50" y2="0">
+    <stop offset="0" stop-color="#b8202a"/><stop offset=".4" stop-color="#ff6a3a"/><stop offset=".75" stop-color="#ffd36b"/><stop offset="1" stop-color="#fff3c2"/>
+  </linearGradient>
+  <linearGradient id="cg-prism" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="130">
+    <stop offset="0" stop-color="#ffd1f0"/><stop offset=".25" stop-color="#c6f4ff"/><stop offset=".5" stop-color="#fff7b8"/><stop offset=".75" stop-color="#d6ffd1"/><stop offset="1" stop-color="#e3d1ff"/>
+  </linearGradient>
+  <radialGradient id="rkfl" cx=".5" cy=".55" r=".5"><stop offset="0" stop-color="#ffd36b" stop-opacity=".9"/><stop offset=".55" stop-color="#ff5a3a" stop-opacity=".45"/><stop offset="1" stop-color="#ff5a3a" stop-opacity="0"/></radialGradient>
   <linearGradient id="cg-rainbow" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="130">
     <stop offset="0" stop-color="#ff9a9a"/><stop offset=".2" stop-color="#ffd59a"/><stop offset=".4" stop-color="#fff59a"/><stop offset=".6" stop-color="#b8f2a6"/><stop offset=".8" stop-color="#9fdcff"/><stop offset="1" stop-color="#c6b4ff"/>
   </linearGradient>
@@ -714,7 +953,7 @@ fieldset:disabled .opts span{cursor:default}
 
 <div class="app">
   <header class="topbar">
-    <button type="button" class="tb-box tb-rate" id="tbRank" aria-label="ランキングを見る"><small>RATE</small><b id="barRate">1500</b><span class="tb-sub" id="barTier">緑</span></button>
+    <button type="button" class="tb-box tb-rate" id="tbRank" aria-label="ランキングを見る"><span class="emb" id="barEmb" aria-hidden="true"></span><b id="barRate">1500</b><span class="tb-sub" id="barTier">シルバー Ⅱ</span></button>
     <button type="button" class="tb-me" id="homePlate" aria-label="プロフィールを開く"><span class="tb-title"><b id="barLv">Lv.1</b><span id="barTitle">ルーキー</span></span><span class="nm" id="barName">ななし</span><span class="coin" id="barCoins">0</span></button>
     <button type="button" class="tb-box tb-daily" id="tbDaily" aria-label="今日のミッション"><small>DAILY</small><b id="tbDailyN">0/3</b><span class="tb-sub" id="tbDailyLeft">--:--</span></button>
   </header>
@@ -728,7 +967,7 @@ fieldset:disabled .opts span{cursor:default}
           <span class="bn-art"><span class="ev-icon" style="--c:var(--p2);width:84px;height:84px;font-size:38px" aria-hidden="true">詰</span></span>
         </button>
         <button type="button" class="bn" data-go="pass" id="bnPass" aria-label="シーズンパスを開く">
-          <span class="bn-txt"><span class="bn-tag">SEASON</span><b class="bn-h" id="bnPassH">シーズンパス</b><span class="bn-s">遊ぶほど段が上がる。30段で限定チョーク</span></span>
+          <span class="bn-txt"><span class="bn-tag">SEASON</span><b class="bn-h" id="bnPassH">シーズンパス</b><span class="bn-s">今月だけのプレート・称号・黒板・エフェクトチョーク</span></span>
           <span class="bn-art art" id="artPass"></span>
         </button>
         <button type="button" class="bn" data-go="bin" style="--c:var(--p2)" aria-label="2進数ルール：CPU対戦で遊ぶ">
@@ -739,13 +978,17 @@ fieldset:disabled .opts span{cursor:default}
           <span class="bn-txt"><span class="bn-tag">毎日4:00更新</span><b class="bn-h">デイリー<br>ミッション</b><span class="bn-s">3つ全部クリアでボーナス50コイン</span></span>
           <span class="bn-art"><span class="coins-art" aria-hidden="true"><i style="left:4px;top:40px"></i><i style="left:30px;top:50px"></i><i style="left:18px;top:18px"></i><b>+50</b></span></span>
         </button>
-        <button type="button" class="bn" data-go="shop" style="--c:var(--p1)" aria-label="ショップを見る">
-          <span class="bn-txt"><span class="bn-tag">SHOP</span><b class="bn-h">チョーク<br>全12色</b><span class="bn-s">金粉・虹色・蛍光は相手の画面でも光る</span></span>
+        <button type="button" class="bn" data-go="shop" style="--c:#b9a0ff" aria-label="ショップを見る">
+          <span class="bn-txt"><span class="bn-tag">NEW</span><b class="bn-h">エフェクト<br>チョーク</b><span class="bn-s">宇宙・雷・オーロラ。光って動くチョークが登場</span></span>
           <span class="bn-art art" id="artShop"></span>
         </button>
-        <button type="button" class="bn" data-go="rank" style="--c:var(--t7)" aria-label="ランキングを見る">
-          <span class="bn-txt"><span class="bn-tag">RANKING</span><b class="bn-h">めざせ<br>赤レート</b><span class="bn-s">レートは100ごとに色が変わる。2000から赤</span></span>
-          <span class="bn-art"><span class="podium" aria-hidden="true"><i style="height:62px;color:var(--t5)">2</i><i style="height:84px;color:var(--t7)">1</i><i style="height:46px;color:var(--t3)">3</i></span></span>
+        <button type="button" class="bn" data-go="book" style="--c:var(--coin)" aria-label="図鑑を開く">
+          <span class="bn-txt"><span class="bn-tag">COLLECTION</span><b class="bn-h">わりばし<br>図鑑</b><span class="bn-s">集めるほど報酬。75%で限定プリズムチョーク</span></span>
+          <span class="bn-art"><span class="bk-ring sm" id="bnBookRing"><b id="bnBookPct">0%</b></span></span>
+        </button>
+        <button type="button" class="bn" data-go="rank" style="--c:var(--t6)" aria-label="ランキングを見る">
+          <span class="bn-txt"><span class="bn-tag">RANKING</span><b class="bn-h">めざせ<br>レジェンド</b><span class="bn-s">ブロンズからレジェンドまで7ランク。ダイヤで限定チョーク</span></span>
+          <span class="bn-art" id="artRank"></span>
         </button>
       </div>
       <div class="bn-dots" id="bnDots"></div>
@@ -836,18 +1079,23 @@ fieldset:disabled .opts span{cursor:default}
     <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>シーズンパス</h2></div>
     <div class="passhero" id="passHero">
       <div class="ph-top"><p class="ph-name" id="phName"></p><span class="ph-left" id="phLeft"></span></div>
-      <div class="ph-lv"><b id="phLv">0</b><span>/ 30 段</span></div>
+      <div class="ph-lv"><b id="phLv">0</b><span>/ 30 段</span><span class="tag mine" id="phBonus" hidden></span></div>
       <div class="ph-xp"><span class="meter"><i id="phXp"></i></span><span id="phXpT"></span></div>
     </div>
+    <h3 class="pass-h">今月だけの限定セット</h3>
+    <div class="passset" id="passSet"></div>
     <button type="button" class="btn gold big" id="passClaim" hidden>まとめて受け取る</button>
     <ol class="passlist" id="passList"></ol>
+    <h3 class="pass-h">ボーナス段（30段のあと）</h3>
+    <ol class="passlist" id="passBonus"></ol>
     <section class="panel">
       <h3>ポイントのため方</h3>
       <ul class="rules">
         <li>オンライン対戦 30（勝つと +20）・CPU対戦 10（勝つと +10）</li>
         <li>デイリーミッション 20・通常ミッション 30・ログイン 20</li>
         <li>ボスに挑戦 20（手を1本消すごとに +5）・詰めわりばし正解 40</li>
-        <li>100ポイントで1段。30段で、そのシーズンだけの限定チョーク。シーズンは毎月1日の4:00に切り替わります。</li>
+        <li>100ポイントで1段。8段でプレート、15段で称号、22段で黒板、30段でエフェクトチョーク。どれもその月だけの限定です。</li>
+        <li>30段のあとは300ポイントごとにボーナス段（コイン100）が10段まで。シーズンは毎月1日の4:00に切り替わります。</li>
         <li>ポイントはプレイヤーレベルにもたまります（マイページで見られます）。</li>
       </ul>
     </section>
@@ -919,8 +1167,8 @@ fieldset:disabled .opts span{cursor:default}
     <div class="myrank" id="myRank"></div>
     <section class="panel" id="rankPanel">
       <ol class="rank" id="rank"></ol>
-      <p class="note">レート戦を1回以上やった人が載ります。レートは1500（緑）から始まって、強い相手に勝つほど大きく上がります。100ごとに色が変わります。</p>
-      <ul class="tiers" id="tierLegend" aria-label="レートの色"></ul>
+      <p class="note">レート戦を1回以上やった人が載ります。レートは1500（シルバー Ⅱ）から始まって、強い相手に勝つほど大きく上がります。ランクは7つで、マスターの手前まではそれぞれⅢ→Ⅱ→Ⅰの3段階。ダイヤとレジェンドに届くと限定チョークと黒板がもらえます。</p>
+      <ul class="tiers" id="tierLegend" aria-label="ランク"></ul>
     </section>
   </section>
 
@@ -1030,8 +1278,13 @@ fieldset:disabled .opts span{cursor:default}
   <!-- Shop -->
   <section class="screen narrow" id="scrShop" hidden>
     <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>ショップ</h2><span class="coin big" id="shopCoinsTop">0</span></div>
-    <p class="note" style="margin:0">チョークの色を変えると、自分の手がその色になります。対戦相手の画面でも同じ色で見えます。コインはミッションとオンライン対戦でもらえます。</p>
-    <div class="shop" id="shopGrid"></div>
+    <div class="seg" role="tablist" aria-label="ショップの種類">
+      <button type="button" role="tab" id="tabShopChalk" aria-selected="true" aria-controls="shopGrid">チョーク</button>
+      <button type="button" role="tab" id="tabShopBoard" aria-selected="false" aria-controls="shopBoards">黒板</button>
+    </div>
+    <p class="note" id="shopNote" style="margin:0"></p>
+    <div class="shop" id="shopGrid" role="tabpanel"></div>
+    <div class="shop" id="shopBoards" role="tabpanel" hidden></div>
   </section>
 
   <!-- Nameplate editor -->
@@ -1039,6 +1292,8 @@ fieldset:disabled .opts span{cursor:default}
     <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>マイページ</h2></div>
     <div class="lvcard" id="lvCard"><span class="lv-n"><small>Lv.</small><span id="lvN">1</span></span><b id="lvNext"></b><div class="ph-xp"><span class="meter"><i id="lvXp"></i></span><span id="lvXpT"></span></div></div>
     <div class="pf-plate" id="homePlateBox"></div>
+    <div class="myrank" id="pfRank"></div>
+    <button type="button" class="bookbtn" id="goBook"><span class="bb-ic" aria-hidden="true">図</span><span class="bb-t"><b>わりばし図鑑</b><small>チョーク・黒板・称号・プレート・エンブレム</small></span><span class="bb-p" id="bookPct">0%</span></button>
     <section class="panel">
       <h3>あなたの記録</h3>
       <dl class="facts" id="myStats"></dl>
@@ -1070,6 +1325,27 @@ fieldset:disabled .opts span{cursor:default}
     </section>
     <button type="button" class="btn" id="goRules2">遊びかたを見る</button>
     <p class="note center" id="appVer" style="margin:0"></p>
+  </section>
+
+  <!-- Collection book -->
+  <section class="screen narrow" id="scrBook" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>わりばし図鑑</h2></div>
+    <div class="bookhero">
+      <span class="bk-ring" id="bkRing"><b id="bkPct">0%</b></span>
+      <p class="bk-k">コレクション</p>
+      <b class="bk-count" id="bkCount">0 / 0</b>
+      <p class="bk-s">集めた数で報酬がもらえる。手に入れた限定アイテムは、期間が終わっても図鑑に残ります。</p>
+    </div>
+    <ol class="miles" id="bkMiles"></ol>
+    <div class="seg five" role="tablist" aria-label="図鑑の種類" id="bkTabs">
+      <button type="button" role="tab" data-bk="chalk" aria-selected="true" aria-controls="bkGrid">チョーク</button>
+      <button type="button" role="tab" data-bk="board" aria-selected="false" aria-controls="bkGrid">黒板</button>
+      <button type="button" role="tab" data-bk="title" aria-selected="false" aria-controls="bkGrid">称号</button>
+      <button type="button" role="tab" data-bk="plate" aria-selected="false" aria-controls="bkGrid">プレート</button>
+      <button type="button" role="tab" data-bk="emblem" aria-selected="false" aria-controls="bkGrid">ランク</button>
+    </div>
+    <p class="note" id="bkNote" style="margin:0"></p>
+    <div class="book" id="bkGrid" role="tabpanel"></div>
   </section>
 
   <!-- Custom match entry -->
@@ -1161,7 +1437,7 @@ fieldset:disabled .opts span{cursor:default}
   <!-- Rated search -->
   <section class="screen narrow" id="scrSearch" hidden>
     <div class="search">
-      <div class="radar" aria-hidden="true"><svg viewBox="0 0 100 130" id="radarHand"></svg></div>
+      <div class="radar" aria-hidden="true" style="position:relative"><svg viewBox="0 0 100 130" id="radarHand"></svg><i class="fxo"></i></div>
       <p class="search-t" id="searchTitle">相手をさがしています</p>
       <p class="search-s" id="searchTime">0秒</p>
       <p class="note" id="searchInfo">あなたのレート 1500</p>
@@ -1188,8 +1464,8 @@ fieldset:disabled .opts span{cursor:default}
             </div>
             <div class="seat me" id="seat0">
               <div class="hands">
-                <button type="button" class="hand" data-k="0" data-i="0"><svg viewBox="0 0 100 130" aria-hidden="true"></svg><span class="count"></span><span class="badge" hidden></span></button>
-                <button type="button" class="hand" data-k="0" data-i="1"><svg viewBox="0 0 100 130" aria-hidden="true"></svg><span class="count"></span><span class="badge" hidden></span></button>
+                <button type="button" class="hand" data-k="0" data-i="0"><svg class="hs" viewBox="0 0 100 130" aria-hidden="true"></svg><i class="fxo" aria-hidden="true"></i><span class="count"></span><span class="badge" hidden></span></button>
+                <button type="button" class="hand" data-k="0" data-i="1"><svg class="hs" viewBox="0 0 100 130" aria-hidden="true"></svg><i class="fxo" aria-hidden="true"></i><span class="count"></span><span class="badge" hidden></span></button>
               </div>
               <p class="name"><span class="nm">あなた</span><span class="tag" hidden></span></p>
             </div>
@@ -1374,19 +1650,40 @@ function fxLayer(){
 }
 const centerOf = el => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
 const CHALK_COLORS = ['#f3d774', '#f4a6bb', '#9fd0f0', '#c8b4f4', '#eceee4', '#b8e6a3'];
-function dust(x, y, color, n, power){
+// shape: '' (chalk dust) or star / petal / leaf / flake / ember / glow / spark, from the attacker's effect chalk
+function dust(x, y, color, n, power, shape){
   if (reduceMotion.matches) return;
   const L = fxLayer();
   for (let i = 0; i < (n || 14); i++) {
-    const d = document.createElement('i'), sz = 3 + Math.random() * 6, c = Array.isArray(color) ? color[i % color.length] : color;
-    d.className = 'fx-dust';
-    d.style.cssText = `left:${x - sz / 2}px;top:${y - sz / 2}px;width:${sz}px;height:${sz}px;background:${c}`;
+    const d = document.createElement('i'), c = Array.isArray(color) ? color[i % color.length] : color;
+    const sz = shape === 'spark' ? 2.5 : shape ? 6 + Math.random() * 8 : 3 + Math.random() * 6, h = shape === 'spark' ? 10 + Math.random() * 10 : sz;
+    d.className = 'fx-dust' + (shape ? ' s-' + shape : '');
+    d.style.cssText = `left:${x - sz / 2}px;top:${y - h / 2}px;width:${sz}px;height:${h}px;background:${c};color:${c}`;
     L.append(d);
     const a = Math.random() * Math.PI * 2, r = (power || 60) * (0.35 + Math.random() * 0.85);
-    const dx = Math.cos(a) * r, dy = Math.sin(a) * r * 0.8;
-    d.animate([{transform: 'translate(0,0) scale(1)', opacity: .95}, {transform: `translate(${dx}px,${dy + 26}px) scale(.3) rotate(${Math.random() * 180}deg)`, opacity: 0}],
-      {duration: 550 + Math.random() * 600, easing: 'cubic-bezier(.15,.7,.3,1)'}).finished.then(() => d.remove(), () => d.remove());
+    let dx = Math.cos(a) * r, dy = Math.sin(a) * r * 0.8 + 26;
+    if (shape === 'ember') dy = -Math.abs(dy) - 30;
+    if (shape === 'petal' || shape === 'leaf' || shape === 'flake') dy = Math.abs(dy) * .6 + 30;
+    const rot = shape === 'spark' ? a * 180 / Math.PI + 90 : 0, spin = shape === 'spark' ? rot : rot + (Math.random() - .5) * (shape ? 540 : 360);
+    d.animate([{transform: `translate(0,0) rotate(${rot}deg) scale(1)`, opacity: .95}, {transform: `translate(${dx}px,${dy}px) rotate(${spin}deg) scale(.3)`, opacity: 0}],
+      {duration: (shape ? 750 : 550) + Math.random() * (shape ? 800 : 600), easing: 'cubic-bezier(.15,.7,.3,1)'}).finished.then(() => d.remove(), () => d.remove());
   }
+}
+const FX_SHAPE = {glitter:'star', hue:'star', prism:'star', cosmos:'star', spark:'star', firework:'star', diamond:'star', shimmer:'glow', pulse:'glow', aurora:'glow',
+  petal:'petal', leaf:'leaf', snow:'flake', ice:'flake', ember:'ember', legend:'ember', thunder:'spark'};
+// Chalk dust in the attacker's colour, plus the shaped particles of an effect chalk.
+function chalkDust(x, y, ch, color, n, power){
+  const sh = ch && ch.fx ? FX_SHAPE[ch.fx] : '';
+  if (!sh) { dust(x, y, [color, color, '#eceee4'], n, power); return; }
+  dust(x, y, [ch.fxc || '#fff', ch.fxc2 || color, color], Math.round(n * .75), power * 1.15, sh);
+  dust(x, y, [color, '#eceee4'], Math.round(n * .45), power * .8);
+}
+function ringFx(x, y, color){
+  if (reduceMotion.matches) return;
+  const r = document.createElement('i');
+  r.className = 'fx-ring'; r.style.left = x + 'px'; r.style.top = y + 'px'; r.style.color = color;
+  fxLayer().append(r);
+  r.animate([{transform: 'scale(.3)', opacity: 1}, {transform: 'scale(5.5)', opacity: 0}], {duration: 650, easing: 'cubic-bezier(.2,.7,.3,1)'}).finished.then(() => r.remove(), () => r.remove());
 }
 function floatText(x, y, text, color, big){
   if (reduceMotion.matches) return;
@@ -1457,18 +1754,19 @@ function showCoins(target){
   ui.coinRaf = requestAnimationFrame(tickC);
 }
 // A touch lands: chalk dust in the attacker's colour, the number, and a burst when the hand vanishes.
-function hitFx(target, color, m){
+function hitFx(target, color, m, ch){
   if (!target) return;
   const [x, y] = centerOf(target), B = rules().base || 5;
   target.animate([{transform: 'none'}, {transform: 'scale(1.14) rotate(-5deg)'}, {transform: 'none'}], {duration: 320, easing: 'ease-out'});
   if (m.after === 0) {
-    dust(x, y, [color, '#eceee4', color], 34, 110);
+    chalkDust(x, y, ch, color, 34, 110);
+    if (ch && ch.fx) ringFx(x, y, ch.fxc && ch.fx !== 'hue' ? ch.g || color : color);
     floatText(x, y - 20, '消えた！', color, true);
     const board = $('#board');
     board.classList.remove('shake'); void board.offsetWidth; board.classList.add('shake');
     sfx('vanish');
   } else {
-    dust(x, y, [color, color, '#eceee4'], 22, 72);
+    chalkDust(x, y, ch, color, 22, 72);
     floatText(x, y - 24, m.before + m.value >= B ? `${m.before + m.value}→${m.after}` : `+${m.value}`, color);
     sfx('hit');
   }
@@ -1476,9 +1774,9 @@ function hitFx(target, color, m){
 function shapeFx(p, m){
   const hs = handBtns[p];
   if (!hs) return;
-  const color = getComputedStyle(hs[0]).color;
-  if (m.kind === 'merge') { const t = hs[m.into]; if (!t) return; const [x, y] = centerOf(t); dust(x, y, color, 18, 50); floatText(x, y - 24, '合成！', color); }
-  else { hs.forEach(h => { const [x, y] = centerOf(h); dust(x, y, color, 8, 34); }); const [x, y] = centerOf(hs[0].parentElement); floatText(x, y - 10, '分身！', color); }
+  const color = getComputedStyle(hs[0]).color, ch = seatChalk(p);
+  if (m.kind === 'merge') { const t = hs[m.into]; if (!t) return; const [x, y] = centerOf(t); chalkDust(x, y, ch, color, 18, 50); floatText(x, y - 24, '合成！', color); }
+  else { hs.forEach(h => { const [x, y] = centerOf(h); chalkDust(x, y, ch, color, 8, 34); }); const [x, y] = centerOf(hs[0].parentElement); floatText(x, y - 10, '分身！', color); }
   sfx('tap');
 }
 const gameId = () => net.on ? `${net.code}:${net.room && net.room.createdAt}:${G.game || 0}` : `${ui.boss ? 'boss' : ui.puzzle ? 'puz' : 'cpu'}:${ui.gameSeq || 0}`;
@@ -1494,7 +1792,7 @@ function boardFx(){
   requestAnimationFrame(() => {
     if (e.k === 'attack') {
       const t = handBtns[L.target] && handBtns[L.target][L.to], a = handBtns[L.p] && handBtns[L.p][L.from];
-      hitFx(t, a ? getComputedStyle(a).color : '#eceee4', {after: e.a, before: e.b, value: e.v});
+      hitFx(t, a ? getComputedStyle(a).color : '#eceee4', {after: e.a, before: e.b, value: e.v}, seatChalk(L.p));
     } else if (e.k === 'merge' || e.k === 'split') shapeFx(L.p, {kind: e.k, into: L.into});
   });
 }
@@ -1596,7 +1894,7 @@ function updateResult(){
     const S = normState(net.room.state);
     if (S && S.over) {
       ui.resShown.rate = true;
-      const d = ratingChange(net.room, S, net.seat), t0 = tierOf(d.from), t1 = tierOf(d.to);
+      const d = ratingChange(net.room, S, net.seat), k0 = rankOf(d.from), k1 = rankOf(d.to);
       const row = document.createElement('div');
       row.className = 'res-row';
       row.innerHTML = '<span>レート</span><b></b>';
@@ -1607,13 +1905,14 @@ function updateResult(){
       const t0ms = performance.now(), dur = reduceMotion.matches ? 0 : 900;
       const run = () => { const f = dur ? Math.min(1, (performance.now() - t0ms) / dur) : 1; put(Math.round(d.from + (d.to - d.from) * f)); if (f < 1) requestAnimationFrame(run); };
       setTimeout(() => requestAnimationFrame(run), 350);
-      if (t1 !== t0) {
-        const up = document.createElement('div');
-        up.className = 'res-row ' + (t1 > t0 ? 'up' : 'down');
+      if (k1.step !== k0.step) {
+        const up = document.createElement('div'), better = k1.step > k0.step;
+        up.className = 'res-row ' + (better ? 'up' : 'down');
         up.style.animationDelay = '1.3s';
-        up.textContent = t1 > t0 ? `昇格！ ${TIERS[t0][1]} → ${TIERS[t1][1]}` : `${TIERS[t1][1]}に下がった`;
+        up.append(embSpan(k1.i, k1.div), better ? `昇格！ ${k0.label} → ${k1.label}` : `${k1.label}に下がった`);
         rows.append(up);
-        if (t1 > t0) setTimeout(() => { if (!$('#result').hidden) { const [x, y] = centerOf(up); dust(x, y, ['#f2cf5b', '#fff6c4'], 30, 120); sfx('up'); } }, 1350);
+        if (better) setTimeout(() => { if (!$('#result').hidden) { const [x, y] = centerOf(up); dust(x, y, ['#f2cf5b', '#fff6c4'], 30, 120, 'star'); sfx('up'); } }, 1350);
+        if (k1.i > k0.i) setTimeout(() => showRankUp(d.to), 2000);
       }
     }
   }
@@ -1714,7 +2013,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/15-4';
+const APP_VERSION = '11/15-5';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -1751,11 +2050,95 @@ const search = {on:false, gen:0, since:0, timers:[], unsub:null, working:false};
 let netQueue = Promise.resolve();
 const counted = new Set();
 
-const TIERS = [[0,'灰'], [1400,'茶'], [1500,'緑'], [1600,'水'], [1700,'青'], [1800,'黄'], [1900,'橙'], [2000,'赤']];
-const tierOf = r => { let t = 0; TIERS.forEach(([min], i) => { if (r >= min) t = i; }); return t; };
+// ----- Ranks: seven named ranks; up to diamond each has three divisions (III → II → I) -----
+const RANKS = [
+  {name: 'ブロンズ', min: 0,    c: ['#6e3d1f', '#f3c193', '#a8693a']},
+  {name: 'シルバー', min: 1450, c: ['#56606e', '#f6f9fc', '#97a3b3']},
+  {name: 'ゴールド', min: 1550, c: ['#8a5a10', '#fff0b3', '#c99124']},
+  {name: 'プラチナ', min: 1650, c: ['#1d6863', '#e0fffa', '#3fb3a6']},
+  {name: 'ダイヤ', min: 1750, c: ['#22468f', '#eef6ff', '#6a9bea']},
+  {name: 'マスター', min: 1850, c: ['#3e2169', '#f5e6ff', '#9461dc']},
+  {name: 'レジェンド', min: 2000, c: ['#7a1020', '#ffe08a', '#e8452f']},
+];
+const ROMAN = ['', 'Ⅰ', 'Ⅱ', 'Ⅲ'];
+const tierOf = r => { let t = 0; RANKS.forEach((k, i) => { if (r >= k.min) t = i; }); return t; };
 const tierCls = r => 't' + tierOf(r);
-const tierName = r => TIERS[tierOf(r)][1];
+// step: one number per division, to compare promotions; next: the rating of the next division
+function rankOf(r){
+  r = Math.round(+r) || BASE_RATE;
+  const i = tierOf(r), k = RANKS[i];
+  if (i >= 5) { const nx = RANKS[i + 1]; return {i, div: 0, name: k.name, label: k.name, step: 15 + i - 5, from: k.min, next: nx ? nx.min : 0, nextLabel: nx ? nx.name : ''}; }
+  const lo = i === 0 ? 1350 : k.min, off = r - lo, div = off >= 67 ? 1 : off >= 34 ? 2 : 3;
+  const from = div === 3 ? (i === 0 ? Math.min(r, lo) : lo) : div === 2 ? lo + 34 : lo + 67;
+  const next = div === 3 ? lo + 34 : div === 2 ? lo + 67 : RANKS[i + 1].min;
+  const nextLabel = div > 1 ? `${k.name} ${ROMAN[div - 1]}` : RANKS[i + 1].name + (i + 1 < 5 ? ' Ⅲ' : '');
+  return {i, div, name: k.name, label: `${k.name} ${ROMAN[div]}`, step: i * 3 + 3 - div, from, next, nextLabel};
+}
+const tierName = r => rankOf(r).label;
 function rateEl(r, tag){ const e = document.createElement(tag || 'b'); e.className = tierCls(r); e.textContent = r; return e; }
+function starPath(cx, cy, R, r){
+  let d = '';
+  for (let k = 0; k < 10; k++) { const a = -Math.PI / 2 + k * Math.PI / 5, rr = k % 2 ? r : R; d += (k ? 'L' : 'M') + (cx + rr * Math.cos(a)).toFixed(1) + ' ' + (cy + rr * Math.sin(a)).toFixed(1); }
+  return d + 'Z';
+}
+// One emblem per rank: shields (bronze-gold), a hexagon (platinum), a gem (diamond), a winged gem (master), a crown (legend). Pips = division.
+const embCache = {};
+function emblemSVG(i, div){
+  const key = i + ':' + div;
+  if (embCache[key]) return embCache[key];
+  const g = `url(#rk${i})`, edge = 'rgba(25,16,8,.62)', ink = 'rgba(30,18,6,.55)', hi = 'rgba(255,255,255,.62)';
+  const pips = (y, n) => { let o = ''; for (let k = 0; k < n; k++) { const x = 32 + (k - (n - 1) / 2) * 7.5; o += `<path d="M${x} ${y - 3.4}l3.4 3.4-3.4 3.4-3.4-3.4Z" fill="#fff" stroke="${edge}" stroke-width="1.2"/>`; } return o; };
+  const n = div ? 4 - div : 0;
+  let s = '';
+  if (i <= 2) {
+    s += `<path d="M32 4 56 12V31C56 46 45 56 32 61 19 56 8 46 8 31V12Z" fill="${g}" stroke="${edge}" stroke-width="2.5" stroke-linejoin="round"/>`
+      + `<path d="M32 8.6 51.6 15.2V30" fill="none" stroke="${hi}" stroke-width="2" stroke-linecap="round"/>`;
+    if (i === 0) s += `<path d="M21 25 32 33 43 25" fill="none" stroke="${ink}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>`;
+    if (i === 1) s += `<path d="M21 20 32 28 43 20M21 30 32 38 43 30" fill="none" stroke="${ink}" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+    if (i === 2) s += `<path d="${starPath(32, 29, 12.5, 5.2)}" fill="#fff7cf" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>`;
+    s += pips(49, n);
+  } else if (i === 3) {
+    s += `<path d="M32 3 57 17.5V46.5L32 61 7 46.5V17.5Z" fill="${g}" stroke="${edge}" stroke-width="2.5" stroke-linejoin="round"/>`
+      + `<path d="M32 10 51 21V43L32 54 13 43V21Z" fill="none" stroke="${hi}" stroke-width="1.8" stroke-linejoin="round"/>`
+      + `<path d="${starPath(32, 29, 11.5, 4.8)}" fill="#fff" stroke="${ink}" stroke-width="1.8" stroke-linejoin="round"/>` + pips(46, n);
+  } else if (i === 4) {
+    s += `<path d="M9 23 21 8H43L55 23 32 60Z" fill="${g}" stroke="${edge}" stroke-width="2.5" stroke-linejoin="round"/>`
+      + `<path d="M9 23H55M21 8 27 23 32 8 37 23 43 8M27 23 32 60 37 23" fill="none" stroke="${hi}" stroke-width="1.6" stroke-linejoin="round"/>` + pips(33, n);
+  } else if (i === 5) {
+    const wing = 'M26 25C18 16 8 16 2 22C7 23 9 25 10 27C5 28 3 31 3 34C8 32 12 33 14 35C11 37 10 40 11 43C17 39 22 38 26 41Z';
+    s += `<path d="${wing}" fill="${g}" stroke="${edge}" stroke-width="2" stroke-linejoin="round"/><path d="${wing}" transform="matrix(-1 0 0 1 64 0)" fill="${g}" stroke="${edge}" stroke-width="2" stroke-linejoin="round"/>`
+      + `<path d="M19 25 26 16H38L45 25 32 53Z" fill="url(#rk4)" stroke="${edge}" stroke-width="2.2" stroke-linejoin="round"/>`
+      + `<path d="M19 25H45M26 16 29.5 25 32 16 34.5 25 38 16M29.5 25 32 53 34.5 25" fill="none" stroke="${hi}" stroke-width="1.3"/>`
+      + `<path d="M24 14 25 5 29 9 32 3 35 9 39 5 40 14Z" fill="url(#rk2)" stroke="${edge}" stroke-width="1.6" stroke-linejoin="round"/>`;
+  } else {
+    s += `<circle cx="32" cy="34" r="31" fill="url(#rkfl)"/>`
+      + `<path d="M7 49 5 19 19 31 32 9 45 31 59 19 57 49Z" fill="${g}" stroke="${edge}" stroke-width="2.4" stroke-linejoin="round"/>`
+      + `<path d="M9 22 19 33 32 13 45 33 55 22" fill="none" stroke="${hi}" stroke-width="1.6" stroke-linejoin="round"/>`
+      + `<path d="M6 49H58V58H6Z" fill="url(#rk2)" stroke="${edge}" stroke-width="2.2" stroke-linejoin="round"/>`
+      + `<path d="M32 30 37.5 37 32 44 26.5 37Z" fill="url(#rk4)" stroke="${edge}" stroke-width="1.6"/>`
+      + `<circle cx="32" cy="8" r="3.6" fill="#fff6c8" stroke="${edge}" stroke-width="1.4"/><circle cx="5" cy="18" r="3" fill="#fff6c8" stroke="${edge}" stroke-width="1.4"/><circle cx="59" cy="18" r="3" fill="#fff6c8" stroke="${edge}" stroke-width="1.4"/>`
+      + `<circle cx="18" cy="53.5" r="2" fill="#ff5a6a"/><circle cx="32" cy="53.5" r="2" fill="#5ab8ff"/><circle cx="46" cy="53.5" r="2" fill="#ff5a6a"/>`;
+  }
+  return embCache[key] = `<svg viewBox="0 0 64 64" aria-hidden="true">${s}</svg>`;
+}
+function embSpan(i, div, cls){ const e = document.createElement('span'); e.className = `emb r${i}` + (cls ? ' ' + cls : ''); e.setAttribute('aria-hidden', 'true'); e.innerHTML = emblemSVG(i, div); return e; }
+function emblemEl(r, cls){ const k = rankOf(r); return embSpan(k.i, k.div, cls); }
+// A big moment: a new rank (not just a division).
+function showRankUp(rate){
+  const k = rankOf(rate), el = document.createElement('div');
+  el.className = 'rankup'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', `${k.label}に昇格`);
+  el.style.setProperty('--c', `var(--t${k.i})`);
+  el.innerHTML = `<div class="ru-in"><span class="ru-k">RANK UP</span><span class="ru-emb">${emblemSVG(k.i, k.div)}</span><b class="ru-t"></b><span class="ru-s"></span></div>`;
+  el.querySelector('.ru-t').textContent = `${k.label} に昇格！`;
+  el.querySelector('.ru-s').textContent = k.i === 4 || k.i === 6 ? '限定のチョークと黒板が手に入った！（タップで閉じる）' : 'タップで閉じる';
+  document.body.append(el);
+  let gone = false;
+  const close = () => { if (gone) return; gone = true; el.remove(); };
+  el.addEventListener('click', close);
+  setTimeout(close, 4200);
+  sfx('up');
+  if (!reduceMotion.matches) requestAnimationFrame(() => { const [x, y] = centerOf(el.querySelector('.ru-emb')); dust(x, y, [RANKS[k.i].c[1], '#fff6c4', RANKS[k.i].c[2]], 46, 170, 'star'); confetti(60); });
+}
 
 // ----- Nameplates: titles and plate designs unlock from your record -----
 const TITLES = [
@@ -1772,9 +2155,11 @@ const TITLES = [
   {id:'ko', name:'とどめ屋', need:'相手の手を30回消す', key:'kos', goal:30},
   {id:'royale', name:'バトロワ王', need:'3人以上の試合で勝つ', key:'royale', goal:1},
   {id:'long', name:'粘り勝ち', need:'40手以上の試合で勝つ', key:'long', goal:1},
-  {id:'mizu', name:'水色の壁', need:'レート1600に届く', key:'maxRate', goal:1600},
-  {id:'ao', name:'青の領域', need:'レート1700に届く', key:'maxRate', goal:1700},
-  {id:'kin', name:'黄金の指', need:'レート1800に届く', key:'maxRate', goal:1800},
+  {id:'mizu', name:'ゴールドの壁', need:'ゴールドに届く（レート1550）', key:'maxRate', goal:1550},
+  {id:'ao', name:'プラチナの輝き', need:'プラチナに届く（レート1650）', key:'maxRate', goal:1650},
+  {id:'kin', name:'ダイヤの指', need:'ダイヤに届く（レート1750）', key:'maxRate', goal:1750},
+  {id:'mst', name:'マスターの風格', need:'マスターに届く（レート1850）', key:'maxRate', goal:1850},
+  {id:'lgd', name:'伝説のわりばし', need:'レジェンドに届く（レート2000）', key:'maxRate', goal:2000},
   {id:'cpu', name:'CPUキラー', need:'CPU（ふつう以上）に勝つ', key:'cpuNormal', goal:1},
   {id:'strong', name:'さいきょうと互角', need:'CPU（さいきょう）と引き分け', key:'cpuDraw', goal:1},
   {id:'puz10', name:'詰めの名人', need:'詰めわりばしに10回正解', key:'puzzles', goal:10},
@@ -1783,6 +2168,7 @@ const TITLES = [
   {id:'season30', name:'シーズンマスター', need:'シーズンパス30段', key:'seasonBest', goal:30},
   {id:'hunter', name:'ボスハンター', need:'ボス討伐 1回', key:'bossKills', goal:1, boss:true},
   {id:'killer', name:'黒板消しキラー', need:'ボス討伐 15回', key:'bossKills', goal:15, boss:true},
+  {id:'thakase', name:'わりばし博士', need:'図鑑100%の報酬', own:'thakase', book:100},
 ];
 const PLATES = [
   {id:'chalk', name:'黒板', need:'はじめから'},
@@ -1795,15 +2181,20 @@ const PLATES = [
   {id:'rainbow', name:'虹', need:'称号を10個集める', key:'titles', goal:10},
   {id:'flag', name:'討伐の旗', need:'ボス討伐 5回', key:'bossKills', goal:5, boss:true},
   {id:'throne', name:'大王の玉座', need:'ボス討伐 30回', key:'bossKills', goal:30, boss:true},
+  {id:'pdia', name:'ダイヤ', need:'ダイヤに届く（レート1750）', key:'maxRate', goal:1750},
+  {id:'plgd', name:'レジェンド', need:'レジェンドに届く（レート2000）', key:'maxRate', goal:2000},
+  {id:'pbook', name:'図鑑', need:'図鑑50%の報酬', own:'pbook', book:50},
 ];
 const STAT_KEYS = ['games','wins','best','streak','merges','splits','kos','royale','long','cpuNormal','cpuDraw','dailyDone','bossKills','bossHands','seasonBest','puzzles','loginDays'];
 function statsOf(p){
   const st = (p && p.st) || {}, o = {};
   for (const k of STAT_KEYS) o[k] = +st[k] || 0;
   o.maxRate = Math.max(+st.maxRate || 0, BASE_RATE);
+  o.own = (p && p.owned) || {};
   return o;
 }
-const progress = (item, st) => item.key ? Math.min(1, (st[item.key] || 0) / item.goal) : 1;
+// own: given as a reward (season pass, collection book) and kept in players/<uid>/owned
+const progress = (item, st) => item.own ? ((st.own || {})[item.own] ? 1 : 0) : item.key ? Math.min(1, (st[item.key] || 0) / item.goal) : 1;
 function unlocked(st){
   const titles = TITLES.filter(t => progress(t, st) >= 1).map(t => t.id);
   const st2 = Object.assign({}, st, {titles: titles.length});
@@ -1868,25 +2259,104 @@ const CHALKS = [
   {id:'fuji', name:'藤色', price:150, color:'#c4a6ff'},
   {id:'shu', name:'朱色', price:150, color:'#ff7d6b'},
   {id:'mint', name:'ミント', price:150, color:'#7ff0d0'},
-  {id:'neon', name:'蛍光チョーク', price:400, color:'#d8ff5a', glow:true},
-  {id:'gold', name:'金粉チョーク', price:600, color:'#f0d264', grad:'cg-gold', shine:true},
-  {id:'rainbow', name:'虹色チョーク', price:1000, color:'#ffd9a8', grad:'cg-rainbow'},
+  // effect chalks: fx = how the hand moves and glows (CSS [data-fx]), fxc/fxc2 = particle colours, g = glow
+  {id:'neon', name:'蛍光チョーク', price:400, color:'#d8ff5a', fx:'pulse', g:'rgba(216,255,90,.85)'},
+  {id:'ice', name:'氷チョーク', price:500, color:'#bfefff', grad:'cg-ice', fx:'ice', fxc:'#ffffff', g:'rgba(140,225,255,.8)'},
+  {id:'gold', name:'金粉チョーク', price:600, color:'#f0d264', grad:'cg-gold', fx:'glitter', fxc:'#fff1b8', fxc2:'#ffd36b', g:'rgba(240,190,80,.6)'},
+  {id:'thunder', name:'雷チョーク', price:700, color:'#fff07a', grad:'cg-thunder', fx:'thunder', fxc:'#fffbd0', g:'rgba(255,230,110,.85)'},
+  {id:'rainbow', name:'虹色チョーク', price:1000, color:'#ffd9a8', grad:'cg-rainbow', fx:'hue', fxc:'#ffffff', g:'rgba(255,200,230,.55)'},
+  {id:'cosmos', name:'宇宙チョーク', price:1200, color:'#b9a0ff', grad:'cg-cosmos', fx:'cosmos', fxc:'#ffffff', fxc2:'#ffe9a8', g:'rgba(170,120,255,.9)'},
+  {id:'aurora', name:'オーロラチョーク', price:1500, color:'#7dffc4', grad:'cg-aurora', fx:'aurora', g:'rgba(100,255,200,.75)'},
   // limited: only from the boss reward road
-  {id:'royal', name:'大王の紫', price:0, color:'#c9a2ff', grad:'cg-royal', boss:3},
-  {id:'fire', name:'炎チョーク', price:0, color:'#ff9a5a', grad:'cg-fire', glow:true, boss:10},
-  {id:'star', name:'星くずチョーク', price:0, color:'#a9c4ff', grad:'cg-star', shine:true, boss:20},
+  {id:'royal', name:'大王の紫', price:0, color:'#c9a2ff', grad:'cg-royal', fx:'shimmer', fxc:'#f0e2ff', g:'rgba(190,150,255,.75)', boss:3},
+  {id:'fire', name:'炎チョーク', price:0, color:'#ff9a5a', grad:'cg-fire', fx:'ember', fxc:'#ffb35a', fxc2:'#ffe08a', g:'rgba(255,110,40,.85)', boss:10},
+  {id:'star', name:'星くずチョーク', price:0, color:'#a9c4ff', grad:'cg-star', fx:'spark', fxc:'#ffffff', fxc2:'#cfe0ff', g:'rgba(150,180,255,.8)', boss:20},
+  // limited: reach a rank
+  {id:'diamond', name:'ダイヤチョーク', price:0, color:'#cfe8ff', grad:'cg-diamond', fx:'diamond', fxc:'#ffffff', fxc2:'#bfe0ff', g:'rgba(150,205,255,.9)', rate:1750},
+  {id:'legend', name:'レジェンドチョーク', price:0, color:'#ffb35a', grad:'cg-legend', fx:'legend', fxc:'#ffd36b', fxc2:'#ff7a4a', g:'rgba(255,80,50,.85)', rate:2000},
+  // limited: the collection book at 75%
+  {id:'prism', name:'プリズムチョーク', price:0, color:'#fff2fb', grad:'cg-prism', fx:'prism', fxc:'#ffc6ec', fxc2:'#b9f0ff', g:'rgba(255,255,255,.7)', book:75},
 ];
 // One limited chalk per month: tier 30 of that month's season pass.
 const SEASON_THEMES = {1:['初日の出','#ff9a5a','#ffe08a'], 2:['梅','#ff8fb0','#fff0f4'], 3:['菜の花','#f3e25b','#b8e66a'], 4:['桜吹雪','#ffc2d6','#fff7fa'],
   5:['若葉風','#8be08a','#e8ffd9'], 6:['紫陽花','#8a9bff','#d7b5ff'], 7:['夏空','#5bc0ff','#e9fbff'], 8:['花火','#ff5f8f','#ffd36b'],
   9:['お月見','#f6dc83','#fffbe3'], 10:['秋桜','#ff9ec4','#c4a6ff'], 11:['紅葉','#e8552f','#ffbf5a'], 12:['雪','#dfefff','#9fc8ff']};
-for (let m = 1; m <= 12; m++) CHALKS.push({id: 'sea' + m, name: `${SEASON_THEMES[m][0]}チョーク`, price: 0, color: SEASON_THEMES[m][1], grad: 'cg-sea' + m, season: m, shine: m === 12 || m === 9});
+const SEASON_FX = {1:['pulse'], 2:['petal','#ffd6e4'], 3:['petal','#fff3a0'], 4:['petal','#ffe3ec','#ffc2d6'], 5:['leaf','#c8f5a8'], 6:['shimmer','#d9ccff'], 7:['spark','#ffffff'],
+  8:['firework','#ffd36b','#ff8fb0'], 9:['glitter','#fff4c4'], 10:['petal','#f7d0ff','#ffc2e0'], 11:['leaf','#ffb35a','#ff6a3a'], 12:['snow','#ffffff']};
+const SEASON_TITLES = {1:'初夢の主', 2:'梅の香り', 3:'菜の花の使者', 4:'花見の主役', 5:'薫風の旅人', 6:'雨上がりの虹', 7:'夏空の下で', 8:'花火師', 9:'月見の宴', 10:'秋桜の君', 11:'紅葉狩り', 12:'雪の精'};
+for (let m = 1; m <= 12; m++) {
+  const [th, c1] = SEASON_THEMES[m], [fx, fxc, fxc2] = SEASON_FX[m];
+  CHALKS.push({id: 'sea' + m, name: `${th}チョーク`, price: 0, color: c1, grad: 'cg-sea' + m, season: m, fx, fxc, fxc2, g: c1});
+  TITLES.push({id: 'tm' + m, name: SEASON_TITLES[m], need: `${m}月のシーズンパス15段`, own: 'tm' + m, season: m});
+  PLATES.push({id: 'pm' + m, name: th, need: `${m}月のシーズンパス8段`, own: 'pm' + m, season: m});
+}
+// Board themes: my own board's look (other players do not see it).
+const BOARDS = [
+  {id:'bstd', name:'いつもの黒板', price:0},
+  {id:'bnight', name:'夜空の黒板', price:400},
+  {id:'bsakura', name:'桜の黒板', price:600},
+  {id:'bgold', name:'金の額縁', price:900},
+  {id:'bcosmos', name:'宇宙の黒板', price:1500},
+  {id:'bboss', name:'大王の黒板', price:0, boss:7},
+  {id:'bdia', name:'ダイヤの黒板', price:0, rate:1750},
+  {id:'blegend', name:'伝説の黒板', price:0, rate:2000},
+];
+for (let m = 1; m <= 12; m++) BOARDS.push({id: 'bm' + m, name: `${SEASON_THEMES[m][0]}の黒板`, price: 0, season: m});
 const chalkId = id => CHALKS.some(c => c.id === id) ? id : 'auto';
 const chalkOf = id => CHALKS.find(c => c.id === id && c.color) || null;
 const myCoins = () => Math.max(0, Math.floor(+((net.profile || {}).coins) || 0));
 function hasChalk(id, prof){
   const p = prof || net.profile || {}, c = CHALKS.find(x => x.id === id);
-  return !!c && (id === 'auto' || !!(p.owned || {})[id] || (!!c.boss && statsOf(p).bossKills >= c.boss));
+  if (!c) return false;
+  if (id === 'auto' || (p.owned || {})[id]) return true;
+  const st = statsOf(p);
+  return (!!c.boss && st.bossKills >= c.boss) || (!!c.rate && st.maxRate >= c.rate);
+}
+function hasBoard(id, prof){
+  const p = prof || net.profile || {}, b = BOARDS.find(x => x.id === id);
+  if (!b) return false;
+  if (id === 'bstd' || (p.owned || {})[id]) return true;
+  const st = statsOf(p);
+  return (!!b.boss && st.bossKills >= b.boss) || (!!b.rate && st.maxRate >= b.rate);
+}
+function myBoard(){
+  const p = net.profile || {}, id = p.board || lsGet('waribashi-board') || 'bstd';
+  return hasBoard(id) ? id : 'bstd';
+}
+const isLimited = c => !!(c.boss || c.rate || c.season || c.book);
+function howToGet(c, kind){
+  return c.boss ? `ボス討伐${c.boss}回` : c.rate ? `${RANKS[tierOf(c.rate)].name}に届く（レート${c.rate}）` : c.season ? `${c.season}月のシーズンパス${kind === 'board' ? 22 : 30}段`
+    : c.book ? `図鑑${c.book}%の報酬` : c.price ? `ショップ・${c.price}コイン` : 'はじめから';
+}
+// A chalk hand as HTML (with its effect layer), for the shop, the book and banners.
+function chalkFig(c, n){
+  const fxv = c && c.fx, col = c && c.color ? c.color : 'var(--you)';
+  const st = `color:${col};--c:${col}` + (fxv ? `;--fxc:${c.fxc || '#fff'};--fxc2:${c.fxc2 || c.fxc || '#fff'};--g:${c.g || col}` : '');
+  return `<span class="cf"${fxv ? ` data-fx="${fxv}"` : ''} style="${st}"><svg class="hs" viewBox="0 0 100 130" aria-hidden="true">${handSVG(n === undefined ? 2 : n, false, 0, c && c.color ? c : null)}</svg>${fxv ? '<i class="fxo"></i>' : ''}</span>`;
+}
+function applyFx(el, ch){
+  const fxv = (ch && ch.fx) || '';
+  if ((el.dataset.fx || '') !== fxv) { if (fxv) el.dataset.fx = fxv; else delete el.dataset.fx; }
+  if (fxv) { el.style.setProperty('--fxc', ch.fxc || '#fff'); el.style.setProperty('--fxc2', ch.fxc2 || ch.fxc || '#fff'); el.style.setProperty('--g', ch.g || ch.color); }
+}
+function boardSwatch(id, ch){
+  const col = ch && ch.color ? ch.color : 'var(--you)';
+  return `<span class="board-wrap bsw" data-bd="${id}"><span class="board"><svg viewBox="0 0 100 130" aria-hidden="true" style="color:${col}">${handSVG(2, false, 0, ch && ch.color ? ch : null)}</svg></span><span class="tray"></span></span>`;
+}
+function itemArt(kind, id){
+  if (kind === 'chalk') return chalkFig(CHALKS.find(c => c.id === id));
+  if (kind === 'board') return boardSwatch(id, chalkOf(myChalk()));
+  if (kind === 'plate') return `<span class="pswatch pl-${id}"></span>`;
+  if (kind === 'title') return '<span class="tt">称号</span>';
+  if (kind === 'emblem') return `<span class="emb r${id.slice(1)}">${emblemSVG(+id.slice(1), 0)}</span>`;
+  return '';
+}
+function itemBanner(art, name, sub){
+  const d = document.createElement('div');
+  d.className = 'ab-item';
+  d.innerHTML = `<span class="ab-art">${art}</span><span class="ab-t"><b></b><span></span></span>`;
+  d.querySelector('b').textContent = name; d.querySelector('.ab-t span').textContent = sub;
+  return d;
 }
 function myChalk(){
   const p = net.profile || {}, id = p.chalk || lsGet('waribashi-chalk') || 'auto';
@@ -2082,13 +2552,30 @@ function maybeShowInvite(){
 }
 
 // ----- Levels and the monthly season pass -----
-const SEASON_TIERS = 30, SEASON_STEP = 100;
+const SEASON_TIERS = 30, SEASON_STEP = 100, BONUS_TIERS = 10, BONUS_STEP = 300;
 const XP = {online: 30, onlineWin: 20, cpu: 10, cpuWin: 10, daily: 20, mission: 30, login: 20, boss: 20, bossHand: 5, puzzle: 40};
 const seasonId = () => dayKey().slice(0, 7);
 const seasonMonth = () => +dayKey().slice(5, 7);
 const levelOf = xp => Math.floor((1 + Math.sqrt(1 + 0.08 * Math.max(0, xp))) / 2);   // reaching level L takes 50·L·(L-1)
 const levelBase = L => 50 * L * (L - 1);
-function seasonReward(t){ return t === SEASON_TIERS ? {chalk: true} : {coins: t % 10 === 0 ? 150 : t % 5 === 0 ? 80 : 30}; }
+// Tiers 8, 15, 22 and 30 give this month's plate, title, board and effect chalk; tiers 31-40 are bonus coins.
+const SEASON_ITEMS = {8: 'plate', 15: 'title', 22: 'board', 30: 'chalk'};
+function seasonReward(t){
+  if (t > SEASON_TIERS) return {coins: 100, bonus: true};
+  const item = SEASON_ITEMS[t];
+  return {item, coins: t === 30 ? 300 : item ? 0 : t === 25 ? 250 : t % 10 === 0 ? 200 : t % 5 === 0 ? 150 : t % 3 === 0 ? 80 : 50};
+}
+const seasonItemId = (kind, m) => ({plate: 'pm', title: 'tm', board: 'bm', chalk: 'sea'})[kind] + m;
+function seasonItems(m){
+  const th = SEASON_THEMES[m][0];
+  return [{t: 8, kind: 'plate', id: 'pm' + m, name: `${th}プレート`, label: 'プレート'}, {t: 15, kind: 'title', id: 'tm' + m, name: `「${SEASON_TITLES[m]}」`, label: '称号'},
+    {t: 22, kind: 'board', id: 'bm' + m, name: `${th}の黒板`, label: '黒板'}, {t: 30, kind: 'chalk', id: 'sea' + m, name: `${th}チョーク`, label: 'エフェクトチョーク'}];
+}
+const tierXP = t => t <= SEASON_TIERS ? t * SEASON_STEP : SEASON_TIERS * SEASON_STEP + (t - SEASON_TIERS) * BONUS_STEP;
+function seasonTierOf(sxp){
+  if (sxp < SEASON_TIERS * SEASON_STEP) return Math.floor(sxp / SEASON_STEP);
+  return Math.min(SEASON_TIERS + BONUS_TIERS, SEASON_TIERS + Math.floor((sxp - SEASON_TIERS * SEASON_STEP) / BONUS_STEP));
+}
 function daysLeftInSeason(){
   const [y, m, d] = dayKey().split('-').map(Number);
   return Math.round((Date.UTC(y, m, 1) - Date.UTC(y, m - 1, d)) / 86400000);
@@ -2096,10 +2583,10 @@ function daysLeftInSeason(){
 function myLevel(){
   const v = (net.profile || {}).lv || {}, xp = +v.xp || 0, L = levelOf(xp);
   const sid = seasonId(), sxp = v.sid === sid ? +v.sxp || 0 : 0, claimed = v.sid === sid ? v.claimed || {} : {};
-  const tier = Math.min(SEASON_TIERS, Math.floor(sxp / SEASON_STEP));
+  const all = seasonTierOf(sxp), tier = Math.min(SEASON_TIERS, all);
   let ready = 0;
-  for (let t = 1; t <= tier; t++) if (!claimed['t' + t]) ready++;
-  return {xp, level: L, into: xp - levelBase(L), need: 100 * L, sxp, tier, claimed, ready};
+  for (let t = 1; t <= all; t++) if (!claimed['t' + t]) ready++;
+  return {xp, level: L, into: xp - levelBase(L), need: 100 * L, sxp, tier, all, bonus: all - tier, claimed, ready};
 }
 function addXP(n){
   if (!net.fb || !net.uid || !n) return;
@@ -2115,21 +2602,124 @@ function addXP(n){
 }
 async function claimSeason(){
   const sid = seasonId(), month = seasonMonth();
-  let coins = 0, chalk = false;
+  let coins = 0, items = [];
   const res = await profileTx(cur => {
     const v = cur.lv || {};
     if (v.sid !== sid) return undefined;
-    const reached = Math.min(SEASON_TIERS, Math.floor((+v.sxp || 0) / SEASON_STEP)), claimed = Object.assign({}, v.claimed || {});
-    coins = 0; chalk = false;
-    for (let t = 1; t <= reached; t++) if (!claimed['t' + t]) { claimed['t' + t] = true; const r = seasonReward(t); if (r.chalk) chalk = true; else coins += r.coins; }
-    if (!coins && !chalk) return undefined;
+    const reached = seasonTierOf(+v.sxp || 0), claimed = Object.assign({}, v.claimed || {}), owned = Object.assign({}, cur.owned || {});
+    coins = 0; items = [];
+    for (let t = 1; t <= reached; t++) if (!claimed['t' + t]) {
+      claimed['t' + t] = true;
+      const r = seasonReward(t);
+      coins += r.coins || 0;
+      if (r.item) { owned[seasonItemId(r.item, month)] = true; items.push(r.item); }
+    }
+    if (!coins && !items.length) return undefined;
     cur.lv = Object.assign({}, v, {claimed});
     cur.coins = (+cur.coins || 0) + coins;
-    if (chalk) cur.owned = Object.assign({}, cur.owned || {}, {['sea' + month]: true});
-    cur.st = Object.assign({}, cur.st || {}, {seasonBest: Math.max(+((cur.st || {}).seasonBest) || 0, reached)});
+    if (items.length) cur.owned = owned;
+    cur.st = Object.assign({}, cur.st || {}, {seasonBest: Math.max(+((cur.st || {}).seasonBest) || 0, Math.min(SEASON_TIERS, reached))});
     return cur;
   });
-  return res && res.committed ? {coins, chalk} : null;
+  return res && res.committed ? {coins, items} : null;
+}
+
+// ----- Collection book: everything you can own, with rewards for how much of it you have -----
+// Other months' season items count only once owned; the book's own rewards are not counted.
+const BOOK_MILES = [
+  {p: 25, coins: 300, text: 'コイン300'},
+  {p: 50, coins: 500, own: 'pbook', kind: 'plate', text: 'プレート「図鑑」＋コイン500'},
+  {p: 75, own: 'prism', kind: 'chalk', text: 'プリズムチョーク'},
+  {p: 100, coins: 1000, own: 'thakase', kind: 'title', text: '称号「わりばし博士」＋コイン1000'},
+];
+const BOOK_TABS = {chalk: 'チョーク', board: '黒板', title: '称号', plate: 'プレート', emblem: 'ランクのエンブレム'};
+function bookItems(prof){
+  const p = prof || net.profile || {}, u = unlocked(statsOf(p)), st = u.st, month = seasonMonth(), out = [];
+  const add = (cat, it, have, how) => {
+    if (it.season && !have && it.season !== month) return;
+    out.push({cat, id: it.id, name: it.name, have, how, limited: isLimited(it), count: !it.book, item: it});
+  };
+  CHALKS.forEach(c => add('chalk', c, hasChalk(c.id, p), howToGet(c, 'chalk')));
+  BOARDS.forEach(b => add('board', b, hasBoard(b.id, p), howToGet(b, 'board')));
+  TITLES.forEach(t => add('title', t, u.titles.includes(t.id), t.need));
+  PLATES.forEach(x => add('plate', x, u.plates.includes(x.id), x.need));
+  RANKS.forEach((k, i) => add('emblem', {id: 'r' + i, name: k.name}, st.maxRate >= k.min, i ? `最高レート${k.min}` : 'はじめから'));
+  const counted = out.filter(x => x.count);
+  return {items: out, have: counted.filter(x => x.have).length, total: counted.length};
+}
+const bookPct = b => b.total ? Math.floor(b.have / b.total * 100) : 0;
+async function claimBook(pct){
+  const m = BOOK_MILES.find(x => x.p === pct);
+  if (!m) return null;
+  const res = await profileTx(cur => {
+    const bk = cur.book || {};
+    if (bk['m' + pct] || bookPct(bookItems(cur)) < pct) return undefined;
+    cur.book = Object.assign({}, bk, {['m' + pct]: true});
+    if (m.coins) cur.coins = (+cur.coins || 0) + m.coins;
+    if (m.own) cur.owned = Object.assign({}, cur.owned || {}, {[m.own]: true});
+    return cur;
+  });
+  return res && res.committed ? m : null;
+}
+function renderBook(){
+  const p = net.profile || {}, b = bookItems(), pct = bookPct(b), claimed = p.book || {}, tab = BOOK_TABS[ui.bookTab] ? ui.bookTab : 'chalk';
+  $('#bkRing').style.setProperty('--p', pct);
+  $('#bkPct').textContent = pct + '%';
+  $('#bkCount').textContent = `${b.have} / ${b.total}`;
+  const ml = $('#bkMiles');
+  if (!unchanged(ml, JSON.stringify([pct, b.have, claimed, myChalk()]))) {
+    ml.innerHTML = '';
+    BOOK_MILES.forEach(m => {
+      const done = !!claimed['m' + m.p], ready = !done && pct >= m.p, li = document.createElement('li');
+      li.className = 'mile' + (done ? ' done' : ready ? ' ready' : '');
+      li.innerHTML = `<span class="ml-p">${m.p}%</span><span class="ml-a">${m.kind ? itemArt(m.kind, m.own) : '<span class="coin"></span>'}</span><span class="ml-r"></span>`;
+      if (!m.kind) li.querySelector('.coin').textContent = m.coins;
+      li.querySelector('.ml-r').textContent = m.text;
+      const bt = document.createElement('button');
+      bt.type = 'button';
+      if (done) { bt.className = 'btn'; bt.textContent = '受け取り済み'; bt.disabled = true; }
+      else if (ready) {
+        bt.className = 'btn gold'; bt.textContent = '受け取る';
+        bt.addEventListener('click', async () => {
+          const from = centerOf(bt);
+          bt.disabled = true;
+          const got = await claimBook(m.p);
+          if (got) {
+            if (got.coins) { flyCoins(from, got.coins); floatText(from[0], from[1] - 10, `+${got.coins}`, 'var(--coin)'); }
+            dust(from[0], from[1], ['#f2cf5b', '#fff6c4', '#eceee4'], 34, 120, 'star'); sfx('unlock');
+          }
+          ml.dataset.key = ''; render();
+        });
+      } else { bt.className = 'btn'; bt.disabled = true; bt.textContent = `あと${Math.max(1, Math.ceil(m.p / 100 * b.total) - b.have)}個`; }
+      li.append(bt);
+      ml.append(li);
+    });
+  }
+  $$('#bkTabs [data-bk]').forEach(t => t.setAttribute('aria-selected', String(t.dataset.bk === tab)));
+  const list = b.items.filter(x => x.cat === tab), look = myLook(), grid = $('#bkGrid');
+  $('#bkNote').textContent = `${BOOK_TABS[tab]}　${list.filter(x => x.have).length} / ${list.length}` + (tab === 'emblem' ? '・最高レートで集まる' : '・持っているものは押すと使える');
+  const using = {chalk: myChalk(), board: myBoard(), title: look.title, plate: look.plate}[tab];
+  if (unchanged(grid, JSON.stringify([tab, list.map(x => [x.id, x.have]), using, typedName()]))) return;
+  grid.innerHTML = '';
+  list.forEach(it => {
+    const can = it.have && tab !== 'emblem', el = document.createElement(can ? 'button' : 'div');
+    if (can) el.type = 'button';
+    el.className = 'bk' + (it.have ? '' : ' lock') + (can && using === it.id ? ' on' : '');
+    el.innerHTML = `<span class="bk-a">${itemArt(tab, it.id)}</span><span class="bk-n"></span><span class="bk-h"></span>`;
+    if (tab === 'title' && it.have) el.querySelector('.tt').textContent = it.name;
+    el.querySelector('.bk-n').textContent = it.have || it.limited ? (tab === 'title' ? '称号' : it.name) : '？？？';
+    if (tab === 'title') el.querySelector('.bk-n').textContent = it.have ? '' : '？？？';
+    el.querySelector('.bk-h').textContent = it.have ? (it.limited ? '限定' : '手に入れた') : it.how;
+    if (it.limited) el.insertAdjacentHTML('afterbegin', '<span class="lim">限定</span>');
+    if (can && using === it.id) el.insertAdjacentHTML('afterbegin', '<span class="use">使用中</span>');
+    if (can) el.addEventListener('click', () => {
+      if (tab === 'chalk') equipChalk(it.id);
+      else if (tab === 'board') equipBoard(it.id);
+      else chooseLook(tab, it.id);
+      toast(`${tab === 'title' ? `称号「${it.name}」` : it.name}にしました`);
+    });
+    grid.append(el);
+  });
 }
 
 // ----- Login bonus: a 7-day stamp card, plus how many days in a row -----
@@ -2337,6 +2927,7 @@ function bossRoad(){
   TITLES.filter(t => t.boss).forEach(t => items.push({n: t.goal, kind: '称号', name: t.name, title: t.id}));
   PLATES.filter(p => p.boss).forEach(p => items.push({n: p.goal, kind: 'プレート', name: p.name, plate: p.id}));
   CHALKS.filter(c => c.boss).forEach(c => items.push({n: c.boss, kind: 'チョーク', name: c.name, chalk: c}));
+  BOARDS.filter(b => b.boss).forEach(b => items.push({n: b.boss, kind: '黒板', name: b.name, board: b.id}));
   return items.sort((a, b) => a.n - b.n);
 }
 function bossDamage(n){
@@ -2435,7 +3026,7 @@ function plateEl(info, size){
   const n = document.createElement('span'); n.className = 'pl-name'; n.textContent = String(info.name || 'ななし').slice(0, 12);
   el.append(t, n);
   const r = Math.round(+info.rating);
-  if (r) { const b = document.createElement('span'); b.className = 'pl-rate bg-' + tierCls(r); b.textContent = r; el.append(b); }
+  if (r) { const b = document.createElement('span'); b.className = 'pl-rate bg-' + tierCls(r); b.textContent = r; b.prepend(emblemEl(r)); el.append(b); }
   return el;
 }
 
@@ -2688,7 +3279,7 @@ function ensureBoard(n){
     seat.className = `seat opp c${k}`;
     seat.id = 'seat' + k;
     seat.innerHTML = '<p class="name"><span class="nm"></span><span class="tag" hidden></span></p><div class="hands">'
-      + [0, 1].map(i => `<button type="button" class="hand" data-k="${k}" data-i="${i}"><svg viewBox="0 0 100 130" aria-hidden="true"></svg><span class="count"></span><span class="badge" hidden></span></button>`).join('')
+      + [0, 1].map(i => `<button type="button" class="hand" data-k="${k}" data-i="${i}"><svg class="hs" viewBox="0 0 100 130" aria-hidden="true"></svg><i class="fxo" aria-hidden="true"></i><span class="count"></span><span class="badge" hidden></span></button>`).join('')
       + '</div>';
     opps.append(seat);
     handBtns[k] = [...seat.querySelectorAll('.hand')];
@@ -2796,7 +3387,8 @@ function animateMove(m){
       {transform:'translate(0,0)'}
     ], {duration:520, easing:'cubic-bezier(.25,.8,.3,1)'});
     const color = getComputedStyle(a).color;
-    setTimeout(() => hitFx(t, color, m), 230);
+    const ch = seatChalk(p);
+    setTimeout(() => hitFx(t, color, m, ch), 230);
     return anim.finished.finally(() => { a.style.zIndex = ''; });
   }
   if (m.kind === 'merge') {
@@ -2881,15 +3473,17 @@ function watchGlobal(fb){
     else {
       const l0 = levelOf(+(((prevProfile || {}).lv || {}).xp) || 0), l1 = levelOf(+(((net.profile || {}).lv || {}).xp) || 0);
       if (l1 > l0) celebrate('レベル<br>アップ！', () => { const d = document.createElement('div'); d.innerHTML = `<b>Lv.${l1} になった！</b><span>これからもどんどん遊ぼう</span>`; return d; });
-      CHALKS.filter(c => c.season && !((prevProfile || {}).owned || {})[c.id] && ((net.profile || {}).owned || {})[c.id]).forEach(c =>
-        celebrate('チョーク<br>ゲット！', () => { const d = document.createElement('div'); d.innerHTML = '<b></b><span>シーズン限定。ショップで「使う」を押そう</span>'; d.querySelector('b').textContent = c.name; return d; }));
     }
     const after = unlocked(statsOf(net.profile));
     if (!first) {
+      CHALKS.filter(c => !c.price && c.id !== 'auto' && !hasChalk(c.id, prevProfile || {}) && hasChalk(c.id)).forEach(c =>
+        celebrate('チョーク<br>ゲット！', () => itemBanner(chalkFig(c), c.name, (c.season ? 'シーズン限定' : '限定チョーク') + '。ショップか図鑑で「使う」を押そう')));
+      BOARDS.filter(b => !b.price && b.id !== 'bstd' && !hasBoard(b.id, prevProfile || {}) && hasBoard(b.id)).forEach(b =>
+        celebrate('黒板<br>ゲット！', () => itemBanner(boardSwatch(b.id, chalkOf(myChalk())), b.name, 'ショップか図鑑で「使う」を押そう')));
+      const p0 = statsOf(prevProfile || {}).maxRate, p1 = statsOf(net.profile).maxRate;
+      if (tierOf(p1) > tierOf(p0) && tierOf(p1) >= 2) celebrate('ランク<br>到達！', () => itemBanner(`<span class="emb r${tierOf(p1)}" style="width:34px;height:34px">${emblemSVG(tierOf(p1), 0)}</span>`, `${RANKS[tierOf(p1)].name}のエンブレム`, '図鑑に記録されました'));
       after.titles.filter(x => !before.titles.includes(x)).forEach(x =>
         celebrate('称号<br>ゲット！', () => plateEl({name: typedName(), title: x, plate: myLook().plate}, 'sm')));
-      CHALKS.filter(c => c.boss && !hasChalk(c.id, prevProfile || {}) && hasChalk(c.id)).forEach(c =>
-        celebrate('チョーク<br>ゲット！', () => { const d = document.createElement('div'); d.innerHTML = '<b></b><span>ショップで「使う」を押すと使えます</span>'; d.querySelector('b').textContent = c.name; return d; }));
       after.plates.filter(x => !before.plates.includes(x)).forEach(x =>
         celebrate('プレート<br>ゲット！', () => plateEl({name: typedName(), title: myLook().title, plate: x}, 'sm')));
       // missions that just became collectable
@@ -3354,9 +3948,34 @@ async function buyChalk(id){
   if (res && res.committed) {
     lsSet('waribashi-chalk', id); toast(`${c.name}を買いました`); updateRoomEntry(); sfx('unlock');
     const it = [...$$('#shopGrid .item')].find(x => x.querySelector('b') && x.querySelector('b').textContent === c.name);
-    if (it) { const [x, y] = centerOf(it); dust(x, y, [c.color, '#fff6c4'], 30, 90); }
+    if (it) { const [x, y] = centerOf(it); chalkDust(x, y, c, c.color, 34, 100); }
   }
   else if (res) toast('コインが足りません', true);
+}
+async function buyBoard(id){
+  const b = BOARDS.find(x => x.id === id);
+  if (!b || !b.price) return;
+  const res = await profileTx(cur => {
+    const owned = cur.owned || {}, coins = +cur.coins || 0;
+    if (owned[id] || coins < b.price) return undefined;
+    cur.coins = coins - b.price;
+    cur.owned = Object.assign({}, owned, {[id]: true});
+    cur.board = id;
+    return cur;
+  });
+  if (res && res.committed) {
+    lsSet('waribashi-board', id); toast(`${b.name}を買いました`); sfx('unlock');
+    const it = [...$$('#shopBoards .item')].find(x => x.querySelector('b') && x.querySelector('b').textContent === b.name);
+    if (it) { const [x, y] = centerOf(it); dust(x, y, ['#fff6c4', '#eceee4'], 30, 90, 'star'); }
+  }
+  else if (res) toast('コインが足りません', true);
+}
+function equipBoard(id){
+  id = BOARDS.some(b => b.id === id) ? id : 'bstd';
+  lsSet('waribashi-board', id);
+  net.profile = Object.assign({}, net.profile || {}, {board: id});
+  if (net.fb) net.fb.update(net.fb.ref(net.fb.db, 'players/' + net.uid), {board: id}).catch(() => {});
+  render();
 }
 function equipChalk(id){
   id = chalkId(id);
@@ -3613,10 +4232,10 @@ async function tryMatch(sg){
 }
 
 // ===================== Screens =====================
-const SCREENS = {home:'#scrHome', cpu:'#scrCpu', plate:'#scrPlate', mission:'#scrMission', shop:'#scrShop', rank:'#scrRank', rules:'#scrRules', boss:'#scrBoss', events:'#scrEvents', pass:'#scrPass', puzzle:'#scrPuzzle', friends:'#scrFriends', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
+const SCREENS = {home:'#scrHome', cpu:'#scrCpu', plate:'#scrPlate', mission:'#scrMission', shop:'#scrShop', rank:'#scrRank', rules:'#scrRules', boss:'#scrBoss', events:'#scrEvents', pass:'#scrPass', puzzle:'#scrPuzzle', friends:'#scrFriends', book:'#scrBook', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
 // The tab bar stays on the menu screens and steps aside for matching and play.
-const TABBED = ['home', 'events', 'mission', 'shop', 'friends', 'plate', 'rank', 'rules', 'cpu', 'custom', 'boss', 'pass', 'puzzle'];
-const TAB_OF = {boss: 'events', pass: 'events', puzzle: 'events', rank: 'friends'};
+const TABBED = ['home', 'events', 'mission', 'shop', 'friends', 'plate', 'rank', 'rules', 'cpu', 'custom', 'boss', 'pass', 'puzzle', 'book'];
+const TAB_OF = {boss: 'events', pass: 'events', puzzle: 'events', rank: 'friends', book: 'plate'};
 function showChrome(s){
   const tabs = TABBED.includes(s);
   $('#tabbar').hidden = !tabs;
@@ -3680,6 +4299,7 @@ function render(){
   if (ui.screen === 'friends') renderFriends();
   if (ui.screen === 'pass') renderPass();
   if (ui.screen === 'puzzle') renderPuzzle();
+  if (ui.screen === 'book') renderBook();
   if (ui.screen === 'plate') renderLevel();
   if (ui.loginShow && ui.screen === 'home' && $('#result').hidden && $('#splash').hidden) { const l = ui.loginShow; ui.loginShow = null; showLogin(l); }
   if (ui.screen === 'home') renderHome();
@@ -3696,8 +4316,10 @@ function renderChrome(){
   $('#tbDaily').hidden = !ok;
   $('#barCoins').hidden = !ok;
   showCoins(coins);
-  $('#barTier').textContent = tierName(mr);
+  const rk = rankOf(mr), be = $('#barEmb'), ek = rk.i + ':' + rk.div;
+  $('#barTier').textContent = rk.label;
   $('#barTier').className = 'tb-sub ' + tierCls(mr);
+  if (be.dataset.k !== ek) { be.dataset.k = ek; be.className = 'emb r' + rk.i; be.innerHTML = emblemSVG(rk.i, rk.div); }
   for (const id of ['#goMission', '#goShop', '#goEvents', '#goFriends']) $(id).disabled = !ok;
   const lv = myLevel();
   $('#barLv').textContent = `Lv.${lv.level}`;
@@ -3718,13 +4340,13 @@ function renderChrome(){
   if (radar.dataset.key !== myChalk()) { radar.dataset.key = myChalk(); $('#radarHand').innerHTML = handSVG(2, false, 0, myCh); }
   $('#radarHand').style.color = myCh ? myCh.color : '';
   radar.style.setProperty('--c', myCh ? myCh.color : 'var(--you)');
-  radar.classList.toggle('glow', !!(myCh && myCh.glow));
-  radar.classList.toggle('shine', !!(myCh && myCh.shine));
+  applyFx(radar, myCh);
   $('#barRate').textContent = mr;
   $('#barRate').className = tierCls(mr);
   const hr = $('#homeRate');
   hr.textContent = 'レート ';
   hr.append(rateEl(mr), `（${tierName(mr)}）・` + (g ? `${+p.rw || 0}勝${+p.rl || 0}敗${+p.rd ? (+p.rd) + '分' : ''}` : 'まだ0戦'));
+  hr.prepend(emblemEl(mr));
   const hb = $('#homePlateBox');
   hb.innerHTML = '';
   hb.append(plateEl(Object.assign({name: typedName(), rating: ok ? mr : 0}, myLook()), 'lg'));
@@ -3770,6 +4392,7 @@ const TIPS = [
 ];
 function renderHome(){
   renderBossCard();
+  if (net.profileLoaded) { const bp = bookPct(bookItems()); $('#bnBookRing').style.setProperty('--p', bp); $('#bnBookPct').textContent = bp + '%'; }
   const ok = !!FIREBASE_CONFIG, pu = $('#pickup'), msx = missionState();
   let tag = 'デイリー', name, cur = 0, goal = 0, coins = 0, left = '', ready = false, go = 'mission';
   if (!lsGet(NAME_KEY)) { tag = 'はじめに'; name = 'プロフィールで名前と称号を決めよう'; go = 'plate'; }
@@ -3886,8 +4509,9 @@ function renderFriends(){
       li.querySelector('.pos').textContent = 1 + list.filter(x => x.rate > r.rate).length;
       li.querySelector('.rn').textContent = r.id === net.uid ? `${r.name}（あなた）` : r.name;
       li.querySelector('.rn').classList.add(tierCls(r.rate));
-      li.querySelector('.who small').textContent = titleName(r.title);
+      li.querySelector('.who small').textContent = `${tierName(r.rate)}・${titleName(r.title)}`;
       li.querySelector('.rt').textContent = r.rate;
+      li.querySelector('.rt').prepend(emblemEl(r.rate));
       li.querySelector('.rt').classList.add(tierCls(r.rate));
       li.querySelector('.rec').textContent = r.w + r.l + r.d ? `${r.w}勝${r.l}敗${r.d ? r.d + '分' : ''}` : 'レート戦まだ';
       rk.append(li);
@@ -3924,32 +4548,58 @@ function renderEvents(){
   list.append(evCard({go: 'puzzle', color: 'var(--p2)', art: '<span class="ev-icon">詰</span>', tag: `毎日1問・#${pz.num}`, title: `詰めわりばし（${pz.d}手詰め）`,
     sub: mp.solved ? `正解！（${mp.at || mp.tries}回目）・連続${mp.streak}日` : mp.tries ? `挑戦中（${mp.tries}回）` : 'まだ挑戦していません', badge: mp.solved ? '' : 'NEW'}));
   list.append(evCard({go: 'pass', color: th[1], art: `<span class="ev-icon" style="font-size:20px">${seasonMonth()}月</span>`, tag: `シーズンパス・あと${daysLeftInSeason()}日`, title: `「${th[0]}」シーズン`,
-    sub: `${lv.tier}/${SEASON_TIERS}段・30段で${th[0]}チョーク`, meter: lv.tier / SEASON_TIERS, meterT: `${lv.tier}/${SEASON_TIERS}`, badge: lv.ready ? `受け取り ${lv.ready}` : ''}));
+    sub: `${lv.tier}/${SEASON_TIERS}段・限定のプレート・称号・黒板・チョーク`, meter: lv.tier / SEASON_TIERS, meterT: lv.bonus ? `30+${lv.bonus}` : `${lv.tier}/${SEASON_TIERS}`, badge: lv.ready ? `受け取り ${lv.ready}` : ''}));
   list.append(evCard({go: 'login', color: 'var(--coin)', art: '<span class="ev-icon" style="--c:var(--lose)">済</span>', tag: 'ログインボーナス', title: `${lg.count || 0}/7日目`,
     sub: `連続ログイン ${lg.streak}日・7日目はコイン150`}));
 }
 function renderPass(){
-  const lv = myLevel(), th = SEASON_THEMES[seasonMonth()], month = seasonMonth(), hero = $('#passHero');
+  const lv = myLevel(), month = seasonMonth(), th = SEASON_THEMES[month], hero = $('#passHero'), owned = (net.profile || {}).owned || {};
   hero.style.setProperty('--sc', th[1]); hero.style.setProperty('--sc2', th[1] + '33');
+  $('#scrPass').style.setProperty('--sc', th[1]);
   $('#phName').textContent = `${month}月シーズン「${th[0]}」`;
   $('#phLeft').textContent = `のこり${daysLeftInSeason()}日`;
   $('#phLv').textContent = lv.tier;
-  const into = lv.tier >= SEASON_TIERS ? SEASON_STEP : lv.sxp % SEASON_STEP;
-  $('#phXp').style.width = Math.round(into / SEASON_STEP * 100) + '%';
-  $('#phXpT').textContent = lv.tier >= SEASON_TIERS ? 'コンプリート！' : `次の段まで ${SEASON_STEP - into}`;
+  $('#phBonus').hidden = !lv.bonus;
+  $('#phBonus').textContent = `ボーナス +${lv.bonus}`;
+  const maxed = lv.all >= SEASON_TIERS + BONUS_TIERS, lo = tierXP(lv.all), hi = tierXP(lv.all + 1);
+  $('#phXp').style.width = Math.round((maxed ? 1 : (lv.sxp - lo) / (hi - lo)) * 100) + '%';
+  $('#phXpT').textContent = maxed ? 'コンプリート！' : lv.all >= SEASON_TIERS ? `次のボーナスまで ${hi - lv.sxp}` : `次の段まで ${hi - lv.sxp}`;
   $('#passClaim').hidden = !lv.ready;
   $('#passClaim').textContent = `まとめて受け取る（${lv.ready}段ぶん）`;
-  const ol = $('#passList');
-  if (unchanged(ol, JSON.stringify([lv.tier, lv.claimed, month]))) return;
-  ol.innerHTML = '';
-  for (let t = 1; t <= SEASON_TIERS; t++) {
-    const r = seasonReward(t), got = !!lv.claimed['t' + t], li = document.createElement('li');
-    li.className = 'pt' + (got ? ' done' : t <= lv.tier ? ' ready' : '') + (r.chalk || t % 10 === 0 ? ' special' : '');
-    const c = CHALKS.find(x => x.id === 'sea' + month);
-    li.innerHTML = `<b>${t}段</b>` + (r.chalk ? `<span style="color:${c.color}"><svg viewBox="0 0 100 130" aria-hidden="true">${handSVG(2, false, 0, c)}</svg></span><span>${c.name}</span>` : `<span class="coin">${r.coins}</span>`)
-      + `<span>${got ? '受け取り済み' : t <= lv.tier ? '受け取れる' : `あと${t * SEASON_STEP - lv.sxp}`}</span>`;
-    ol.append(li);
+  const items = seasonItems(month), set = $('#passSet');
+  if (!unchanged(set, JSON.stringify([month, items.map(it => !!owned[it.id]), myChalk()]))) {
+    set.innerHTML = '';
+    items.forEach(it => {
+      const got = !!owned[it.id], d = document.createElement('div');
+      d.className = 'ps-c' + (got ? ' got' : '');
+      d.innerHTML = `<span class="ps-t"></span><span class="ps-a">${itemArt(it.kind, it.id)}</span><b></b><small></small>`;
+      d.querySelector('.ps-t').textContent = `${it.t}段`;
+      d.querySelector('b').textContent = it.name;
+      d.querySelector('small').textContent = got ? '手に入れた！' : it.label;
+      set.append(d);
+    });
   }
+  const ol = $('#passList');
+  if (unchanged(ol, JSON.stringify([lv.sxp, lv.claimed, month, myChalk()]))) return;
+  ol.innerHTML = '';
+  const byTier = {};
+  items.forEach(it => { byTier[it.t] = it; });
+  const cell = t => {
+    const r = seasonReward(t), it = byTier[t], got = !!lv.claimed['t' + t], li = document.createElement('li');
+    li.className = 'pt' + (got ? ' done' : t <= lv.all ? ' ready' : '') + (it ? ' special' : r.coins >= 150 ? ' big' : '') + (r.bonus ? ' bonus' : '');
+    li.innerHTML = '<b></b><span class="pt-art"></span><span class="pt-n"></span><span class="pt-s"></span>';
+    li.querySelector('b').textContent = r.bonus ? `+${t - SEASON_TIERS}` : `${t}段`;
+    const art = li.querySelector('.pt-art');
+    if (it) art.innerHTML = itemArt(it.kind, it.id);
+    else { art.innerHTML = '<span class="coin"></span>'; art.firstChild.textContent = r.coins; }
+    li.querySelector('.pt-n').textContent = it ? it.name + (r.coins ? `＋${r.coins}` : '') : '';
+    li.querySelector('.pt-s').textContent = got ? '受け取り済み' : t <= lv.all ? '受け取れる' : `あと${tierXP(t) - lv.sxp}`;
+    return li;
+  };
+  for (let t = 1; t <= SEASON_TIERS; t++) ol.append(cell(t));
+  const bl = $('#passBonus');
+  bl.innerHTML = '';
+  for (let t = SEASON_TIERS + 1; t <= SEASON_TIERS + BONUS_TIERS; t++) bl.append(cell(t));
 }
 function renderLevel(){
   const lv = myLevel();
@@ -4018,7 +4668,8 @@ function renderBoss(){
       li.innerHTML = '<span class="rn"></span><span class="ri"></span><b></b><span class="rs"></span>';
       li.querySelector('.rn').textContent = `${it.n}回`;
       const ri = li.querySelector('.ri');
-      if (it.chalk) { ri.style.color = it.chalk.color; ri.innerHTML = `<svg viewBox="0 0 100 130" aria-hidden="true">${handSVG(2, false, 0, it.chalk)}</svg>`; }
+      if (it.chalk) ri.innerHTML = chalkFig(it.chalk);
+      else if (it.board) ri.innerHTML = boardSwatch(it.board, chalkOf(myChalk()));
       else if (it.plate) ri.innerHTML = `<span class="pswatch pl-${it.plate}"></span>`;
       else ri.innerHTML = '<span class="tt">称号</span>';
       const b = li.querySelector('b');
@@ -4121,38 +4772,46 @@ function renderMission(){
   }
 }
 function renderShop(){
-  const coins = myCoins(), owned = (net.profile || {}).owned || {}, using = myChalk(), now = Date.now();
+  const coins = myCoins(), p = net.profile || {}, owned = p.owned || {}, now = Date.now(), boards = ui.shopTab === 'board';
   $('#shopCoinsTop').textContent = coins;
-  const grid = $('#shopGrid'), armed = ui.buyArm && ui.buyArm.until > now ? ui.buyArm.id : '';
-  const kills = statsOf(net.profile).bossKills;
-  if (unchanged(grid, JSON.stringify([coins, owned, using, armed, kills]))) return;
+  $('#tabShopChalk').setAttribute('aria-selected', String(!boards));
+  $('#tabShopBoard').setAttribute('aria-selected', String(boards));
+  $('#shopGrid').hidden = boards;
+  $('#shopBoards').hidden = !boards;
+  $('#shopNote').textContent = boards ? '黒板を変えると、対戦するときの自分の盤面の見た目が変わります（相手の画面はそのまま）。'
+    : 'チョークを変えると、自分の手がその色になります。対戦相手の画面でも同じに見えます。エフェクトチョークは光ったり、星や花びらが舞ったりします。';
+  const grid = boards ? $('#shopBoards') : $('#shopGrid'), armed = ui.buyArm && ui.buyArm.until > now ? ui.buyArm.id : '';
+  const st = statsOf(p), using = boards ? myBoard() : myChalk();
+  if (unchanged(grid, JSON.stringify([coins, owned, using, armed, st.bossKills, st.maxRate, myChalk()]))) return;
   grid.innerHTML = '';
-  CHALKS.forEach(c => {
-    const have = hasChalk(c.id), on = using === c.id;
-    if (c.season && !have && c.season !== seasonMonth()) return;   // other months' season chalks: only once owned
+  (boards ? BOARDS : CHALKS).forEach(c => {
+    const have = boards ? hasBoard(c.id) : hasChalk(c.id), on = using === c.id, lim = isLimited(c);
+    if (c.season && !have && c.season !== seasonMonth()) return;   // other months' season items: only once owned
     const el = document.createElement('div');
-    el.className = 'item' + (on ? ' on' : '') + (c.glow ? ' glow' : '') + (c.shine ? ' shine' : '');
-    if (c.color) el.style.setProperty('--c', c.color);
-    el.innerHTML = `<svg viewBox="0 0 100 130" aria-hidden="true">${handSVG(2, false, 0, c)}</svg><b></b><span class="price"></span>`;
+    el.className = 'item' + (on ? ' on' : '') + (boards ? ' bitem' : '');
+    if (!boards && c.color) el.style.setProperty('--c', c.color);
+    el.innerHTML = (boards ? boardSwatch(c.id, chalkOf(myChalk())) : chalkFig(c)) + '<b></b><span class="price"></span>';
     el.querySelector('b').textContent = c.name;
+    if (c.fx) el.querySelector('b').insertAdjacentHTML('afterend', '<span class="fxtag">エフェクト</span>');
     const pr = el.querySelector('.price');
-    if (have) { pr.className = 'owned'; pr.textContent = c.boss ? '限定・持っている' : c.price ? '持っている' : 'はじめから'; }
-    else if (c.boss) { pr.className = 'owned'; pr.textContent = `限定：ボス討伐${c.boss}回（${Math.min(kills, c.boss)}/${c.boss}）`; }
-    else if (c.season) { pr.className = 'owned'; pr.textContent = `限定：今月のシーズンパス30段`; }
+    if (have) { pr.className = 'owned'; pr.textContent = lim ? '限定・持っている' : c.price ? '持っている' : 'はじめから'; }
+    else if (c.boss) { pr.className = 'owned'; pr.textContent = `限定：ボス討伐${c.boss}回（${Math.min(st.bossKills, c.boss)}/${c.boss}）`; }
+    else if (c.rate) { pr.className = 'owned'; pr.textContent = `限定：${RANKS[tierOf(c.rate)].name}に届く（最高${st.maxRate}/${c.rate}）`; }
+    else if (c.season) { pr.className = 'owned'; pr.textContent = `限定：今月のシーズンパス${boards ? 22 : 30}段`; }
+    else if (c.book) { pr.className = 'owned'; pr.textContent = `限定：図鑑${c.book}%の報酬`; }
     else { pr.className = 'coin'; pr.textContent = c.price; }
     const b = document.createElement('button');
     b.type = 'button';
     if (on) { b.className = 'btn'; b.textContent = '使用中'; b.disabled = true; }
-    else if (have) { b.className = 'btn primary'; b.textContent = '使う'; b.addEventListener('click', () => equipChalk(c.id)); }
-    else if (c.boss) { b.className = 'btn'; b.textContent = 'ボスで手に入る'; b.disabled = true; }
-    else if (c.season) { b.className = 'btn'; b.textContent = 'シーズンパスで手に入る'; b.disabled = true; }
+    else if (have) { b.className = 'btn primary'; b.textContent = '使う'; b.addEventListener('click', () => boards ? equipBoard(c.id) : equipChalk(c.id)); }
+    else if (lim) { b.className = 'btn'; b.disabled = true; b.textContent = c.boss ? 'ボスで手に入る' : c.rate ? 'ランクで手に入る' : c.season ? 'シーズンパスで手に入る' : '図鑑で手に入る'; }
     else if (coins < c.price) { b.className = 'btn'; b.textContent = 'コインが足りない'; b.disabled = true; }
     else {
       b.className = 'btn gold'; b.textContent = armed === c.id ? 'もう一度押すと買う' : '買う';
       b.addEventListener('click', () => {
         if (ui.buyArm && ui.buyArm.id === c.id && ui.buyArm.until > Date.now()) {
           ui.buyArm = null; b.disabled = true;
-          buyChalk(c.id).finally(() => { grid.dataset.key = ''; if (ui.screen === 'shop') renderShop(); });
+          (boards ? buyBoard(c.id) : buyChalk(c.id)).finally(() => { grid.dataset.key = ''; if (ui.screen === 'shop') renderShop(); });
         }
         else { ui.buyArm = {id: c.id, until: Date.now() + 3000}; renderShop(); }
       });
@@ -4164,42 +4823,47 @@ function renderShop(){
 
 function renderPlateEditor(){
   const ok = !!FIREBASE_CONFIG, u = unlocked(statsOf(net.profile)), st = u.st, look = myLook();
-  $('#titleCount').textContent = `${u.titles.length}/${TITLES.length}`;
-  $('#plateCount').textContent = `${u.plates.length}/${PLATES.length}`;
+  const shown = (it, have) => !(it.season && !have && it.season !== seasonMonth());
+  const tList = TITLES.filter(t => shown(t, u.titles.includes(t.id))), pList = PLATES.filter(x => shown(x, u.plates.includes(x.id)));
+  $('#titleCount').textContent = `${u.titles.length}/${tList.length}`;
+  $('#plateCount').textContent = `${u.plates.length}/${pList.length}`;
+  $('#pfRank').hidden = !ok;
+  if (ok) rankCard($('#pfRank'), null, false);
+  $('#bookPct').textContent = bookPct(bookItems()) + '%';
   const prog = item => item.key === 'maxRate' ? `最高 ${st.maxRate}` : `${Math.min(st[item.key] || 0, item.goal)}/${item.goal}`;
   const meter = f => { const m = document.createElement('span'); m.className = 'meter'; m.innerHTML = '<i></i>'; m.firstChild.style.width = Math.round(f * 100) + '%'; return m; };
   const tp = $('#titlePicks');
   const pickKey = JSON.stringify([u.titles, u.plates, look, typedName(), st]);
   if (unchanged(tp, pickKey)) return;
   tp.innerHTML = '';
-  TITLES.forEach(t => {
+  tList.forEach(t => {
     const have = u.titles.includes(t.id), on = look.title === t.id, b = document.createElement('button');
     b.type = 'button'; b.className = 'pick' + (on ? ' on' : ''); b.disabled = !have;
     b.setAttribute('aria-pressed', String(on));
     b.innerHTML = '<b></b><small></small>';
     b.querySelector('b').textContent = have ? t.name : '？？？';
-    b.querySelector('small').textContent = have ? t.need : `${t.need}（${prog(t)}）`;
-    if (!have && t.key !== 'maxRate') b.append(meter(progress(t, st)));
+    b.querySelector('small').textContent = have || t.own ? t.need : `${t.need}（${prog(t)}）`;
+    if (!have && t.key && t.key !== 'maxRate') b.append(meter(progress(t, st)));
     b.addEventListener('click', () => chooseLook('title', t.id));
     tp.append(b);
   });
   const pp = $('#platePicks');
   pp.innerHTML = '';
-  PLATES.forEach(p => {
+  pList.forEach(p => {
     const have = u.plates.includes(p.id), on = look.plate === p.id, b = document.createElement('button');
     b.type = 'button'; b.className = 'pick' + (on ? ' on' : ''); b.disabled = !have;
     b.setAttribute('aria-pressed', String(on));
     b.append(plateEl({name: typedName(), title: look.title, plate: p.id}, 'sm'));
     const nb = document.createElement('b'), sm = document.createElement('small');
     nb.textContent = p.name;
-    sm.textContent = have ? p.need : `${p.need}（${prog(p)}）`;
+    sm.textContent = have || p.own ? p.need : `${p.need}（${prog(p)}）`;
     b.append(nb, sm);
-    if (!have && p.key !== 'maxRate') b.append(meter(progress(p, st)));
+    if (!have && p.key && p.key !== 'maxRate') b.append(meter(progress(p, st)));
     b.addEventListener('click', () => chooseLook('plate', p.id));
     pp.append(b);
   });
   const rows = [['オンライン試合', `${st.games}試合`], ['勝ち', st.games ? `${st.wins}勝（勝率${Math.round(st.wins / st.games * 100)}%）` : '0勝'],
-    ['最高連勝', `${st.best}連勝`], ['合成', `${st.merges}回`], ['分身', `${st.splits}回`], ['消した手', `${st.kos}本`], ['最高レート', String(st.maxRate)]];
+    ['最高連勝', `${st.best}連勝`], ['合成', `${st.merges}回`], ['分身', `${st.splits}回`], ['消した手', `${st.kos}本`], ['最高レート', `${st.maxRate}（${tierName(st.maxRate)}）`]];
   const dl = $('#myStats');
   dl.innerHTML = '';
   rows.forEach(([k, v]) => { const d = document.createElement('div'); d.innerHTML = '<dt></dt><dd></dd>'; d.firstChild.textContent = k; d.lastChild.textContent = v; dl.append(d); });
@@ -4255,6 +4919,8 @@ function renderLobby(){
 function renderGame(){
   if (!G) return;
   ensureBoard(G.n);
+  const bw = $('#board').parentElement, bd = myBoard();
+  if (bw.dataset.bd !== bd) bw.dataset.bd = bd;
   const nm = names(), r = rules(), act = interactive(), src = act ? sourceHand() : null, ms = act ? legalMoves(G, r) : [];
   const online = (net.room && net.room.online) || {}, ps = (net.room && net.room.players) || {};
   for (let k = 0; k < G.n; k++) {
@@ -4264,8 +4930,7 @@ function renderGame(){
     seatEl.querySelector('.nm').textContent = nm[k];
     const ch = seatChalk(k);
     if (ch) seatEl.style.setProperty('--c', ch.color); else seatEl.style.removeProperty('--c');
-    seatEl.classList.toggle('glow', !!(ch && ch.glow));
-    seatEl.classList.toggle('shine', !!(ch && ch.shine));
+    applyFx(seatEl, ch);
     const tg = seatEl.querySelector('.tag');
     let tt = '', tc = '';
     const nameP = seatEl.querySelector('.name');
@@ -4360,10 +5025,10 @@ function renderStrip(act, ms, nm){
     if (isRated()) {
       const S = normState(net.room.state);
       if (S && S.over) {
-        const d = ratingChange(net.room, S, net.seat), t0 = tierOf(d.from), t1 = tierOf(d.to);
+        const d = ratingChange(net.room, S, net.seat), k0 = rankOf(d.from), k1 = rankOf(d.to);
         ev.textContent = 'レート ';
         ev.append(rateEl(d.from, 'span'), ' → ', rateEl(d.to, 'span'), `（${d.delta >= 0 ? '+' : ''}${d.delta}）`);
-        if (t1 !== t0) ev.append(t1 > t0 ? `　${TIERS[t1][1]}に上がった！` : `　${TIERS[t1][1]}に下がった`);
+        if (k1.step !== k0.step) ev.append(k1.step > k0.step ? `　${k1.label}に上がった！` : `　${k1.label}に下がった`);
         ev.hidden = false;
       }
       again.textContent = '次の相手をさがす';
@@ -4513,14 +5178,24 @@ function renderAnalysis(){
   $('#aSplit').textContent = `手番側の勝ち ${s.counts.win}・負け ${s.counts.lose}・引き分け ${s.counts.draw}`;
 }
 
-function renderMyRank(rows){
-  const box = $('#myRank'), p = net.profile || {}, mr = myRating(), g = ratedGames(p);
+// My rank card: emblem, rating, the way to the next division (ranking screen, and the profile without the position).
+function rankCard(box, rows, withPos){
+  const p = net.profile || {}, mr = myRating(), g = ratedGames(p), k = rankOf(mr);
   const pos = g && rows ? 1 + rows.filter(x => x.rate > mr).length : 0;
-  box.innerHTML = '<span class="mr-k">あなたのレート</span><span class="mr-pos"></span><b class="mr-rate"></b><span class="mr-rec"></span>';
-  box.querySelector('.mr-rate').append(rateEl(mr, 'span'), `（${tierName(mr)}）`);
+  if (unchanged(box, JSON.stringify([mr, g, pos, withPos, p.rw, p.rl, p.rd]))) return;
+  box.innerHTML = '<span class="mr-k">あなたのレート</span><span class="mr-pos"></span><b class="mr-rate"></b><span class="mr-next"><span class="meter"><i></i></span><small></small></span><span class="mr-rec"></span>';
+  box.prepend(embSpan(k.i, k.div, 'mr-emb'));
+  const rt = box.querySelector('.mr-rate'), rkn = document.createElement('span');
+  rkn.className = 'rk ' + tierCls(mr); rkn.textContent = k.label;
+  rt.append(rateEl(mr, 'span'), rkn);
+  box.querySelector('.mr-pos').hidden = !withPos;
   box.querySelector('.mr-pos').innerHTML = pos ? `${pos}<small>位</small>` : '<small>ランク外</small>';
+  const f = k.next ? Math.max(0, Math.min(1, (mr - k.from) / (k.next - k.from))) : 1;
+  box.querySelector('.mr-next i').style.width = Math.round(f * 100) + '%';
+  box.querySelector('.mr-next small').textContent = k.next ? `${k.nextLabel}まで あと${k.next - mr}` : '最高ランク！';
   box.querySelector('.mr-rec').textContent = g ? `${+p.rw || 0}勝${+p.rl || 0}敗${+p.rd ? (+p.rd) + '分' : ''}` : 'レート戦を1回やるとランキングに載ります';
 }
+function renderMyRank(rows){ rankCard($('#myRank'), rows, true); }
 function renderRank(){
   const panelEl = $('#rankPanel'), ol = $('#rank');
   panelEl.hidden = !FIREBASE_CONFIG;
@@ -4544,8 +5219,9 @@ function renderRank(){
     li.querySelector('.pos').textContent = 1 + rows.filter(x => x.rate > r.rate).length;
     li.querySelector('.rn').textContent = r.name;
     li.querySelector('.rn').classList.add(tierCls(r.rate));
-    li.querySelector('.who small').textContent = titleName(r.title);
+    li.querySelector('.who small').textContent = `${tierName(r.rate)}・${titleName(r.title)}`;
     li.querySelector('.rt').textContent = r.rate;
+    li.querySelector('.rt').prepend(emblemEl(r.rate));
     li.querySelector('.rt').classList.add(tierCls(r.rate));
     li.querySelector('.rec').textContent = `${r.w}勝${r.l}敗${r.d ? r.d + '分' : ''}`;
     ol.append(li);
@@ -4614,6 +5290,10 @@ $('#goBoss').addEventListener('click', () => setScreen('boss'));
 $('#tabFr').addEventListener('click', () => { ui.frTab = 'list'; renderFriends(); });
 $('#tabFrRank').addEventListener('click', () => { ui.frTab = 'rank'; renderFriends(); });
 $('#goRankAll').addEventListener('click', () => setScreen('rank'));
+$('#goBook').addEventListener('click', () => setScreen('book'));
+$$('#bkTabs [data-bk]').forEach(t => t.addEventListener('click', () => { ui.bookTab = t.dataset.bk; renderBook(); }));
+$('#tabShopChalk').addEventListener('click', () => { ui.shopTab = 'chalk'; ui.buyArm = null; renderShop(); });
+$('#tabShopBoard').addEventListener('click', () => { ui.shopTab = 'board'; ui.buyArm = null; renderShop(); });
 $('#copyCode').addEventListener('click', () => { const c = (net.profile || {}).code; if (c) copyText(c).then(() => toast('コードをコピーしました'), () => toast(c)); });
 $('#frAdd').addEventListener('click', async () => {
   const b = $('#frAdd'), typed = $('#frCode').value;
@@ -4636,6 +5316,7 @@ $('#passClaim').addEventListener('click', async () => {
   if (got) {
     if (got.coins) { flyCoins(from, got.coins); floatText(from[0], from[1] - 10, `+${got.coins}`, 'var(--coin)'); }
     sfx('unlock'); const [x, y] = centerOf($('#passHero')); dust(x, y, CHALK_COLORS, 30, 120);
+    if (got.items.length) { dust(x, y, ['#fff6c4', SEASON_THEMES[seasonMonth()][1]], 30, 160, 'star'); confetti(40); }
   }
   render();
 });
@@ -4673,12 +5354,10 @@ $$('#bnTrack .bn').forEach(b => b.addEventListener('click', () => {
   const sea = CHALKS.find(c => c.id === 'sea' + seasonMonth()), th = SEASON_THEMES[seasonMonth()];
   $('#bnPass').style.setProperty('--c', th[1]);
   $('#bnPassH').innerHTML = `${seasonMonth()}月シーズン<br>「${th[0]}」`;
-  $('#artPass').innerHTML = `<figure class="shine" style="color:${sea.color};--c:${sea.color}"><svg viewBox="0 0 100 130" aria-hidden="true">${handSVG(2, false, 0, sea)}</svg></figure>`;
+  $('#artPass').innerHTML = `<figure>${chalkFig(sea)}</figure>`;
   const ch = id => CHALKS.find(c => c.id === id);
-  $('#artShop').innerHTML = ['gold', 'rainbow', 'neon'].map(id => {
-    const c = ch(id);
-    return `<figure class="${c.glow ? 'glow' : ''}${c.shine ? 'shine' : ''}" style="color:${c.color};--c:${c.color}"><svg viewBox="0 0 100 130" aria-hidden="true">${handSVG(2, false, 0, c)}</svg></figure>`;
-  }).join('');
+  $('#artShop').innerHTML = ['thunder', 'cosmos', 'aurora'].map(id => `<figure>${chalkFig(ch(id))}</figure>`).join('');
+  $('#artRank').innerHTML = `<span class="podium" aria-hidden="true"><i style="height:62px;color:var(--t4)">${emblemSVG(4, 0)}</i><i style="height:84px;color:var(--t6)">${emblemSVG(6, 0)}</i><i style="height:46px;color:var(--t2)">${emblemSVG(2, 0)}</i></span>`;
 })();
 $('#tabDaily').addEventListener('click', () => { ui.missionTab = 'daily'; renderMission(); });
 $('#tabNormal').addEventListener('click', () => { ui.missionTab = 'normal'; renderMission(); });
@@ -4784,12 +5463,34 @@ $('#appVer').textContent = `バージョン ${APP_VERSION}`;
     [[0, c1], [.45, c2], [.7, c1], [1, c2]].forEach(([o, c]) => { const st = document.createElementNS(NS, 'stop'); st.setAttribute('offset', o); st.setAttribute('stop-color', c); g.append(st); });
     defs.append(g);
   }
+  RANKS.forEach((k, i) => {
+    const g = document.createElementNS(NS, 'linearGradient');
+    g.id = 'rk' + i; g.setAttribute('x1', '0'); g.setAttribute('y1', '0'); g.setAttribute('x2', '.8'); g.setAttribute('y2', '1');
+    [[0, k.c[1]], [.48, k.c[2]], [1, k.c[0]]].forEach(([o, c]) => { const st = document.createElementNS(NS, 'stop'); st.setAttribute('offset', o); st.setAttribute('stop-color', c); g.append(st); });
+    defs.append(g);
+  });
+  // this month's season plate and board, for every month
+  const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const mix = (a, b, t) => '#' + hex(a).map((v, i) => Math.round(v * t + hex(b)[i] * (1 - t)).toString(16).padStart(2, '0')).join('');
+  const lum = h => { const [r, g, b] = hex(h); return (0.299 * r + 0.587 * g + 0.114 * b) / 255; };
+  let css = '';
+  for (let m = 1; m <= 12; m++) {
+    const [, c1, c2] = SEASON_THEMES[m], light = lum(c1) > .58;
+    css += `.pl-pm${m}{background-color:${c1};background-image:radial-gradient(circle at 88% 24%,rgba(255,255,255,.6) 0 2.5px,transparent 3.5px),radial-gradient(circle at 76% 76%,rgba(255,255,255,.45) 0 1.8px,transparent 2.8px),linear-gradient(115deg,${c1} 0%,${c1} 45%,${c2} 100%);`
+      + `--pf:${light ? mix(c1, '#000000', .22) : '#fffaf2'};--pa:${light ? mix(c1, '#000000', .42) : mix(c2, '#ffffff', .6)};--pe:${mix(c1, '#000000', .55)}}\n`
+      + `.board-wrap[data-bd="bm${m}"]{--board:${mix(c1, '#18201c', .16)};--wood:${mix(c1, '#000000', .55)};--wood-hi:${mix(c1, '#000000', .82)}}\n`
+      + `.board-wrap[data-bd="bm${m}"] .board{background-image:radial-gradient(ellipse 65% 45% at 85% 8%,${c1}44,transparent 70%),radial-gradient(ellipse 55% 40% at 10% 95%,${c2}33,transparent 70%),var(--noise)}\n`;
+  }
+  const tag = document.createElement('style');
+  tag.textContent = css;
+  document.head.append(tag);
 })();
 dbg('debug on, version ' + APP_VERSION);
-TIERS.forEach(([min], i) => {
+(() => { try { const q = new URLSearchParams(location.search); if (q.has('debug') && q.has('rankup')) setTimeout(() => showRankUp(+q.get('rankup') || 1750), 1200); } catch(e) {} })();
+RANKS.forEach((k, i) => {
   const li = document.createElement('li');
   li.className = 't' + i;
-  li.textContent = `${TIERS[i][1]} ` + (i === 0 ? `〜${TIERS[1][0] - 1}` : `${min}〜`);
+  li.append(embSpan(i, 0), `${k.name} ` + (i === 0 ? `〜${RANKS[1].min - 1}` : `${k.min}〜`));
   $('#tierLegend').append(li);
 });
 
