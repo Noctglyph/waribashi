@@ -1029,7 +1029,55 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .road .ri .tt{font-size:11px;padding:0 4px;white-space:normal;line-height:1.3}
 .item .medal{font-size:13px;font-weight:700;color:var(--ec,var(--you))}
 .item .lim2{font-size:11px;color:var(--chalk-soft)}
+
+/* ===== Jewels: the gacha currency ===== */
+.jwl{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-variant-numeric:tabular-nums;color:#ffb8ea;white-space:nowrap}
+.jwl::before{content:"";flex:none;width:1em;height:.9em;background:linear-gradient(135deg,#fff3fc,#ff9adf 40%,#8fd8ff 75%,#c9a2ff);clip-path:polygon(22% 0,78% 0,100% 34%,50% 100%,0 34%)}
+.tb-money{display:flex;flex-wrap:wrap;gap:0 10px;align-items:center;min-width:0}
+.tb-me .jwl{font-size:13px}
+.gicon.jw::before{content:"";width:48px;height:44px;background:linear-gradient(135deg,#fff3fc,#ff9adf 40%,#8fd8ff 75%,#c9a2ff);clip-path:polygon(22% 0,78% 0,100% 34%,50% 100%,0 34%)}
+.mrow .ms{display:grid;justify-items:end;gap:4px}
+.mrow .ms .jwl{font-size:13px}
+.pt .jwl{font-size:12.5px}
+.stamp .jwl{font-size:11.5px}
+.gbtns .jwl{font-size:15px}
+
+/* ===== Battle stamps (fixed phrases only) ===== */
+.stk{--sc:#f3d774;position:relative;display:inline-grid;grid-template-columns:auto minmax(0,auto);align-items:center;gap:4px;max-width:100%;padding:4px 11px 4px 5px;border-radius:14px;border:2px solid var(--sc);background:var(--board-deep);color:var(--sc);font-family:var(--font-display);font-size:14px;line-height:1.2;white-space:nowrap;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.stk::after{content:"";position:absolute;left:18px;bottom:-7px;width:10px;height:10px;background:var(--board-deep);border-right:2px solid var(--sc);border-bottom:2px solid var(--sc);transform:rotate(45deg)}
+.stk svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
+.stk b{font-weight:400;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.stk.glow{box-shadow:0 0 14px var(--sc),0 3px 0 rgba(0,0,0,.3)}
+.seat{position:relative}
+.stampb{position:absolute;left:50%;z-index:6;pointer-events:none;transform:translateX(-50%);animation:stkPop .35s cubic-bezier(.2,.9,.3,1.5)}
+.seat.me .stampb{top:-30px}
+.seat.opp .stampb{bottom:-26px}
+.seat.opp .stampb .stk::after{bottom:auto;top:-7px;transform:rotate(225deg)}
+.stampb.out{animation:stkOut .3s ease-in forwards}
+@keyframes stkPop{from{transform:translateX(-50%) scale(.3);opacity:0}}
+@keyframes stkOut{to{transform:translateX(-50%) translateY(-8px);opacity:0}}
+.stamppal{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:45;width:min(440px,calc(100% - 32px));transform:translateX(-50%);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:10px;border-radius:14px;border:1.5px solid var(--chalk-faint);background:var(--panel);box-shadow:0 14px 30px -8px rgba(0,0,0,.8)}
+.stampbtn{display:grid;place-items:center;width:46px;padding:0}
+.stampbtn svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.stampbtn[aria-expanded="true"]{border-color:var(--you);color:var(--you)}
+.stamppal button{display:grid;place-items:center;min-height:46px;min-width:0;padding:4px;border:0;border-radius:10px;background:var(--board-deep);cursor:pointer}
+.stamppal button:disabled{opacity:.45;cursor:default}
+.stamppal .stk{font-size:13px}
+.stpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.stpick button{display:grid;justify-items:start;gap:4px;min-width:0;padding:8px;border-radius:10px;border:1.5px solid var(--line);background:var(--board-deep);cursor:pointer;text-align:left}
+.stpick button[aria-pressed="true"]{border-color:var(--you);box-shadow:0 0 0 1px var(--you) inset}
+.stpick button small{font-size:11px;color:var(--chalk-soft)}
+.stpick .stk{font-size:13px}
+.stamppal .stk::after,.stpick .stk::after,.bk .stk::after,.gcard .stk::after,.ps-c .stk::after,.item .stk::after,.ab-item .stk::after{display:none}
+.bk .stk,.gcard .stk,.item .stk{font-size:11.5px;padding:3px 7px 3px 3px;white-space:normal;text-align:left}
+.bk .stk svg,.item .stk svg{width:20px;height:20px}
+.gcard .stk svg{width:16px;height:16px}
+.gfx-cards.one .gcard .stk{font-size:16px}
+.gfx-cards.one .gcard .stk svg{width:28px;height:28px}
+.seg.six{grid-template-columns:repeat(6,minmax(0,1fr))}
+.seg.six button{font-size:11.5px;min-height:38px;padding:0 1px}
 @media (prefers-reduced-motion:reduce){
+  .stampb{animation:none!important}
   .gfx-orb,.gfx-orb::before,.gcard.show{animation:none!important}
   .gcard{opacity:1;transform:none}
   [data-fx] .hs,.fxo::before,.fxo::after,.ru-emb,.ru-emb::before,.rankup{animation:none!important}
@@ -1093,7 +1141,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 <div class="app">
   <header class="topbar">
     <button type="button" class="tb-box tb-rate" id="tbRank" aria-label="ランキングを見る"><span class="emb" id="barEmb" aria-hidden="true"></span><b id="barRate">1500</b><span class="tb-sub" id="barTier">シルバー Ⅱ</span></button>
-    <button type="button" class="tb-me" id="homePlate" aria-label="プロフィールを開く"><span class="tb-title"><b id="barLv">Lv.1</b><span id="barTitle">ルーキー</span></span><span class="nm" id="barName">ななし</span><span class="coin" id="barCoins">0</span></button>
+    <button type="button" class="tb-me" id="homePlate" aria-label="プロフィールを開く"><span class="tb-title"><b id="barLv">Lv.1</b><span id="barTitle">ルーキー</span></span><span class="nm" id="barName">ななし</span><span class="tb-money"><span class="coin" id="barCoins">0</span><span class="jwl" id="barJewels">0</span></span></button>
     <button type="button" class="tb-box tb-daily" id="tbDaily" aria-label="今日のミッション"><small>DAILY</small><b id="tbDailyN">0/3</b><span class="tb-sub" id="tbDailyLeft">--:--</span></button>
   </header>
 
@@ -1437,7 +1485,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
       <button type="button" role="tab" id="tabShopChalk" aria-selected="false" aria-controls="shopGrid">チョーク</button>
       <button type="button" role="tab" id="tabShopBoard" aria-selected="false" aria-controls="shopBoards">黒板</button>
     </div>
-    <div class="gwallet" id="shopWallet"><span class="tkt" id="gTickets">0</span><span class="shd" id="gShards">0</span></div>
+    <div class="gwallet" id="shopWallet"><span class="jwl" id="gJewels">0</span><span class="tkt" id="gTickets">0</span><span class="shd" id="gShards">0</span></div>
     <p class="note" id="shopNote" style="margin:0"></p>
     <div class="gpanel" id="shopGacha" role="tabpanel">
       <div class="gbanner" id="gBanner">
@@ -1445,8 +1493,8 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
         <span class="gb-art" id="gbArt"></span>
       </div>
       <div class="gbtns">
-        <button type="button" class="btn gold" id="gPull1"><span>1回引く</span><span class="coin">150</span></button>
-        <button type="button" class="btn gold" id="gPull10"><span>10回引く</span><span class="coin">1500</span><small>SR以上が1つ確定</small></button>
+        <button type="button" class="btn gold" id="gPull1"><span>1回引く</span><span class="jwl">100</span></button>
+        <button type="button" class="btn gold" id="gPull10"><span>10回引く</span><span class="jwl">1000</span><small>SR以上が1つ確定</small></button>
       </div>
       <button type="button" class="btn primary big" id="gPullT" hidden>チケットで1回引く</button>
       <div class="gmore"><button type="button" class="btn sm" id="gRatesBtn" aria-expanded="false">提供割合</button><button type="button" class="btn sm" id="gShardBtn" aria-expanded="false">かけら交換所</button></div>
@@ -1486,6 +1534,11 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
       <div class="picks plates" id="platePicks"></div>
     </section>
     <section class="panel">
+      <h3>スタンプ <span class="tag mine" id="stampCount"></span></h3>
+      <p class="note" style="margin:0 0 10px">対戦中に送れるスタンプを8個まで選べます。</p>
+      <div class="stpick" id="stampPicks"></div>
+    </section>
+    <section class="panel">
       <h3>設定</h3>
       <div class="settings">
         <fieldset>
@@ -1493,6 +1546,13 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
           <div class="opts" id="soundOpts">
             <label><input type="radio" name="sound" value="on" id="snd-on"><span>オン</span></label>
             <label><input type="radio" name="sound" value="off" id="snd-off"><span>オフ</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>相手のスタンプ</legend>
+          <div class="opts" id="stampOpts">
+            <label><input type="radio" name="stampshow" value="on" id="stp-on"><span>表示する</span></label>
+            <label><input type="radio" name="stampshow" value="off" id="stp-off"><span>表示しない</span></label>
           </div>
         </fieldset>
       </div>
@@ -1562,11 +1622,12 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
       <p class="bk-s">集めた数で報酬がもらえる。手に入れた限定アイテムは、期間が終わっても図鑑に残ります。</p>
     </div>
     <ol class="miles" id="bkMiles"></ol>
-    <div class="seg five" role="tablist" aria-label="図鑑の種類" id="bkTabs">
+    <div class="seg six" role="tablist" aria-label="図鑑の種類" id="bkTabs">
       <button type="button" role="tab" data-bk="chalk" aria-selected="true" aria-controls="bkGrid">チョーク</button>
       <button type="button" role="tab" data-bk="board" aria-selected="false" aria-controls="bkGrid">黒板</button>
       <button type="button" role="tab" data-bk="title" aria-selected="false" aria-controls="bkGrid">称号</button>
       <button type="button" role="tab" data-bk="plate" aria-selected="false" aria-controls="bkGrid">プレート</button>
+      <button type="button" role="tab" data-bk="stamp" aria-selected="false" aria-controls="bkGrid">スタンプ</button>
       <button type="button" role="tab" data-bk="emblem" aria-selected="false" aria-controls="bkGrid">ランク</button>
     </div>
     <p class="note" id="bkNote" style="margin:0"></p>
@@ -1698,11 +1759,13 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
           <div class="tray" aria-hidden="true"></div>
         </div>
         <div class="controls">
+          <button type="button" class="btn stampbtn" id="stampBtn" aria-expanded="false" aria-controls="stampPal" aria-label="スタンプ" title="スタンプ"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 6h24a5 5 0 0 1 5 5v13a5 5 0 0 1-5 5H18l-8 7v-7H8a5 5 0 0 1-5-5V11a5 5 0 0 1 5-5z"/><circle cx="15" cy="16" r="1.8" fill="currentColor"/><circle cx="25" cy="16" r="1.8" fill="currentColor"/><path d="M14 21q6 5 12 0"/></svg></button>
           <button type="button" class="btn" id="shapeBtn" aria-expanded="false">分身・合成</button>
           <button type="button" class="btn end" id="resetBtn">最初から</button>
           <button type="button" class="btn danger end" id="resignBtn" hidden>投了</button>
           <button type="button" class="btn" id="exitBtn">ホームへ</button>
         </div>
+        <div class="stamppal" id="stampPal" hidden></div>
       </div>
       <div class="side-col">
         <section class="panel" id="roomPanel" hidden>
@@ -1762,7 +1825,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
     <p class="res-t" id="loginT">ログインボーナス</p>
     <p class="res-s" id="loginS"></p>
     <ol class="stamps" id="stamps"></ol>
-    <p class="lg-got" id="loginGotP"><span class="coin" id="loginGot"></span> を受け取りました</p>
+    <p class="lg-got" id="loginGotP"><span class="coin" id="loginGot"></span><span class="jwl" id="loginGotJ" hidden></span> を受け取りました</p>
     <button type="button" class="btn primary big" id="loginOk">OK</button>
   </div>
 </div>
@@ -2238,7 +2301,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/15-7';
+const APP_VERSION = '11/15-8';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -2434,7 +2497,8 @@ function myLook(){
   return {title: u.titles.includes(t) ? t : 'rookie', plate: u.plates.includes(pl) ? pl : 'chalk'};
 }
 // ----- Coins, missions, chalk colours -----
-const GAME_COINS = 10, WIN_COINS = 10, GAME_COIN_CAP = 200, DAILY_BONUS = 50, DAY_RESET_H = 4;
+const GAME_COINS = 10, WIN_COINS = 10, GAME_COIN_CAP = 200, DAILY_BONUS = 50, DAILY_BONUS_J = 20, DAY_RESET_H = 4;
+const missionJewels = m => m.coins >= 300 ? 50 : m.coins >= 150 ? 30 : 20;
 const rewards = new Map();   // game record key -> coins actually given for it
 const DAILY = [
   {id:'d_g1', name:'オンラインで1試合遊ぶ', key:'games', goal:1, coins:30},
@@ -2527,6 +2591,37 @@ const BOARDS = [
   {id:'blegend', name:'伝説の黒板', price:0, rate:2000},
 ];
 for (let m = 1; m <= 12; m++) BOARDS.push({id: 'bm' + m, name: `${SEASON_THEMES[m][0]}の黒板`, price: 0, season: m});
+// ----- Battle stamps: fixed phrases with a chalk face (no free text) -----
+const STAMP_FACES = {
+  smile: '<circle cx="14" cy="18" r="1.6" fill="currentColor"/><circle cx="26" cy="18" r="1.6" fill="currentColor"/><path d="M13 25q7 6 14 0"/>',
+  grin: '<path d="M11 19q3-4 6 0M23 19q3-4 6 0"/><path d="M13 24h14q-1 7-7 7t-7-7z"/>',
+  sweat: '<circle cx="14" cy="18" r="1.6" fill="currentColor"/><circle cx="26" cy="18" r="1.6" fill="currentColor"/><path d="M15 27h10"/><path d="M34 8q3 4 0 6q-3-2 0-6z"/>',
+  shock: '<circle cx="14" cy="18" r="2.6"/><circle cx="26" cy="18" r="2.6"/><ellipse cx="20" cy="28" rx="3" ry="4"/>',
+  fire: '<path d="M11 15l6 3M29 15l-6 3"/><circle cx="14" cy="20" r="1.4" fill="currentColor"/><circle cx="26" cy="20" r="1.4" fill="currentColor"/><path d="M15 28h10"/><path d="M20 1q6 4 2 9q-2-2-2-4q-2 2-2 4q-4-5 2-9z"/>',
+  bow: '<path d="M11 19h6M23 19h6"/><path d="M16 26q4 3 8 0"/><path d="M3 30l4-2M37 30l-4-2"/>',
+  smug: '<path d="M11 18h6M23 18h6"/><path d="M12 18q2 2.5 4 0M24 18q2 2.5 4 0"/><path d="M14 26q7 3 12-2"/>',
+  star: '<path d="M14 14.5l1.1 2.5 2.6.2-2 1.7.7 2.6-2.4-1.5-2.4 1.5.7-2.6-2-1.7 2.6-.2zM26 14.5l1.1 2.5 2.6.2-2 1.7.7 2.6-2.4-1.5-2.4 1.5.7-2.6-2-1.7 2.6-.2z" fill="currentColor" stroke-width="1"/><path d="M14 25q6 6 12 0"/>',
+  blush: '<path d="M11 19q3-3 6 0M23 19q3-3 6 0"/><path d="M17 26q3 2 6 0"/><circle cx="10.5" cy="24" r="2.6" fill="currentColor" stroke="none" opacity=".35"/><circle cx="29.5" cy="24" r="2.6" fill="currentColor" stroke="none" opacity=".35"/>',
+  think: '<circle cx="16" cy="16" r="1.6" fill="currentColor"/><circle cx="27" cy="16" r="1.6" fill="currentColor"/><path d="M14 27q2-2 4 0t4 0t4 0"/><path d="M33 3q4 0 4 3.5t-4 3.5v2.5M33 16v.4"/>',
+  crown: '<circle cx="14" cy="20" r="1.6" fill="currentColor"/><circle cx="26" cy="20" r="1.6" fill="currentColor"/><path d="M14 27q6 4 12 0"/><path d="M11 7l3 4 6-7 6 7 3-4v5H11z"/>',
+  angry: '<path d="M10 14l7 4M30 14l-7 4"/><circle cx="14" cy="20" r="1.5" fill="currentColor"/><circle cx="26" cy="20" r="1.5" fill="currentColor"/><path d="M14 29q6-5 12 0"/><path d="M31 4l3 3M35 3l-1 4M37 7l-4 0"/>',
+};
+const STAMPS = [
+  {id: 'st_yoro', text: 'よろしく！', face: 'smile', c: '#f3d774'},
+  {id: 'st_nice', text: 'ナイス！', face: 'grin', c: '#b8e6a3'},
+  {id: 'st_yaru', text: 'やるな…', face: 'sweat', c: '#9fd0f0'},
+  {id: 'st_shimatta', text: 'しまった！', face: 'shock', c: '#ffa48c'},
+  {id: 'st_mada', text: 'まだまだ！', face: 'fire', c: '#ff9a5a'},
+  {id: 'st_gg', text: 'GG', face: 'bow', c: '#c8b4f4'},
+  {id: 'st_thanks', text: 'ありがとう', face: 'blush', c: '#f4a6bb'},
+  {id: 'st_doya', text: 'ドヤッ', face: 'smug', c: '#f2cf5b'},
+].map(x => Object.assign(x, {name: `「${x.text}」`, base: true}));
+const STAMP_DEFAULT = STAMPS.map(x => x.id);
+function stampHTML(st){
+  if (!st) return '';
+  return `<span class="stk${st.glow ? ' glow' : ''}" style="--sc:${st.c}"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="21" r="15"/>${STAMP_FACES[st.face] || ''}</svg><b>${st.text}</b></span>`;
+}
+
 // Gacha-only items (R / SR / SSR). Looks (gradients, plates, boards) are generated at startup from stops / look.
 const GACHA = [
   {kind:'chalk', id:'meteor', name:'流星チョーク', rar:'SSR', color:'#cfe0ff', stops:['#e6efff','#7fa8ff','#ffffff','#5b7fe8','#d6e4ff'], fx:'meteor', fxc:'#ffffff', fxc2:'#cfe0ff', g:'rgba(140,180,255,.9)'},
@@ -2549,6 +2644,10 @@ const GACHA = [
   {kind:'plate', id:'pdot', name:'水玉', rar:'R', look:{c:['#ffd6e4','#ffc6da','#ffd6e4'], text:'#4b1d2c', acc:'#b53a66', edge:'#e08aa6', deco:'dots'}},
   {kind:'title', id:'tartist', name:'黒板アーティスト', rar:'R'},
   {kind:'title', id:'tlucky', name:'ラッキー', rar:'R'},
+  {kind:'stamp', id:'st_sugoi', name:'「すごい！」', text:'すごい！', face:'star', c:'#ffe08a', rar:'R'},
+  {kind:'stamp', id:'st_ehehe', name:'「えへへ」', text:'えへへ', face:'blush', c:'#ffc2d6', rar:'R'},
+  {kind:'stamp', id:'st_kangae', name:'「考え中…」', text:'考え中…', face:'think', c:'#cfd8e3', rar:'R'},
+  {kind:'stamp', id:'st_kami', name:'「神の一手」', text:'神の一手', face:'crown', c:'#ffd36b', glow:true, rar:'SR'},
 ];
 // Limited-time events take turns: 10 days on, 4 days of results. Each has its own items, boosted gear and gacha pickups.
 const EVENT_TPL = [
@@ -2588,6 +2687,7 @@ function addItem(it, extra){
   if (it.kind === 'chalk') CHALKS.push(Object.assign({price: 0}, o, it.stops ? {grad: 'cg-' + it.id} : {}));
   else if (it.kind === 'board') BOARDS.push(Object.assign({price: 0}, o));
   else if (it.kind === 'plate') PLATES.push(Object.assign({own: it.id}, o));
+  else if (it.kind === 'stamp') STAMPS.push(o);
   else TITLES.push(Object.assign({own: it.id}, o));
 }
 GACHA.forEach(it => addItem(it, {gacha: it.rar, need: `ガチャ（${it.rar}）`}));
@@ -2597,6 +2697,7 @@ TITLES.push({id: 'tdebut', name: 'わりばしデビュー', need: 'はじめて
 const chalkId = id => CHALKS.some(c => c.id === id) ? id : 'auto';
 const chalkOf = id => CHALKS.find(c => c.id === id && c.color) || null;
 const myCoins = () => Math.max(0, Math.floor(+((net.profile || {}).coins) || 0));
+const myJewels = () => Math.max(0, Math.floor(+((net.profile || {}).jewels) || 0));
 function hasChalk(id, prof){
   const p = prof || net.profile || {}, c = CHALKS.find(x => x.id === id);
   if (!c) return false;
@@ -2648,7 +2749,21 @@ function itemArt(kind, id){
   if (kind === 'plate') return `<span class="pswatch pl-${id}"></span>`;
   if (kind === 'title') return '<span class="tt">称号</span>';
   if (kind === 'emblem') return `<span class="emb r${id.slice(1)}">${emblemSVG(+id.slice(1), 0)}</span>`;
+  if (kind === 'stamp') return stampHTML(STAMPS.find(x => x.id === id));
   return '';
+}
+const hasStamp = (id, prof) => { const st = STAMPS.find(x => x.id === id); return !!st && (!!st.base || !!((prof || net.profile || {}).owned || {})[id]); };
+// The eight stamps in my palette (saved as "id,id,…").
+function myStamps(){
+  const p = net.profile || {}, raw = String(p.stampset || lsGet('waribashi-stamps') || ''), ids = raw ? raw.split(',').filter(id => hasStamp(id)) : [];
+  return ids.length ? ids.slice(0, 8) : STAMP_DEFAULT.slice();
+}
+function saveStamps(ids){
+  const v = ids.join(',');
+  lsSet('waribashi-stamps', v);
+  net.profile = Object.assign({}, net.profile || {}, {stampset: v});
+  if (net.fb) net.fb.update(net.fb.ref(net.fb.db, 'players/' + net.uid), {stampset: v}).catch(() => {});
+  render();
 }
 function itemBanner(art, name, sub){
   const d = document.createElement('div');
@@ -2687,7 +2802,7 @@ function missionState(){
   const bonusState = d.bonus ? 'done' : daily.length && daily.every(m => m.state === 'done') ? 'ready' : 'todo';
   const normal = MISSIONS.map(m => {
     const v = st[m.key] || 0;
-    return Object.assign({}, m, {cur: Math.min(v, m.goal), raw: v, state: done[m.id] ? 'done' : v >= m.goal ? 'ready' : 'todo'});
+    return Object.assign({}, m, {cur: Math.min(v, m.goal), raw: v, jewels: missionJewels(m), state: done[m.id] ? 'done' : v >= m.goal ? 'ready' : 'todo'});
   });
   const readyDaily = daily.filter(m => m.state === 'ready').length + (bonusState === 'ready' ? 1 : 0);
   const readyNormal = normal.filter(m => m.state === 'ready').length;
@@ -2860,9 +2975,10 @@ const levelBase = L => 50 * L * (L - 1);
 // Tiers 8, 15, 22 and 30 give this month's plate, title, board and effect chalk; tiers 31-40 are bonus coins.
 const SEASON_ITEMS = {8: 'plate', 15: 'title', 22: 'board', 30: 'chalk'};
 function seasonReward(t){
-  if (t > SEASON_TIERS) return {coins: 100, bonus: true};
+  if (t > SEASON_TIERS) return {coins: 100, jewels: 30, bonus: true};
   const item = SEASON_ITEMS[t];
-  return {item, coins: t === 30 ? 300 : item ? 0 : t === 25 ? 250 : t % 10 === 0 ? 200 : t % 5 === 0 ? 150 : t % 3 === 0 ? 80 : 50};
+  return {item, coins: t === 30 ? 300 : item ? 0 : t === 25 ? 250 : t % 10 === 0 ? 200 : t % 5 === 0 ? 150 : t % 3 === 0 ? 80 : 50,
+    jewels: ({5: 50, 10: 100, 20: 100, 25: 150})[t] || 0};
 }
 const seasonItemId = (kind, m) => ({plate: 'pm', title: 'tm', board: 'bm', chalk: 'sea'})[kind] + m;
 function seasonItems(m){
@@ -2902,37 +3018,38 @@ function addXP(n){
 }
 async function claimSeason(){
   const sid = seasonId(), month = seasonMonth();
-  let coins = 0, items = [];
+  let coins = 0, jewels = 0, items = [];
   const res = await profileTx(cur => {
     const v = cur.lv || {};
     if (v.sid !== sid) return undefined;
     const reached = seasonTierOf(+v.sxp || 0), claimed = Object.assign({}, v.claimed || {}), owned = Object.assign({}, cur.owned || {});
-    coins = 0; items = [];
+    coins = 0; jewels = 0; items = [];
     for (let t = 1; t <= reached; t++) if (!claimed['t' + t]) {
       claimed['t' + t] = true;
       const r = seasonReward(t);
-      coins += r.coins || 0;
+      coins += r.coins || 0; jewels += r.jewels || 0;
       if (r.item) { owned[seasonItemId(r.item, month)] = true; items.push(r.item); }
     }
     if (!coins && !items.length) return undefined;
     cur.lv = Object.assign({}, v, {claimed});
     cur.coins = (+cur.coins || 0) + coins;
+    if (jewels) cur.jewels = (+cur.jewels || 0) + jewels;
     if (items.length) cur.owned = owned;
     cur.st = Object.assign({}, cur.st || {}, {seasonBest: Math.max(+((cur.st || {}).seasonBest) || 0, Math.min(SEASON_TIERS, reached))});
     return cur;
   });
-  return res && res.committed ? {coins, items} : null;
+  return res && res.committed ? {coins, jewels, items} : null;
 }
 
 // ----- Collection book: everything you can own, with rewards for how much of it you have -----
 // Other months' season items count only once owned; the book's own rewards are not counted.
 const BOOK_MILES = [
-  {p: 25, coins: 300, text: 'コイン300'},
-  {p: 50, coins: 500, own: 'pbook', kind: 'plate', text: 'プレート「図鑑」＋コイン500'},
+  {p: 25, coins: 300, jewels: 100, text: 'コイン300＋ジュエル100'},
+  {p: 50, coins: 500, jewels: 200, own: 'pbook', kind: 'plate', text: 'プレート「図鑑」＋コイン500＋ジュエル200'},
   {p: 75, own: 'prism', kind: 'chalk', text: 'プリズムチョーク'},
   {p: 100, coins: 1000, own: 'thakase', kind: 'title', text: '称号「わりばし博士」＋コイン1000'},
 ];
-const BOOK_TABS = {chalk: 'チョーク', board: '黒板', title: '称号', plate: 'プレート', emblem: 'ランクのエンブレム'};
+const BOOK_TABS = {chalk: 'チョーク', board: '黒板', title: '称号', plate: 'プレート', stamp: 'スタンプ', emblem: 'ランクのエンブレム'};
 function bookItems(prof){
   const p = prof || net.profile || {}, u = unlocked(statsOf(p)), st = u.st, month = seasonMonth(), out = [];
   const add = (cat, it, have, how) => {
@@ -2943,6 +3060,7 @@ function bookItems(prof){
   BOARDS.forEach(b => add('board', b, hasBoard(b.id, p), howToGet(b, 'board')));
   TITLES.forEach(t => add('title', t, u.titles.includes(t.id), t.need));
   PLATES.forEach(x => add('plate', x, u.plates.includes(x.id), x.need));
+  STAMPS.forEach(x => add('stamp', x, hasStamp(x.id, p), x.gacha ? howToGet(x) : x.need || 'はじめから'));
   RANKS.forEach((k, i) => add('emblem', {id: 'r' + i, name: k.name}, st.maxRate >= k.min, i ? `最高レート${k.min}` : 'はじめから'));
   const counted = out.filter(x => x.count);
   return {items: out, have: counted.filter(x => x.have).length, total: counted.length};
@@ -2956,6 +3074,7 @@ async function claimBook(pct){
     if (bk['m' + pct] || bookPct(bookItems(cur)) < pct) return undefined;
     cur.book = Object.assign({}, bk, {['m' + pct]: true});
     if (m.coins) cur.coins = (+cur.coins || 0) + m.coins;
+    if (m.jewels) cur.jewels = (+cur.jewels || 0) + m.jewels;
     if (m.own) cur.owned = Object.assign({}, cur.owned || {}, {[m.own]: true});
     return cur;
   });
@@ -2997,12 +3116,12 @@ function renderBook(){
   }
   $$('#bkTabs [data-bk]').forEach(t => t.setAttribute('aria-selected', String(t.dataset.bk === tab)));
   const list = b.items.filter(x => x.cat === tab), look = myLook(), grid = $('#bkGrid');
-  $('#bkNote').textContent = `${BOOK_TABS[tab]}　${list.filter(x => x.have).length} / ${list.length}` + (tab === 'emblem' ? '・最高レートで集まる' : '・持っているものは押すと使える');
+  $('#bkNote').textContent = `${BOOK_TABS[tab]}　${list.filter(x => x.have).length} / ${list.length}` + (tab === 'emblem' ? '・最高レートで集まる' : tab === 'stamp' ? '・使うスタンプはマイページで選べる' : '・持っているものは押すと使える');
   const using = {chalk: myChalk(), board: myBoard(), title: look.title, plate: look.plate}[tab];
   if (unchanged(grid, JSON.stringify([tab, list.map(x => [x.id, x.have]), using, typedName()]))) return;
   grid.innerHTML = '';
   list.forEach(it => {
-    const can = it.have && tab !== 'emblem', el = document.createElement(can ? 'button' : 'div');
+    const can = it.have && tab !== 'emblem' && tab !== 'stamp', el = document.createElement(can ? 'button' : 'div');
     if (can) el.type = 'button';
     el.className = 'bk' + (it.have ? '' : ' lock') + (can && using === it.id ? ' on' : '');
     el.innerHTML = `<span class="bk-a">${itemArt(tab, it.id)}</span><span class="bk-n"></span><span class="bk-h"></span>`;
@@ -3024,8 +3143,87 @@ function renderBook(){
 }
 
 
-// ===================== Gacha (coins only) =====================
-const GACHA_COST = 150, GACHA_SHARD = {R: 2, SR: 10, SSR: 50}, SHARD_COST = {R: 10, SR: 60, SSR: 300}, GACHA_RATE = {SSR: 3, SR: 17, R: 80};
+
+// ===================== Battle stamps =====================
+const STAMP_GAP = 3000;
+const stampMuted = () => lsGet('waribashi-stampmute') === '1';
+const stampsAllowed = () => !!G && !ui.puzzle && (net.on || settings.mode === 'cpu' || !!ui.boss || !!ui.stage);
+function showStamp(k, id){
+  const st = STAMPS.find(x => x.id === id), seat = $('#seat' + k);
+  if (!st || !seat) return;
+  const old = seat.querySelector('.stampb');
+  if (old) old.remove();
+  const b = document.createElement('div');
+  b.className = 'stampb'; b.dataset.id = id;
+  b.innerHTML = stampHTML(st);
+  seat.append(b);
+  sfx('tap');
+  setTimeout(() => { b.classList.add('out'); setTimeout(() => b.remove(), 320); }, 2600);
+}
+function sendStamp(id){
+  if (!stampsAllowed() || Date.now() - (ui.stampAt || 0) < STAMP_GAP) return;
+  ui.stampAt = Date.now();
+  $('#stampPal').hidden = true; $('#stampBtn').setAttribute('aria-expanded', 'false');
+  showStamp(0, id);
+  if (net.on && net.fb && net.code) net.fb.update(net.fb.ref(net.fb.db, `rooms/${net.code}/stamp/${net.uid}`), {id, at: serverNow()}).catch(() => {});
+  else { const r = CPU_LINES.reply[id]; if (r) cpuSay([r], .75, 1100); }
+  renderStampPal();
+  setTimeout(renderStampPal, STAMP_GAP + 50);
+}
+function renderStampPal(){
+  const pal = $('#stampPal'), wait = Date.now() - (ui.stampAt || 0) < STAMP_GAP, ids = myStamps();
+  if (!unchanged(pal, JSON.stringify([ids, wait]))) {
+    pal.innerHTML = '';
+    ids.forEach(id => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.disabled = wait; b.dataset.id = id;
+      b.innerHTML = stampHTML(STAMPS.find(x => x.id === id));
+      b.setAttribute('aria-label', 'スタンプ：' + STAMPS.find(x => x.id === id).text);
+      b.addEventListener('click', () => sendStamp(id));
+      pal.append(b);
+    });
+  }
+}
+// Stamps from the other players in the room (only ones sent while I'm here).
+function handleRoomStamps(room){
+  const st = room.stamp || {};
+  ui.stampSeen = ui.stampSeen || {};
+  for (const [uid, v] of Object.entries(st)) {
+    if (uid === net.uid || !v || !v.id) continue;
+    const key = net.code + ':' + uid, at = +v.at || 0, first = ui.stampSeen[key] === undefined;
+    if (!first && ui.stampSeen[key] >= at) continue;
+    ui.stampSeen[key] = at;
+    if ((first && serverNow() - at > 6000) || serverNow() - at > 10000 || stampMuted()) continue;
+    setTimeout(() => { const k = G && G.seats ? G.seats.indexOf(uid) : -1; if (k > 0 && ui.screen === 'game') showStamp(k, v.id); }, 0);
+  }
+}
+// The CPU talks back now and then (not in puzzles, not in 2-player games on one device).
+const CPU_LINES = {start: ['st_yoro'], kill: ['st_doya', 'st_nice'], hurt: ['st_shimatta', 'st_yaru'], win: ['st_doya', 'st_gg'], lose: ['st_gg', 'st_yaru'],
+  reply: {st_yoro: 'st_yoro', st_gg: 'st_gg', st_thanks: 'st_thanks', st_doya: 'st_yaru', st_nice: 'st_thanks', st_mada: 'st_mada', st_shimatta: 'st_doya', st_yaru: 'st_doya', st_sugoi: 'st_thanks', st_kami: 'st_shimatta'}};
+const cpuTalks = () => !net.on && !!G && G.n === 2 && !ui.puzzle && (settings.mode === 'cpu' || !!ui.boss || !!ui.stage);
+function cpuSay(list, chance, delay){
+  if (!cpuTalks() || Math.random() > chance) return;
+  const id = list[Math.floor(Math.random() * list.length)], gid = gameId();
+  setTimeout(() => { if (cpuTalks() && gameId() === gid && ui.screen === 'game') showStamp(1, id); }, delay || 800);
+}
+function cpuReact(){
+  if (!cpuTalks()) return;
+  const gid = gameId();
+  if (ui.reactGid !== gid) { ui.reactGid = gid; ui.reactPly = G.ply; ui.reactOver = false; if (!G.ply) cpuSay(CPU_LINES.start, .5, 1200); return; }
+  if (G.ply > ui.reactPly) {
+    const news = (G.log || []).filter(e => e.n > ui.reactPly);
+    ui.reactPly = G.ply;
+    const ko = news.find(e => e.k === 'attack' && e.a === 0);
+    if (ko && !G.over) cpuSay(ko.p === 1 ? CPU_LINES.kill : CPU_LINES.hurt, .4, 900);
+  } else ui.reactPly = G.ply;
+  if (G.over && !ui.reactOver) {
+    ui.reactOver = true;
+    if (G.over.type === 'win') cpuSay(G.over.winner === 0 ? CPU_LINES.lose : CPU_LINES.win, .7, 700);
+  }
+}
+
+// ===================== Gacha (jewels) =====================
+const GACHA_COST = 100, GACHA_SHARD = {R: 2, SR: 10, SSR: 50}, SHARD_COST = {R: 10, SR: 60, SSR: 300}, GACHA_RATE = {SSR: 3, SR: 17, R: 80};
 // Weights in percent. During an event its pickups take half of their rarity's share.
 function gachaPool(){
   const e = eventNow(), pick = e && e.live ? EVENT_TPL[e.tpl].pick : [], out = [];
@@ -3053,12 +3251,12 @@ async function pullGacha(n, ticket){
   const rolls = rollGacha(n), cost = ticket ? 0 : n * GACHA_COST;
   let out = null;
   const res = await profileTx(cur => {
-    const coins = +cur.coins || 0, tk = +cur.tickets || 0;
-    if (ticket ? tk < n : coins < cost) return undefined;
+    const jw = +cur.jewels || 0, tk = +cur.tickets || 0;
+    if (ticket ? tk < n : jw < cost) return undefined;
     const owned = Object.assign({}, cur.owned || {});
     let shards = +cur.shards || 0;
     out = rolls.map(it => { const dup = !!owned[it.id]; if (dup) shards += GACHA_SHARD[it.rar]; else owned[it.id] = true; return {it, dup}; });
-    if (ticket) cur.tickets = tk - n; else cur.coins = coins - cost;
+    if (ticket) cur.tickets = tk - n; else cur.jewels = jw - cost;
     cur.owned = owned; cur.shards = shards;
     cur.st = Object.assign({}, cur.st || {}, {gachaPulls: (+((cur.st || {}).gachaPulls) || 0) + n});
     return cur;
@@ -3083,7 +3281,7 @@ async function doPull(n, ticket){
   ui.pulling = true;
   const res = await pullGacha(n, ticket);
   ui.pulling = false;
-  if (res === 'short') toast(ticket ? 'チケットがありません' : 'コインが足りません', true);
+  if (res === 'short') toast(ticket ? 'チケットがありません' : 'ジュエルが足りません', true);
   else if (Array.isArray(res)) showGacha(res, n, ticket);
   render();
 }
@@ -3121,10 +3319,10 @@ function showGacha(res, n, ticket){
     close.type = 'button'; close.className = 'btn primary'; close.textContent = '閉じる';
     close.addEventListener('click', () => { el.remove(); render(); });
     btns.append(close);
-    const p = net.profile || {}, can = ticket ? (+p.tickets || 0) >= n : myCoins() >= n * GACHA_COST;
+    const p = net.profile || {}, can = ticket ? (+p.tickets || 0) >= n : myJewels() >= n * GACHA_COST;
     if (can) {
       const again = document.createElement('button');
-      again.type = 'button'; again.className = 'btn gold'; again.textContent = ticket ? 'もう一度（チケット）' : `もう一度（${n * GACHA_COST}コイン）`;
+      again.type = 'button'; again.className = 'btn gold'; again.textContent = ticket ? 'もう一度（チケット）' : `もう一度（${n * GACHA_COST}ジュエル）`;
       again.addEventListener('click', () => { el.remove(); doPull(n, ticket); });
       btns.append(again);
     }
@@ -3156,12 +3354,13 @@ function renderGacha(){
   const picks = live ? tpl.pick.map(id => GACHA.find(x => x.id === id)) : [];
   $('#gbTag').textContent = live ? 'ピックアップ' : 'GACHA';
   $('#gbH').innerHTML = live ? `${tpl.short}<br>ピックアップ` : 'チョーク<br>ガチャ';
-  $('#gbS').textContent = live ? `「${picks.map(x => x.name).join('」「')}」が出やすい！・のこり${fmtDur(eventLeft(e))}` : 'ここでしか出ないチョーク・黒板・プレート。SSRは3%';
+  $('#gbS').textContent = live ? `「${picks.map(x => x.name).join('」「')}」が出やすい！・のこり${fmtDur(eventLeft(e))}` : 'ここでしか出ないチョーク・黒板・スタンプ。SSRは3%';
   const art = $('#gbArt'), ak = live ? tpl.key : 'std';
   if (art.dataset.k !== ak) { art.dataset.k = ak; art.innerHTML = (live ? picks.filter(x => x.kind === 'chalk') : ['meteor', 'phoenix', 'mankai'].map(id => GACHA.find(x => x.id === id))).map(x => chalkFig(CHALKS.find(c => c.id === x.id))).join(''); }
   const set = (id, can, label) => { const b = $(id); b.disabled = !can || !!ui.pulling; b.firstElementChild.textContent = armed === id.slice(1) ? 'もう一度押すと引く' : label; };
-  set('#gPull1', coins >= GACHA_COST, '1回引く');
-  set('#gPull10', coins >= GACHA_COST * 10, '10回引く');
+  const jw = myJewels();
+  set('#gPull1', jw >= GACHA_COST, '1回引く');
+  set('#gPull10', jw >= GACHA_COST * 10, '10回引く');
   const bt = $('#gPullT');
   bt.hidden = tk < 1; bt.disabled = !!ui.pulling;
   bt.textContent = armed === 'gPullT' ? 'もう一度押すと引く' : `チケットで1回引く（${tk}枚）`;
@@ -3221,7 +3420,7 @@ function renderGacha(){
 
 // ===================== Daily shop: four slots, new every morning =====================
 function dailyGoods(d){
-  const out = [{slot: 't1', name: 'ガチャチケット', tickets: 1, price: 100, was: GACHA_COST}, {slot: 's10', name: 'かけら×10', shards: 10, price: 180}];
+  const out = [{slot: 't1', name: 'ガチャチケット', tickets: 1, price: 120}, {slot: 's10', name: 'かけら×10', shards: 10, price: 180}];
   Object.values(d.items || {}).forEach((id, i) => {   // the database may hand an array back as an object
     const c = CHALKS.find(x => x.id === id), b = BOARDS.find(x => x.id === id), it = c || b;
     if (it && it.price) out.push({slot: 'i' + i, item: it, kind: c ? 'chalk' : 'board', name: it.name, price: Math.round(it.price * 0.7), was: it.price});
@@ -3259,7 +3458,7 @@ async function buyDaily(slot){
   else if (res) toast('買えませんでした', true);
 }
 function goodArt(g){
-  return g.tickets ? '<span class="gicon tk"></span>' : g.shards ? '<span class="gicon sh"></span>' : g.coins ? '<span class="gicon co"></span>'
+  return g.tickets ? '<span class="gicon tk"></span>' : g.shards ? '<span class="gicon sh"></span>' : g.jewels ? '<span class="gicon jw"></span>' : g.coins ? '<span class="gicon co"></span>'
     : g.kind === 'board' ? boardSwatch(g.item.id, chalkOf(myChalk())) : chalkFig(g.item);
 }
 function renderDaily(){
@@ -3314,12 +3513,12 @@ const eventLeft = e => msUntilDay(dayStr(dayNum(e.end) + 1));
 function fmtDur(ms){ ms = Math.max(0, ms); const d = Math.floor(ms / 86400000), h = Math.floor(ms % 86400000 / 3600000); return d ? `${d}日${h}時間` : fmtLeft(ms); }
 const evItem = (tpl, kind) => EVENT_TPL[tpl].items.find(x => x.kind === kind && !x.rank);
 const myEv = (e, prof) => (e && ((prof || net.profile || {}).evs || {})[e.id]) || {};
-const EV_MILES = [{pt: 150, coins: 100}, {pt: 400, tickets: 1}, {pt: 800, item: 'title'}, {pt: 1300, coins: 300}, {pt: 2000, item: 'plate'},
-  {pt: 3000, tickets: 2}, {pt: 4500, item: 'board'}, {pt: 6000, tickets: 3, shards: 30}];
+const EV_MILES = [{pt: 150, coins: 100}, {pt: 400, tickets: 1}, {pt: 800, item: 'title'}, {pt: 1300, coins: 200, jewels: 100}, {pt: 2000, item: 'plate'},
+  {pt: 3000, tickets: 2}, {pt: 4500, item: 'board'}, {pt: 6000, tickets: 2, jewels: 200, shards: 30}];
 const EV_SHOP = [{id: 'chalk', item: 'chalk', cost: 2500, limit: 1}, {id: 'tk', name: 'ガチャチケット', tickets: 1, cost: 300, limit: 5},
-  {id: 'sh', name: 'かけら×10', shards: 10, cost: 200, limit: 5}, {id: 'co', name: 'コイン100', coins: 100, cost: 150, limit: 10}];
-const EV_RANK = [{max: 3, title: 3, tickets: 5}, {max: 10, title: 10, tickets: 3}, {max: 50, tickets: 2}, {max: Infinity, tickets: 1}];
-const rewardText = r => [r.coins ? `コイン${r.coins}` : '', r.tickets ? `チケット×${r.tickets}` : '', r.shards ? `かけら×${r.shards}` : ''].filter(Boolean).join('＋');
+  {id: 'jw', name: 'ジュエル50', jewels: 50, cost: 250, limit: 6}, {id: 'sh', name: 'かけら×10', shards: 10, cost: 200, limit: 5}, {id: 'co', name: 'コイン100', coins: 100, cost: 150, limit: 10}];
+const EV_RANK = [{max: 3, title: 3, tickets: 5, jewels: 500}, {max: 10, title: 10, tickets: 3, jewels: 300}, {max: 50, tickets: 2, jewels: 150}, {max: Infinity, tickets: 1, jewels: 50}];
+const rewardText = r => [r.coins ? `コイン${r.coins}` : '', r.jewels ? `ジュエル${r.jewels}` : '', r.tickets ? `チケット×${r.tickets}` : '', r.shards ? `かけら×${r.shards}` : ''].filter(Boolean).join('＋');
 // Boost from what I'm wearing (chalk + board), capped.
 function evBoost(){
   const e = eventNow();
@@ -3374,16 +3573,16 @@ async function claimEvMiles(){
   let got = null;
   const res = await profileTx(cur => {
     const evs = Object.assign({}, cur.evs || {}), v = Object.assign({}, evs[e.id] || {}), claimed = Object.assign({}, v.claimed || {}), pt = +v.pt || 0;
-    const g = {coins: 0, tickets: 0, shards: 0, items: []};
+    const g = {coins: 0, jewels: 0, tickets: 0, shards: 0, items: []};
     EV_MILES.forEach((m, i) => {
       if (pt < m.pt || claimed['m' + i]) return;
       claimed['m' + i] = true;
-      g.coins += m.coins || 0; g.tickets += m.tickets || 0; g.shards += m.shards || 0;
+      g.coins += m.coins || 0; g.jewels += m.jewels || 0; g.tickets += m.tickets || 0; g.shards += m.shards || 0;
       if (m.item) g.items.push(evItem(e.tpl, m.item).id);
     });
-    if (!g.coins && !g.tickets && !g.shards && !g.items.length) return undefined;
+    if (!g.coins && !g.jewels && !g.tickets && !g.shards && !g.items.length) return undefined;
     v.claimed = claimed; evs[e.id] = v; cur.evs = evs;
-    cur.coins = (+cur.coins || 0) + g.coins; cur.tickets = (+cur.tickets || 0) + g.tickets; cur.shards = (+cur.shards || 0) + g.shards;
+    cur.coins = (+cur.coins || 0) + g.coins; cur.jewels = (+cur.jewels || 0) + g.jewels; cur.tickets = (+cur.tickets || 0) + g.tickets; cur.shards = (+cur.shards || 0) + g.shards;
     if (g.items.length) cur.owned = Object.assign({}, cur.owned || {}, Object.fromEntries(g.items.map(id => [id, true])));
     got = g;
     return cur;
@@ -3401,6 +3600,7 @@ async function buyEvShop(sid){
     if (g.tickets) cur.tickets = (+cur.tickets || 0) + g.tickets;
     if (g.shards) cur.shards = (+cur.shards || 0) + g.shards;
     if (g.coins) cur.coins = (+cur.coins || 0) + g.coins;
+    if (g.jewels) cur.jewels = (+cur.jewels || 0) + g.jewels;
     if (it) cur.owned = Object.assign({}, cur.owned || {}, {[it.id]: true});
     return cur;
   });
@@ -3415,10 +3615,11 @@ async function claimEvRank(){
     if (claimed.rank || !(+v.pt > 0)) return undefined;
     claimed.rank = true; v.claimed = claimed; v.rank = rank === Infinity ? 0 : rank; evs[e.id] = v; cur.evs = evs;
     cur.tickets = (+cur.tickets || 0) + r.tickets;
+    cur.jewels = (+cur.jewels || 0) + r.jewels;
     if (title) cur.owned = Object.assign({}, cur.owned || {}, {[title.id]: true});
     return cur;
   });
-  return res && res.committed ? {rank, tickets: r.tickets, title} : null;
+  return res && res.committed ? {rank, tickets: r.tickets, jewels: r.jewels, title} : null;
 }
 function evBoostItems(t){
   return Object.entries(t.boost).sort((a, b) => b[1] - a[1]).map(([id, pct]) => {
@@ -3527,7 +3728,7 @@ function renderEvent(){
       const li = document.createElement('li'), title = r.title ? t.items.find(x => x.rank === r.title) : null;
       li.innerHTML = '<span></span><span></span>';
       li.children[0].textContent = r.max === Infinity ? '参加賞' : `${i ? EV_RANK[i - 1].max + 1 : 1}〜${r.max}位`;
-      li.children[1].textContent = (title ? `称号「${title.name}」＋` : '') + `チケット×${r.tickets}`;
+      li.children[1].textContent = (title ? `称号「${title.name}」＋` : '') + rewardText(r);
       rr.append(li);
     });
   }
@@ -3567,7 +3768,7 @@ const GUIDE = [
   {d: 7, id: 'gold', name: 'ゴールドに届く（レート1550）', ok: (p, st) => st.maxRate >= 1550, tickets: 2},
   {d: 7, id: 'book', name: '図鑑を30%にする', ok: p => bookPct(bookItems(p)) >= 30, coins: 300},
 ];
-const GUIDE_DONE = {tickets: 5, title: 'tdebut'};
+const GUIDE_DONE = {tickets: 5, jewels: 300, title: 'tdebut'};
 function guideState(prof){
   const p = prof || net.profile || {}, g = p.guide || {}, st = statsOf(p), today = dayKey(), claimed = g.claimed || {};
   const day = Math.max(1, dayNum(today) - dayNum(g.start || today) + 1);
@@ -3603,15 +3804,18 @@ async function claimGuideDone(){
     if (g.done || !GUIDE.every(m => claimed[m.id])) return undefined;
     cur.guide = Object.assign({}, g, {done: true});
     cur.tickets = (+cur.tickets || 0) + GUIDE_DONE.tickets;
+    cur.jewels = (+cur.jewels || 0) + GUIDE_DONE.jewels;
     cur.owned = Object.assign({}, cur.owned || {}, {[GUIDE_DONE.title]: true});
     return cur;
   });
-  if (res && res.committed) { toast(`はじめてガイド完了！ チケット ×${GUIDE_DONE.tickets}と称号`); sfx('win'); confetti(50); }
+  if (res && res.committed) { toast(`はじめてガイド完了！ チケット ×${GUIDE_DONE.tickets}・ジュエル${GUIDE_DONE.jewels}と称号`); sfx('win'); confetti(50); }
   return 0;
 }
 
 // ===================== News =====================
 const NEWS = [
+  {id: 'n8', date: '2026-11-15', tag: 'アップデート', title: 'ジュエル登場！ 1000個プレゼント＆対戦スタンプ',
+    body: 'ガチャは新しい通貨「ジュエル」で引くようになりました（1回100・10回1000）。記念に全員へジュエル1000個（10連1回分）をプレゼント！\nジュエルはログインボーナス・デイリーの全部クリア・通常ミッション・ボス討伐・詰めわりばし・シーズンパス・イベントでもらえます。持っているコインはそのまま、ショップで使えます。\n対戦中に送れる「スタンプ」も登場。マイページで使う8個を選べます。'},
   {id: 'n7', date: '2026-11-15', tag: '新機能', title: 'ガチャ・日替わりショップ・期間限定イベントが登場！',
     body: 'ショップに「ガチャ」と「日替わり」を追加しました。ガチャはコインで引けて、ここでしか出ないチョーク・黒板・プレート・称号が手に入ります。ダブったアイテムは「かけら」になり、かけら交換所で好きなアイテムと交換できます。\n期間限定イベントは10日間の開催と4日間の結果発表のくり返し。ptをためて限定アイテムを集めて、ランキング上位をめざそう！\nはじめて遊ぶ人向けの「はじめてガイド」もミッション画面に追加しました。'},
   {id: 'n6', date: '2026-11-15', tag: 'アップデート', title: 'ランク・エフェクトチョーク・黒板・図鑑を追加',
@@ -3658,7 +3862,7 @@ function renderNews(){
 }
 
 // ----- Login bonus: a 7-day stamp card, plus how many days in a row -----
-const LOGIN_REWARDS = [30, 30, 50, 50, 80, 80, 150];
+const LOGIN_REWARDS = [30, 30, 50, 50, 80, 80, 150], LOGIN_JEWELS = [0, 20, 0, 20, 0, 20, 100], GIFT_JEWELS = 1000;
 function myLogin(){
   const l = (net.profile || {}).login || {}, day = dayKey(), yday = dayKey(serverNow() - 86400000);
   return {count: +l.count || 0, streak: l.day === day || l.day === yday ? +l.streak || 0 : 0, today: l.day === day, total: +l.total || 0};
@@ -3666,20 +3870,26 @@ function myLogin(){
 async function checkLogin(){
   if (!net.fb || !net.uid || !net.profileLoaded || ui.loginChecked === dayKey()) return;
   const day = ui.loginChecked = dayKey(), yday = dayKey(serverNow() - 86400000), fb = net.fb;
-  let got = null;
+  let got = null, gift = 0;
   try {
     const res = await fb.runTransaction(fb.ref(fb.db, 'players/' + net.uid), cur => {
-      const p = Object.assign({}, cur || {}), l = p.login || {};
-      got = null;
-      if (l.day === day) return undefined;
-      const count = ((+l.count || 0) % 7) + 1, streak = l.day === yday ? (+l.streak || 0) + 1 : 1;
-      p.login = {day, count, streak, total: (+l.total || 0) + 1};
-      p.coins = (+p.coins || 0) + LOGIN_REWARDS[count - 1];
-      p.st = Object.assign({}, p.st || {}, {loginDays: (+((p.st || {}).loginDays) || 0) + 1});
-      got = p.login;
+      const p = Object.assign({}, cur || {}), l = p.login || {}, gifts = p.gifts || {};
+      got = null; gift = 0;
+      if (l.day === day && gifts.j1000) return undefined;
+      if (l.day !== day) {
+        const count = ((+l.count || 0) % 7) + 1, streak = l.day === yday ? (+l.streak || 0) + 1 : 1;
+        p.login = {day, count, streak, total: (+l.total || 0) + 1};
+        p.coins = (+p.coins || 0) + LOGIN_REWARDS[count - 1];
+        p.jewels = (+p.jewels || 0) + LOGIN_JEWELS[count - 1];
+        p.st = Object.assign({}, p.st || {}, {loginDays: (+((p.st || {}).loginDays) || 0) + 1});
+        got = p.login;
+      }
+      // gacha moved to jewels: everyone gets jewels for one 10-pull, once
+      if (!gifts.j1000) { p.jewels = (+p.jewels || 0) + GIFT_JEWELS; p.gifts = Object.assign({}, gifts, {j1000: true}); gift = GIFT_JEWELS; }
       return p;
     });
     if (res && res.committed && got) { addXP(XP.login); ui.loginShow = got; render(); }
+    if (res && res.committed && gift) setTimeout(() => toast(`プレゼント：ジュエル ${gift}個！ ガチャはジュエルで引けます`), got ? 4600 : 300);
   } catch(e) {}
 }
 function showLogin(l, replay){
@@ -3690,10 +3900,12 @@ function showLogin(l, replay){
   LOGIN_REWARDS.forEach((c, i) => {
     const li = document.createElement('li');
     li.className = 'stamp' + (i === 6 ? ' big' : '') + (i < l.count ? ' done' : '') + (i === l.count - 1 ? ' today' : '');
-    li.innerHTML = `<span>${i + 1}日目</span><span class="coin">${c}</span>`;
+    li.innerHTML = `<span>${i + 1}日目</span><span class="coin">${c}</span>` + (LOGIN_JEWELS[i] ? `<span class="jwl">${LOGIN_JEWELS[i]}</span>` : '');
     ol.append(li);
   });
   $('#loginGot').textContent = LOGIN_REWARDS[l.count - 1];
+  $('#loginGotJ').hidden = !LOGIN_JEWELS[l.count - 1];
+  $('#loginGotJ').textContent = LOGIN_JEWELS[l.count - 1];
   box.hidden = false;
   if (!replay) {
     sfx('unlock');
@@ -3707,7 +3919,7 @@ function hideLogin(){ clearTimeout(ui.loginTimer); $('#loginBox').hidden = true;
 // ----- Daily puzzle: 詰めわりばし -----
 // Positions where the side to move wins in exactly d plies with one right first move, for several rule sets (precomputed).
 const PUZ = {"rules":[[5,"wrap",1,1],[5,"wrap",1,0],[5,"wrap",0,1],[5,"wrap",0,0],[5,"die",1,1],[5,"die",1,0],[5,"die",0,1],[5,"die",0,0],[31,"wrap",1,1],[31,"die",1,1]],"pool":{"3":[[0,0,3,0,3],[0,0,3,1,2],[0,1,2,0,1],[1,0,3,0,3],[1,0,3,1,2],[2,0,1,0,1],[2,0,1,2,4],[2,0,2,0,2],[2,0,2,3,4],[2,0,3,0,3],[2,0,3,1,2],[2,0,4,0,4],[2,0,4,1,3],[2,1,2,0,1],[2,1,3,0,3],[2,2,4,0,2],[2,3,4,0,4],[3,0,1,0,1],[3,0,1,2,4],[3,0,2,0,2],[3,0,2,3,4],[3,0,3,0,3],[3,0,3,1,2],[3,0,4,0,4],[3,0,4,1,3],[4,0,3,1,2],[4,0,3,1,3],[4,0,3,1,4],[4,1,2,0,1],[5,0,3,1,2],[5,0,3,1,3],[5,0,3,1,4],[6,0,1,0,1],[6,0,1,0,2],[6,0,1,2,4],[6,0,1,3,4],[6,0,2,2,3],[6,0,2,2,4],[6,0,3,1,2],[6,0,3,1,3],[6,0,3,1,4],[6,1,2,0,2],[6,1,2,2,3],[6,1,2,3,4],[6,1,3,0,1],[6,1,3,2,4],[6,1,3,3,4],[6,1,4,1,4],[6,1,4,2,4],[6,1,4,3,4],[6,2,3,2,3],[6,2,3,2,4],[6,2,4,1,3],[6,2,4,1,4],[6,2,4,2,3],[6,2,4,2,4],[6,3,4,1,2],[6,3,4,1,3],[6,3,4,1,4],[7,0,1,0,1],[7,0,1,0,2],[7,0,1,2,4],[7,0,1,3,4],[7,0,2,2,3],[7,0,2,2,4],[7,0,3,1,2],[7,0,3,1,3],[7,0,3,1,4],[7,1,2,0,1],[7,1,2,0,2],[7,1,2,2,3],[7,1,2,3,4],[7,1,3,0,1],[7,1,3,2,4],[7,1,3,3,4],[7,1,4,1,4],[7,1,4,2,4],[7,1,4,3,4],[7,2,3,2,3],[7,2,3,2,4],[7,2,4,1,3],[7,2,4,1,4],[7,2,4,2,3],[7,2,4,2,4],[7,3,4,1,2],[7,3,4,1,3],[7,3,4,1,4],[8,0,29,0,3],[8,0,29,1,2],[8,1,28,0,1],[8,2,27,0,1],[8,3,26,0,1],[8,4,25,0,1],[8,5,24,0,1],[8,6,23,0,1],[8,7,22,0,1],[8,8,21,0,1],[8,9,20,0,1],[8,10,19,0,1],[8,11,18,0,1],[8,12,17,0,1],[8,13,16,0,1],[8,14,15,0,1],[9,0,29,1,2],[9,0,29,1,3],[9,0,29,1,4],[9,0,29,1,5],[9,0,29,1,6],[9,0,29,1,7],[9,0,29,1,8],[9,0,29,1,9],[9,0,29,1,10],[9,0,29,1,11],[9,0,29,1,12],[9,0,29,1,13],[9,0,29,1,14],[9,0,29,1,15],[9,0,29,1,16],[9,0,29,1,17],[9,0,29,1,18],[9,0,29,1,19],[9,0,29,1,20],[9,0,29,1,21],[9,0,29,1,22],[9,0,29,1,23],[9,0,29,1,24],[9,0,29,1,25],[9,0,29,1,26],[9,0,29,1,27],[9,0,29,1,28],[9,0,29,1,29],[9,0,29,1,30],[9,1,28,0,1],[9,2,27,0,1],[9,3,26,0,1],[9,4,25,0,1],[9,5,24,0,1],[9,6,23,0,1],[9,7,22,0,1],[9,8,21,0,1],[9,9,20,0,1],[9,10,19,0,1],[9,11,18,0,1],[9,12,17,0,1],[9,13,16,0,1],[9,14,15,0,1]],"5":[[0,0,2,0,1],[2,1,4,0,2],[2,1,4,0,3],[2,2,3,0,1],[2,2,3,0,4],[3,1,4,0,2],[3,1,4,0,3],[3,2,3,0,1],[3,2,3,0,4],[4,0,2,0,1],[6,1,2,1,3],[6,1,3,1,2],[6,1,3,1,3],[6,1,3,2,3],[6,1,4,1,3],[6,1,4,2,3],[6,2,3,1,2],[7,1,2,1,3],[7,1,3,1,2],[7,1,3,1,3],[7,1,3,2,3],[7,1,4,1,3],[7,1,4,2,3],[7,2,3,1,2],[8,1,27,0,5],[8,1,27,1,4],[8,1,27,1,30],[8,2,26,0,6],[8,2,26,0,30],[8,2,26,1,5],[8,2,26,1,29],[8,3,25,0,7],[8,3,25,0,29],[8,3,25,1,6],[8,3,25,1,28],[8,4,24,0,8],[8,4,24,0,28],[8,4,24,1,7],[8,4,24,1,27],[8,5,23,0,9],[8,5,23,0,27],[8,5,23,1,8],[8,5,23,1,26],[8,6,22,0,10],[8,6,22,0,26],[8,6,22,1,9],[8,6,22,1,25],[8,7,21,0,11],[8,7,21,0,25],[8,7,21,1,10],[8,7,21,1,24],[8,8,20,0,12],[8,8,20,0,24],[8,8,20,1,11],[8,8,20,1,23],[8,9,19,0,13],[8,9,19,0,23],[8,9,19,1,12],[8,9,19,1,22],[8,10,18,0,14],[8,10,18,0,22],[8,10,18,1,13],[8,10,18,1,21],[8,11,17,0,15],[8,11,17,0,21],[8,11,17,1,14],[8,11,17,1,20],[8,12,16,0,16],[8,12,16,0,20],[8,12,16,1,15],[8,12,16,1,19],[8,13,15,0,17],[8,13,15,0,19],[8,13,15,1,16],[8,13,15,1,18],[9,1,27,1,4],[9,1,27,1,5],[9,1,27,1,6],[9,1,27,1,7],[9,1,27,1,8],[9,1,27,1,9],[9,1,27,1,10],[9,1,27,1,11],[9,1,27,1,12],[9,1,27,1,13],[9,1,27,1,14],[9,1,27,1,15],[9,1,27,1,16],[9,1,27,1,17],[9,1,27,1,18],[9,1,27,1,19],[9,1,27,1,20],[9,1,27,1,21],[9,1,27,1,22],[9,1,27,1,23],[9,1,27,1,24],[9,1,27,1,25],[9,1,27,1,26],[9,1,27,1,27],[9,1,27,1,28],[9,1,27,1,29],[9,2,26,1,5],[9,2,26,1,6],[9,2,26,1,7],[9,2,26,1,8],[9,2,26,1,9],[9,2,26,1,10],[9,2,26,1,11],[9,2,26,1,12],[9,2,26,1,13],[9,2,26,1,14],[9,2,26,1,15],[9,2,26,1,16],[9,2,26,1,17],[9,2,26,1,18],[9,2,26,1,19],[9,2,26,1,20],[9,2,26,1,21],[9,2,26,1,22],[9,2,26,1,23],[9,2,26,1,24],[9,2,26,1,25],[9,2,26,1,26],[9,2,26,1,27],[9,2,26,1,28],[9,3,25,1,6],[9,3,25,1,7],[9,3,25,1,8],[9,3,25,1,9],[9,3,25,1,10],[9,3,25,1,11],[9,3,25,1,12],[9,3,25,1,13],[9,3,25,1,14],[9,3,25,1,15],[9,3,25,1,16],[9,3,25,1,17],[9,3,25,1,18],[9,3,25,1,19],[9,3,25,1,20],[9,3,25,1,21],[9,3,25,1,22],[9,3,25,1,23],[9,3,25,1,24],[9,3,25,1,25],[9,3,25,1,26],[9,3,25,1,27],[9,4,24,1,7],[9,4,24,1,8],[9,4,24,1,9],[9,4,24,1,10],[9,4,24,1,11],[9,4,24,1,12],[9,4,24,1,13],[9,4,24,1,14],[9,4,24,1,15],[9,4,24,1,16],[9,4,24,1,17],[9,4,24,1,18],[9,4,24,1,19],[9,4,24,1,20],[9,4,24,1,21],[9,4,24,1,22],[9,4,24,1,23],[9,4,24,1,24],[9,4,24,1,25],[9,4,24,1,26],[9,5,23,1,8],[9,5,23,1,9],[9,5,23,1,10],[9,5,23,1,11],[9,5,23,1,12],[9,5,23,1,13],[9,5,23,1,14],[9,5,23,1,15],[9,5,23,1,16],[9,5,23,1,17],[9,5,23,1,18],[9,5,23,1,19],[9,5,23,1,20],[9,5,23,1,21],[9,5,23,1,22],[9,5,23,1,23],[9,5,23,1,24],[9,5,23,1,25],[9,6,22,1,9],[9,6,22,1,10],[9,6,22,1,11],[9,6,22,1,12],[9,6,22,1,13],[9,6,22,1,14],[9,6,22,1,15],[9,6,22,1,16],[9,6,22,1,17],[9,6,22,1,18],[9,6,22,1,19],[9,6,22,1,20],[9,6,22,1,21],[9,6,22,1,22],[9,6,22,1,23],[9,6,22,1,24],[9,7,21,1,10],[9,7,21,1,11],[9,7,21,1,12],[9,7,21,1,13],[9,7,21,1,14],[9,7,21,1,15],[9,7,21,1,16],[9,7,21,1,17],[9,7,21,1,18],[9,7,21,1,19],[9,7,21,1,20],[9,7,21,1,21],[9,7,21,1,22],[9,7,21,1,23],[9,8,20,1,11],[9,8,20,1,12],[9,8,20,1,13],[9,8,20,1,14],[9,8,20,1,15],[9,8,20,1,16],[9,8,20,1,17],[9,8,20,1,18],[9,8,20,1,19],[9,8,20,1,20],[9,8,20,1,21],[9,8,20,1,22],[9,9,19,1,12],[9,9,19,1,13],[9,9,19,1,14],[9,9,19,1,15],[9,9,19,1,16],[9,9,19,1,17],[9,9,19,1,18],[9,9,19,1,19],[9,9,19,1,20],[9,9,19,1,21],[9,10,18,1,13],[9,10,18,1,14],[9,10,18,1,15],[9,10,18,1,16],[9,10,18,1,17],[9,10,18,1,18],[9,10,18,1,19],[9,10,18,1,20],[9,11,17,1,14],[9,11,17,1,15],[9,11,17,1,16],[9,11,17,1,17],[9,11,17,1,18],[9,11,17,1,19],[9,12,16,1,15],[9,12,16,1,16],[9,12,16,1,17],[9,12,16,1,18],[9,13,15,1,16],[9,13,15,1,17]],"7":[[0,0,1,1,4],[0,2,4,0,2],[0,2,4,0,4],[0,2,4,1,3],[2,1,2,2,3],[2,1,2,2,4],[2,1,3,1,2],[2,1,3,1,4],[2,2,4,1,4],[2,2,4,3,4],[2,3,4,1,3],[2,3,4,2,3],[3,1,2,0,1],[3,1,2,2,3],[3,1,2,2,4],[3,1,3,0,3],[3,1,3,1,2],[3,1,3,1,4],[3,2,4,0,2],[3,2,4,1,4],[3,2,4,3,4],[3,3,4,0,4],[3,3,4,1,3],[3,3,4,2,3],[4,0,1,1,4],[4,2,4,1,2],[8,0,27,0,5],[8,0,27,1,4],[8,1,26,0,6],[8,1,26,1,5],[8,1,26,1,30],[8,2,25,0,7],[8,2,25,0,30],[8,2,25,1,6],[8,2,25,1,29],[8,3,24,0,8],[8,3,24,0,29],[8,3,24,1,7],[8,3,24,1,28],[8,4,23,0,9],[8,4,23,0,28],[8,4,23,1,8],[8,4,23,1,27],[8,5,22,0,10],[8,5,22,0,27],[8,5,22,1,9],[8,5,22,1,26],[8,6,21,0,11],[8,6,21,0,26],[8,6,21,1,10],[8,6,21,1,25],[8,7,20,0,12],[8,7,20,0,25],[8,7,20,1,11],[8,7,20,1,24],[8,8,19,0,13],[8,8,19,0,24],[8,8,19,1,12],[8,8,19,1,23],[8,9,18,0,14],[8,9,18,0,23],[8,9,18,1,13],[8,9,18,1,22],[8,10,17,0,15],[8,10,17,0,22],[8,10,17,1,14],[8,10,17,1,21],[8,11,16,0,16],[8,11,16,0,21],[8,11,16,1,15],[8,11,16,1,20],[8,12,15,0,17],[8,12,15,0,20],[8,12,15,1,16],[8,12,15,1,19],[8,13,14,0,19],[8,13,14,1,17],[8,13,14,1,18],[8,28,30,0,2],[8,28,30,0,4],[8,28,30,1,3],[9,0,27,1,4],[9,0,27,1,5],[9,0,27,1,6],[9,0,27,1,7],[9,0,27,1,8],[9,0,27,1,9],[9,0,27,1,10],[9,0,27,1,11],[9,0,27,1,12],[9,0,27,1,13],[9,0,27,1,14],[9,0,27,1,15],[9,0,27,1,16],[9,0,27,1,17],[9,0,27,1,18],[9,0,27,1,19],[9,0,27,1,20],[9,0,27,1,21],[9,0,27,1,22],[9,0,27,1,23],[9,0,27,1,24],[9,0,27,1,25],[9,0,27,1,26],[9,0,27,1,27],[9,0,27,1,28],[9,0,27,1,29],[9,0,27,1,30],[9,1,26,1,5],[9,1,26,1,6],[9,1,26,1,7],[9,1,26,1,8],[9,1,26,1,9],[9,1,26,1,10],[9,1,26,1,11],[9,1,26,1,12],[9,1,26,1,13],[9,1,26,1,14],[9,1,26,1,15],[9,1,26,1,16],[9,1,26,1,17],[9,1,26,1,18],[9,1,26,1,19],[9,1,26,1,20],[9,1,26,1,21],[9,1,26,1,22],[9,1,26,1,23],[9,1,26,1,24],[9,1,26,1,25],[9,1,26,1,26],[9,1,26,1,27],[9,1,26,1,28],[9,1,26,1,29],[9,2,25,1,6],[9,2,25,1,7],[9,2,25,1,8],[9,2,25,1,9],[9,2,25,1,10],[9,2,25,1,11],[9,2,25,1,12],[9,2,25,1,13],[9,2,25,1,14],[9,2,25,1,15],[9,2,25,1,16],[9,2,25,1,17],[9,2,25,1,18],[9,2,25,1,19],[9,2,25,1,20],[9,2,25,1,21],[9,2,25,1,22],[9,2,25,1,23],[9,2,25,1,24],[9,2,25,1,25],[9,2,25,1,26],[9,2,25,1,27],[9,2,25,1,28],[9,3,24,1,7],[9,3,24,1,8],[9,3,24,1,9],[9,3,24,1,10],[9,3,24,1,11],[9,3,24,1,12],[9,3,24,1,13],[9,3,24,1,14],[9,3,24,1,15],[9,3,24,1,16],[9,3,24,1,17],[9,3,24,1,18],[9,3,24,1,19],[9,3,24,1,20],[9,3,24,1,21],[9,3,24,1,22],[9,3,24,1,23],[9,3,24,1,24],[9,3,24,1,25],[9,3,24,1,26],[9,3,24,1,27],[9,4,23,1,8],[9,4,23,1,9],[9,4,23,1,10],[9,4,23,1,11],[9,4,23,1,12],[9,4,23,1,13],[9,4,23,1,14],[9,4,23,1,15],[9,4,23,1,16],[9,4,23,1,17],[9,4,23,1,18],[9,4,23,1,19],[9,4,23,1,20],[9,4,23,1,21],[9,4,23,1,22],[9,4,23,1,23],[9,4,23,1,24],[9,4,23,1,25],[9,4,23,1,26],[9,5,22,1,9],[9,5,22,1,10],[9,5,22,1,11],[9,5,22,1,12],[9,5,22,1,13],[9,5,22,1,14],[9,5,22,1,15],[9,5,22,1,16],[9,5,22,1,17],[9,5,22,1,18],[9,5,22,1,19],[9,5,22,1,20],[9,5,22,1,21],[9,5,22,1,22],[9,5,22,1,23],[9,5,22,1,24],[9,5,22,1,25],[9,6,21,1,10],[9,6,21,1,11],[9,6,21,1,12],[9,6,21,1,13],[9,6,21,1,14],[9,6,21,1,15],[9,6,21,1,16],[9,6,21,1,17],[9,6,21,1,18],[9,6,21,1,19],[9,6,21,1,20],[9,6,21,1,21],[9,6,21,1,22],[9,6,21,1,23],[9,6,21,1,24],[9,7,20,1,11],[9,7,20,1,12],[9,7,20,1,13],[9,7,20,1,14],[9,7,20,1,15],[9,7,20,1,16],[9,7,20,1,17],[9,7,20,1,18],[9,7,20,1,19],[9,7,20,1,20],[9,7,20,1,21],[9,7,20,1,22],[9,7,20,1,23],[9,8,19,1,12],[9,8,19,1,13],[9,8,19,1,14],[9,8,19,1,15],[9,8,19,1,16],[9,8,19,1,17],[9,8,19,1,18],[9,8,19,1,19],[9,8,19,1,20],[9,8,19,1,21],[9,8,19,1,22],[9,9,18,1,13],[9,9,18,1,14],[9,9,18,1,15],[9,9,18,1,16],[9,9,18,1,17],[9,9,18,1,18],[9,9,18,1,19],[9,9,18,1,20],[9,9,18,1,21],[9,10,17,1,14],[9,10,17,1,15],[9,10,17,1,16],[9,10,17,1,17],[9,10,17,1,18],[9,10,17,1,19],[9,10,17,1,20],[9,11,16,1,15],[9,11,16,1,16],[9,11,16,1,17],[9,11,16,1,18],[9,11,16,1,19],[9,12,15,1,16],[9,12,15,1,17],[9,12,15,1,18],[9,13,14,1,17],[9,28,30,1,2]]}};
-const PUZ_START = '2026-11-15', PUZ_COINS = 30;
+const PUZ_START = '2026-11-15', PUZ_COINS = 30, PUZ_JEWELS = 10;
 const PUZ_LEN = [7, 3, 3, 5, 3, 5, 7];   // plies by weekday (0 = Sunday)
 const PUZ_FORCE = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('puzzle') ? q.get('puzzle') : ''; } catch(e) { return ''; } })();
 function puzzleOf(day){
@@ -3785,6 +3997,7 @@ function puzzleSolved(){
     const streak = p.last === yday ? (+p.streak || 0) + 1 : 1;
     cur.puzzle = Object.assign(p, {day, solved: true, last: day, streak, at, tries: Math.max(+p.tries || 0, at)});
     cur.coins = (+cur.coins || 0) + PUZ_COINS;
+    cur.jewels = (+cur.jewels || 0) + PUZ_JEWELS;
     cur.st = Object.assign({}, cur.st || {}, {puzzles: (+((cur.st || {}).puzzles) || 0) + 1});
     return cur;
   }).then(r => { if (r && r.committed) { pz.reward = PUZ_COINS; addXP(XP.puzzle); render(); } });
@@ -3817,7 +4030,7 @@ function sharePuzzle(){
 }
 
 // ----- Today's boss: 黒板消し大王 -----
-const BOSS_LIVES = 3, BOSS_HAND_DMG = 100, BOSS_CLEAR_BONUS = 300, BOSS_GAME_DMG = 20, BOSS_TRIES = 3, BOSS_REWARD = 100;
+const BOSS_LIVES = 3, BOSS_HAND_DMG = 100, BOSS_CLEAR_BONUS = 300, BOSS_GAME_DMG = 20, BOSS_TRIES = 3, BOSS_REWARD = 100, BOSS_REWARD_J = 30;
 // One twist per weekday of the boss day (index 0 = Sunday). skill = how often the boss plays the best move on its first life.
 const BOSS_DAYS = [
   {tag:'日曜・本気の日', rule:'大王が本気。読みが鋭い', hp:5000, start:[1, 2], skill:.8},
@@ -3948,6 +4161,7 @@ async function claimBoss(){
     if (b.day !== day || !(+b.dmg > 0) || b.claimed) return undefined;
     cur.boss = Object.assign({}, b, {claimed: true});
     cur.coins = (+cur.coins || 0) + BOSS_REWARD;
+    cur.jewels = (+cur.jewels || 0) + BOSS_REWARD_J;
     cur.st = Object.assign({}, cur.st || {}, {bossKills: (+((cur.st || {}).bossKills) || 0) + 1});
     return cur;
   });
@@ -4625,6 +4839,7 @@ function onRoom(room){
     return;
   }
   net.room = room;
+  handleRoomStamps(room);
   // Self-heal: if I'm connected but not marked online here, mark me again.
   if (net.connected && net.presRef && !(room.online || {})[net.uid] && Date.now() - net.presFix > 3000) {
     net.presFix = Date.now();
@@ -4851,9 +5066,10 @@ async function claimBonus(){
     if (d.bonus || !list.every(m => d.claimed[m.id])) return undefined;
     cur.daily = {day: d.day, p: d.p, claimed: d.claimed, bonus: true};
     cur.coins = (+cur.coins || 0) + DAILY_BONUS;
+    cur.jewels = (+cur.jewels || 0) + DAILY_BONUS_J;
     return cur;
   });
-  if (res && res.committed) { addXP(XP.daily); toast(`全部クリア！コイン +${DAILY_BONUS}`); return DAILY_BONUS; }
+  if (res && res.committed) { addXP(XP.daily); toast(`全部クリア！コイン +${DAILY_BONUS}・ジュエル +${DAILY_BONUS_J}`); return DAILY_BONUS; }
   return 0;
 }
 async function claimMission(id){
@@ -4864,9 +5080,10 @@ async function claimMission(id){
     if (done[id] || (statsOf(cur)[m.key] || 0) < m.goal) return undefined;
     cur.done = Object.assign({}, done, {[id]: true});
     cur.coins = (+cur.coins || 0) + m.coins;
+    cur.jewels = (+cur.jewels || 0) + missionJewels(m);
     return cur;
   });
-  if (res && res.committed) { addXP(XP.mission); if (reduceMotion.matches) toast(`コイン +${m.coins}`); return m.coins; }
+  if (res && res.committed) { addXP(XP.mission); toast(`ジュエル +${missionJewels(m)}`); return m.coins; }
   return 0;
 }
 async function buyChalk(id){
@@ -5269,6 +5486,8 @@ function renderChrome(){
   $('#tbDaily').hidden = !ok;
   $('#barCoins').hidden = !ok;
   showCoins(coins);
+  $('#barJewels').hidden = !ok;
+  $('#barJewels').textContent = myJewels();
   const rk = rankOf(mr), be = $('#barEmb'), ek = rk.i + ':' + rk.div;
   $('#barTier').textContent = rk.label;
   $('#barTier').className = 'tb-sub ' + tierCls(mr);
@@ -5573,7 +5792,7 @@ function renderPass(){
     li.querySelector('b').textContent = r.bonus ? `+${t - SEASON_TIERS}` : `${t}段`;
     const art = li.querySelector('.pt-art');
     if (it) art.innerHTML = itemArt(it.kind, it.id);
-    else { art.innerHTML = '<span class="coin"></span>'; art.firstChild.textContent = r.coins; }
+    else { art.innerHTML = '<span class="coin"></span>' + (r.jewels ? '<span class="jwl"></span>' : ''); art.firstChild.textContent = r.coins; if (r.jewels) art.lastChild.textContent = r.jewels; }
     li.querySelector('.pt-n').textContent = it ? it.name + (r.coins ? `＋${r.coins}` : '') : '';
     li.querySelector('.pt-s').textContent = got ? '受け取り済み' : t <= lv.all ? '受け取れる' : `あと${tierXP(t) - lv.sxp}`;
     return li;
@@ -5635,7 +5854,7 @@ function renderBoss(){
   go.disabled = left <= 0 || !net.fb;
   go.textContent = left > 0 ? `挑戦する（残り${left}回）` : '今日の挑戦は終わり（4:00に回復）';
   $('#bossClaim').hidden = !canClaim;
-  $('#bossClaim').textContent = `討伐報酬を受け取る（コイン${BOSS_REWARD}）`;
+  $('#bossClaim').textContent = `討伐報酬を受け取る（コイン${BOSS_REWARD}・ジュエル${BOSS_REWARD_J}）`;
   $('#bossNote').textContent = bs.err ? 'ボスのデータを読み書きできません。Firebaseのルールに boss を追加してください。'
     : bs.down && me.claimed ? '今日の報酬は受け取り済み。また明日！' : bs.down && !me.dmg ? '今日の大王はもう倒されました。明日は参加しよう！' : '';
   // reward road
@@ -5711,6 +5930,7 @@ function missionRow(m, onClaim){
   li.querySelector('.mc').textContent = m.label !== undefined ? m.label : m.key === 'maxRate' ? `最高 ${m.raw}／${m.goal}` : `${m.cur}／${m.goal}`;
   const rw = li.querySelector('.ms span');
   if (m.tickets) { rw.className = 'tkt'; rw.textContent = '×' + m.tickets; } else rw.textContent = m.coins;
+  if (m.jewels) { const j = document.createElement('span'); j.className = 'jwl'; j.textContent = m.jewels; rw.after(j); }
   if (m.state !== 'todo') {
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'btn sm' + (m.state === 'ready' ? ' gold' : '');
@@ -5750,7 +5970,7 @@ function renderMission(){
       gl.innerHTML = '';
       gs.list.forEach(m => gl.append(missionRow({name: m.name, cur: m.state === 'ready' || m.state === 'done' ? 1 : 0, goal: 1, coins: m.coins, tickets: m.tickets,
         state: m.state === 'locked' ? 'todo' : m.state, locked: m.state === 'locked', label: m.state === 'locked' ? `${m.d}日目に解放` : m.state === 'todo' ? 'まだ' : '達成！'}, () => claimGuide(m.id))));
-      gl.append(missionRow({name: 'ぜんぶクリア：チケット×5＋称号「わりばしデビュー」', cur: gs.claimedN, goal: GUIDE.length, tickets: GUIDE_DONE.tickets,
+      gl.append(missionRow({name: 'ぜんぶクリア：チケット×5＋ジュエル300＋称号「わりばしデビュー」', cur: gs.claimedN, goal: GUIDE.length, tickets: GUIDE_DONE.tickets,
         state: gs.finished ? 'done' : gs.all ? 'ready' : 'todo', bonus: true}, claimGuideDone));
     }
   }
@@ -5765,7 +5985,7 @@ function renderMission(){
     dl.innerHTML = '';
     st.daily.forEach(m => dl.append(missionRow(m, () => claimDaily(m.id))));
     dl.append(missionRow({name:'今日のミッションを3つ全部クリア', key:'all', goal:3, cur: st.daily.filter(m => m.state === 'done').length,
-      coins: DAILY_BONUS, state: st.bonusState, bonus: true}, claimBonus));
+      coins: DAILY_BONUS, jewels: DAILY_BONUS_J, state: st.bonusState, bonus: true}, claimBonus));
   }
   const nl = $('#normalList');
   const order = {ready: 0, todo: 1, done: 2};
@@ -5782,9 +6002,10 @@ function renderShop(){
   [['#tabShopGacha', 'gacha'], ['#tabShopDaily', 'daily'], ['#tabShopChalk', 'chalk'], ['#tabShopBoard', 'board']].forEach(([id, t]) => $(id).setAttribute('aria-selected', String(tab === t)));
   $('#shopGacha').hidden = tab !== 'gacha'; $('#shopDaily').hidden = tab !== 'daily';
   $('#shopGrid').hidden = tab !== 'chalk'; $('#shopBoards').hidden = tab !== 'board';
+  $('#gJewels').textContent = `ジュエル ${myJewels()}`;
   $('#gTickets').textContent = `チケット ${+p.tickets || 0}`;
   $('#gShards').textContent = `かけら ${+p.shards || 0}`;
-  $('#shopNote').textContent = {gacha: 'コインで引けるガチャ。ここでしか出ないアイテムがあります（お金はかかりません）。', daily: '毎日ちがう品物がお得な値段で並びます。',
+  $('#shopNote').textContent = {gacha: 'ジュエルで引けるガチャ。ここでしか出ないアイテムがあります（お金はかかりません）。ジュエルはログイン・ミッション・イベントなどでもらえます。', daily: '毎日ちがう品物がお得な値段で並びます。',
     board: '黒板を変えると、対戦するときの自分の盤面の見た目が変わります（相手の画面はそのまま）。',
     chalk: 'チョークを変えると、自分の手がその色になります。対戦相手の画面でも同じに見えます。エフェクトチョークは光ったり、星や花びらが舞ったりします。'}[tab];
   if (tab === 'gacha') { renderGacha(); return; }
@@ -5840,6 +6061,23 @@ function renderPlateEditor(){
   $('#pfRank').hidden = !ok;
   if (ok) rankCard($('#pfRank'), null, false);
   $('#bookPct').textContent = bookPct(bookItems()) + '%';
+  const sp = $('#stampPicks'), mine = myStamps(), ownedSt = STAMPS.filter(x => hasStamp(x.id));
+  $('#stampCount').textContent = `${mine.length}/8`;
+  if (!unchanged(sp, JSON.stringify([mine, ownedSt.map(x => x.id)]))) {
+    sp.innerHTML = '';
+    ownedSt.forEach(x => {
+      const on = mine.includes(x.id), b = document.createElement('button');
+      b.type = 'button'; b.setAttribute('aria-pressed', String(on));
+      b.innerHTML = stampHTML(x) + `<small>${on ? '使う' : '使わない'}</small>`;
+      b.addEventListener('click', () => {
+        const cur = myStamps();
+        if (cur.includes(x.id)) { if (cur.length <= 1) { toast('1個は選んでね', true); return; } saveStamps(cur.filter(id => id !== x.id)); }
+        else if (cur.length >= 8) toast('スタンプは8個までです。先にどれかを外してね', true);
+        else saveStamps([...cur, x.id]);
+      });
+      sp.append(b);
+    });
+  }
   const prog = item => item.key === 'maxRate' ? `最高 ${st.maxRate}` : `${Math.min(st[item.key] || 0, item.goal)}/${item.goal}`;
   const meter = f => { const m = document.createElement('span'); m.className = 'meter'; m.innerHTML = '<i></i>'; m.firstChild.style.width = Math.round(f * 100) + '%'; return m; };
   const tp = $('#titlePicks');
@@ -5977,6 +6215,12 @@ function renderGame(){
   }
   renderStrip(act, ms, nm);
 
+  const stb = $('#stampBtn'), canStamp = stampsAllowed();
+  stb.hidden = !canStamp;
+  if (!canStamp) $('#stampPal').hidden = true;
+  stb.setAttribute('aria-expanded', String(!$('#stampPal').hidden));
+  if (!$('#stampPal').hidden) renderStampPal();
+  cpuReact();
   const sb = $('#shapeBtn');
   sb.hidden = !r.split && !r.merge;
   sb.disabled = !(act && ms.some(m => m.kind !== 'attack'));
@@ -6327,6 +6571,7 @@ $('#passClaim').addEventListener('click', async () => {
     if (got.coins) { flyCoins(from, got.coins); floatText(from[0], from[1] - 10, `+${got.coins}`, 'var(--coin)'); }
     sfx('unlock'); const [x, y] = centerOf($('#passHero')); dust(x, y, CHALK_COLORS, 30, 120);
     if (got.items.length) { dust(x, y, ['#fff6c4', SEASON_THEMES[seasonMonth()][1]], 30, 160, 'star'); confetti(40); }
+    if (got.jewels) toast(`ジュエル +${got.jewels}`);
   }
   render();
 });
@@ -6371,7 +6616,7 @@ $('#evMilesClaim').addEventListener('click', async () => {
   b.disabled = false;
   if (got) {
     if (got.coins) { flyCoins(from, got.coins); floatText(from[0], from[1] - 10, `+${got.coins}`, 'var(--coin)'); }
-    if (got.tickets || got.shards) toast(rewardText({tickets: got.tickets, shards: got.shards}) + ' を受け取りました');
+    if (got.jewels || got.tickets || got.shards) toast(rewardText({jewels: got.jewels, tickets: got.tickets, shards: got.shards}) + ' を受け取りました');
     dust(from[0], from[1], ['#fff6c4', EVENT_TPL[eventNow().tpl].c[0]], 30, 120, 'star'); sfx('unlock');
   }
   $('#evMiles').dataset.key = ''; render();
@@ -6380,7 +6625,7 @@ $('#evRankClaim').addEventListener('click', async () => {
   const b = $('#evRankClaim');
   b.disabled = true;
   const got = await claimEvRank();
-  if (got) { toast(`${got.rank === Infinity ? '参加賞' : got.rank + '位'}の報酬：チケット ×${got.tickets}` + (got.title ? `と称号「${got.title.name}」` : '')); sfx('win'); confetti(50); }
+  if (got) { toast(`${got.rank === Infinity ? '参加賞' : got.rank + '位'}の報酬：${rewardText(got)}` + (got.title ? `と称号「${got.title.name}」` : '')); sfx('win'); confetti(50); }
   render();
 });
 (() => {
@@ -6456,6 +6701,9 @@ nameInputs.forEach(inp => {
   inp.addEventListener('input', () => { nameInputs.forEach(o => { if (o !== inp) o.value = inp.value; }); renderChrome(); if (ui.screen === 'plate') renderPlateEditor(); });
   inp.addEventListener('change', onNameChange);
 });
+$('#stampBtn').addEventListener('click', () => { const pal = $('#stampPal'); pal.hidden = !pal.hidden; renderStampPal(); $('#stampBtn').setAttribute('aria-expanded', String(!pal.hidden)); });
+document.getElementById(lsGet('waribashi-stampmute') === '1' ? 'stp-off' : 'stp-on').checked = true;
+$('#stampOpts').addEventListener('change', e => lsSet('waribashi-stampmute', e.target.value === 'off' ? '1' : '0'));
 $('#shapeBtn').addEventListener('click', () => { if (!interactive()) return; panel = panel ? null : 'shape'; sel = null; render(); });
 $('#resetBtn').addEventListener('click', newGame);
 $('#resignBtn').addEventListener('click', () => {
