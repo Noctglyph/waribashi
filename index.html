@@ -1203,7 +1203,39 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .ch-story .btn.sm[disabled]{opacity:.45}
 .chhero .chbust{grid-row:1/span 3;width:84px;height:84px;border-radius:50%;overflow:hidden;background:rgba(0,0,0,.22);box-shadow:inset 0 0 0 2px var(--cc)}
 .chhero .chbust .chara{width:100%;height:100%}
+
+/* ===== Purchase confirmation ===== */
+.cfm{position:fixed;inset:0;z-index:66;display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px));background:rgba(14,13,11,.72);animation:stIn .2s ease-out}
+.cfm-card{width:min(340px,100%);display:grid;justify-items:center;gap:8px;padding:20px 18px 16px;border-radius:16px;border:4px solid var(--wood);background-color:var(--board);background-image:var(--noise);box-shadow:0 20px 40px -12px rgba(0,0,0,.85),inset 0 0 30px rgba(0,0,0,.3);text-align:center;animation:cfmIn .25s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes cfmIn{from{transform:scale(.92);opacity:0}to{transform:none;opacity:1}}
+.cfm-t{margin:0;font-family:var(--font-display);font-size:22px;letter-spacing:.04em}
+.cfm-art{display:grid;place-items:center;min-height:0}
+.cfm-art:empty{display:none}
+.cfm-art > *{max-width:96px}
+.cfm-art .bsw{width:96px}
+.cfm-name{font-size:16px}
+.cfm-cost{margin:2px 0 0;font-size:20px;font-weight:800;display:flex;gap:6px;align-items:center}
+.cfm-after{margin:0;font-size:12.5px;color:var(--chalk-soft)}
+.cfm-note{margin:0;font-size:12.5px;color:var(--chalk-soft);text-wrap:pretty}
+.cfm-note:empty{display:none}
+.cfm-btns{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;width:100%;margin-top:8px}
+.cfm-btns .btn{min-height:46px}
+/* ===== Boss: scores, milestones, angry form ===== */
+.bscores{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.bscores .sc{min-width:52px;padding:4px 10px;border-radius:999px;border:1.5px solid var(--line);text-align:center;font-weight:800;font-variant-numeric:tabular-nums}
+.bscores .sc.top{border-color:#c9a2ff;color:#e7d6ff;background:rgba(201,162,255,.12)}
+.bscores .sc.out{opacity:.45;text-decoration:line-through}
+.bscores .sum{margin-left:auto;font-size:13px;color:var(--chalk-soft)}
+.bmiles{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:6px}
+.bmiles li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--board-deep);border:1.5px solid var(--line)}
+.bmiles li.got{border-color:rgba(242,207,91,.5)}
+.bmiles .md{font-weight:800;font-variant-numeric:tabular-nums;color:#e7d6ff}
+.bmiles .mr{font-size:13px}
+.bosshero.angry{border-color:#ff6b8a;box-shadow:0 0 0 3px rgba(255,107,138,.18),inset 0 0 40px rgba(120,0,30,.35)}
+.bosshero.angry .bh-name{color:#ffb3c1}
+.bosscard.angry{border-color:#ff6b8a}
 @media (prefers-reduced-motion:reduce){
+  .cfm,.cfm-card{animation:none!important}
   .story,.st-ch.pop,.st-next{animation:none!important}
   .st-ch{transition:none}
   .fold > summary::after{transition:none}
@@ -1464,15 +1496,23 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
     <div class="bosshero" id="bossHero">
       <div class="bh-face" id="bhFace"></div>
       <p class="bh-tag" id="bhTag"></p>
-      <h3 class="bh-name">黒板消し大王</h3>
+      <h3 class="bh-name" id="bhName">黒板消し大王</h3>
       <p class="bh-rule" id="bhRule"></p>
       <div class="bh-hp"><span class="meter"><i id="bhHp" style="width:100%"></i></span></div>
       <p class="bh-hpt" id="bhHpT"></p>
       <p class="bh-sub" id="bhSub"></p>
     </div>
     <button type="button" class="btn gold big" id="bossClaim" hidden>討伐報酬を受け取る</button>
+    <button type="button" class="btn gold big" id="bossClaim2" hidden>怒り大王の報酬を受け取る</button>
+    <button type="button" class="btn gold big" id="bossRankClaim" hidden>昨日のランキング報酬を受け取る</button>
     <button type="button" class="btn primary big" id="bossGo">挑戦する</button>
     <p class="note center" id="bossNote" style="margin:-6px 0 0"></p>
+    <section class="panel">
+      <h3>あなたの今日のスコア</h3>
+      <div class="bscores" id="bossScores"></div>
+      <p class="note" style="margin:8px 0 0">いちばん高い3回ぶんと、オンライン対戦で消した手のぶんがダメージになります。ジュエル50で再挑戦でき、いちばん低い回より高ければ入れ替わります。</p>
+      <ol class="bmiles" id="bossMiles"></ol>
+    </section>
     <section class="panel">
       <h3>ごほうびロード <span class="tag mine" id="roadCount"></span></h3>
       <ol class="road" id="bossRoad"></ol>
@@ -1485,12 +1525,14 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
     <section class="panel">
       <h3>ボス戦のルール</h3>
       <ul class="rules">
-        <li>大王は毎朝4:00に現れます。HPはプレイヤー全員で共通。みんなの攻撃でHPを0にしたら討伐成功！</li>
-        <li>挑戦は1日3回まで。大王の手を1本消すごとに100ダメージ。大王は3回まで起き上がり、3回とも倒すとボーナス300ダメージ。</li>
+        <li>大王は毎朝4:00に現れます。HPはプレイヤー全員で共通で、前の日に参加した人数に合わせて決まります。みんなの攻撃でHPを0にしたら討伐成功！</li>
+        <li>討伐すると「怒りの大王」になって復活。ミスが減り、ライフが4つになります。怒り大王も倒すと追加の報酬（ジュエル100・かけら20）。</li>
+        <li>挑戦は1日3回。ジュエル50で再挑戦もでき（1日5回まで）、いちばん低い回より高いスコアなら入れ替わります。大王の手を1本消すごとに100ダメージ、ライフを全部削るとボーナス300ダメージ。</li>
+        <li>自分のダメージが300・800・1500・2500に届くと報酬（コイン200・ジュエル50・ジュエル80・ガチャチケット1枚）。前の日のダメージランキングでは1位ジュエル200・2位150・3位100・4〜10位50。</li>
         <li>あなたの両手が消えるか、同じ局面が3回出たら挑戦終了。それまでのダメージはちゃんと入ります。</li>
         <li>曜日ごとにルールが変わります（合成なし、2進数など）。日曜は大王が本気です。</li>
         <li>ふだんのオンライン対戦でも、相手の手を1本消すと20ダメージ入ります。</li>
-        <li>討伐できた日に参加していたら、コイン100枚と「討伐」1回ぶんの報酬を受け取れます（その日の4:00まで）。</li>
+        <li>討伐できた日に参加していたら、コイン200・ジュエル50と「討伐」1回ぶんの報酬を受け取れます（その日の4:00まで）。</li>
       </ul>
     </section>
   </section>
@@ -2006,6 +2048,17 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
   <div class="st-stage"><div class="st-ch gone" id="stCh"></div></div>
   <div class="st-box" id="stBox"><b class="st-name" id="stName"></b><p class="st-text" id="stText" aria-live="polite"></p><span class="st-next" aria-hidden="true">▼</span></div>
 </div>
+<div class="cfm" id="cfm" role="dialog" aria-modal="true" aria-labelledby="cfmT" hidden>
+  <div class="cfm-card">
+    <p class="cfm-t" id="cfmT">購入しますか？</p>
+    <div class="cfm-art" id="cfmArt"></div>
+    <b class="cfm-name" id="cfmName"></b>
+    <p class="cfm-cost" id="cfmCost"></p>
+    <p class="cfm-after" id="cfmAfter"></p>
+    <p class="cfm-note" id="cfmNote"></p>
+    <div class="cfm-btns"><button type="button" class="btn" id="cfmNo">やめる</button><button type="button" class="btn gold" id="cfmOk">購入する</button></div>
+  </div>
+</div>
 <p class="toast" id="toast" role="status" hidden></p>
 <pre class="dbg" id="dbg" hidden></pre>
 
@@ -2369,18 +2422,26 @@ function updateResult(){
     return;
   }
   if (ui.boss) {
-    const bs = bossState(), key = `${ui.boss.dmg}:${bs.dmg}:${bs.down}`;
+    const bs = bossState(), bb = ui.boss, key = `${bb.dmg}:${bs.dmg}:${bs.phase}`;
     if (ui.resShown.boss !== key) {
       ui.resShown.boss = key;
       rows.innerHTML = '';
       const r1 = document.createElement('div');
-      r1.className = 'res-row'; r1.innerHTML = '<span>与えたダメージ</span><b></b>';
-      r1.querySelector('b').textContent = ui.boss.dmg + (ui.boss.cleared ? `（ボーナス${BOSS_CLEAR_BONUS}込み）` : '');
+      r1.className = 'res-row'; r1.innerHTML = '<span>今回のスコア</span><b></b>';
+      r1.querySelector('b').textContent = bb.dmg + (bb.cleared ? `（ボーナス${BOSS_CLEAR_BONUS}込み）` : '');
+      rows.append(r1);
+      if (bb.floor !== null && bb.floor !== undefined) {
+        const rr = document.createElement('div');
+        rr.className = 'res-row' + (bb.dmg > bb.floor ? ' up' : '');
+        rr.textContent = bb.dmg > bb.floor ? `いちばん低い回（${bb.floor}）と入れ替え！ +${bb.dmg - bb.floor}ダメージ` : `いちばん低い回（${bb.floor}）に届かず…`;
+        rows.append(rr);
+      }
       const r2 = document.createElement('div');
-      r2.className = 'res-row'; r2.innerHTML = '<span>みんなの合計</span><b></b>';
-      r2.querySelector('b').textContent = bs.loaded ? `${Math.min(bs.dmg, bs.hp)} / ${bs.hp}` : '…';
-      rows.append(r1, r2);
-      if (bs.down) { const r3 = document.createElement('div'); r3.className = 'res-row up'; r3.textContent = '大王を討伐した！ 報酬を受け取ろう'; rows.append(r3); }
+      r2.className = 'res-row'; r2.innerHTML = '<span></span><b></b>';
+      r2.firstChild.textContent = bs.phase === 1 ? 'みんなの合計' : '怒り大王への合計';
+      r2.querySelector('b').textContent = bs.loaded ? `${Math.min(bs.dmg - (bs.phase === 1 ? 0 : bs.hp), bs.hp)} / ${bs.hp}` : '…';
+      rows.append(r2);
+      if (bs.down) { const r3 = document.createElement('div'); r3.className = 'res-row up'; r3.textContent = bs.down2 ? '怒りの大王もたおした！ 報酬を受け取ろう' : '大王を討伐した！ 報酬を受け取ろう'; rows.append(r3); }
     }
     return;
   }
@@ -2509,7 +2570,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/15-13';
+const APP_VERSION = '11/15-15';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -3760,6 +3821,39 @@ function charaSVG(id, ex, color){
 }
 // ===== CHARA-END =====
 
+
+// ===================== Purchase confirmation =====================
+// confirmBuy({title, art, name, cur, cost, have, ok, note}) → Promise<boolean>. cur: coins / jewels / tickets / shards / medals.
+const CUR_INFO = {coins: ['coin', 'コイン'], jewels: ['jwl', 'ジュエル'], tickets: ['tkt', 'チケット'], shards: ['shd', 'かけら'], medals: ['', 'メダル']};
+function confirmBuy(o){
+  const box = $('#cfm'), [cls, label] = CUR_INFO[o.cur] || ['', ''];
+  $('#cfmT').textContent = o.title || '購入しますか？';
+  $('#cfmArt').innerHTML = o.art || '';
+  $('#cfmName').textContent = o.name || '';
+  const cost = $('#cfmCost');
+  cost.innerHTML = cls ? `<span class="${cls}"></span>` : '<span></span>';
+  cost.firstChild.textContent = cls ? `${o.cost}` : `${label} ${o.cost}`;
+  $('#cfmAfter').textContent = o.have !== undefined ? `${label} ${o.have} → ${o.have - o.cost}` : '';
+  $('#cfmNote').textContent = o.note || '';
+  $('#cfmOk').textContent = o.ok || '購入する';
+  box.hidden = false;
+  const prev = document.activeElement;
+  setTimeout(() => $('#cfmOk').focus(), 30);
+  return new Promise(res => {
+    const done = v => {
+      box.hidden = true;
+      $('#cfmOk').removeEventListener('click', yes); $('#cfmNo').removeEventListener('click', no);
+      box.removeEventListener('click', out); document.removeEventListener('keydown', key);
+      if (prev && prev.focus) try { prev.focus(); } catch(e) {}
+      res(v);
+    };
+    const yes = () => done(true), no = () => done(false), out = e => { if (e.target === box) done(false); };
+    const key = e => { if (e.key === 'Escape') done(false); };
+    $('#cfmOk').addEventListener('click', yes); $('#cfmNo').addEventListener('click', no);
+    box.addEventListener('click', out); document.addEventListener('keydown', key);
+  });
+}
+
 // ===================== Story scenes =====================
 // Lines: [who, expression, text]. who: a character id, 'me' (the player) or 'n' (narration). {name} = the player's name.
 // Keys: <chapter>s = before the first stage, <chapter>b = before the boss, <chapter>e = after the first boss clear.
@@ -4262,13 +4356,13 @@ function renderGacha(){
   $('#gbS').textContent = live ? `「${picks.map(x => x.name).join('」「')}」が出やすい！・のこり${fmtDur(eventLeft(e))}` : 'ここでしか出ないチョーク・黒板・スタンプ。SSRは3%';
   const art = $('#gbArt'), ak = live ? tpl.key : 'std';
   if (art.dataset.k !== ak) { art.dataset.k = ak; art.innerHTML = (live ? picks.filter(x => x.kind === 'chalk') : ['meteor', 'phoenix', 'mankai'].map(id => GACHA.find(x => x.id === id))).map(x => chalkFig(CHALKS.find(c => c.id === x.id))).join(''); }
-  const set = (id, can, label) => { const b = $(id); b.disabled = !can || !!ui.pulling; b.firstElementChild.textContent = armed === id.slice(1) ? 'もう一度押すと引く' : label; };
+  const set = (id, can, label) => { const b = $(id); b.disabled = !can || !!ui.pulling; b.firstElementChild.textContent = label; };
   const jw = myJewels();
   set('#gPull1', jw >= GACHA_COST, '1回引く');
   set('#gPull10', jw >= GACHA_COST * 10, '10回引く');
   const bt = $('#gPullT');
   bt.hidden = tk < 1; bt.disabled = !!ui.pulling;
-  bt.textContent = armed === 'gPullT' ? 'もう一度押すと引く' : `チケットで1回引く（${tk}枚）`;
+  bt.textContent = `チケットで1回引く（${tk}枚）`;
   const showR = !!ui.gRates, showS = !!ui.gShop;
   $('#gRates').hidden = !showR; $('#gShop').hidden = !showS;
   $('#gRatesBtn').setAttribute('aria-expanded', String(showR)); $('#gShardBtn').setAttribute('aria-expanded', String(showS));
@@ -4308,12 +4402,11 @@ function renderGacha(){
         if (have) { b.className = 'btn'; b.textContent = '持っている'; b.disabled = true; }
         else if (sh < cost) { b.className = 'btn'; b.textContent = 'かけらが足りない'; b.disabled = true; }
         else {
-          b.className = 'btn gold'; b.textContent = armed === 'x' + it.id ? 'もう一度押すと交換' : '交換';
-          b.addEventListener('click', () => {
-            if (ui.buyArm && ui.buyArm.id === 'x' + it.id && ui.buyArm.until > Date.now()) {
-              ui.buyArm = null; b.disabled = true;
-              exchangeShard(it.id).then(ok => { if (ok) { toast(`${it.name}と交換しました`); sfx('unlock'); } grid.dataset.key = ''; render(); });
-            } else { ui.buyArm = {id: 'x' + it.id, until: Date.now() + 3000}; renderShop(); }
+          b.className = 'btn gold'; b.textContent = '交換';
+          b.addEventListener('click', async () => {
+            if (!(await confirmBuy({title: '交換しますか？', art: itemArt(it.kind, it.id), name: it.name, cur: 'shards', cost, have: sh, ok: '交換する'}))) return;
+            b.disabled = true;
+            exchangeShard(it.id).then(ok => { if (ok) { toast(`${it.name}と交換しました`); sfx('unlock'); } grid.dataset.key = ''; render(); });
           });
         }
         el.append(b);
@@ -4389,10 +4482,10 @@ function renderDaily(){
     else if (have) { b.className = 'btn'; b.textContent = '持っている'; b.disabled = true; }
     else if (coins < g.price) { b.className = 'btn'; b.textContent = 'コインが足りない'; b.disabled = true; }
     else {
-      b.className = 'btn gold'; b.textContent = armed === 'd' + g.slot ? 'もう一度押すと買う' : '買う';
-      b.addEventListener('click', () => {
-        if (ui.buyArm && ui.buyArm.id === 'd' + g.slot && ui.buyArm.until > Date.now()) { ui.buyArm = null; b.disabled = true; buyDaily(g.slot).finally(() => { grid.dataset.key = ''; render(); }); }
-        else { ui.buyArm = {id: 'd' + g.slot, until: Date.now() + 3000}; renderShop(); }
+      b.className = 'btn gold'; b.textContent = '買う';
+      b.addEventListener('click', async () => {
+        if (!(await confirmBuy({art: goodArt(g), name: g.name, cur: 'coins', cost: g.price, have: myCoins(), note: g.was ? `${Math.round((1 - g.price / g.was) * 100)}%OFF（もとの値段 ${g.was}）` : ''}))) return;
+        b.disabled = true; buyDaily(g.slot).finally(() => { grid.dataset.key = ''; render(); });
       });
     }
     el.append(b);
@@ -4596,12 +4689,11 @@ function renderEvent(){
       if (have || n >= g.limit) { b.className = 'btn'; b.textContent = have ? '持っている' : '交換済み'; b.disabled = true; }
       else if (medal < g.cost) { b.className = 'btn'; b.textContent = 'メダルが足りない'; b.disabled = true; }
       else {
-        b.className = 'btn gold'; b.textContent = armed === 'v' + g.id ? 'もう一度押すと交換' : '交換';
-        b.addEventListener('click', () => {
-          if (ui.buyArm && ui.buyArm.id === 'v' + g.id && ui.buyArm.until > Date.now()) {
-            ui.buyArm = null; b.disabled = true;
-            buyEvShop(g.id).then(ok => { if (ok) { toast(`${it ? it.name : g.name}と交換しました`); sfx('unlock'); } sg.dataset.key = ''; render(); });
-          } else { ui.buyArm = {id: 'v' + g.id, until: Date.now() + 3000}; renderEvent(); }
+        b.className = 'btn gold'; b.textContent = '交換';
+        b.addEventListener('click', async () => {
+          if (!(await confirmBuy({title: '交換しますか？', art: it ? chalkFig(CHALKS.find(c => c.id === it.id)) : goodArt(g), name: it ? it.name : g.name, cur: 'medals', cost: g.cost, have: medal, ok: '交換する'}))) return;
+          b.disabled = true;
+          buyEvShop(g.id).then(ok => { if (ok) { toast(`${it ? it.name : g.name}と交換しました`); sfx('unlock'); } sg.dataset.key = ''; render(); });
         });
       }
       el.append(b);
@@ -4720,6 +4812,8 @@ async function claimGuideDone(){
 
 // ===================== News =====================
 const NEWS = [
+  {id: 'n12', date: '2026-11-15', tag: 'アップデート', title: '大王パワーアップ！ 怒りモード・再挑戦・報酬アップ',
+    body: '今日のボスのHPが、前の日に参加した人数に合わせて決まるようになりました。\n討伐報酬はコイン200・ジュエル50に。倒すと「怒りの黒板消し大王」が復活し、怒り大王も倒すとジュエル100・かけら20！\nジュエル50で再挑戦でき、いちばん低い回より高いスコアなら入れ替わります。自分のダメージが300・800・1500・2500に届くとコイン・ジュエル・ガチャチケット。前の日のランキングは1位ジュエル200、4〜10位にも50。\nショップでは、買う前に確認の画面が出るようになりました。'},
   {id: 'n11', date: '2026-11-15', tag: 'お試し', title: 'ストーリーがはじまりました（第1章）',
     body: 'ステージ第1章に会話シーンがつきました。いいんちょうとのお話を楽しんでね。章の画面の「ストーリー」からいつでも見られます（NEWがついているのがまだ見ていないお話）。\n第1章はやさしくしました。詰めわりばし風のステージは第2章から少しずつ出てきます。\nほかの章のお話と、キャラを「相棒」にできる機能はこれから追加していきます。'},
   {id: 'n10', date: '2026-11-15', tag: '新機能', title: 'Lv報酬が登場！ これまでのレベルぶんもプレゼント',
@@ -4942,7 +5036,15 @@ function sharePuzzle(){
 }
 
 // ----- Today's boss: 黒板消し大王 -----
-const BOSS_LIVES = 3, BOSS_HAND_DMG = 100, BOSS_CLEAR_BONUS = 300, BOSS_GAME_DMG = 20, BOSS_TRIES = 3, BOSS_REWARD = 100, BOSS_REWARD_J = 30;
+const BOSS_LIVES = 3, BOSS_HAND_DMG = 100, BOSS_CLEAR_BONUS = 300, BOSS_GAME_DMG = 20, BOSS_TRIES = 3, BOSS_REWARD = 200, BOSS_REWARD_J = 50;
+// HP grows with yesterday's players; after HP 0 the angry form has the same HP again. Retries cost jewels.
+const BOSS_HP_PER = 1200, BOSS_RETRY_COST = 50, BOSS_RETRY_MAX = 5, BOSS_REWARD2_J = 100, BOSS_REWARD2_SH = 20;
+const BOSS_MILES = [{d: 300, coins: 200}, {d: 800, jewels: 50}, {d: 1500, jewels: 80}, {d: 2500, tickets: 1}];
+const BOSS_RANK_J = [200, 150, 100, 50, 50, 50, 50, 50, 50, 50];   // yesterday's ranking: 1st-3rd, then 4th-10th
+// My part: online damage plus my best three tries (try scores live in boss.sc as t1, t2, ...).
+const scoresOf = b => Object.values((b && b.sc) || {}).map(v => +v || 0).sort((x, y) => y - x);
+const bossContrib = b => (+((b || {}).online) || 0) + scoresOf(b).slice(0, BOSS_TRIES).reduce((a, v) => a + v, 0);
+const bossMilesReady = me => BOSS_MILES.filter(m => me.dmg >= m.d && !me.mi['m' + m.d]);
 // One twist per weekday of the boss day (index 0 = Sunday). skill = how often the boss plays the best move on its first life.
 const BOSS_DAYS = [
   {tag:'日曜・本気の日', rule:'大王が本気。読みが鋭い', hp:5000, start:[1, 2], skill:.8},
@@ -4958,7 +5060,9 @@ const BOSS_CHALK = {id:'boss', color:'#d6a8ff'};
 const BOSS_FORCE = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('bossday') ? (+q.get('bossday')) % 7 : -1; } catch(e) { return -1; } })();
 const bossDayInfo = day => BOSS_DAYS[BOSS_FORCE >= 0 ? BOSS_FORCE : new Date((day || dayKey()) + 'T00:00:00Z').getUTCDay()];
 const bossRules = b => ({overflow: b.overflow || 'wrap', split: b.split !== false, merge: b.merge !== false, base: b.count === 'binary' ? BIN : 5});
-function bossFace(down){
+function bossFace(down, angry){
+  if (angry && !down) return bossFace(false).replace('fill="#7d55c7"', 'fill="#b0365f"').split('r="6" fill="#fff"').join('r="6" fill="#ffd0d0"')
+    .replace('</g></svg>', '<path d="M96 30l7-6M100 36l9-2M92 26l2-9" stroke="#ff6b6b" stroke-width="4" stroke-linecap="round"/></g></svg>');
   const eyes = down
     ? '<path d="M36 57l12 12M48 57 36 69M72 57l12 12M84 57 72 69" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/>'
     : '<path d="M30 50 50 57M90 50 70 57" stroke="#fff" stroke-width="5" stroke-linecap="round"/><circle cx="42" cy="63" r="6" fill="#fff"/><circle cx="78" cy="63" r="6" fill="#fff"/><circle cx="43.5" cy="64" r="2.8" fill="#24183d"/><circle cx="79.5" cy="64" r="2.8" fill="#24183d"/>';
@@ -4974,12 +5078,36 @@ function bossFace(down){
 // My part of today's boss (stored in my profile) and everyone's (boss/<day>).
 function myBoss(){
   const b = (net.profile || {}).boss || {}, day = dayKey();
-  return b.day === day ? {day, tries: +b.tries || 0, dmg: +b.dmg || 0, claimed: !!b.claimed} : {day, tries: 0, dmg: 0, claimed: false};
+  if (b.day !== day) return {day, tries: 0, dmg: 0, claimed: false, claimed2: false, paid: 0, sc: [], online: 0, mi: {}, allowed: BOSS_TRIES};
+  const paid = +b.paid || 0;
+  return {day, tries: +b.tries || 0, dmg: +b.dmg || 0, claimed: !!b.claimed, claimed2: !!b.claimed2, paid, sc: scoresOf(b),
+    online: b.sc || b.online !== undefined ? +b.online || 0 : +b.dmg || 0, mi: b.mi || {}, allowed: BOSS_TRIES + paid};
 }
 function bossState(){
   const info = bossDayInfo(), d = (net.bossDay === dayKey() && net.bossData) || {}, dmg = Math.max(0, +d.dmg || 0), top = d.top || {};
   const list = Object.keys(top).map(uid => ({uid, name: String((top[uid] || {}).name || 'ななし').slice(0, 12), dmg: +((top[uid] || {}).dmg) || 0})).filter(x => x.dmg > 0).sort((a, b) => b.dmg - a.dmg);
-  return {info, hp: info.hp, dmg, left: Math.max(0, info.hp - dmg), down: dmg >= info.hp, players: list.length, top: list, loaded: !!net.bossData, err: !!net.bossErr};
+  const hp = Math.max(1, +d.hp || info.hp), phase = dmg < hp ? 1 : dmg < 2 * hp ? 2 : 3;
+  return {info, hp, dmg, phase, left: phase === 1 ? hp - dmg : phase === 2 ? 2 * hp - dmg : 0, down: dmg >= hp, down2: dmg >= 2 * hp, angry: phase >= 2,
+    players: list.length, top: list, loaded: !!net.bossData, err: !!net.bossErr};
+}
+// Yesterday's ranking (for its top-3 bonus) and today's HP, fixed once from yesterday's players.
+const bossYRank = () => { const y = net.bossY; if (!y || y.day !== dayKey(serverNow() - 86400000) || !net.uid) return -1; const i = y.top.findIndex(r => r.uid === net.uid); return i >= 0 && i < BOSS_RANK_J.length ? i : -1; };
+const bossRankReady = () => bossYRank() >= 0 && ((net.profile || {}).bossRank || {}).day !== (net.bossY || {}).day;
+async function loadBossYesterday(day){
+  const fb = net.fb, yday = dayKey(serverNow() - 86400000), info = bossDayInfo(day);
+  if (!fb || ui.bossYFor === day) return;
+  ui.bossYFor = day;
+  let top = [];
+  try {
+    const sv = (await fb.get(fb.ref(fb.db, `boss/${yday}/top`))).val() || {};
+    top = Object.keys(sv).map(uid => ({uid, name: String((sv[uid] || {}).name || 'ななし').slice(0, 12), dmg: +((sv[uid] || {}).dmg) || 0})).filter(r => r.dmg > 0).sort((a, b) => b.dmg - a.dmg);
+  } catch(e) { ui.bossYFor = null; return; }
+  net.bossY = {day: yday, top};
+  if (!(net.bossData || {}).hp) {
+    const w = info.hp >= 5000 ? 1.5 : 1, hp = Math.max(info.hp, Math.ceil(top.length * BOSS_HP_PER * w / 100) * 100);
+    fb.runTransaction(fb.ref(fb.db, `boss/${day}/hp`), cur => cur ? undefined : hp).catch(() => {});
+  }
+  render();
 }
 // Reward road: everything unlocked by number of bosses defeated, in order.
 function bossRoad(){
@@ -4990,26 +5118,37 @@ function bossRoad(){
   BOARDS.filter(b => b.boss).forEach(b => items.push({n: b.boss, kind: '黒板', name: b.name, board: b.id}));
   return items.sort((a, b) => a.n - b.n);
 }
-function bossDamage(n){
+function bossDamage(n, tryNo){
   if (!net.fb || !net.uid || !n) return;
   const fb = net.fb, day = dayKey();
+  let delta = 0;
   fb.runTransaction(fb.ref(fb.db, `players/${net.uid}/boss`), cur => {
     const b = cur && cur.day === day ? Object.assign({}, cur) : {day, tries: 0, dmg: 0};
-    b.dmg = (+b.dmg || 0) + n;
+    if (!b.sc && b.online === undefined) b.online = +b.dmg || 0;       // damage from before per-try scores
+    const before = bossContrib(b);
+    if (tryNo) b.sc = Object.assign({}, b.sc || {}, {['t' + tryNo]: (+((b.sc || {})['t' + tryNo]) || 0) + n});
+    else b.online = (+b.online || 0) + n;
+    b.dmg = bossContrib(b);
+    delta = b.dmg - before;
     return b;
-  }).catch(() => {});
-  fb.update(fb.ref(fb.db, 'boss/' + day), {dmg: fb.increment(n), [`top/${net.uid}/dmg`]: fb.increment(n), [`top/${net.uid}/name`]: typedName()})
-    .catch(() => { net.bossErr = true; render(); });
+  }).then(res => {
+    if (!res || !res.committed || delta <= 0) return;
+    return fb.update(fb.ref(fb.db, 'boss/' + day), {dmg: fb.increment(delta), [`top/${net.uid}/dmg`]: fb.increment(delta), [`top/${net.uid}/name`]: typedName()});
+  }).catch(() => { net.bossErr = true; render(); });
 }
 async function startBossChallenge(){
   if (!net.fb || !net.uid) { toast('オンラインにつながっていないとボスに挑戦できません', true); return; }
   const fb = net.fb, day = dayKey(), info = bossDayInfo(day);
-  let res;
+  let res, tryNo = 0, floor = null;
   try {
     res = await fb.runTransaction(fb.ref(fb.db, `players/${net.uid}/boss`), cur => {
       const b = cur && cur.day === day ? Object.assign({}, cur) : {day, tries: 0, dmg: 0};
-      if ((+b.tries || 0) >= BOSS_TRIES) return undefined;
+      if (!b.sc && b.online === undefined) b.online = +b.dmg || 0;
+      if ((+b.tries || 0) >= BOSS_TRIES + (+b.paid || 0)) return undefined;
+      const top3 = scoresOf(b).slice(0, BOSS_TRIES);
       b.tries = (+b.tries || 0) + 1;
+      tryNo = b.tries;
+      floor = b.tries > BOSS_TRIES ? (top3.length < BOSS_TRIES ? 0 : top3[BOSS_TRIES - 1]) : null;
       return b;
     });
   } catch(e) { toast(errText(e, '挑戦を始められませんでした'), true); return; }
@@ -5017,12 +5156,13 @@ async function startBossChallenge(){
   bumpDaily({boss: 1});
   addXP(XP.boss);
   ui.puzzle = null; ui.stage = null;
-  ui.boss = {day, info, life: 1, hands: 0, dmg: 0};
+  const angry = bossState().angry;
+  ui.boss = {day, info, life: 1, hands: 0, dmg: 0, tryNo, floor, angry, lives: angry ? BOSS_LIVES + 1 : BOSS_LIVES, skill: angry ? Math.min(.95, info.skill + .2) : info.skill};
   setScreen('game');
   newBossGame();
   const body = $('#splashB');
-  body.innerHTML = `<div class="sp-boss">${bossFace(false)}</div>`;
-  showSplash('黒板消し大王があらわれた！', `${info.tag}：${info.rule}`);
+  body.innerHTML = `<div class="sp-boss">${bossFace(false, angry)}</div>`;
+  showSplash(angry ? '怒りの大王があらわれた！' : '黒板消し大王があらわれた！', `${info.tag}：${info.rule}` + (angry ? '・ライフ4' : '') + (floor !== null ? `・再挑戦（いちばん低い回 ${floor}）` : ''));
 }
 function newBossGame(){
   clearTimeout(cpuTimer); cpuTimer = null; busy = false;
@@ -5044,7 +5184,7 @@ function bossAfterMove(m){
     setTimeout(() => { const t = handBtns[1] && handBtns[1][m.to]; if (t) { const [x, y] = centerOf(t); floatText(x, y + 34, `${BOSS_HAND_DMG}ダメージ`, '#d6a8ff', true); } }, 120);
   }
   if (G.over && G.over.type === 'win' && G.over.winner === 0) {
-    if (b.life < BOSS_LIVES) {
+    if (b.life < b.lives) {
       b.life++;
       G = Object.assign({}, G, {over: null, hands: [[...G.hands[0]], [...b.info.start]], turn: 1, seen: {}});
       G.seen[posKeyOf(G)] = 1;
@@ -5054,7 +5194,7 @@ function bossAfterMove(m){
         if (!seat) return;
         const [x, y] = centerOf(seat);
         dust(x, y, ['#d6a8ff', '#f3d774', '#eceee4'], 44, 150);
-        floatText(x, y - 30, `ダウン！ 残りライフ ${BOSS_LIVES - b.life + 1}`, '#d6a8ff', true);
+        floatText(x, y - 30, `ダウン！ 残りライフ ${b.lives - b.life + 1}`, '#d6a8ff', true);
         sfx('up');
       }, 600);   // after the "消えた！" of the last hand
     } else {
@@ -5062,9 +5202,60 @@ function bossAfterMove(m){
     }
   }
   // server writes last: a local write re-renders at once, and the board must already be settled by then
-  if (dmg) bossDamage(dmg);
+  if (dmg) bossDamage(dmg, b.tryNo);
   if (hit) { bumpStats(st => { st.bossHands = (+st.bossHands || 0) + 1; return st; }); addXP(XP.bossHand); }
 }
+async function claimBoss2(){
+  if (!bossState().down2) return 0;
+  const day = dayKey();
+  const res = await profileTx(cur => {
+    const b = cur.boss || {};
+    if (b.day !== day || !(+b.dmg > 0) || b.claimed2) return undefined;
+    cur.boss = Object.assign({}, b, {claimed2: true});
+    cur.jewels = (+cur.jewels || 0) + BOSS_REWARD2_J;
+    cur.shards = (+cur.shards || 0) + BOSS_REWARD2_SH;
+    return cur;
+  });
+  return res && res.committed;
+}
+async function claimBossMile(m){
+  const day = dayKey();
+  const res = await profileTx(cur => {
+    const b = cur.boss || {};
+    if (b.day !== day || (+b.dmg || 0) < m.d || (b.mi || {})['m' + m.d]) return undefined;
+    cur.boss = Object.assign({}, b, {mi: Object.assign({}, b.mi || {}, {['m' + m.d]: true})});
+    if (m.coins) cur.coins = (+cur.coins || 0) + m.coins;
+    if (m.jewels) cur.jewels = (+cur.jewels || 0) + m.jewels;
+    if (m.tickets) cur.tickets = (+cur.tickets || 0) + m.tickets;
+    return cur;
+  });
+  return res && res.committed;
+}
+async function claimBossRank(){
+  const r = bossYRank(), y = net.bossY;
+  if (r < 0 || !y) return 0;
+  const j = BOSS_RANK_J[r];
+  const res = await profileTx(cur => {
+    if ((cur.bossRank || {}).day === y.day) return undefined;
+    cur.bossRank = {day: y.day, r: r + 1};
+    cur.jewels = (+cur.jewels || 0) + j;
+    return cur;
+  });
+  return res && res.committed ? j : 0;
+}
+async function buyBossRetry(){
+  const day = dayKey();
+  const res = await profileTx(cur => {
+    const b = cur.boss && cur.boss.day === day ? Object.assign({}, cur.boss) : null;
+    if (!b || (+b.tries || 0) < BOSS_TRIES + (+b.paid || 0) || (+b.paid || 0) >= BOSS_RETRY_MAX || (+cur.jewels || 0) < BOSS_RETRY_COST) return undefined;
+    b.paid = (+b.paid || 0) + 1;
+    cur.boss = b;
+    cur.jewels = (+cur.jewels || 0) - BOSS_RETRY_COST;
+    return cur;
+  });
+  return res && res.committed;
+}
+const bossReady = () => { const bs = bossState(), me = myBoss(); return (bs.down && me.dmg > 0 && !me.claimed) || (bs.down2 && me.dmg > 0 && !me.claimed2) || bossMilesReady(me).length > 0 || bossRankReady(); };
 async function claimBoss(){
   if (!bossState().down) return 0;
   const day = dayKey();
@@ -5413,7 +5604,7 @@ function chooseCpuMove(){
     // the longest defence (and the quickest win, if the puzzle side ever slips)
     const sc = x => s.res[x.next] === -1 ? 9000 - s.dist[x.next] : s.res[x.next] === 0 ? 5000 : 1000 + s.dist[x.next];
     m = ms.reduce((a, b) => sc(b) > sc(a) ? b : a);
-  } else if (ui.boss) m = Math.random() < Math.min(.95, ui.boss.info.skill + (ui.boss.life - 1) * .12) ? best() : randomMove(ms);
+  } else if (ui.boss) m = Math.random() < Math.min(.95, ui.boss.skill + (ui.boss.life - 1) * .12) ? best() : randomMove(ms);
   else if (ui.stage) {
     const lv = ui.stage.level;
     if (lv === 'strong') m = !ui.stage.hard || Math.random() < ui.stage.hard ? best() : randomMove(ms);
@@ -5578,11 +5769,13 @@ function watchBoss(){
   const day = net.bossDay = dayKey();
   net.bossData = null; net.bossErr = false;
   let wasDown = null;
+  ui.bossYFor = null;
   net.bossOff = fb.onValue(fb.ref(fb.db, 'boss/' + day), s => {
     net.bossData = s.val() || {};
     const bs = bossState();
-    if (wasDown === false && bs.down && myBoss().dmg > 0) celebrate('討伐<br>成功！', () => { const d = document.createElement('div'); d.innerHTML = '<b>みんなで黒板消し大王をたおした！</b><span>ボス画面で報酬を受け取ろう</span>'; return d; });
-    wasDown = bs.down;
+    if (wasDown !== null && bs.phase > wasDown && myBoss().dmg > 0) celebrate('討伐<br>成功！', () => { const d = document.createElement('div'); d.innerHTML = bs.phase === 2 ? '<b>みんなで黒板消し大王をたおした！</b><span>…と思ったら「怒りの大王」が現れた！</span>' : '<b>怒りの大王もたおした！</b><span>ボス画面で追加の報酬を受け取ろう</span>'; return d; });
+    wasDown = bs.phase;
+    loadBossYesterday(day);
     render();
   }, () => { net.bossErr = true; net.bossData = {}; render(); });
 }
@@ -6652,7 +6845,7 @@ function renderFriends(){
 function eventBadgeCount(){
   if (!FIREBASE_CONFIG || !net.profileLoaded) return 0;
   const bs = bossState(), me = myBoss();
-  return (featOpen('boss') && bs.down && me.dmg > 0 && !me.claimed ? 1 : 0) + (featOpen('pass') && myLevel().ready ? 1 : 0) + (featOpen('puzzle') && !myPuzzle().solved ? 1 : 0) + (featOpen('event') && evReady() ? 1 : 0);
+  return (featOpen('boss') && bossReady() ? 1 : 0) + (featOpen('pass') && myLevel().ready ? 1 : 0) + (featOpen('puzzle') && !myPuzzle().solved ? 1 : 0) + (featOpen('event') && evReady() ? 1 : 0);
 }
 function evCard(o){
   const b = document.createElement('button');
@@ -6673,7 +6866,7 @@ function evCard(o){
 function renderEvents(){
   const list = $('#evList'), bs = bossState(), me = myBoss(), lv = myLevel(), pz = puzzleOf(), mp = myPuzzle(), lg = myLogin(), th = SEASON_THEMES[seasonMonth()];
   const ev = eventNow(), evv = myEv(ev), evRank = (watchEventTop(ev), myEventRank());
-  const key = JSON.stringify([bs.dmg, bs.down, me, lv.sxp, lv.ready, mp, lg, dayKey(), ev, evv, evRank, myChalk(), Object.keys(FEATS).map(f => featOpen(f))]);
+  const key = JSON.stringify([bs.dmg, bs.hp, bs.down, me, lv.sxp, lv.ready, mp, lg, dayKey(), ev, evv, evRank, myChalk(), Object.keys(FEATS).map(f => featOpen(f)), bossRankReady()]);
   if (unchanged(list, key)) return;
   list.innerHTML = '';
   if (ev) {
@@ -6682,9 +6875,9 @@ function renderEvents(){
       title: t.name, sub: `イベントpt ${pt}・` + (evRank === null ? '順位 …' : evRank === Infinity ? (pt ? '圏外' : 'まだ参加していません') : `${evRank}位`),
       meter: Math.min(1, pt / EV_MILES[EV_MILES.length - 1].pt), meterT: `${pt}pt`, badge: n ? '報酬' : ev.live ? '開催中' : ''}));
   }
-  list.append(evCard({go: 'boss', cls: 'boss', color: '#c9a2ff', art: bossFace(bs.down), tag: `今日のボス・${bs.info.tag}`, title: '黒板消し大王',
-    sub: bs.down ? (me.dmg > 0 && !me.claimed ? '討伐成功！ 報酬を受け取ろう' : '討伐成功！ また明日') : `挑戦 ${me.tries}/${BOSS_TRIES}・参加 ${bs.players}人`,
-    meter: bs.loaded ? bs.left / bs.hp : 1, meterT: bs.down ? '0%' : `HP ${bs.loaded ? Math.round(bs.left / bs.hp * 100) : 100}%`, badge: bs.down && me.dmg > 0 && !me.claimed ? '報酬' : ''}));
+  list.append(evCard({go: 'boss', cls: 'boss', color: bs.angry && !bs.down2 ? '#ff6b8a' : '#c9a2ff', art: bossFace(bs.down2, bs.angry), tag: `今日のボス・${bs.info.tag}`, title: bs.angry && !bs.down2 ? '怒りの黒板消し大王' : '黒板消し大王',
+    sub: bossReady() ? '報酬を受け取ろう！' : bs.down2 ? '完全討伐！ また明日' : `挑戦 ${me.tries}/${me.allowed}・参加 ${bs.players}人`,
+    meter: bs.loaded ? bs.left / bs.hp : 1, meterT: bs.down2 ? '0%' : `${bs.angry ? '怒りHP' : 'HP'} ${bs.loaded ? Math.round(bs.left / bs.hp * 100) : 100}%`, badge: bossReady() ? '報酬' : ''}));
   list.append(evCard({go: 'puzzle', color: 'var(--p2)', art: '<span class="ev-icon">詰</span>', tag: `毎日1問・#${pz.num}`, title: `詰めわりばし（${pz.d}手詰め）`,
     sub: mp.solved ? `正解！（${mp.at || mp.tries}回目）・連続${mp.streak}日` : mp.tries ? `挑戦中（${mp.tries}回）` : 'まだ挑戦していません', badge: mp.solved ? '' : 'NEW'}));
   list.append(evCard({go: 'pass', color: th[1], art: `<span class="ev-icon" style="font-size:20px">${seasonMonth()}月</span>`, tag: `シーズンパス・あと${daysLeftInSeason()}日`, title: `「${th[0]}」シーズン`,
@@ -6778,35 +6971,70 @@ function renderBossCard(){
   const ok = !!FIREBASE_CONFIG, card = $('#goBoss');
   card.hidden = !ok;
   if (!ok) return;
-  const bs = bossState(), me = myBoss(), canClaim = bs.down && me.dmg > 0 && !me.claimed;
-  if (!unchanged($('#bcFace'), String(bs.down))) $('#bcFace').innerHTML = bossFace(bs.down);
-  $('#bcTag').textContent = `今日のボス・${bs.info.tag}`;
+  const bs = bossState(), me = myBoss(), canClaim = bossReady();
+  if (!unchanged($('#bcFace'), String([bs.down2, bs.angry]))) $('#bcFace').innerHTML = bossFace(bs.down2, bs.angry);
+  $('#bcTag').textContent = `今日のボス・${bs.info.tag}` + (bs.angry && !bs.down2 ? '・怒り' : '');
+  $('#goBoss .bc-name').textContent = bs.angry && !bs.down2 ? '怒りの黒板消し大王' : '黒板消し大王';
   const pct = bs.loaded ? Math.round(bs.left / bs.hp * 100) : 100;
   $('#bcHp').style.width = pct + '%';
-  $('#bcHpT').textContent = bs.err ? 'HP ?' : `HP ${pct}%`;
-  $('#bcSub').textContent = canClaim ? '討伐成功！ 報酬を受け取ろう' : bs.err ? 'ボスのデータを読めません' : `挑戦 ${me.tries}/${BOSS_TRIES}・参加 ${bs.players}人`;
-  $('#bcStamp').hidden = !bs.down;
-  card.classList.toggle('down', bs.down);
+  $('#bcHpT').textContent = bs.err ? 'HP ?' : `${bs.angry ? '怒りHP' : 'HP'} ${pct}%`;
+  $('#bcSub').textContent = canClaim ? '報酬を受け取ろう！' : bs.err ? 'ボスのデータを読めません' : `挑戦 ${me.tries}/${me.allowed}・参加 ${bs.players}人`;
+  $('#bcStamp').hidden = !bs.down2;
+  card.classList.toggle('down', bs.down2);
+  card.classList.toggle('angry', bs.angry && !bs.down2);
   card.classList.toggle('claim', canClaim);
 }
 function renderBoss(){
-  const bs = bossState(), me = myBoss(), st = statsOf(net.profile), left = BOSS_TRIES - me.tries, canClaim = bs.down && me.dmg > 0 && !me.claimed;
+  const bs = bossState(), me = myBoss(), st = statsOf(net.profile), left = me.allowed - me.tries, canClaim = bs.down && me.dmg > 0 && !me.claimed;
   const face = $('#bhFace');
-  if (!unchanged(face, String(bs.down))) face.innerHTML = bossFace(bs.down);
-  $('#bossHero').classList.toggle('down', bs.down);
-  $('#bhTag').textContent = bs.info.tag;
-  $('#bhRule').textContent = `今日のルール：${bs.info.rule}`;
+  if (!unchanged(face, String([bs.down2, bs.angry]))) face.innerHTML = bossFace(bs.down2, bs.angry);
+  $('#bossHero').classList.toggle('down', bs.down2);
+  $('#bossHero').classList.toggle('angry', bs.angry && !bs.down2);
+  $('#bhTag').textContent = bs.info.tag + (bs.angry && !bs.down2 ? '・怒りモード' : '');
+  $('#bhName').textContent = bs.angry && !bs.down2 ? '怒りの黒板消し大王' : '黒板消し大王';
+  $('#bhRule').textContent = `今日のルール：${bs.info.rule}` + (bs.angry && !bs.down2 ? '・ミスが減ってライフ4' : '');
   const pct = bs.loaded ? Math.round(bs.left / bs.hp * 100) : 100;
   $('#bhHp').style.width = pct + '%';
-  $('#bhHpT').textContent = bs.err ? 'HP ？' : bs.down ? '討伐成功！' : `HP ${bs.left.toLocaleString()} / ${bs.hp.toLocaleString()}`;
+  $('#bhHpT').textContent = bs.err ? 'HP ？' : bs.down2 ? '怒りの大王も討伐！ 完全勝利' : `${bs.angry ? '怒りHP' : 'HP'} ${bs.left.toLocaleString()} / ${bs.hp.toLocaleString()}`;
   $('#bhSub').textContent = `参加 ${bs.players}人・あなたのダメージ ${me.dmg}・のこり ${fmtLeft(msToReset())}`;
-  const go = $('#bossGo');
-  go.disabled = left <= 0 || !net.fb;
-  go.textContent = left > 0 ? `挑戦する（残り${left}回）` : '今日の挑戦は終わり（4:00に回復）';
+  const go = $('#bossGo'), canRetry = left <= 0 && me.paid < BOSS_RETRY_MAX;
+  go.disabled = !net.fb || (left <= 0 && (!canRetry || myJewels() < BOSS_RETRY_COST));
+  go.textContent = left > 0 ? `挑戦する（残り${left}回）` : canRetry ? `ジュエル${BOSS_RETRY_COST}で再挑戦（今日あと${BOSS_RETRY_MAX - me.paid}回）` : '今日の挑戦は終わり（4:00に回復）';
+  go.classList.toggle('gold', left <= 0 && canRetry);
+  go.classList.toggle('primary', !(left <= 0 && canRetry));
   $('#bossClaim').hidden = !canClaim;
   $('#bossClaim').textContent = `討伐報酬を受け取る（コイン${BOSS_REWARD}・ジュエル${BOSS_REWARD_J}）`;
+  $('#bossClaim2').hidden = !(bs.down2 && me.dmg > 0 && !me.claimed2);
+  $('#bossClaim2').textContent = `怒り大王の報酬を受け取る（ジュエル${BOSS_REWARD2_J}・かけら${BOSS_REWARD2_SH}）`;
+  const rr = bossYRank();
+  $('#bossRankClaim').hidden = !bossRankReady();
+  if (rr >= 0) $('#bossRankClaim').textContent = `昨日のダメージランキング${rr + 1}位！ ジュエル${BOSS_RANK_J[rr]}を受け取る`;
   $('#bossNote').textContent = bs.err ? 'ボスのデータを読み書きできません。Firebaseのルールに boss を追加してください。'
-    : bs.down && me.claimed ? '今日の報酬は受け取り済み。また明日！' : bs.down && !me.dmg ? '今日の大王はもう倒されました。明日は参加しよう！' : '';
+    : bs.down2 && me.claimed2 ? '今日の報酬は全部受け取り済み。また明日！' : bs.down && me.claimed && !bs.down2 ? '怒りの大王を倒すと追加の報酬！' : bs.down && !me.dmg ? '大王はもう倒されました。今からでも怒りの大王に挑めます！' : '';
+  // my tries: the best three count
+  const sb = $('#bossScores');
+  if (!unchanged(sb, JSON.stringify([me.sc, me.online, me.dmg]))) {
+    sb.innerHTML = '';
+    if (!me.sc.length) { const n = document.createElement('span'); n.className = 'sum'; n.style.marginLeft = '0'; n.textContent = 'まだ挑戦していません'; sb.append(n); }
+    me.sc.forEach((v, i) => { const c = document.createElement('span'); c.className = 'sc ' + (i < BOSS_TRIES ? 'top' : 'out'); c.textContent = v; sb.append(c); });
+    const sum = document.createElement('span'); sum.className = 'sum'; sum.textContent = (me.online ? `オンライン +${me.online}・` : '') + `合計 ${me.dmg}`; sb.append(sum);
+  }
+  const ml = $('#bossMiles');
+  if (!unchanged(ml, JSON.stringify([me.dmg, me.mi]))) {
+    ml.innerHTML = '';
+    BOSS_MILES.forEach(m => {
+      const got = !!me.mi['m' + m.d], ready = !got && me.dmg >= m.d, li = document.createElement('li');
+      li.className = got ? 'got' : '';
+      li.innerHTML = '<span class="md"></span><span class="mr"></span>';
+      li.querySelector('.md').textContent = `${m.d}ダメージ`;
+      li.querySelector('.mr').innerHTML = m.coins ? `<span class="coin">${m.coins}</span>` : m.tickets ? `<span class="tkt">ガチャチケット${m.tickets}枚</span>` : `<span class="jwl">${m.jewels}</span>`;
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'btn sm' + (ready ? ' gold' : ''); b.disabled = !ready;
+      b.textContent = got ? '受け取り済み' : ready ? '受け取る' : `あと${m.d - me.dmg}`;
+      if (ready) b.addEventListener('click', async () => { b.disabled = true; if (await claimBossMile(m)) { sfx('coin'); toast(m.coins ? `コイン +${m.coins}` : m.tickets ? `ガチャチケット +${m.tickets}` : `ジュエル +${m.jewels}`); } ml.dataset.key = ''; render(); });
+      li.append(b); ml.append(li);
+    });
+  }
   // reward road
   const road = bossRoad(), ol = $('#bossRoad');
   $('#roadCount').textContent = `討伐 ${st.bossKills}回`;
@@ -6995,13 +7223,11 @@ function renderShop(){
     else if (lim) { b.className = 'btn'; b.disabled = true; b.textContent = c.boss ? 'ボスで手に入る' : c.rate ? 'ランクで手に入る' : c.season ? 'シーズンパスで手に入る' : c.stars ? 'ステージで手に入る' : c.lvl ? 'レベルで手に入る' : '図鑑で手に入る'; }
     else if (coins < c.price) { b.className = 'btn'; b.textContent = 'コインが足りない'; b.disabled = true; }
     else {
-      b.className = 'btn gold'; b.textContent = armed === c.id ? 'もう一度押すと買う' : '買う';
-      b.addEventListener('click', () => {
-        if (ui.buyArm && ui.buyArm.id === c.id && ui.buyArm.until > Date.now()) {
-          ui.buyArm = null; b.disabled = true;
-          (boards ? buyBoard(c.id) : buyChalk(c.id)).finally(() => { grid.dataset.key = ''; if (ui.screen === 'shop') renderShop(); });
-        }
-        else { ui.buyArm = {id: c.id, until: Date.now() + 3000}; renderShop(); }
+      b.className = 'btn gold'; b.textContent = '買う';
+      b.addEventListener('click', async () => {
+        if (!(await confirmBuy({art: boards ? boardSwatch(c.id, chalkOf(myChalk())) : chalkFig(c), name: c.name, cur: 'coins', cost: c.price, have: myCoins(), note: c.fx ? 'エフェクトつき' : ''}))) return;
+        b.disabled = true;
+        (boards ? buyBoard(c.id) : buyChalk(c.id)).finally(() => { grid.dataset.key = ''; if (ui.screen === 'shop') renderShop(); });
       });
     }
     el.append(b);
@@ -7148,7 +7374,7 @@ function renderGame(){
     }
     if (stageSeat) { tt = ui.stage.boss ? 'BOSS' : STAGE_LEVEL[ui.stage.level]; tc = 'boss'; }
     else if (!net.on && ui.puzzle && k === 1) { tt = `${ui.puzzle.d}手詰め`; tc = 'boss'; }
-    else if (bossSeat) { const left = BOSS_LIVES - ui.boss.life + (G.over && ui.boss.cleared ? 0 : 1); tt = 'ライフ ' + '●'.repeat(Math.max(0, left)) + '○'.repeat(BOSS_LIVES - Math.max(0, left)); tc = 'boss'; }
+    else if (bossSeat) { const L = ui.boss.lives, left = L - ui.boss.life + (G.over && ui.boss.cleared ? 0 : 1); tt = 'ライフ ' + '●'.repeat(Math.max(0, left)) + '○'.repeat(L - Math.max(0, left)); tc = 'boss'; }
     else if (out) { tt = '脱落'; tc = 'out'; }
     else if (net.on && k > 0 && G.seats && !online[G.seats[k]]) { tt = '切断中'; tc = 'off'; }
     else if (isRated() && G.seats) { const rr = Math.round(+((ps[G.seats[k]] || {}).rating)) || BASE_RATE; tt = String(rr); tc = 'rate ' + tierCls(rr); }
@@ -7260,7 +7486,7 @@ function renderStrip(act, ms, nm){
       again.textContent = isHost() ? 'ロビーにもどる' : 'ホストを待っています…';
       again.disabled = !isHost() || net.busy;
     } else if (ui.boss) {
-      const left = BOSS_TRIES - myBoss().tries;
+      const mb = myBoss(), left = mb.allowed - mb.tries;
       again.textContent = left > 0 ? `もう一回挑戦（残り${left}回）` : 'ボス画面へ';
       ev.textContent = `与えたダメージ ${ui.boss.dmg}`; ev.hidden = false;
     } else again.textContent = 'もう一回';
@@ -7277,7 +7503,7 @@ function renderStrip(act, ms, nm){
   turn.style.color = (seatChalk(G.turn) || {}).color || '';
   turn.textContent = `${nm[G.turn]}の番`;
   if (ui.puzzle) { ev.textContent = `${ui.puzzle.d}手詰め・のこり${ui.puzzle.left}手（${ruleShort(ui.puzzle.rules)}）`; ev.hidden = false; }
-  if (ui.boss) { ev.textContent = `ライフ ${BOSS_LIVES - ui.boss.life + 1}/${BOSS_LIVES}・与えたダメージ ${ui.boss.dmg}`; ev.hidden = false; }
+  if (ui.boss) { ev.textContent = `ライフ ${ui.boss.lives - ui.boss.life + 1}/${ui.boss.lives}・与えたダメージ ${ui.boss.dmg}`; ev.hidden = false; }
   if (ui.stage) { const sg = ui.stage; ev.textContent = `${sg.id}・あなたの手数 ${sg.moves}${sg.limit ? `/${sg.limit}` : ''}（${ruleShort(sg.rule)}）`; ev.hidden = false; }
   if (net.on && !net.connected) msg.textContent = 'インターネットにつながっていません';
   else if (net.on && !alive(G, 0)) msg.textContent = 'あなたは脱落しました。最後まで見られます';
@@ -7546,7 +7772,30 @@ $('#passClaim').addEventListener('click', async () => {
   }
   render();
 });
-$('#bossGo').addEventListener('click', () => { $('#bossGo').disabled = true; startBossChallenge().finally(() => { if (ui.screen === 'boss') renderBoss(); }); });
+$('#bossGo').addEventListener('click', async () => {
+  const me = myBoss(), go = $('#bossGo');
+  if (me.allowed - me.tries <= 0) {
+    const fl = me.sc.length >= BOSS_TRIES ? me.sc[BOSS_TRIES - 1] : 0;
+    const ok = await confirmBuy({title: '再挑戦しますか？', art: `<span class="sp-boss" style="width:84px;display:block;animation:none">${bossFace(false, bossState().angry)}</span>`, name: '大王にもう一度挑戦',
+      cur: 'jewels', cost: BOSS_RETRY_COST, have: myJewels(), ok: '再挑戦する', note: `今日いちばん低い回（${fl}）より高いスコアなら入れ替わります`});
+    if (!ok) return;
+    go.disabled = true;
+    if (!(await buyBossRetry())) { toast('再挑戦できませんでした', true); renderBoss(); return; }
+  }
+  go.disabled = true;
+  startBossChallenge().finally(() => { if (ui.screen === 'boss') renderBoss(); });
+});
+$('#bossClaim2').addEventListener('click', async () => {
+  const b = $('#bossClaim2'); b.disabled = true;
+  if (await claimBoss2()) { sfx('win'); toast(`ジュエル +${BOSS_REWARD2_J}・かけら +${BOSS_REWARD2_SH}`); }
+  b.disabled = false; render();
+});
+$('#bossRankClaim').addEventListener('click', async () => {
+  const b = $('#bossRankClaim'); b.disabled = true;
+  const j = await claimBossRank();
+  if (j) { sfx('win'); toast(`ジュエル +${j}`); }
+  b.disabled = false; render();
+});
 $('#bossClaim').addEventListener('click', async () => {
   const b = $('#bossClaim'), from = centerOf(b);
   b.disabled = true;
@@ -7572,14 +7821,15 @@ $$('#bnTrack .bn').forEach(b => b.addEventListener('click', () => {
   }
 }));
 $('#newsBar').addEventListener('click', () => setScreen('news'));
-const armThen = (id, fn) => () => {
+const askPull = (n, ticket) => async () => {
   if (ui.pulling) return;
-  if (ui.buyArm && ui.buyArm.id === id && ui.buyArm.until > Date.now()) { ui.buyArm = null; fn(); }
-  else { ui.buyArm = {id, until: Date.now() + 3000}; renderShop(); }
+  const ok = await confirmBuy({title: 'ガチャを引きますか？', art: $('#gbArt').innerHTML, name: ticket ? 'チケットで1回' : `${n}回引く`,
+    cur: ticket ? 'tickets' : 'jewels', cost: ticket ? 1 : GACHA_COST * n, have: ticket ? +((net.profile || {}).tickets) || 0 : myJewels(), ok: '引く'});
+  if (ok) doPull(n, ticket);
 };
-$('#gPull1').addEventListener('click', armThen('gPull1', () => doPull(1, false)));
-$('#gPull10').addEventListener('click', armThen('gPull10', () => doPull(10, false)));
-$('#gPullT').addEventListener('click', armThen('gPullT', () => doPull(1, true)));
+$('#gPull1').addEventListener('click', askPull(1, false));
+$('#gPull10').addEventListener('click', askPull(10, false));
+$('#gPullT').addEventListener('click', askPull(1, true));
 $('#gRatesBtn').addEventListener('click', () => { ui.gRates = !ui.gRates; renderShop(); });
 $('#gShardBtn').addEventListener('click', () => { ui.gShop = !ui.gShop; renderShop(); });
 $('#tabShopGacha').addEventListener('click', () => { ui.shopTab = 'gacha'; ui.buyArm = null; renderShop(); });
@@ -7704,7 +7954,7 @@ $('#again').addEventListener('click', () => {
     return;
   }
   if (!net.on && ui.puzzle) { startPuzzle(); return; }
-  if (!net.on && ui.boss) { if (BOSS_TRIES - myBoss().tries > 0) startBossChallenge(); else { ui.boss = null; setScreen('boss'); } return; }
+  if (!net.on && ui.boss) { const mb = myBoss(); if (mb.allowed - mb.tries > 0) startBossChallenge(); else { ui.boss = null; setScreen('boss'); } return; }
   if (isRated()) { leaveRoom().then(() => startSearch()); }
   else if (net.on) { if (isHost()) backToLobby(); }
   else newGame();
