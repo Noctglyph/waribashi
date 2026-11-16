@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="waribashi-version" content="11/16-3">
+<meta name="waribashi-version" content="11/16-4">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="指の本数を足して、相手の両手を消したら勝ち。教室の手遊び「わりばし」をスマホで。">
 <meta property="og:title" content="わりばし対戦">
@@ -1243,6 +1243,25 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 
 
 
+
+/* ===== Account linking ===== */
+.acct{display:grid;gap:12px;min-width:0}
+.acct-st{margin:0;font-size:13.5px;line-height:1.65}
+.acct-id{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:12px 14px;border-radius:12px;border:2px dashed var(--coin);background:var(--board-deep)}
+.acct-id .label{grid-column:1/-1}
+.acct-id b{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:clamp(18px,5.6vw,24px);letter-spacing:.08em;color:var(--coin);overflow-wrap:anywhere}
+.acct-g{margin:0;font-size:13px;color:var(--chalk-soft);overflow-wrap:anywhere}
+.acct-btns{display:flex;flex-wrap:wrap;gap:8px}
+.acct-form{display:grid;gap:12px;min-width:0}
+.input.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase}
+.input.mono[readonly]{color:var(--coin);border-style:dashed}
+.acct-show{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--chalk-soft);cursor:pointer}
+.acct-warn{margin:0;padding-left:1.3em;font-size:12.5px;line-height:1.75;color:var(--chalk-soft)}
+.acct-warn1{margin:0;padding:8px 12px;border-radius:10px;background:rgba(255,140,140,.1);border:1.5px solid rgba(255,140,140,.4);font-size:12.5px;line-height:1.6;color:#ffb3b3}
+.acct-err{margin:0;font-size:13px;font-weight:700;color:var(--lose)}
+.acct-err:empty{display:none}
+.fold-s.warn{color:#ffb3b3}
+.acct-art{display:grid;place-items:center;width:64px;height:64px;margin:0 auto;border-radius:50%;border:2px solid var(--coin);font-size:30px;font-weight:800;color:var(--coin)}
 /* ===== Present box and the admin's distribution ===== */
 .nbrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
 .giftbtn{position:relative;display:grid;place-items:center;align-content:center;gap:1px;width:58px;min-height:44px;padding:4px 0;border-radius:10px;border:1.5px solid var(--line);background:var(--panel);color:var(--chalk-soft);cursor:pointer;font:inherit}
@@ -1934,6 +1953,50 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
       <summary><h3>あなたの記録</h3><span class="fold-s" id="foldStatsS"></span></summary>
       <dl class="facts" id="myStats"></dl>
       <p class="note">記録・称号・プレートはオンライン対戦（レート戦とカスタムマッチ）で増えます。CPUの称号はCPU対戦で手に入ります。</p>
+    </details>
+    <details class="panel fold" id="foldAcct" data-fold="acct" hidden>
+      <summary><h3>アカウント連携</h3><span class="fold-s" id="foldAcctS"></span></summary>
+      <div class="acct">
+        <div class="acct" id="acctView">
+          <p class="acct-st" id="acctSt"></p>
+          <div class="acct-id" id="acctIdBox" hidden><span class="label">あなたの引き継ぎID</span><b id="acctId"></b><button type="button" class="btn sm" id="acctCopy">コピー</button></div>
+          <p class="acct-g" id="acctG" hidden><span id="acctGT"></span></p>
+          <p class="note" id="acctNote" style="margin:0"></p>
+          <p class="acct-err" id="acctErrG" role="alert"></p>
+          <div class="acct-btns">
+            <button type="button" class="btn primary" id="acctMake">IDとパスワードで連携する</button>
+            <button type="button" class="btn" id="acctPwBtn" hidden>パスワードを変える</button>
+            <button type="button" class="btn" id="acctGoogle">Googleで連携する</button>
+            <button type="button" class="btn" id="acctRestoreBtn">別の端末のデータを引き継ぐ</button>
+          </div>
+          <p class="note" style="margin:0">学校のタブレットなどでGoogleが使えないときは、IDとパスワードを使ってね。</p>
+        </div>
+        <form class="acct-form" id="acctMakeForm" hidden>
+          <label class="field"><span class="label">あなたの引き継ぎID（自動で決まります）</span><input class="input mono" id="acctNewId" autocomplete="username" readonly></label>
+          <label class="field"><span class="label">パスワード（8文字以上・英字と数字をまぜる）</span><input class="input" type="password" id="acctPw1" autocomplete="new-password" maxlength="64"></label>
+          <label class="field"><span class="label">パスワード（もう一度）</span><input class="input" type="password" id="acctPw2" autocomplete="new-password" maxlength="64"></label>
+          <label class="acct-show"><input type="checkbox" id="acctShow1">パスワードを表示する</label>
+          <ul class="acct-warn"><li>ほかのサイトやゲームと同じパスワードにしないでね</li><li>忘れると引き継げません。IDとパスワードを紙などにメモしておいてね</li><li>パスワードはだれにも教えないでね（運営がきくこともありません）</li></ul>
+          <p class="acct-err" id="acctErr1" role="alert"></p>
+          <div class="acct-btns"><button type="button" class="btn" data-acct-cancel>やめる</button><button type="submit" class="btn primary" id="acctMakeGo">連携する</button></div>
+        </form>
+        <form class="acct-form" id="acctRestoreForm" hidden>
+          <p class="acct-warn1">引き継ぐと、この端末のいまのデータから、引き継いだデータに切りかわります。</p>
+          <label class="field"><span class="label">引き継ぎID</span><input class="input mono" id="acctRid" autocomplete="username" maxlength="16" placeholder="WB-XXXX-XXXX" autocapitalize="characters" spellcheck="false"></label>
+          <label class="field"><span class="label">パスワード</span><input class="input" type="password" id="acctRpw" autocomplete="current-password" maxlength="64"></label>
+          <p class="acct-err" id="acctErr2" role="alert"></p>
+          <div class="acct-btns"><button type="button" class="btn" data-acct-cancel>やめる</button><button type="submit" class="btn primary" id="acctRestoreGo">引き継ぐ</button></div>
+          <button type="button" class="btn" id="acctRestoreG">Googleで連携したデータを引き継ぐ</button>
+        </form>
+        <form class="acct-form" id="acctPwForm" hidden>
+          <label class="field"><span class="label">いまのパスワード</span><input class="input" type="password" id="acctCur" autocomplete="current-password" maxlength="64"></label>
+          <label class="field"><span class="label">新しいパスワード（8文字以上・英字と数字をまぜる）</span><input class="input" type="password" id="acctNew1" autocomplete="new-password" maxlength="64"></label>
+          <label class="field"><span class="label">新しいパスワード（もう一度）</span><input class="input" type="password" id="acctNew2" autocomplete="new-password" maxlength="64"></label>
+          <label class="acct-show"><input type="checkbox" id="acctShow3">パスワードを表示する</label>
+          <p class="acct-err" id="acctErr3" role="alert"></p>
+          <div class="acct-btns"><button type="button" class="btn" data-acct-cancel>やめる</button><button type="submit" class="btn primary" id="acctPwGo">変える</button></div>
+        </form>
+      </div>
     </details>
     <details class="panel fold" id="foldSet" data-fold="set">
       <summary><h3>設定</h3><span class="fold-s">効果音・BGM・対戦募集・相手のスタンプ</span></summary>
@@ -2904,7 +2967,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/16-3';
+const APP_VERSION = '11/16-4';
 // ----- New version: the page's <head> carries its version (build.py writes it). Now and then, and whenever the app comes
 // back to the front, read the head of the live page; if its version differs, offer a reload. ?debug&vfast checks every few seconds.
 const VER_FAST = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('vfast'); } catch(e) { return false; } })();
@@ -4057,6 +4120,158 @@ document.addEventListener('click', e => {
   lockToast(el.dataset.feat);
 }, true);
 
+
+// ===================== Account: an ID and password (or Google) on this account, and taking it over on another device =====================
+// The ID is the name part of an e-mail address that is never written to (Firebase's e-mail/password sign-in holds the
+// password; this page never stores it). Linking keeps the same account, so everything stays.
+const ACCT_DOMAIN = 'noctglyph.github.io';
+const acctKey = raw => String(raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '').replace(/^WB(?=[A-Z0-9]{8}$)/, '');
+const acctEmail = id => `wb${acctKey(id).toLowerCase()}@${ACCT_DOMAIN}`;
+const acctIdOf = email => { const m = /^wb([a-z0-9]{8})@/.exec(String(email || '')); return m ? `WB-${m[1].slice(0, 4).toUpperCase()}-${m[1].slice(4).toUpperCase()}` : ''; };
+const newAcctId = () => { let s = ''; for (let i = 0; i < 8; i++) s += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]; return `WB-${s.slice(0, 4)}-${s.slice(4)}`; };
+function acctState(){
+  const u = net.auth && net.auth.currentUser, pd = (u && u.providerData) || [];
+  const pw = pd.find(p => p && p.providerId === 'password'), g = pd.find(p => p && p.providerId === 'google.com');
+  return {ready: !!u, id: pw ? acctIdOf(pw.email || u.email) : '', google: g ? (g.email || 'Googleアカウント') : '', linked: !!(pw || g)};
+}
+const AUTH_MSG = {
+  'auth/operation-not-allowed': 'Firebaseで、この連携方法がまだ有効になっていません', 'auth/admin-restricted-operation': 'Firebaseで、この連携方法がまだ有効になっていません',
+  'auth/invalid-credential': 'IDかパスワードがちがいます', 'auth/wrong-password': 'IDかパスワードがちがいます', 'auth/user-not-found': 'IDかパスワードがちがいます',
+  'auth/invalid-login-credentials': 'IDかパスワードがちがいます', 'auth/invalid-email': 'IDの形がちがいます（WB-から始まる12文字）',
+  'auth/weak-password': 'パスワードが短すぎます（8文字以上）', 'auth/too-many-requests': '何回もためしたので、しばらく待ってからもう一度ためしてね',
+  'auth/network-request-failed': 'インターネットにつながっていません', 'auth/popup-blocked': 'ポップアップが止められました。もう一度押してね',
+  'auth/popup-closed-by-user': 'Googleの画面が閉じられました', 'auth/cancelled-popup-request': 'Googleの画面が閉じられました',
+  'auth/credential-already-in-use': 'そのGoogleアカウントは、もう別のデータとつながっています', 'auth/provider-already-linked': 'もう連携しています',
+  'auth/unauthorized-domain': 'Firebaseの「承認済みドメイン」に、このサイトを追加してね', 'auth/email-already-in-use': 'IDを決められませんでした。もう一度押してね'};
+const authErr = (e, fallback) => AUTH_MSG[String((e && e.code) || '')] || fallback;
+const pwProblem = (a, b) => a.length < 8 ? 'パスワードは8文字以上にしてね' : !/[A-Za-z]/.test(a) || !/[0-9]/.test(a) ? 'パスワードは英字と数字をまぜてね' : a !== b ? '2回目のパスワードがちがいます' : '';
+async function acctLink(pw){
+  const am = net.authMod, u = net.auth && net.auth.currentUser;
+  if (!am || !u) throw Object.assign(new Error('auth'), {code: 'auth/network-request-failed'});
+  for (let i = 0; i < 4; i++) {
+    const id = i === 0 && ui.acctNewId ? ui.acctNewId : newAcctId();
+    try { await am.linkWithCredential(u, am.EmailAuthProvider.credential(acctEmail(id), pw)); if (typeof u.reload === 'function') await u.reload().catch(() => {}); return id; }
+    catch(e) { if (e && e.code === 'auth/email-already-in-use') continue; throw e; }
+  }
+  throw Object.assign(new Error('id'), {code: 'auth/email-already-in-use'});
+}
+// Taking over another account replaces this one on this device: the page starts again on the other account.
+function acctSwitched(msg){
+  try { sessionStorage.setItem('waribashi-acctmsg', msg); } catch(e) {}
+  location.reload();
+}
+function acctOpen(mode){
+  ui.acctMode = mode;
+  if (mode === 'make') ui.acctNewId = newAcctId();
+  ['#acctPw1', '#acctPw2', '#acctRid', '#acctRpw', '#acctCur', '#acctNew1', '#acctNew2'].forEach(s => { $(s).value = ''; });
+  ['#acctErr1', '#acctErr2', '#acctErr3', '#acctErrG'].forEach(s => { $(s).textContent = ''; });
+  renderAcct();
+  const first = {make: '#acctPw1', restore: '#acctRid', pw: '#acctCur'}[mode];
+  if (first) setTimeout(() => { try { $(first).focus(); } catch(e) {} }, 50);
+}
+function renderAcct(){
+  if (!$('#foldAcct')) return;
+  const a = acctState(), mode = ui.acctMode || '', on = !!FIREBASE_CONFIG && a.ready;
+  $('#foldAcct').hidden = !FIREBASE_CONFIG;
+  const s = $('#foldAcctS');
+  s.textContent = !on ? '読み込み中…' : a.linked ? `連携ずみ${a.id ? `（${a.id}）` : '（Google）'}` : '未連携：機種変更すると、データが引き継げません';
+  s.classList.toggle('warn', on && !a.linked);
+  $('#acctView').hidden = !!mode;
+  $('#acctMakeForm').hidden = mode !== 'make';
+  $('#acctRestoreForm').hidden = mode !== 'restore';
+  $('#acctPwForm').hidden = mode !== 'pw';
+  $('#acctSt').textContent = !on ? '' : a.linked ? 'このアカウントは連携ずみです。ほかの端末でも、同じデータで遊べます。' : 'いまは、この端末だけのデータです。連携しておくと、機種変更や学校のタブレットでも同じデータで遊べます。';
+  $('#acctIdBox').hidden = !a.id;
+  $('#acctId').textContent = a.id;
+  $('#acctG').hidden = !a.google;
+  $('#acctGT').textContent = a.google ? `Google：${a.google}` : '';
+  $('#acctNote').textContent = a.id ? 'パスワードは、この画面には出ません。忘れると引き継げないので、紙などにメモしておいてね。' : '';
+  $('#acctMake').hidden = !!a.id;
+  $('#acctPwBtn').hidden = !a.id;
+  $('#acctGoogle').hidden = !!a.google;
+  $('#acctGoogle').textContent = a.id ? 'Googleでも連携する' : 'Googleで連携する';
+  ['#acctMake', '#acctGoogle', '#acctRestoreBtn', '#acctPwBtn'].forEach(id => { $(id).disabled = !on || !!ui.acctBusy; });
+  $('#acctNewId').value = ui.acctNewId || '';
+  $$('#acctMakeForm button, #acctRestoreForm button, #acctPwForm button').forEach(b => { b.disabled = !!ui.acctBusy; });
+}
+async function acctRun(errSel, job){
+  if (ui.acctBusy) return;
+  ui.acctBusy = true; $(errSel).textContent = ''; renderAcct();
+  try { await job(); }
+  catch(e) { $(errSel).textContent = authErr(e, 'うまくいきませんでした。もう一度ためしてね'); dbg('account: ' + ((e && (e.code || e.message)) || e)); }
+  finally { ui.acctBusy = false; renderAcct(); }
+}
+function wireAcct(){
+  const pwShow = (box, ids) => $(box).addEventListener('change', e => ids.forEach(id => { $(id).type = e.target.checked ? 'text' : 'password'; }));
+  pwShow('#acctShow1', ['#acctPw1', '#acctPw2']);
+  pwShow('#acctShow3', ['#acctCur', '#acctNew1', '#acctNew2']);
+  $('#acctMake').addEventListener('click', () => acctOpen('make'));
+  $('#acctRestoreBtn').addEventListener('click', () => acctOpen('restore'));
+  $('#acctPwBtn').addEventListener('click', () => acctOpen('pw'));
+  $$('[data-acct-cancel]').forEach(b => b.addEventListener('click', () => { ui.acctMode = ''; renderAcct(); }));
+  $('#acctCopy').addEventListener('click', () => { const id = acctState().id; copyText(id).then(() => toast('引き継ぎIDをコピーしました'), () => toast(id)); });
+  $('#acctMakeForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const p1 = $('#acctPw1').value, bad = pwProblem(p1, $('#acctPw2').value);
+    if (bad) { $('#acctErr1').textContent = bad; return; }
+    acctRun('#acctErr1', async () => {
+      const id = await acctLink(p1);
+      ui.acctMode = ''; ui.acctNewId = '';
+      sfx('unlock');
+      celebrate('連携<br>完了！', () => { const d = document.createElement('div'), b = document.createElement('b'), sp = document.createElement('span'); b.textContent = `引き継ぎID：${id}`; sp.textContent = 'IDとパスワードをメモしておいてね'; d.append(b, sp); return d; });
+      toast(`連携しました。引き継ぎIDは ${id} です`);
+    });
+  });
+  $('#acctRestoreForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const id = acctKey($('#acctRid').value), pw = $('#acctRpw').value;
+    $('#acctErr2').textContent = '';
+    if (id.length !== 8) { $('#acctErr2').textContent = AUTH_MSG['auth/invalid-email']; return; }
+    if (!pw) { $('#acctErr2').textContent = 'パスワードを入れてね'; return; }
+    if (!(await acctConfirmSwitch())) return;
+    acctRun('#acctErr2', async () => {
+      await net.authMod.signInWithEmailAndPassword(net.auth, acctEmail(id), pw);
+      acctSwitched(`データを引き継ぎました（${acctIdOf(acctEmail(id))}）`);
+    });
+  });
+  $('#acctPwForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const cur = $('#acctCur').value, p1 = $('#acctNew1').value, bad = pwProblem(p1, $('#acctNew2').value);
+    if (!cur) { $('#acctErr3').textContent = 'いまのパスワードを入れてね'; return; }
+    if (bad) { $('#acctErr3').textContent = bad; return; }
+    acctRun('#acctErr3', async () => {
+      const am = net.authMod, u = net.auth.currentUser, em = (u.providerData.find(p => p.providerId === 'password') || {}).email || u.email;
+      await am.reauthenticateWithCredential(u, am.EmailAuthProvider.credential(em, cur));
+      await am.updatePassword(u, p1);
+      ui.acctMode = '';
+      toast('パスワードを変えました。新しいパスワードをメモしておいてね');
+    });
+  });
+  $('#acctGoogle').addEventListener('click', () => acctRun('#acctErrG', async () => {
+    const am = net.authMod;
+    const u = net.auth.currentUser;
+    await am.linkWithPopup(u, new am.GoogleAuthProvider());
+    if (typeof u.reload === 'function') await u.reload().catch(() => {});
+    sfx('unlock'); toast('Googleアカウントと連携しました');
+  }));
+  $('#acctRestoreG').addEventListener('click', async () => {
+    $('#acctErr2').textContent = '';
+    if (!(await acctConfirmSwitch())) return;
+    acctRun('#acctErr2', async () => {
+      const am = net.authMod, r = await am.signInWithPopup(net.auth, new am.GoogleAuthProvider());
+      const fresh = am.getAdditionalUserInfo ? (am.getAdditionalUserInfo(r) || {}).isNewUser : false;
+      acctSwitched(fresh ? 'そのGoogleアカウントには引き継ぐデータがなかったので、新しく始めました' : 'Googleアカウントのデータを引き継ぎました');
+    });
+  });
+  try { const m = sessionStorage.getItem('waribashi-acctmsg'); if (m) { sessionStorage.removeItem('waribashi-acctmsg'); setTimeout(() => toast(m), 1200); } } catch(e) {}
+}
+// Before switching accounts on this device: what happens to the data here.
+function acctConfirmSwitch(){
+  const a = acctState(), lv = myLevel();
+  return confirmBuy({title: 'データを引き継ぎますか？', art: '<span class="acct-art" aria-hidden="true">⇄</span>', name: '別の端末のデータに切りかえる',
+    note: a.linked ? `この端末のいまのデータ（Lv.${lv.level}）は、いまの引き継ぎIDでいつでも戻せます。` : `この端末のいまのデータ（Lv.${lv.level}・ジュエル${myJewels()}）は連携していないので、使えなくなります。残したいときは、先に「IDとパスワードで連携する」をしてね。`,
+    ok: '引き継ぐ'});
+}
 
 // ===================== Present box (受け取りBOX) and the admin's distribution =====================
 // Gifts for everyone live in gifts/<id>, gifts for one player in inbox/<uid>/<id>; only admins (admins/<uid> = true) write them.
@@ -5651,6 +5866,8 @@ async function claimGuideDone(){
 
 // ===================== News =====================
 const NEWS = [
+  {id: 'n17', date: '2026-11-16', tag: '新機能', title: 'アカウント連携ができるようになりました',
+    body: 'マイページの「アカウント連携」から、引き継ぎIDとパスワードを作れます。連携しておくと、機種変更したときや学校のタブレットでも、同じデータ（レート・ジュエル・フレンドなど）で遊べます。\nGoogleアカウントでも連携できます。パスワードは忘れると引き継げないので、メモしておいてね。'},
   {id: 'n16', date: '2026-11-16', tag: '新機能', title: '受け取りBOXができました',
     body: 'ホームの「お知らせ」のとなりに、プレゼントの受け取りBOXができました。運営からのプレゼントや、これから始まる大会の報酬などがここに届きます。\n受け取り期限があるので、届いたら早めに受け取ってね。'},
   {id: 'n15', date: '2026-11-16', tag: '新機能', title: '曜日ごとにボスが変わる！ 伝説のボスも登場',
@@ -6712,6 +6929,7 @@ function loadFirebase(){
       const [appMod, authMod, dbMod] = mods;
       const app = appMod.getApps().length ? appMod.getApp() : appMod.initializeApp(FIREBASE_CONFIG);
       const auth = authMod.getAuth(app);
+      net.auth = auth; net.authMod = authMod;
       let user = await new Promise(res => { let off = null; off = authMod.onAuthStateChanged(auth, u => { if (off) off(); res(u); }); });
       if (!user) user = (await authMod.signInAnonymously(auth)).user;
       net.uid = user.uid;
@@ -7618,6 +7836,7 @@ function render(){
   if (ui.screen === 'chapter') renderChapter();
   if (ui.screen === 'news') renderNews();
   if (ui.screen === 'plate') renderLevel();
+  if (ui.screen === 'plate') renderAcct();
   if (ui.loginShow && ui.screen === 'home' && $('#result').hidden && $('#splash').hidden) { const l = ui.loginShow; ui.loginShow = null; showLogin(l); }
   if (ui.screen === 'home') renderHome();
   if (ui.screen === 'game') renderGame();
@@ -8975,6 +9194,7 @@ $$('#bnTrack .bn').forEach(b => b.addEventListener('click', () => {
 }));
 $('#newsBar').addEventListener('click', () => setScreen('news'));
 $('#goGifts').addEventListener('click', () => { ui.giftTab = 'box'; setScreen('gifts'); });
+wireAcct();
 $$('#giftTabs [role="tab"]').forEach(b => b.addEventListener('click', () => { ui.giftTab = b.dataset.gt; renderGifts(); }));
 $('#giftAll').addEventListener('click', () => takeGifts(giftList(), $('#giftAll')));
 $('#goAdmin').addEventListener('click', () => setScreen('admin'));
