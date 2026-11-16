@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="waribashi-version" content="11/16-2">
+<meta name="waribashi-version" content="11/16-3">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="指の本数を足して、相手の両手を消したら勝ち。教室の手遊び「わりばし」をスマホで。">
 <meta property="og:title" content="わりばし対戦">
@@ -1242,6 +1242,53 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 
 
 
+
+/* ===== Present box and the admin's distribution ===== */
+.nbrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.giftbtn{position:relative;display:grid;place-items:center;align-content:center;gap:1px;width:58px;min-height:44px;padding:4px 0;border-radius:10px;border:1.5px solid var(--line);background:var(--panel);color:var(--chalk-soft);cursor:pointer;font:inherit}
+.giftbtn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round}
+.giftbtn span{font-size:9.5px;font-weight:800;letter-spacing:.06em;line-height:1}
+.giftbtn.has{color:var(--coin);border-color:rgba(242,207,91,.7);box-shadow:0 0 14px -4px rgba(242,207,91,.6)}
+.giftbtn .tab-badge{top:-7px;left:auto;right:-7px}
+.giftbtn:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.gifts,.ghist,.adm-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.gift{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;border-radius:12px;border:1.5px solid var(--line);background:var(--panel)}
+.gift.mine{border-color:rgba(242,207,91,.7)}
+.gf-art svg{display:block;width:52px;height:auto;overflow:visible}
+.gf-txt{display:grid;gap:4px;min-width:0}
+.gf-t{font-size:15px;line-height:1.35;overflow-wrap:anywhere}
+.gf-t small{display:inline-block;margin-right:6px;padding:0 7px;border-radius:999px;background:var(--coin);color:#1c1b18;font-size:10.5px;line-height:1.7;vertical-align:2px}
+.gf-m{font-size:12.5px;line-height:1.55;color:var(--chalk-soft);white-space:pre-wrap;overflow-wrap:anywhere}
+.gf-items{display:flex;flex-wrap:wrap;gap:4px}
+.gf-chip{display:inline-flex;align-items:center;padding:1px 9px;border-radius:999px;border:1.5px solid var(--line);background:var(--board-deep);font-size:12px;font-weight:700;color:var(--chalk)}
+.gf-chip.coins{border-color:rgba(242,207,91,.6);color:var(--coin)}
+.gf-chip.jewels{border-color:rgba(233,166,255,.6);color:#e9a6ff}
+.gf-chip.tickets{border-color:rgba(255,179,90,.6);color:#ffb35a}
+.gf-chip.shards{border-color:rgba(159,216,255,.6);color:#9fd8ff}
+.gf-chip.rmp{border-color:rgba(159,224,255,.6);color:#9fe0ff}
+.gf-chip.own{border-color:rgba(255,143,143,.6);color:#ffb0b0}
+.gf-lim{font-size:11.5px;color:var(--chalk-faint)}
+.gifts li.empty,.ghist li.empty,.adm-list li.empty{display:block;padding:18px;text-align:center;color:var(--chalk-soft);border:1.5px dashed var(--line);border-radius:12px;background:none}
+.ghist li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 12px;align-items:baseline;padding:8px 12px;border-radius:10px;background:var(--board-deep);border:1.5px solid var(--line)}
+.ghist .gh-d{grid-row:span 2;font-size:11.5px;color:var(--chalk-faint);font-variant-numeric:tabular-nums}
+.ghist b{font-size:14px;min-width:0;overflow-wrap:anywhere}
+.ghist .gh-x{font-size:12px;color:var(--chalk-soft);min-width:0;overflow-wrap:anywhere}
+.adm{display:grid;gap:14px}
+.adm h3{margin:0}
+.adm-nums{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
+.adm-nums label{display:grid;gap:4px;font-size:12.5px;color:var(--chalk-soft)}
+.adm-pick{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:8px}
+.adm-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.adm-chips .gf-chip{cursor:pointer;font:inherit;font-size:12px}
+textarea.input{resize:vertical;min-height:72px;line-height:1.5}
+.adm-list li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--board-deep);border:1.5px solid var(--line)}
+.adm-list li.over{opacity:.6}
+.adm-list .al-t{display:grid;min-width:0}
+.adm-list b{font-size:14px;overflow-wrap:anywhere}
+.adm-list small{font-size:11.5px;color:var(--chalk-soft);overflow-wrap:anywhere}
+.adm-list .al-n{font-weight:800;font-variant-numeric:tabular-nums;color:var(--coin);white-space:nowrap}
+.uidline{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin:0;font-size:11.5px;color:var(--chalk-faint);overflow-wrap:anywhere}
+@media (max-width:380px){.gift{grid-template-columns:44px minmax(0,1fr)}.gift>.btn{grid-column:1/-1}.gf-art svg{width:44px}}
 /* ===== A newer version is up ===== */
 .updbar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 78px);z-index:58;translate:-50% 0;width:min(520px,calc(100% - 24px));display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:10px 10px 10px 14px;border-radius:14px;border:2px solid var(--coin);background:var(--panel);box-shadow:0 14px 30px -10px rgba(0,0,0,.85);animation:ubIn .35s cubic-bezier(.2,.9,.3,1.2)}
 .updbar .ub-dot{width:10px;height:10px;border-radius:50%;background:var(--coin);box-shadow:0 0 0 0 rgba(242,207,91,.6);animation:ubPing 1.6s ease-out infinite}
@@ -1491,7 +1538,10 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
       <div class="bn-dots" id="bnDots"></div>
       <button type="button" class="bn-help" id="goRules">遊び<br>かた</button>
     </div>
-    <button type="button" class="newsbar" id="newsBar"><span class="nb-tag">お知らせ</span><span class="nb-t" id="newsT"></span><span class="nb-new" id="newsNew" hidden>NEW</span></button>
+    <div class="nbrow">
+      <button type="button" class="newsbar" id="newsBar"><span class="nb-tag">お知らせ</span><span class="nb-t" id="newsT"></span><span class="nb-new" id="newsNew" hidden>NEW</span></button>
+      <button type="button" class="giftbtn" id="goGifts" aria-label="受け取りBOX" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="9.5" rx="1.5"/><rect x="2.8" y="7.5" width="18.4" height="4" rx="1"/><path d="M12 7.5v13"/><path d="M12 7.5c-1.6-3.6-6-4.2-5.6-1.6.3 1.6 3.4 1.6 5.6 1.6zM12 7.5c1.6-3.6 6-4.2 5.6-1.6-.3 1.6-3.4 1.6-5.6 1.6z"/></svg><span>BOX</span><i class="tab-badge" id="giftBadge" hidden></i></button>
+    </div>
     <p class="sec-label">ピックアップ</p>
     <button type="button" class="pickup" id="pickup">
       <span class="pu-tag" id="puTag">デイリー</span>
@@ -1918,6 +1968,8 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
     <button type="button" class="btn" id="goRules2">遊びかたを見る</button>
     <p class="note center" id="appVer" style="margin:0"></p>
     <button type="button" class="btn sm" id="updCheck" style="justify-self:center">最新版かチェック</button>
+    <p class="uidline" id="uidLine" hidden><span id="myUid"></span><button type="button" class="btn sm" id="copyUid">コピー</button></p>
+    <button type="button" class="btn" id="goAdmin" hidden>配布（管理者）</button>
   </section>
 
   <!-- Rated matches -->
@@ -1946,6 +1998,62 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
     <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>RPショップ</h2><span class="rpc" id="rpsHave" style="margin-left:auto;font-size:16px">0</span></div>
     <p class="note" style="margin:0">レート戦でためたRPで交換できます。ここだけのチョーク・黒板・称号・プレート・スタンプも。</p>
     <div class="shop rps" id="rpsGrid"></div>
+  </section>
+
+  <!-- Present box -->
+  <section class="screen narrow" id="scrGifts" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>受け取りBOX</h2></div>
+    <div class="seg" role="tablist" aria-label="受け取りBOX" id="giftTabs">
+      <button type="button" role="tab" data-gt="box" aria-selected="true">プレゼント</button>
+      <button type="button" role="tab" data-gt="hist" aria-selected="false">受け取り履歴</button>
+    </div>
+    <ol class="gifts" id="giftList"></ol>
+    <ol class="ghist" id="giftHist" hidden></ol>
+    <button type="button" class="btn gold big" id="giftAll" hidden>まとめて受け取る</button>
+    <p class="note" style="margin:0">運営からのプレゼントや、大会などの報酬がここに届きます。受け取り期限をすぎると消えるので気をつけてね。</p>
+  </section>
+
+  <!-- Admin: hand out presents -->
+  <section class="screen narrow" id="scrAdmin" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>配布（管理者）</h2></div>
+    <section class="panel adm">
+      <h3>新しい配布</h3>
+      <div class="field"><label for="admTitle">タイトル</label><input class="input" id="admTitle" maxlength="30" placeholder="例：メンテナンスのおわび"></div>
+      <div class="field"><label for="admMsg">メッセージ</label><textarea class="input" id="admMsg" maxlength="200" rows="3" placeholder="例：いつも遊んでくれてありがとう！"></textarea></div>
+      <div class="field"><span class="label">中身</span>
+        <div class="adm-nums">
+          <label>コイン<input class="input" type="number" inputmode="numeric" min="0" id="adm_coins" value="0"></label>
+          <label>ジュエル<input class="input" type="number" inputmode="numeric" min="0" id="adm_jewels" value="0"></label>
+          <label>ガチャチケット<input class="input" type="number" inputmode="numeric" min="0" id="adm_tickets" value="0"></label>
+          <label>かけら<input class="input" type="number" inputmode="numeric" min="0" id="adm_shards" value="0"></label>
+          <label>RP<input class="input" type="number" inputmode="numeric" min="0" id="adm_rmp" value="0"></label>
+        </div>
+        <div class="adm-pick"><select class="input" id="admItem" aria-label="アイテム"><option value="">アイテムを追加…</option></select><button type="button" class="btn" id="admItemAdd">追加</button></div>
+        <div class="adm-chips" id="admItems"></div>
+      </div>
+      <div class="field"><span class="label">受け取り期限</span>
+        <div class="opts" id="admDays">
+          <label><input type="radio" name="admDays" value="3"><span>3日</span></label>
+          <label><input type="radio" name="admDays" value="7" checked><span>7日</span></label>
+          <label><input type="radio" name="admDays" value="14"><span>14日</span></label>
+          <label><input type="radio" name="admDays" value="30"><span>30日</span></label>
+        </div>
+      </div>
+      <div class="field"><span class="label">送る相手</span>
+        <div class="opts" id="admTo">
+          <label><input type="radio" name="admTo" value="all" checked><span>全員</span></label>
+          <label><input type="radio" name="admTo" value="one"><span>1人だけ（フレンドコード）</span></label>
+        </div>
+        <input class="input" id="admCode" maxlength="8" autocomplete="off" placeholder="フレンドコード（6文字）" hidden>
+      </div>
+      <div class="field"><span class="label">みんなにはこう見えます</span><ol class="gifts" id="admPreview"></ol></div>
+      <button type="button" class="btn primary big" id="admSend" disabled>配布する</button>
+    </section>
+    <section class="panel">
+      <h3>全員への配布</h3>
+      <ol class="adm-list" id="admList"></ol>
+      <p class="note">数字は受け取った人数です。1人あての配布は、受け取ると相手のBOXから消えます。</p>
+    </section>
   </section>
 
   <!-- Stage mode: chapters -->
@@ -2209,7 +2317,7 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
 </div>
 <nav class="tabbar" id="tabbar" aria-label="メニュー">
   <div class="tabbar-in">
-    <button type="button" class="tab" id="goHomeTab" data-tab="home" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h5v-6h3v6h5V10"/></svg><span>ホーム</span></button>
+    <button type="button" class="tab" id="goHomeTab" data-tab="home" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h5v-6h3v6h5V10"/></svg><span>ホーム</span><i class="tab-badge" id="homeBadge" hidden></i></button>
     <button type="button" class="tab" id="goEvents" data-tab="events"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4"/><path d="M6 4.5c4-2 7 2 12 0v8c-5 2-8-2-12 0"/></svg><span>イベント</span><i class="tab-badge" id="eventBadge" hidden></i></button>
     <button type="button" class="tab" id="goMission" data-tab="mission"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="m8.5 11 1.6 1.6L13 9.7"/><path d="M8.5 16.5h7"/></svg><span>ミッション</span><i class="tab-badge" id="missionBadge" hidden></i></button>
     <button type="button" class="tab" id="goShop" data-tab="shop" data-feat="shop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span>ショップ</span></button>
@@ -2796,7 +2904,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/16-2';
+const APP_VERSION = '11/16-3';
 // ----- New version: the page's <head> carries its version (build.py writes it). Now and then, and whenever the app comes
 // back to the front, read the head of the live page; if its version differs, offer a reload. ?debug&vfast checks every few seconds.
 const VER_FAST = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('vfast'); } catch(e) { return false; } })();
@@ -3950,6 +4058,268 @@ document.addEventListener('click', e => {
 }, true);
 
 
+// ===================== Present box (受け取りBOX) and the admin's distribution =====================
+// Gifts for everyone live in gifts/<id>, gifts for one player in inbox/<uid>/<id>; only admins (admins/<uid> = true) write them.
+// What I have taken is in my profile (gifts/<id> = true), with a short history in ghist.
+const GIFT_KEYS = [['coins', 'コイン'], ['jewels', 'ジュエル'], ['tickets', 'ガチャチケット'], ['shards', 'かけら'], ['rmp', 'RP']];
+const GIFT_HIST_N = 30, GIFT_MAX = 1000000;
+// Things a gift can hold, by the key they are owned under.
+function giftItemName(id){
+  const c = CHALKS.find(x => x.id === id && id !== 'auto'); if (c) return `チョーク「${c.name}」`;
+  const b = BOARDS.find(x => x.id === id && id !== 'bstd'); if (b) return `黒板「${b.name}」`;
+  const t = TITLES.find(x => x.own === id); if (t) return `称号「${t.name}」`;
+  const p = PLATES.find(x => x.own === id); if (p) return `プレート「${p.name}」`;
+  const s = STAMPS.find(x => x.id === id && !x.base); if (s) return `スタンプ${s.name}`;
+  return null;
+}
+function giftItemsOf(it){
+  it = it || {};
+  const out = [];
+  GIFT_KEYS.forEach(([k, l]) => { const n = Math.floor(+it[k] || 0); if (n > 0) out.push({k, n, label: `${l}${n.toLocaleString()}`}); });
+  Object.keys(it.own || {}).forEach(id => { const nm = giftItemName(id); if (nm) out.push({k: 'own', id, label: nm}); });
+  return out;
+}
+const giftText = it => giftItemsOf(it).map(x => x.label).join('・') || '（なし）';
+const jstMD = t => { const d = new Date(+t + 9 * 3600000); return `${d.getUTCMonth() + 1}/${d.getUTCDate()} ${d.getUTCHours()}:${String(d.getUTCMinutes()).padStart(2, '0')}`; };
+const giftLeft = ms => ms >= 2 * 86400000 ? `あと${Math.ceil(ms / 86400000)}日` : `あと${fmtLeft(ms)}`;
+// Gifts I can take now, newest first.
+function giftList(){
+  const now = serverNow(), got = (net.profile || {}).gifts || {}, out = [];
+  const add = (id, g, mine) => {
+    if (!g || typeof g !== 'object' || got[id]) return;
+    if ((+g.from || 0) > now || (g.until && now >= +g.until) || !giftItemsOf(g.items).length) return;
+    out.push(Object.assign({}, g, {id, mine}));
+  };
+  Object.keys(net.giftsAll || {}).forEach(id => add(id, net.giftsAll[id], false));
+  Object.keys(net.giftsMine || {}).forEach(id => add(id, net.giftsMine[id], true));
+  return out.sort((a, b) => (+b.from || +b.ts || 0) - (+a.from || +a.ts || 0));
+}
+function applyGift(cur, it){
+  GIFT_KEYS.forEach(([k]) => { const n = Math.min(GIFT_MAX, Math.floor(+it[k] || 0)); if (n > 0) cur[k] = (+cur[k] || 0) + n; });
+  const own = Object.keys(it.own || {}).filter(id => giftItemName(id));
+  if (own.length) cur.owned = Object.assign({}, cur.owned || {}, Object.fromEntries(own.map(id => [id, true])));
+}
+async function claimGifts(list){
+  list = list.filter(Boolean);
+  if (!list.length || !net.fb) return null;
+  const now = serverNow();
+  let took = [];
+  const res = await profileTx(cur => {
+    const got = Object.assign({}, cur.gifts || {}), hist = Object.assign({}, cur.ghist || {});
+    took = [];
+    for (const g of list) {
+      if (got[g.id] || (g.until && now >= +g.until)) continue;
+      applyGift(cur, g.items || {});
+      got[g.id] = true;
+      hist[g.id] = {t: now, title: String(g.title || 'プレゼント').slice(0, 40), txt: giftText(g.items).slice(0, 160)};
+      took.push(g);
+    }
+    if (!took.length) return undefined;
+    cur.gifts = got;
+    cur.ghist = Object.fromEntries(Object.entries(hist).sort((a, b) => (+b[1].t || 0) - (+a[1].t || 0)).slice(0, GIFT_HIST_N));
+    return cur;
+  });
+  if (!(res && res.committed)) return null;
+  const fb = net.fb;
+  took.forEach(g => {
+    if (g.mine) fb.set(fb.ref(fb.db, `inbox/${net.uid}/${g.id}`), null).catch(() => {});
+    else fb.runTransaction(fb.ref(fb.db, `gifts/${g.id}/n`), c => (+c || 0) + 1).catch(() => {});
+  });
+  return took;
+}
+function watchGifts(){
+  const fb = net.fb;
+  if (!fb || net.giftsOn) return;
+  net.giftsOn = true;
+  fb.onValue(fb.ref(fb.db, 'gifts'), s => { net.giftsAll = s.val() || {}; giftArrived(); render(); }, () => { net.giftsAll = {}; });
+  fb.onValue(fb.ref(fb.db, 'inbox/' + net.uid), s => { net.giftsMine = s.val() || {}; giftArrived(); render(); }, () => { net.giftsMine = {}; });
+  fb.onValue(fb.ref(fb.db, 'admins/' + net.uid), s => { net.admin = s.val() === true; render(); }, () => { net.admin = false; });
+}
+// A toast the first time a gift shows up on this device.
+function giftArrived(){
+  if (!net.profileLoaded || net.giftsAll === undefined || net.giftsMine === undefined) return;
+  const seen = new Set((lsGet('waribashi-giftseen') || '').split(',').filter(Boolean)), fresh = giftList().filter(g => !seen.has(g.id));
+  if (!fresh.length) return;
+  fresh.forEach(g => seen.add(g.id));
+  lsSet('waribashi-giftseen', [...seen].slice(-100).join(','));
+  clearTimeout(ui.giftToast);
+  ui.giftToast = setTimeout(() => toast(fresh.length === 1 ? `プレゼントが届きました：${fresh[0].title || 'プレゼント'}（受け取りBOXへ）` : `プレゼントが${fresh.length}件届きました（受け取りBOXへ）`), 2400);
+}
+// A chalk-drawn gift box (the ribbon takes the colour of what is inside).
+function giftArt(it){
+  const items = giftItemsOf(it), k = (items[0] || {}).k, c = {coins: '#f2cf5b', jewels: '#e9a6ff', tickets: '#ffb35a', shards: '#9fd8ff', rmp: '#9fe0ff', own: '#ff8f8f'}[k] || '#ff8f8f';
+  return `<svg viewBox="0 0 48 48" aria-hidden="true"><g filter="url(#chalk)"><rect x="8" y="20" width="32" height="22" rx="3" fill="#eceee4"/><rect x="5" y="13" width="38" height="9" rx="2.5" fill="#f4f4ee"/>`
+    + `<rect x="21" y="13" width="6" height="29" fill="${c}"/><path d="M24 13c-3-7-11-8-10-3 1 3 6 3 10 3zM24 13c3-7 11-8 10-3-1 3-6 3-10 3z" fill="${c}"/></g></svg>`;
+}
+function giftCard(g, onTake){
+  const li = document.createElement('li');
+  li.className = 'gift' + (g.mine ? ' mine' : '');
+  li.innerHTML = '<span class="gf-art"></span><span class="gf-txt"><b class="gf-t"></b><span class="gf-m"></span><span class="gf-items"></span><span class="gf-lim"></span></span>';
+  li.querySelector('.gf-art').innerHTML = giftArt(g.items);
+  const t = li.querySelector('.gf-t');
+  t.textContent = g.title || 'プレゼント';
+  if (g.mine) { const s = document.createElement('small'); s.textContent = 'あなたへ'; t.prepend(s); }
+  li.querySelector('.gf-m').textContent = g.msg || '';
+  li.querySelector('.gf-m').hidden = !g.msg;
+  const ch = li.querySelector('.gf-items');
+  giftItemsOf(g.items).forEach(x => { const s = document.createElement('span'); s.className = 'gf-chip ' + x.k; s.textContent = x.label; ch.append(s); });
+  li.querySelector('.gf-lim').textContent = g.until ? `${jstMD(g.until)}まで（${giftLeft(+g.until - serverNow())}）` : '期限なし';
+  if (onTake) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'btn gold sm'; b.textContent = '受け取る';
+    b.addEventListener('click', () => onTake(b));
+    li.append(b);
+  }
+  return li;
+}
+async function takeGifts(list, btn){
+  if (btn) btn.disabled = true;
+  const took = await claimGifts(list);
+  if (btn) btn.disabled = false;
+  if (!took || !took.length) { toast('受け取れませんでした。期限切れか、もう受け取り済みです', true); render(); return; }
+  const sum = {}, own = [];
+  took.forEach(g => giftItemsOf(g.items).forEach(x => { if (x.k === 'own') own.push(x.label); else sum[x.k] = (sum[x.k] || 0) + x.n; }));
+  const parts = GIFT_KEYS.filter(([k]) => sum[k]).map(([k, l]) => `${l}+${sum[k].toLocaleString()}`).concat(own);
+  sfx('unlock');
+  const box = $('#giftList');
+  if (box) { const [x, y] = centerOf(btn || box); dust(x, y, ['#f2cf5b', '#ff8f8f', '#fff6c4'], 36, 120, 'star'); }
+  toast(`受け取りました：${parts.join('・')}`);
+  render();
+}
+function renderGiftBadge(){
+  $('#goAdmin').hidden = !net.admin;
+  $('#uidLine').hidden = !net.uid;
+  $('#myUid').textContent = net.uid ? `ユーザーID：${net.uid}` : '';
+  const n = FIREBASE_CONFIG && net.profileLoaded ? giftList().length : 0;
+  for (const id of ['#giftBadge', '#homeBadge']) { const b = $(id); b.hidden = !n; b.textContent = n; }
+  const g = $('#goGifts');
+  g.hidden = !FIREBASE_CONFIG;
+  g.classList.toggle('has', n > 0);
+  g.setAttribute('aria-label', n ? `受け取りBOX（${n}件）` : '受け取りBOX');
+}
+function renderGifts(){
+  const tab = ui.giftTab === 'hist' ? 'hist' : 'box', list = giftList(), box = $('#giftList'), hist = $('#giftHist');
+  $$('#giftTabs [role="tab"]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.gt === tab)));
+  box.hidden = tab !== 'box'; hist.hidden = tab !== 'hist';
+  const all = $('#giftAll');
+  all.hidden = tab !== 'box' || list.length < 2;
+  all.textContent = `まとめて受け取る（${list.length}件）`;
+  if (tab === 'box' && !unchanged(box, JSON.stringify(list.map(g => [g.id, g.until, g.title, g.msg])) + Math.floor(serverNow() / 60000))) {
+    box.innerHTML = '';
+    if (!list.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = net.profileLoaded ? 'いまはプレゼントはありません。配布があると、ここに届きます' : '読み込み中…'; box.append(li); }
+    list.forEach(g => box.append(giftCard(g, b => takeGifts([g], b))));
+  }
+  if (tab === 'hist') {
+    const h = Object.entries((net.profile || {}).ghist || {}).map(([id, v]) => Object.assign({id}, v)).sort((a, b) => (+b.t || 0) - (+a.t || 0));
+    if (!unchanged(hist, JSON.stringify(h))) {
+      hist.innerHTML = '';
+      if (!h.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = 'まだ受け取ったプレゼントはありません'; hist.append(li); }
+      h.forEach(x => {
+        const li = document.createElement('li');
+        li.innerHTML = '<span class="gh-d"></span><b></b><span class="gh-x"></span>';
+        li.querySelector('.gh-d').textContent = jstMD(x.t);
+        li.querySelector('b').textContent = x.title || 'プレゼント';
+        li.querySelector('.gh-x').textContent = x.txt || '';
+        hist.append(li);
+      });
+    }
+  }
+}
+
+// ----- the admin's side
+function adminItemOptions(){
+  const sel = $('#admItem');
+  if (sel.dataset.built) return;
+  sel.dataset.built = '1';
+  const groups = [['チョーク', CHALKS.filter(c => c.id !== 'auto').map(c => [c.id, c.name])], ['黒板', BOARDS.filter(b => b.id !== 'bstd').map(b => [b.id, b.name])],
+    ['称号', TITLES.filter(t => t.own).map(t => [t.own, t.name])], ['プレート', PLATES.filter(p => p.own).map(p => [p.own, p.name])], ['スタンプ', STAMPS.filter(s => !s.base).map(s => [s.id, s.name])]];
+  groups.forEach(([label, items]) => {
+    const og = document.createElement('optgroup'); og.label = label;
+    items.forEach(([id, name]) => { const o = document.createElement('option'); o.value = id; o.textContent = name; og.append(o); });
+    sel.append(og);
+  });
+}
+function adminDraft(){
+  const items = {};
+  GIFT_KEYS.forEach(([k]) => { const n = Math.min(GIFT_MAX, Math.max(0, Math.floor(+$('#adm_' + k).value || 0))); if (n) items[k] = n; });
+  const own = ui.admOwn || [];
+  if (own.length) items.own = Object.fromEntries(own.map(id => [id, true]));
+  const days = +(($('#admDays input:checked') || {}).value) || 7, to = (($('#admTo input:checked') || {}).value) || 'all';
+  return {title: $('#admTitle').value.trim().slice(0, 30), msg: $('#admMsg').value.trim().slice(0, 200), items, days, to, code: $('#admCode').value.trim().toUpperCase()};
+}
+function renderAdmin(){
+  adminItemOptions();
+  const d = adminDraft(), now = serverNow();
+  $('#admCode').hidden = d.to !== 'one';
+  const chips = $('#admItems');
+  if (!unchanged(chips, JSON.stringify(ui.admOwn || []))) {
+    chips.innerHTML = '';
+    (ui.admOwn || []).forEach(id => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'gf-chip own'; b.textContent = giftItemName(id) + ' ×';
+      b.setAttribute('aria-label', giftItemName(id) + 'を外す');
+      b.addEventListener('click', () => { ui.admOwn = (ui.admOwn || []).filter(x => x !== id); renderAdmin(); });
+      chips.append(b);
+    });
+  }
+  const pv = $('#admPreview');
+  pv.innerHTML = '';
+  pv.append(giftCard({title: d.title || '（タイトル）', msg: d.msg, items: d.items, until: now + d.days * 86400000, mine: d.to === 'one'}));
+  const ok = !!d.title && giftItemsOf(d.items).length > 0 && (d.to === 'all' || d.code.length === 6);
+  $('#admSend').disabled = !ok || !!ui.admBusy;
+  // what has gone out to everyone
+  const all = Object.entries(net.giftsAll || {}).map(([id, g]) => Object.assign({id}, g)).filter(g => g.ts && g.title).sort((a, b) => (+b.ts || 0) - (+a.ts || 0));
+  const ol = $('#admList');
+  if (!unchanged(ol, JSON.stringify(all) + Math.floor(now / 60000))) {
+    ol.innerHTML = '';
+    if (!all.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = 'まだ配布していません'; ol.append(li); }
+    all.forEach(g => {
+      const live = !(g.until && now >= +g.until), li = document.createElement('li');
+      li.className = live ? '' : 'over';
+      li.innerHTML = '<span class="al-t"><b></b><small></small></span><span class="al-n"></span>';
+      li.querySelector('b').textContent = g.title || 'プレゼント';
+      li.querySelector('small').textContent = `${giftText(g.items)}・${live ? jstMD(g.until) + 'まで' : '期限切れ'}`;
+      li.querySelector('.al-n').textContent = `${+g.n || 0}人`;
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'btn sm'; b.textContent = live ? '取り消す' : '消す';
+      b.addEventListener('click', async () => {
+        const yes = await confirmBuy({title: live ? '配布を取り消しますか？' : '一覧から消しますか？', art: giftArt(g.items), name: g.title || 'プレゼント',
+          note: live ? 'まだ受け取っていない人は受け取れなくなります。受け取った人の分はそのままです' : '', ok: live ? '取り消す' : '消す'});
+        if (!yes) return;
+        try { await net.fb.set(net.fb.ref(net.fb.db, 'gifts/' + g.id), null); toast('取り消しました'); } catch(e) { toast(errText(e, '取り消せませんでした'), true); }
+      });
+      li.append(b);
+      ol.append(li);
+    });
+  }
+}
+async function adminSend(){
+  const d = adminDraft(), fb = net.fb;
+  if (!fb || !net.admin || ui.admBusy) return;
+  if (!d.title || !giftItemsOf(d.items).length) { toast('タイトルと中身を入れてね', true); return; }
+  let uid = null;
+  if (d.to === 'one') {
+    const code = d.code.replace(/[^A-Z0-9]/g, '');
+    if (code.length !== 6) { toast('フレンドコードは6文字です', true); return; }
+    uid = await readOnce('codes/' + code, 7000);
+    if (!uid || typeof uid !== 'string') { toast('そのコードの人は見つかりません', true); return; }
+  }
+  const yes = await confirmBuy({title: '配布しますか？', art: giftArt(d.items), name: d.title,
+    note: `${d.to === 'all' ? 'プレイヤー全員' : `コード ${d.code} の人`}に「${giftText(d.items)}」を送ります。受け取り期限は${d.days}日です`, ok: '配布する'});
+  if (!yes) return;
+  const now = serverNow(), id = 'g' + now.toString(36) + Math.random().toString(36).slice(2, 6);
+  const g = {title: d.title, msg: d.msg, items: d.items, from: now, until: now + d.days * 86400000, ts: now, by: net.uid};
+  ui.admBusy = true; render();
+  try {
+    await fb.set(fb.ref(fb.db, uid ? `inbox/${uid}/${id}` : `gifts/${id}`), g);
+    toast(uid ? `コード ${d.code} の人に送りました` : '全員に配布しました');
+    ['#admTitle', '#admMsg'].forEach(s => { $(s).value = ''; });
+    GIFT_KEYS.forEach(([k]) => { $('#adm_' + k).value = '0'; });
+    ui.admOwn = [];
+  } catch(e) { toast(errText(e, '配布できませんでした'), true); }
+  ui.admBusy = false; render();
+}
+
 // ===================== Rated screen, RP, recruit banner, practice =====================
 const RP_WIN = 30, RP_LOSE = 10, RP_DRAW = 15, RP_STREAK = 10, RP_FIRST = 50, RHIST_N = 10;
 const weekKey = () => Math.floor((dayNum(dayKey()) + 3) / 7);
@@ -4301,6 +4671,7 @@ function confirmBuy(o){
   const cost = $('#cfmCost');
   cost.innerHTML = cls ? `<span class="${cls}"></span>` : '<span></span>';
   cost.firstChild.textContent = cls ? `${o.cost}` : `${label} ${o.cost}`;
+  cost.hidden = o.cost === undefined;
   $('#cfmAfter').textContent = o.have !== undefined ? `${label} ${o.have} → ${o.have - o.cost}` : '';
   $('#cfmNote').textContent = o.note || '';
   $('#cfmOk').textContent = o.ok || '購入する';
@@ -5280,6 +5651,8 @@ async function claimGuideDone(){
 
 // ===================== News =====================
 const NEWS = [
+  {id: 'n16', date: '2026-11-16', tag: '新機能', title: '受け取りBOXができました',
+    body: 'ホームの「お知らせ」のとなりに、プレゼントの受け取りBOXができました。運営からのプレゼントや、これから始まる大会の報酬などがここに届きます。\n受け取り期限があるので、届いたら早めに受け取ってね。'},
   {id: 'n15', date: '2026-11-16', tag: '新機能', title: '曜日ごとにボスが変わる！ 伝説のボスも登場',
     body: 'ボスが曜日ごとに7体になりました。月曜の黒板消し大王のほかに、三角定規ナイト（火）・赤ペン鬼教官（水）・ホッチキス将軍（木）・ものさし侍（金）・電卓魔人（土）・ガイコツ博士（日）が登場します。\nそして11/17（火）は1日だけ、伝説のボス「チョークドラゴン」が現れます。3つの形態をみんなで倒そう。挑戦は5回、完全討伐で限定の「竜のチョーク」と称号「竜を討つ者」がもらえます。'},
   {id: 'n14', date: '2026-11-16', tag: '新機能', title: 'レート戦画面・RPショップ・対戦募集のお知らせ',
@@ -6363,7 +6736,7 @@ function watchGlobal(fb){
     net.profile = s.val();
     net.profileLoaded = true;
     if (!(net.profile || {}).code) setTimeout(ensureCode, 600);
-    if (first) { ensureUnl(); setTimeout(checkLogin, 400); setTimeout(() => { presence(true); watchInvites(); watchFriendData(); migrateFriends(); ensureGuide(); watchLobby(); }, 0); setTimeout(claimLevels, 1500); }
+    if (first) { ensureUnl(); setTimeout(checkLogin, 400); setTimeout(() => { presence(true); watchInvites(); watchFriendData(); migrateFriends(); ensureGuide(); watchLobby(); watchGifts(); }, 0); setTimeout(claimLevels, 1500); }
     else if (levelOfProfile(net.profile) > levelOfProfile(prevProfile)) claimLevels();
     checkUnlocks();
     const after = unlocked(statsOf(net.profile));
@@ -7149,10 +7522,10 @@ async function tryMatch(sg){
 }
 
 // ===================== Screens =====================
-const SCREENS = {home:'#scrHome', cpu:'#scrCpu', plate:'#scrPlate', mission:'#scrMission', shop:'#scrShop', rank:'#scrRank', rules:'#scrRules', boss:'#scrBoss', events:'#scrEvents', pass:'#scrPass', puzzle:'#scrPuzzle', friends:'#scrFriends', book:'#scrBook', event:'#scrEvent', news:'#scrNews', stage:'#scrStage', chapter:'#scrChapter', rated:'#scrRated', rpshop:'#scrRpShop', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
+const SCREENS = {home:'#scrHome', cpu:'#scrCpu', plate:'#scrPlate', mission:'#scrMission', shop:'#scrShop', rank:'#scrRank', rules:'#scrRules', boss:'#scrBoss', events:'#scrEvents', pass:'#scrPass', puzzle:'#scrPuzzle', friends:'#scrFriends', book:'#scrBook', event:'#scrEvent', news:'#scrNews', stage:'#scrStage', chapter:'#scrChapter', rated:'#scrRated', rpshop:'#scrRpShop', gifts:'#scrGifts', admin:'#scrAdmin', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
 // The tab bar stays on the menu screens and steps aside for matching and play.
-const TABBED = ['home', 'events', 'mission', 'shop', 'friends', 'plate', 'rank', 'rules', 'cpu', 'custom', 'boss', 'pass', 'puzzle', 'book', 'event', 'news', 'stage', 'chapter', 'rated', 'rpshop'];
-const TAB_OF = {boss: 'events', pass: 'events', puzzle: 'events', event: 'events', rank: 'friends', book: 'plate', news: 'home', stage: 'home', chapter: 'home', rated: 'home', rpshop: 'home'};
+const TABBED = ['home', 'events', 'mission', 'shop', 'friends', 'plate', 'rank', 'rules', 'cpu', 'custom', 'boss', 'pass', 'puzzle', 'book', 'event', 'news', 'stage', 'chapter', 'rated', 'rpshop', 'gifts', 'admin'];
+const TAB_OF = {boss: 'events', pass: 'events', puzzle: 'events', event: 'events', rank: 'friends', book: 'plate', news: 'home', stage: 'home', chapter: 'home', rated: 'home', rpshop: 'home', gifts: 'home', admin: 'plate'};
 function showChrome(s){
   const tabs = TABBED.includes(s);
   $('#tabbar').hidden = !tabs;
@@ -7239,6 +7612,9 @@ function render(){
   if (ui.screen === 'stage') renderStage();
   if (ui.screen === 'rated') renderRated();
   if (ui.screen === 'rpshop') renderRpShop();
+  if (ui.screen === 'gifts') renderGifts();
+  if (ui.screen === 'admin') renderAdmin();
+  renderGiftBadge();
   if (ui.screen === 'chapter') renderChapter();
   if (ui.screen === 'news') renderNews();
   if (ui.screen === 'plate') renderLevel();
@@ -8598,6 +8974,15 @@ $$('#bnTrack .bn').forEach(b => b.addEventListener('click', () => {
   }
 }));
 $('#newsBar').addEventListener('click', () => setScreen('news'));
+$('#goGifts').addEventListener('click', () => { ui.giftTab = 'box'; setScreen('gifts'); });
+$$('#giftTabs [role="tab"]').forEach(b => b.addEventListener('click', () => { ui.giftTab = b.dataset.gt; renderGifts(); }));
+$('#giftAll').addEventListener('click', () => takeGifts(giftList(), $('#giftAll')));
+$('#goAdmin').addEventListener('click', () => setScreen('admin'));
+['#admTitle', '#admMsg', '#admCode', ...GIFT_KEYS.map(([k]) => '#adm_' + k)].forEach(sel => $(sel).addEventListener('input', renderAdmin));
+$$('#admDays input, #admTo input').forEach(i => i.addEventListener('change', renderAdmin));
+$('#admItemAdd').addEventListener('click', () => { const v = $('#admItem').value; if (!v) return; ui.admOwn = [...new Set([...(ui.admOwn || []), v])].slice(0, 5); $('#admItem').value = ''; renderAdmin(); });
+$('#admSend').addEventListener('click', adminSend);
+$('#copyUid').addEventListener('click', () => copyText(net.uid || '').then(() => toast('ユーザーIDをコピーしました'), () => toast(net.uid || '')));
 const askPull = (n, ticket) => async () => {
   if (ui.pulling) return;
   const ok = await confirmBuy({title: 'ガチャを引きますか？', art: $('#gbArt').innerHTML, name: ticket ? 'チケットで1回' : `${n}回引く`,
