@@ -1257,7 +1257,59 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .shop-hint span{flex:1;min-width:0}
 .shop-hint .btn{flex:none}
 .item .used{position:absolute;top:8px;left:8px;padding:1px 8px;border-radius:999px;background:var(--you);color:#1c1b18;font-size:10.5px;font-weight:800}
+
+/* ===== Rated screen, RP, streaks, recruit banner, practice ===== */
+.rt-top{display:grid;gap:10px}
+.rt-strk{display:flex;align-items:center;justify-content:center;gap:8px;margin:0;font-weight:800;font-size:15px;color:var(--chalk-soft)}
+.rt-strk.hot{color:#ffb35a}
+.rt-strk.hot b{font-family:var(--font-display);font-weight:400;font-size:26px;color:#ffd36b;text-shadow:0 0 12px rgba(255,160,60,.6)}
+.flame{display:inline-block;width:18px;height:22px;background:linear-gradient(180deg,#ffe08a,#ff7a3a);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 22'%3E%3Cpath d='M9 0c1 4 6 6 6 12a6 6 0 0 1-12 0c0-3 2-5 3-6 0 2 1 3 2 3 0-3-1-6 1-9z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 22'%3E%3Cpath d='M9 0c1 4 6 6 6 12a6 6 0 0 1-12 0c0-3 2-5 3-6 0 2 1 3 2 3 0-3-1-6 1-9z'/%3E%3C/svg%3E") center/contain no-repeat;vertical-align:-4px}
+.rt-live{display:flex;justify-content:center;gap:14px;margin:-2px 0 0;font-size:13px;color:var(--chalk-soft)}
+.rt-live b{color:var(--chalk)}
+.rt-live .wait b{color:#9fe0a8}
+.rt-rp{display:grid;gap:10px}
+.rt-rp .rp-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.rt-rp .rpv{font-family:var(--font-display);font-weight:400;font-size:40px;line-height:1;color:#9fe0ff}
+.rp-rules{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.rp-rules li{padding:3px 10px;border-radius:999px;background:var(--board-deep);border:1px solid var(--line);font-size:12px;color:var(--chalk-soft)}
+.rp-rules b{color:#9fe0ff}
+.rpc{display:inline-flex;align-items:center;gap:4px;font-weight:800;color:#9fe0ff;white-space:nowrap}
+.rpc::before{content:"RP";display:inline-grid;place-items:center;min-width:22px;height:16px;padding:0 3px;border-radius:5px;background:#9fe0ff;color:#14202a;font-size:9.5px;font-weight:900;letter-spacing:.02em}
+.rt-hist{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.rt-hist li{display:grid;grid-template-columns:2.6em minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:7px 10px;border-radius:10px;background:var(--board-deep);border:1.5px solid var(--line);font-size:13.5px}
+.rt-hist .wl{font-weight:800;text-align:center;border-radius:6px;padding:1px 0}
+.rt-hist .wl.w{background:rgba(159,224,168,.18);color:#9fe0a8}
+.rt-hist .wl.l{background:rgba(255,140,140,.14);color:#ff9a9a}
+.rt-hist .wl.d{background:rgba(236,238,228,.1);color:var(--chalk-soft)}
+.rt-hist .op{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rt-hist .dr{font-variant-numeric:tabular-nums;font-weight:700}
+.rt-hist .dr.up{color:#9fe0a8}
+.rt-hist .dr.dn{color:#ff9a9a}
+.rt-hist .tm{font-size:11px;color:var(--chalk-faint)}
+.rt-hist li.empty{display:block;text-align:center;color:var(--chalk-soft)}
+.vs-stk{display:flex;justify-content:center;align-items:center;gap:4px;margin-top:4px;font-size:13px;font-weight:800;color:#ffb35a}
+.vsbox > div{display:grid;justify-items:center}
+.recruit{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 78px);z-index:45;translate:-50% 0;width:min(520px,calc(100% - 24px));display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;align-items:center;padding:12px 14px;border-radius:14px;border:2.5px solid #9fe0a8;background:rgba(18,32,24,.96);box-shadow:0 14px 30px -10px rgba(0,0,0,.8);animation:recIn .35s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes recIn{from{transform:translateY(-16px);opacity:0}to{transform:none;opacity:1}}
+.recruit .rc-ic{grid-row:1/span 2;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:rgba(159,224,168,.16);color:#9fe0a8;font-family:var(--font-display);font-size:20px}
+.recruit .rc-t{font-size:14px;font-weight:700;line-height:1.4;min-width:0}
+.recruit .rc-t small{display:block;font-size:12px;font-weight:600;color:var(--chalk-soft)}
+.recruit .rc-b{display:flex;gap:8px;justify-content:flex-end}
+.recruit .rc-b .btn{min-height:36px;padding:0 14px}
+.practice-bar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:46;translate:-50% 0;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 14px;border-radius:999px;border:2px solid #9fe0a8;background:rgba(18,32,24,.95);box-shadow:0 10px 24px -8px rgba(0,0,0,.8);font-size:13px;font-weight:700;white-space:nowrap}
+.practice-bar .dotp{width:9px;height:9px;border-radius:50%;background:#9fe0a8;animation:stBlink 1s steps(2) infinite}
+.practice-bar .btn{min-height:32px;padding:0 12px;font-size:12px}
+body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+.search .btn.practice{margin-top:4px}
+.rps .item .rpc{font-size:14px}
+.rps .lim2{font-size:11.5px;color:var(--chalk-soft)}
+.board-wrap[data-bd="brp1"]{--board:#16243a;--wood:#4c5b78;--wood-hi:#9fb4d9}
+.board-wrap[data-bd="brp1"] .board{background-image:radial-gradient(ellipse 45% 60% at 50% -10%,rgba(159,224,255,.28),transparent 70%),radial-gradient(ellipse 30% 40% at 0% 100%,rgba(159,224,255,.12),transparent 70%),radial-gradient(ellipse 30% 40% at 100% 100%,rgba(159,224,255,.12),transparent 70%),var(--noise)}
+.board-wrap[data-bd="brp2"]{--board:#2a1420;--wood:#a8862e;--wood-hi:#ffe9a8}
+.board-wrap[data-bd="brp2"] .board{border-image:linear-gradient(135deg,#8f6f18,#fff3c2 25%,#c79a2c 50%,#fff6cf 75%,#8a6a12) 1;background-image:radial-gradient(ellipse 60% 45% at 50% 0%,rgba(255,215,120,.22),transparent 70%),repeating-conic-gradient(from 0deg at 50% -20%,rgba(255,220,140,.06) 0 6deg,transparent 6deg 18deg),var(--noise)}
+.pl-prp{background-color:#13202e;background-image:radial-gradient(ellipse 50% 90% at 100% 50%,rgba(159,224,255,.3),transparent 70%),linear-gradient(115deg,#13202e,#1f3550 60%,#13202e);--pf:#e9f6ff;--pa:#9fe0ff;--pe:#08121c}
 @media (prefers-reduced-motion:reduce){
+  .recruit,.practice-bar .dotp{animation:none!important}
   .cfm,.cfm-card{animation:none!important}
   .story,.st-ch.pop,.st-next{animation:none!important}
   .st-ch{transition:none}
@@ -1758,7 +1810,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
       <p class="note">記録・称号・プレートはオンライン対戦（レート戦とカスタムマッチ）で増えます。CPUの称号はCPU対戦で手に入ります。</p>
     </details>
     <details class="panel fold" id="foldSet" data-fold="set">
-      <summary><h3>設定</h3><span class="fold-s">効果音・BGM・相手のスタンプ</span></summary>
+      <summary><h3>設定</h3><span class="fold-s">効果音・BGM・対戦募集・相手のスタンプ</span></summary>
       <div class="settings">
         <fieldset>
           <legend>効果音</legend>
@@ -1772,6 +1824,13 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
           <div class="bgmset"><label for="bgmVol">音量</label><input type="range" id="bgmVol" min="0" max="100" step="5" value="60"><output id="bgmVolT">60</output></div>
         </fieldset>
         <fieldset>
+          <legend>対戦募集のお知らせ</legend>
+          <div class="opts" id="recruitOpts">
+            <label><input type="radio" name="recruit" value="on" id="rcr-on"><span>表示する</span></label>
+            <label><input type="radio" name="recruit" value="off" id="rcr-off"><span>表示しない</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
           <legend>相手のスタンプ</legend>
           <div class="opts" id="stampOpts">
             <label><input type="radio" name="stampshow" value="on" id="stp-on"><span>表示する</span></label>
@@ -1782,6 +1841,34 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
     </details>
     <button type="button" class="btn" id="goRules2">遊びかたを見る</button>
     <p class="note center" id="appVer" style="margin:0"></p>
+  </section>
+
+  <!-- Rated matches -->
+  <section class="screen narrow" id="scrRated" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>レート戦</h2></div>
+    <div class="rt-top">
+      <div class="myrank" id="rtRank"></div>
+      <p class="rt-strk" id="rtStreak"></p>
+      <button type="button" class="btn primary big" id="rtGo">マッチング開始</button>
+      <p class="rt-live" id="rtLive"><span class="on">いまオンライン <b id="rtOnline">-</b>人</span><span class="wait">相手待ち <b id="rtWait">0</b>人</span></p>
+    </div>
+    <section class="panel rt-rp">
+      <div class="rp-head"><span class="rpc">レートマッチポイント</span><button type="button" class="btn gold sm" id="rtShop">RPショップ</button></div>
+      <b class="rpv" id="rtRpv">0</b>
+      <ul class="rp-rules" aria-label="RPのもらいかた"><li>勝ち <b>+30</b></li><li>負けても <b>+10</b></li><li>3連勝から <b>+10</b></li><li>その日はじめての勝利 <b>+50</b></li></ul>
+    </section>
+    <section class="panel">
+      <h3>最近の試合</h3>
+      <ol class="rt-hist" id="rtHist"></ol>
+    </section>
+    <p class="note" style="margin:0">1対1・1手30秒・ふつうのルール。勝つとレートが上がり、負けると下がります。相手が見つからないあいだは、CPUと練習しながら待てます。</p>
+  </section>
+
+  <!-- RP shop -->
+  <section class="screen narrow" id="scrRpShop" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>RPショップ</h2><span class="rpc" id="rpsHave" style="margin-left:auto;font-size:16px">0</span></div>
+    <p class="note" style="margin:0">レート戦でためたRPで交換できます。ここだけのチョーク・黒板・称号・プレート・スタンプも。</p>
+    <div class="shop rps" id="rpsGrid"></div>
   </section>
 
   <!-- Stage mode: chapters -->
@@ -1970,6 +2057,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
       <p class="search-t" id="searchTitle">相手をさがしています</p>
       <p class="search-s" id="searchTime">0秒</p>
       <p class="note" id="searchInfo">あなたのレート 1500</p>
+      <button type="button" class="btn practice" id="searchPractice">CPUと練習しながら待つ</button>
       <button type="button" class="btn" id="netCancel">やめる</button>
     </div>
   </section>
@@ -2093,6 +2181,12 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
     <div class="cfm-btns"><button type="button" class="btn" id="cfmNo">やめる</button><button type="button" class="btn gold" id="cfmOk">購入する</button></div>
   </div>
 </div>
+<div class="recruit" id="recruit" role="status" hidden>
+  <span class="rc-ic" aria-hidden="true">VS</span>
+  <p class="rc-t" id="recruitT"></p>
+  <div class="rc-b"><button type="button" class="btn sm" id="recruitNo">あとで</button><button type="button" class="btn gold sm" id="recruitGo">受けて立つ</button></div>
+</div>
+<div class="practice-bar" id="practiceBar" hidden><i class="dotp" aria-hidden="true"></i><span id="practiceT">相手をさがし中…</span><button type="button" class="btn sm" id="practiceStop">さがすのをやめる</button></div>
 <p class="toast" id="toast" role="status" hidden></p>
 <pre class="dbg" id="dbg" hidden></pre>
 
@@ -2506,6 +2600,16 @@ function updateResult(){
       }
     }
   }
+  // rated: RP and the streak
+  if (isRated() && ui.rmpRes && ui.rmpRes.key === `rmp:${net.code}:${net.room && net.room.createdAt}` && !ui.resShown.rmp) {
+    ui.resShown.rmp = true;
+    const r = ui.rmpRes, row = document.createElement('div');
+    row.className = 'res-row';
+    row.innerHTML = '<span>RP</span><b><span class="rpc"></span></b>';
+    row.querySelector('.rpc').textContent = `+${r.gain}` + (r.notes.length ? `（${r.notes.join('・')}）` : '');
+    rows.append(row);
+    if (r.stk >= 2) { const s2 = document.createElement('div'); s2.className = 'res-row up'; s2.innerHTML = '<i class="flame"></i> '; s2.append(`${r.stk}連勝中！`); rows.append(s2); }
+  }
   // online: coins, once they are in
   if (net.on && G.seats && !ui.resShown.coins) {
     const rk = `waribashi-rec:${net.code}:${net.room && net.room.createdAt}:${G.game}`;
@@ -2604,7 +2708,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/15-17';
+const APP_VERSION = '11/15-18';
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -2870,6 +2974,10 @@ const CHALKS = [
   {id:'prism', name:'プリズムチョーク', price:0, color:'#fff2fb', grad:'cg-prism', fx:'prism', fxc:'#ffc6ec', fxc2:'#b9f0ff', g:'rgba(255,255,255,.7)', book:75},
   // limited: the level 30 reward
   {id:'silver', name:'銀粉チョーク', price:0, color:'#e3e9f0', fx:'glitter', fxc:'#ffffff', fxc2:'#cdd6e2', g:'rgba(215,228,242,.75)', lvl:30},
+  // limited: the RP shop
+  {id:'rpred', name:'勝負師のチョーク', price:0, color:'#ff7a7a', fx:'thunder', fxc:'#fff1a8', fxc2:'#ffd2d2', g:'rgba(255,122,122,.7)', rmp:600},
+  {id:'rpstreak', name:'連勝のチョーク', price:0, color:'#ffb35a', fx:'ember', fxc:'#ffd36b', fxc2:'#ff7a4a', g:'rgba(255,170,90,.7)', rmp:900},
+  {id:'rptop', name:'頂点のチョーク', price:0, color:'#e7e1ff', fx:'shimmer', fxc:'#ffffff', fxc2:'#c9b8ff', g:'rgba(220,210,255,.75)', rmp:1500},
 ];
 // One limited chalk per month: tier 30 of that month's season pass.
 const SEASON_THEMES = {1:['初日の出','#ff9a5a','#ffe08a'], 2:['梅','#ff8fb0','#fff0f4'], 3:['菜の花','#f3e25b','#b8e66a'], 4:['桜吹雪','#ffc2d6','#fff7fa'],
@@ -2901,6 +3009,8 @@ const BOARDS = [
   {id:'blegend', name:'伝説の黒板', price:0, rate:2000},
   {id:'bst200', name:'星空の教室', price:0, stars:200},
   {id:'blv50', name:'殿堂の黒板', price:0, lvl:50},
+  {id:'brp1', name:'対戦会場の黒板', price:0, rmp:800},
+  {id:'brp2', name:'王者の黒板', price:0, rmp:1200},
 ];
 for (let m = 1; m <= 12; m++) BOARDS.push({id: 'bm' + m, name: `${SEASON_THEMES[m][0]}の黒板`, price: 0, season: m});
 // ----- Battle stamps: fixed phrases with a chalk face (no free text) -----
@@ -3007,6 +3117,12 @@ EVENT_TPL.forEach((t, i) => t.items.forEach(it => addItem(it, {event: i + 1,
   need: it.rank ? `イベント「${t.name}」で${it.rank}位以内` : it.kind === 'chalk' ? `イベント「${t.name}」の交換所` : `イベント「${t.name}」の累計pt報酬`, evrank: it.rank || 0})));
 TITLES.push({id: 'tdebut', name: 'わりばしデビュー', need: 'はじめてガイドを全部クリア', own: 'tdebut'});
 TITLES.push({id: 'tlv10', name: 'わりばしの常連', need: 'Lv10の報酬', own: 'tlv10', lvl: 10});
+// RP shop (rate match points): items only sold there
+TITLES.push({id: 'trp1', name: 'レート戦の常連', need: 'RPショップ', own: 'trp1', rmp: 300}, {id: 'trp2', name: '勝負師', need: 'RPショップ', own: 'trp2', rmp: 800},
+  {id: 'trp3', name: '連勝街道', need: 'RPショップ', own: 'trp3', rmp: 1500});
+PLATES.push({id: 'prp', name: '対戦会場', need: 'RPショップ', own: 'prp', rmp: 1000});
+STAMPS.push({id: 'st_shoubu', text: '勝負だ！', face: 'fire', c: '#ff7a7a', name: '「勝負だ！」', need: 'RPショップ', rmp: 200},
+  {id: 'st_mouikkai', text: 'もう一回！', face: 'grin', c: '#9fe0ff', name: '「もう一回！」', need: 'RPショップ', rmp: 200});
 PLATES.push({id: 'plv20', name: '年季の入った黒板', need: 'Lv20の報酬', own: 'plv20', lvl: 20});
 // ----- Stage mode: nine chapters, each with its own rule and CPU character -----
 const STAGE_N = 10;
@@ -3048,9 +3164,9 @@ function myBoard(){
   const p = net.profile || {}, id = p.board || lsGet('waribashi-board') || 'bstd';
   return hasBoard(id) ? id : 'bstd';
 }
-const isLimited = c => !!(c.boss || c.rate || c.season || c.book || c.event || c.stars || c.lvl);
+const isLimited = c => !!(c.boss || c.rate || c.season || c.book || c.event || c.stars || c.lvl || c.rmp);
 function howToGet(c, kind){
-  return c.gacha ? `ガチャ（${c.gacha}）・かけら${SHARD_COST[c.gacha]}` : c.event || c.stage ? c.need : c.lvl ? `Lv${c.lvl}の報酬` : c.stars ? `ステージで★${c.stars}` : c.boss ? `ボス討伐${c.boss}回` : c.rate ? `${RANKS[tierOf(c.rate)].name}に届く（レート${c.rate}）` : c.season ? `${c.season}月のシーズンパス${kind === 'board' ? 22 : 30}段`
+  return c.gacha ? `ガチャ（${c.gacha}）・かけら${SHARD_COST[c.gacha]}` : c.event || c.stage ? c.need : c.rmp ? `RPショップ（RP ${c.rmp}）` : c.lvl ? `Lv${c.lvl}の報酬` : c.stars ? `ステージで★${c.stars}` : c.boss ? `ボス討伐${c.boss}回` : c.rate ? `${RANKS[tierOf(c.rate)].name}に届く（レート${c.rate}）` : c.season ? `${c.season}月のシーズンパス${kind === 'board' ? 22 : 30}段`
     : c.book ? `図鑑${c.book}%の報酬` : c.price ? `ショップ・${c.price}コイン` : 'はじめから';
 }
 // Other months' season items and other events' items appear only once owned.
@@ -3141,7 +3257,8 @@ function missionState(){
   const readyNormal = normal.filter(m => m.state === 'ready').length;
   return {daily, bonusState, normal, readyDaily, readyNormal, day: d.day};
 }
-const myEntry = () => Object.assign({name: typedName(), rating: myRating(), joinedAt: Date.now(), chalk: myChalk()}, myLook());
+const myRStreak = () => +((net.profile || {}).rstk) || 0;
+const myEntry = () => Object.assign({name: typedName(), rating: myRating(), joinedAt: Date.now(), chalk: myChalk(), stk: myRStreak()}, myLook());
 
 // ----- Friends -----
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', MAX_FRIENDS = 50;
@@ -3563,7 +3680,7 @@ function cpuReact(){
 // New players open features as they level up; players from before this update keep everything (unl.all).
 const FEATS = {shop: {lv: 2, name: 'ショップ'}, rated: {lv: 3, name: 'レート戦'}, gacha: {lv: 3, name: 'ガチャ'}, puzzle: {lv: 3, name: '詰めわりばし'},
   boss: {lv: 4, name: '大王ボス'}, pass: {lv: 4, name: 'シーズンパス'}, event: {lv: 5, name: '期間限定イベント'}};
-const SCREEN_FEAT = {shop: 'shop', puzzle: 'puzzle', boss: 'boss', pass: 'pass', event: 'event'};
+const SCREEN_FEAT = {shop: 'shop', puzzle: 'puzzle', boss: 'boss', pass: 'pass', event: 'event', rated: 'rated', rpshop: 'rated'};
 // ?noprog (and ?debug without &prog) turns locks and level rewards off, for the older test suites.
 const PROG_ON = (() => { try { const q = new URLSearchParams(location.search); return !q.has('noprog') && (!q.has('debug') || q.has('prog')); } catch(e) { return true; } })();
 // Feature locks are switched off for now (everything open from the start); flip LOCKS_DEFAULT to bring them back.
@@ -3699,6 +3816,187 @@ document.addEventListener('click', e => {
   e.preventDefault(); e.stopImmediatePropagation();
   lockToast(el.dataset.feat);
 }, true);
+
+
+// ===================== Rated screen, RP, recruit banner, practice =====================
+const RP_WIN = 30, RP_LOSE = 10, RP_DRAW = 15, RP_STREAK = 10, RP_FIRST = 50, RHIST_N = 10;
+const weekKey = () => Math.floor((dayNum(dayKey()) + 3) / 7);
+const myRmp = () => +((net.profile || {}).rmp) || 0;
+// RP goods besides the items: tickets (3 a week) and jewels (3 a day).
+const RP_GOODS = [{id: 'tk', name: 'ガチャチケット', tickets: 1, cost: 150, limit: 3, per: 'week'}, {id: 'jw', name: 'ジュエル50', jewels: 50, cost: 120, limit: 3, per: 'day'}];
+const rpItems = () => [...CHALKS.filter(c => c.rmp).map(c => ({kind: 'chalk', it: c})), ...BOARDS.filter(b => b.rmp).map(b => ({kind: 'board', it: b})),
+  ...TITLES.filter(t => t.rmp).map(t => ({kind: 'title', it: t})), ...PLATES.filter(t => t.rmp).map(t => ({kind: 'plate', it: t})), ...STAMPS.filter(t => t.rmp).map(t => ({kind: 'stamp', it: t}))];
+// After a rated game: RP, the rated win streak and the recent-games list (one transaction).
+async function rewardRated(S, d, room){
+  const key = `rmp:${net.code}:${room.createdAt}`;
+  const oppUid = (S.seats || []).find(u => u !== net.uid), opp = (room.players || {})[oppUid] || {};
+  let got = null;
+  const res = await profileTx(cur => {
+    if ((cur.rhk || '') === key) return undefined;
+    const win = d.score === 1, draw = d.score !== 1 && d.score !== 0, day = dayKey();
+    const stk = win ? (+cur.rstk || 0) + 1 : draw ? (+cur.rstk || 0) : 0;
+    let gain = win ? RP_WIN : draw ? RP_DRAW : RP_LOSE;
+    const notes = [];
+    if (win && stk >= 3) { gain += RP_STREAK; notes.push(`${stk}連勝`); }
+    if (win && cur.rday !== day) { gain += RP_FIRST; notes.push('今日はじめての勝利'); cur.rday = day; }
+    cur.rmp = (+cur.rmp || 0) + gain;
+    cur.rstk = stk;
+    cur.rbest = Math.max(+cur.rbest || 0, stk);
+    cur.rhk = key;
+    const h = Object.assign({}, cur.rhist || {}), t = serverNow();
+    h['h' + t] = {t, o: String(opp.name || '相手').slice(0, 12), or: Math.round(+opp.rating) || BASE_RATE, w: win ? 1 : draw ? 0.5 : 0, d: d.delta};
+    Object.keys(h).sort().slice(0, Math.max(0, Object.keys(h).length - RHIST_N)).forEach(k => delete h[k]);
+    cur.rhist = h;
+    got = {key, gain, notes, stk};
+    return cur;
+  });
+  if (res && res.committed && got) { ui.rmpRes = got; render(); }
+}
+function renderRated(){
+  const p = net.profile || {}, stk = myRStreak();
+  rankCard($('#rtRank'), null, false);
+  const sl = $('#rtStreak');
+  sl.className = 'rt-strk' + (stk >= 2 ? ' hot' : '');
+  sl.innerHTML = stk >= 2 ? `<i class="flame"></i><b>${stk}</b>連勝中！` : stk === 1 ? '1連勝中。つぎも勝てば連勝！' : `連勝なし${+p.rbest ? `（最高 ${+p.rbest}連勝）` : ''}`;
+  $('#rtRpv').textContent = myRmp();
+  $('#rtOnline').textContent = net.onlineN === null || net.onlineN === undefined ? '-' : net.onlineN;
+  $('#rtWait').textContent = recruitList().length;
+  $('#rtGo').disabled = !FIREBASE_CONFIG;
+  const ol = $('#rtHist'), h = Object.values(p.rhist || {}).sort((a, b) => b.t - a.t);
+  if (unchanged(ol, JSON.stringify(h))) return;
+  ol.innerHTML = '';
+  if (!h.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = 'まだレート戦をしていません'; ol.append(li); return; }
+  h.forEach(r => {
+    const li = document.createElement('li');
+    li.innerHTML = '<span class="wl"></span><span class="op"></span><span class="dr"></span><span class="tm"></span>';
+    const wl = li.querySelector('.wl');
+    wl.className = 'wl ' + (r.w === 1 ? 'w' : r.w === 0 ? 'l' : 'd'); wl.textContent = r.w === 1 ? '勝ち' : r.w === 0 ? '負け' : '引分';
+    li.querySelector('.op').textContent = `${r.o}（${r.or}）`;
+    const dr = li.querySelector('.dr');
+    dr.className = 'dr ' + (r.d > 0 ? 'up' : r.d < 0 ? 'dn' : ''); dr.textContent = (r.d > 0 ? '+' : '') + r.d;
+    const ago = Math.max(0, serverNow() - r.t);
+    li.querySelector('.tm').textContent = ago < 3600e3 ? `${Math.max(1, Math.round(ago / 60e3))}分前` : ago < 86400e3 ? `${Math.round(ago / 3600e3)}時間前` : `${Math.round(ago / 86400e3)}日前`;
+    ol.append(li);
+  });
+}
+// ---- RP shop
+async function buyRp(kind, it, g){
+  const day = dayKey(), wk = weekKey();
+  let ok = false;
+  const res = await profileTx(cur => {
+    const have = +cur.rmp || 0, b = Object.assign({}, cur.rpb || {});
+    if (g) {
+      const k = g.id + (g.per === 'week' ? 'w' + wk : 'd' + day), n = +b[k] || 0;
+      if (n >= g.limit || have < g.cost) return undefined;
+      b[k] = n + 1;
+      Object.keys(b).forEach(x => { if (!x.endsWith('w' + wk) && !x.endsWith('d' + day)) delete b[x]; });
+      cur.rpb = b; cur.rmp = have - g.cost;
+      if (g.tickets) cur.tickets = (+cur.tickets || 0) + g.tickets;
+      if (g.jewels) cur.jewels = (+cur.jewels || 0) + g.jewels;
+    } else {
+      if ((cur.owned || {})[it.id] || have < it.rmp) return undefined;
+      cur.owned = Object.assign({}, cur.owned || {}, {[it.id]: true});
+      cur.rmp = have - it.rmp;
+      if (kind === 'chalk') cur.chalk = it.id;
+      if (kind === 'board') cur.board = it.id;
+    }
+    ok = true;
+    return cur;
+  });
+  return res && res.committed && ok;
+}
+function renderRpShop(){
+  const p = net.profile || {}, have = myRmp(), owned = p.owned || {}, b = p.rpb || {}, day = dayKey(), wk = weekKey();
+  $('#rpsHave').textContent = have;
+  const grid = $('#rpsGrid');
+  if (unchanged(grid, JSON.stringify([have, owned, b, myChalk(), myBoard()]))) return;
+  grid.innerHTML = '';
+  const card = (art, name, sub, cost, can, label, onBuy, conf) => {
+    const el = document.createElement('div');
+    el.className = 'item';
+    el.innerHTML = art + '<b></b><span class="rpc"></span><span class="lim2"></span>';
+    el.querySelector('b').textContent = name;
+    el.querySelector('.rpc').textContent = cost;
+    el.querySelector('.lim2').textContent = sub;
+    const bt = document.createElement('button');
+    bt.type = 'button';
+    bt.className = 'btn' + (can ? ' gold' : ''); bt.textContent = label; bt.disabled = !can;
+    if (can) bt.addEventListener('click', async () => {
+      if (!(await confirmBuy(Object.assign({title: '交換しますか？', art, name, cur: 'rmp', cost, have: myRmp(), ok: '交換する'}, conf || {})))) return;
+      bt.disabled = true;
+      if (await onBuy()) { toast(`${name}と交換しました`); sfx('unlock'); } else toast('交換できませんでした', true);
+      grid.dataset.key = ''; render();
+    });
+    el.append(bt);
+    grid.append(el);
+  };
+  RP_GOODS.forEach(g => {
+    const n = +b[g.id + (g.per === 'week' ? 'w' + wk : 'd' + day)] || 0, left = g.limit - n;
+    card(goodArt(g), g.name, `${g.per === 'week' ? '今週' : '今日'}あと${left}回`, g.cost, left > 0 && have >= g.cost, left <= 0 ? '交換済み' : have < g.cost ? 'RPが足りない' : '交換', () => buyRp(null, null, g));
+  });
+  rpItems().forEach(({kind, it}) => {
+    const mine = kind === 'stamp' ? hasStamp(it.id) : !!owned[it.id];
+    const sub = ({chalk: 'RP限定チョーク', board: 'RP限定黒板', title: 'RP限定の称号', plate: 'RP限定プレート', stamp: 'RP限定スタンプ'})[kind];
+    card(itemArt(kind, it.id), it.name, sub, it.rmp, !mine && have >= it.rmp, mine ? '持っている' : have < it.rmp ? 'RPが足りない' : '交換', () => buyRp(kind, it),
+      kind === 'chalk' || kind === 'board' ? {note: '交換するとそのまま使用中になります'} : null);
+  });
+}
+// ---- who is online (lobby/<uid> heartbeat) and who is looking for a match (the queue)
+function watchLobby(){
+  const fb = net.fb;
+  if (!fb || !net.uid || net.lobbyOff) return;
+  const beat = () => { if (!document.hidden) fb.set(fb.ref(fb.db, 'lobby/' + net.uid), {ts: serverNow()}).catch(() => { net.onlineN = null; }); };
+  try { fb.onDisconnect(fb.ref(fb.db, 'lobby/' + net.uid)).remove(); } catch(e) {}
+  beat(); net.lobbyTimer = setInterval(beat, 60000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) beat(); });
+  net.lobbyOff = fb.onValue(fb.ref(fb.db, 'lobby'), sn => {
+    const v = sn.val() || {}, now = serverNow();
+    net.onlineN = Object.keys(v).filter(u => now - (+((v[u] || {}).ts) || 0) < 150000).length;
+    if (ui.screen === 'rated') renderRated();
+  }, () => { net.onlineN = null; });
+  net.recruitOff = fb.onValue(fb.ref(fb.db, 'queue'), sn => { net.queueAll = sn.val() || {}; checkRecruit(); if (ui.screen === 'home') renderChrome(); }, () => {});
+}
+// People waiting in the queue right now (not me, not matched yet).
+function recruitList(){
+  const q = net.queueAll || {}, now = serverNow();
+  return Object.keys(q).filter(u => u !== net.uid && q[u] && !q[u].match && now - (+q[u].ts || 0) < QUEUE_FRESH).map(u => Object.assign({uid: u}, q[u]));
+}
+// (quiet in the older test suites: ?noprog, or ?debug without &recruit)
+const RECRUIT_TEST_OFF = (() => { try { const q = new URLSearchParams(location.search); return q.has('noprog') || (q.has('debug') && !q.has('recruit')); } catch(e) { return false; } })();
+const recruitOn = () => !RECRUIT_TEST_OFF && lsGet('waribashi-recruit') !== '0';
+function checkRecruit(){
+  const box = $('#recruit');
+  ui.recruitSeen = ui.recruitSeen || {};
+  const busy = search.on || net.on || net.connecting || ui.screen === 'search' || !$('#story').hidden || !$('#cfm').hidden || !recruitOn();
+  const r = busy ? null : recruitList().find(x => !(ui.recruitSeen[x.uid] > Date.now()));
+  if (!r) { if (!box.hidden && (busy || !recruitList().some(x => x.uid === box.dataset.uid))) box.hidden = true; if (ui.screen === 'rated') renderRated(); return; }
+  if (!box.hidden && box.dataset.uid === r.uid) return;
+  box.dataset.uid = r.uid;
+  const t = $('#recruitT'), k = rankOf(Math.round(+r.rating) || BASE_RATE), n = +r.stk || 0;
+  t.textContent = `${String(r.name || 'だれか').slice(0, 12)}さん（${k.label}）が対戦相手をさがしてる！`;
+  const sm = document.createElement('small'); sm.textContent = n >= 2 ? `${n}連勝中・レート${Math.round(+r.rating) || BASE_RATE}` : `レート${Math.round(+r.rating) || BASE_RATE}`; t.append(sm);
+  box.hidden = false;
+  sfx('tap');
+  if (ui.screen === 'rated') renderRated();
+}
+// ---- practice while searching
+function startPractice(){
+  if (!search.on) return;
+  ui.practice = true;
+  ui.boss = null; ui.puzzle = null; ui.stage = null;
+  settings.mode = 'cpu';
+  setScreen('game');
+  newGame();
+  render();
+}
+function endPractice(){
+  if (!ui.practice) return;
+  ui.practice = false;
+  clearTimeout(cpuTimer); cpuTimer = null;
+  hideResult();
+  $('#practiceBar').hidden = true;
+  document.body.classList.remove('practicing');
+}
 
 // ===================== BGM: bgm/home.mp3, bgm/battle.mp3, bgm/boss.mp3 (silent if a file is missing) =====================
 const BGM_FILES = {home: 'bgm/home.mp3', battle: 'bgm/battle.mp3', boss: 'bgm/boss.mp3'};
@@ -3862,7 +4160,7 @@ function charaSVG(id, ex, color){
 
 // ===================== Purchase confirmation =====================
 // confirmBuy({title, art, name, cur, cost, have, ok, note}) → Promise<boolean>. cur: coins / jewels / tickets / shards / medals.
-const CUR_INFO = {coins: ['coin', 'コイン'], jewels: ['jwl', 'ジュエル'], tickets: ['tkt', 'チケット'], shards: ['shd', 'かけら'], medals: ['', 'メダル']};
+const CUR_INFO = {coins: ['coin', 'コイン'], jewels: ['jwl', 'ジュエル'], tickets: ['tkt', 'チケット'], shards: ['shd', 'かけら'], medals: ['', 'メダル'], rmp: ['rpc', 'RP']};
 function confirmBuy(o){
   const box = $('#cfm'), [cls, label] = CUR_INFO[o.cur] || ['', ''];
   $('#cfmT').textContent = o.title || '購入しますか？';
@@ -4850,6 +5148,8 @@ async function claimGuideDone(){
 
 // ===================== News =====================
 const NEWS = [
+  {id: 'n14', date: '2026-11-16', tag: '新機能', title: 'レート戦画面・RPショップ・対戦募集のお知らせ',
+    body: '「レート戦」を押すと専用の画面になりました。いまのランク・連勝・最近の試合・オンラインの人数が見られます。\nレート戦でRP（レートマッチポイント）がたまります（勝つと30・負けても10・3連勝から+10・その日はじめての勝利で+50）。RPショップで限定のチョーク・黒板・称号・スタンプや、ガチャチケットと交換できます。\nだれかがレート戦の相手をさがし始めると、アプリを開いている人に「受けて立つ」のお知らせが出ます。待っているあいだはCPUと練習もできます。2連勝以上だと、マッチングしたときに相手にも「○連勝中」が見えます。'},
   {id: 'n13', date: '2026-11-15', tag: 'おしらせ', title: 'チョークと黒板はマイページで変えられます',
     body: 'ショップには買えるものだけが並ぶようになりました（買ったものは「購入済み」）。\n持っているチョークと黒板は、マイページの「チョーク」「黒板」から選べます。限定アイテムの手に入れかたは図鑑で見られます。'},
   {id: 'n12', date: '2026-11-15', tag: 'アップデート', title: '大王パワーアップ！ 怒りモード・再挑戦・報酬アップ',
@@ -5772,7 +6072,7 @@ function watchGlobal(fb){
     net.profile = s.val();
     net.profileLoaded = true;
     if (!(net.profile || {}).code) setTimeout(ensureCode, 600);
-    if (first) { ensureUnl(); setTimeout(checkLogin, 400); setTimeout(() => { presence(true); watchInvites(); watchFriendData(); migrateFriends(); ensureGuide(); }, 0); setTimeout(claimLevels, 1500); }
+    if (first) { ensureUnl(); setTimeout(checkLogin, 400); setTimeout(() => { presence(true); watchInvites(); watchFriendData(); migrateFriends(); ensureGuide(); watchLobby(); }, 0); setTimeout(claimLevels, 1500); }
     else if (levelOfProfile(net.profile) > levelOfProfile(prevProfile)) claimLevels();
     checkUnlocks();
     const after = unlocked(statsOf(net.profile));
@@ -5943,11 +6243,13 @@ async function leaveRoom(msg){
     const S = res && res.committed ? normState(res.snapshot.val()) : null;
     if (S) { if (isRated()) await applyRating(S); else await recordGame(S); }
   }
+  const wasRated = !!(net.room && net.room.kind === 'rated');
   detach();
   Object.assign(net, {on:false, code:null, room:null, seat:-1, busy:false});
   G = null;
   setUrlRoom(null);
   goHome();
+  if (wasRated) setScreen('rated');
   if (msg) toast(msg, true);
   fb.runTransaction(fb.ref(fb.db, 'rooms/' + code), cur => {
     if (cur === null) return null;
@@ -6325,6 +6627,7 @@ async function applyRating(S){
     const d = ratingChange(room, S, seat);
     const field = d.score === 1 ? 'rw' : d.score === 0 ? 'rl' : 'rd';
     await fb.update(fb.ref(fb.db, 'players/' + uid), {rp: fb.increment(d.delta), [field]: fb.increment(1), name: typedName()});
+    await rewardRated(S, d, room);
     await recordGame(S, d.to, {code, createdAt: room.createdAt, seat});
   } catch(e) {}
 }
@@ -6343,7 +6646,13 @@ function maybeSplash(room, S){
     box.className = 'vsbox';
     const x = document.createElement('p');
     x.className = 'vs-x'; x.textContent = 'VS';
-    box.append(plateEl(info(0)), x, plateEl(info(1)));
+    const side = k => {
+      const d = document.createElement('div'), n = +info(k).stk || 0;
+      d.append(plateEl(info(k)));
+      if (n >= 2) { const t = document.createElement('span'); t.className = 'vs-stk'; t.innerHTML = '<i class="flame"></i>'; t.append(`${n}連勝中`); d.append(t); }
+      return d;
+    };
+    box.append(side(0), x, side(1));
     body.append(box);
     showSplash('マッチングしました！', `先手は${nm[L.turn]}。1手${S.limit}秒`);
   } else {
@@ -6427,13 +6736,14 @@ async function enqueue(sg, create){
   const fb = net.fb, meRef = fb.ref(fb.db, 'queue/' + net.uid);
   try {
     await fb.onDisconnect(meRef).remove();
-    const entry = Object.assign({name: typedName(), rating: myRating(), ts: serverNow(), chalk: myChalk()}, myLook());
+    const entry = Object.assign({name: typedName(), rating: myRating(), ts: serverNow(), chalk: myChalk(), stk: myRStreak()}, myLook());
     await fb.runTransaction(meRef, cur => (sg !== search.gen || (cur && cur.match) || (!cur && !create)) ? undefined : entry);
   } catch(e) { if (sg === search.gen) toast(errText(e, '相手さがしに参加できませんでした'), true); }
 }
 function gotMatch(code){
   if (!search.on) return;
   dbg('got match ' + code);
+  if (ui.practice) { endPractice(); toast('相手が見つかりました！ レート戦をはじめます'); sfx('start'); }
   stopSearch();
   const fb = net.fb, meRef = fb.ref(fb.db, 'queue/' + net.uid);
   fb.onDisconnect(meRef).cancel().catch(() => {});
@@ -6505,7 +6815,7 @@ async function tryMatch(sg){
     const t0 = Date.now();
     const pls = {[net.uid]: Object.assign(myEntry(), {rating: myR, joinedAt: t0}),
                  [oppUid]: {name: String(opp.name || '相手').slice(0, 12), rating: Math.round(+opp.rating) || BASE_RATE, joinedAt: t0,
-                   title: titleId(opp.title), plate: plateId(opp.plate), chalk: chalkId(opp.chalk)}};
+                   title: titleId(opp.title), plate: plateId(opp.plate), chalk: chalkId(opp.chalk), stk: Math.max(0, Math.min(999, +opp.stk || 0))}};
     const seats = shuffle([net.uid, oppUid]);
     code = await createRoomRecord({kind:'rated', status:'playing', games:1, rules: Object.assign({}, RATED_RULES, {limit: RATED_LIMIT}), players: pls,
       waitUntil: serverNow() + JOIN_WAIT,
@@ -6539,10 +6849,10 @@ async function tryMatch(sg){
 }
 
 // ===================== Screens =====================
-const SCREENS = {home:'#scrHome', cpu:'#scrCpu', plate:'#scrPlate', mission:'#scrMission', shop:'#scrShop', rank:'#scrRank', rules:'#scrRules', boss:'#scrBoss', events:'#scrEvents', pass:'#scrPass', puzzle:'#scrPuzzle', friends:'#scrFriends', book:'#scrBook', event:'#scrEvent', news:'#scrNews', stage:'#scrStage', chapter:'#scrChapter', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
+const SCREENS = {home:'#scrHome', cpu:'#scrCpu', plate:'#scrPlate', mission:'#scrMission', shop:'#scrShop', rank:'#scrRank', rules:'#scrRules', boss:'#scrBoss', events:'#scrEvents', pass:'#scrPass', puzzle:'#scrPuzzle', friends:'#scrFriends', book:'#scrBook', event:'#scrEvent', news:'#scrNews', stage:'#scrStage', chapter:'#scrChapter', rated:'#scrRated', rpshop:'#scrRpShop', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
 // The tab bar stays on the menu screens and steps aside for matching and play.
-const TABBED = ['home', 'events', 'mission', 'shop', 'friends', 'plate', 'rank', 'rules', 'cpu', 'custom', 'boss', 'pass', 'puzzle', 'book', 'event', 'news', 'stage', 'chapter'];
-const TAB_OF = {boss: 'events', pass: 'events', puzzle: 'events', event: 'events', rank: 'friends', book: 'plate', news: 'home', stage: 'home', chapter: 'home'};
+const TABBED = ['home', 'events', 'mission', 'shop', 'friends', 'plate', 'rank', 'rules', 'cpu', 'custom', 'boss', 'pass', 'puzzle', 'book', 'event', 'news', 'stage', 'chapter', 'rated', 'rpshop'];
+const TAB_OF = {boss: 'events', pass: 'events', puzzle: 'events', event: 'events', rank: 'friends', book: 'plate', news: 'home', stage: 'home', chapter: 'home', rated: 'home', rpshop: 'home'};
 function showChrome(s){
   const tabs = TABBED.includes(s);
   $('#tabbar').hidden = !tabs;
@@ -6627,6 +6937,8 @@ function render(){
   if (ui.screen === 'book') renderBook();
   if (ui.screen === 'event') renderEvent();
   if (ui.screen === 'stage') renderStage();
+  if (ui.screen === 'rated') renderRated();
+  if (ui.screen === 'rpshop') renderRpShop();
   if (ui.screen === 'chapter') renderChapter();
   if (ui.screen === 'news') renderNews();
   if (ui.screen === 'plate') renderLevel();
@@ -6679,6 +6991,9 @@ function renderChrome(){
   hr.textContent = 'レート ';
   hr.append(rateEl(mr), `（${tierName(mr)}）・` + (g ? `${+p.rw || 0}勝${+p.rl || 0}敗${+p.rd ? (+p.rd) + '分' : ''}` : 'まだ0戦'));
   hr.prepend(emblemEl(mr));
+  const nw = recruitList().length, sk = myRStreak();
+  if (nw) { const w = document.createElement('b'); w.style.color = '#9fe0a8'; w.textContent = `・いま${nw}人が相手待ち！`; hr.append(w); }
+  else if (sk >= 2) hr.append(`・${sk}連勝中`);
   const hb = $('#homePlateBox');
   hb.innerHTML = '';
   hb.append(plateEl(Object.assign({name: typedName(), rating: ok ? mr : 0}, myLook()), 'lg'));
@@ -7503,7 +7818,7 @@ function renderGame(){
   rb.disabled = net.busy;
   rb.textContent = ui.resignArm > now ? 'もう一度押すと投了' : '投了';
   const midGame = netPlaying() && !G.over && alive(G, 0);
-  xb.textContent = !net.on ? 'ホームへ' : ui.exitArm > now ? 'もう一度押すと投了して退出' : '退出';
+  xb.textContent = !net.on ? (ui.practice ? 'さがす画面へ' : ui.stage ? 'ステージ選択へ' : 'ホームへ') : ui.exitArm > now ? 'もう一度押すと投了して退出' : '退出';
   xb.classList.toggle('danger', midGame && ui.exitArm > now);
 
   $('#anaPanel').hidden = net.on || !!ui.boss || !!ui.puzzle || !!ui.stage;
@@ -7803,6 +8118,11 @@ function tick(){
   }
   if (ui.screen === 'shop' && ui.buyArm && ui.buyArm.until <= now) { ui.buyArm = null; renderShop(); }
   if (ui.screen === 'search' && (search.on || net.on)) $('#searchTime').textContent = `${Math.floor((now - (ui.searchSince || search.since)) / 1000)}秒`;
+  if (ui.practice) {
+    if (!search.on && !net.on && !net.connecting) endPractice();
+    else { $('#practiceBar').hidden = ui.screen !== 'game'; document.body.classList.toggle('practicing', ui.screen === 'game'); $('#practiceT').textContent = `相手をさがし中… ${Math.floor((now - (ui.searchSince || search.since || now)) / 1000)}秒`; }
+  }
+  if (!$('#recruit').hidden) checkRecruit();
   if ((ui.resignArm && now > ui.resignArm) || (ui.exitArm && now > ui.exitArm)) {
     if (ui.resignArm && now > ui.resignArm) ui.resignArm = 0;
     if (ui.exitArm && now > ui.exitArm) ui.exitArm = 0;
@@ -7967,7 +8287,21 @@ $('#tabDaily').addEventListener('click', () => { ui.missionTab = 'daily'; render
 $('#tabGuide').addEventListener('click', () => { ui.missionTab = 'guide'; renderMission(); });
 $('#tabNormal').addEventListener('click', () => { ui.missionTab = 'normal'; renderMission(); });
 $('#goCustom').addEventListener('click', () => setScreen('custom'));
-$('#goRated').addEventListener('click', () => startSearch());
+$('#goRated').addEventListener('click', () => setScreen('rated'));
+$('#rtGo').addEventListener('click', () => startSearch());
+$('#rtShop').addEventListener('click', () => setScreen('rpshop'));
+$('#recruitGo').addEventListener('click', () => {
+  $('#recruit').hidden = true;
+  if (net.on) return;
+  clearTimeout(cpuTimer); cpuTimer = null; hideResult(); hideSplash();
+  ui.boss = null; ui.puzzle = null; ui.stage = null;
+  startSearch();
+});
+$('#recruitNo').addEventListener('click', () => { const u = $('#recruit').dataset.uid; ui.recruitSeen = ui.recruitSeen || {}; ui.recruitSeen[u] = Date.now() + 120000; $('#recruit').hidden = true; checkRecruit(); });
+document.getElementById(lsGet('waribashi-recruit') === '0' ? 'rcr-off' : 'rcr-on').checked = true;
+$('#recruitOpts').addEventListener('change', e => { lsSet('waribashi-recruit', e.target.value === 'off' ? '0' : '1'); checkRecruit(); });
+$('#searchPractice').addEventListener('click', startPractice);
+$('#practiceStop').addEventListener('click', async () => { endPractice(); setScreen('rated'); await cancelSearch(); });
 $$('[data-home]').forEach(b => b.addEventListener('click', goBack));
 $('#cpuStart').addEventListener('click', () => { ui.boss = null; ui.puzzle = null; ui.stage = null; setScreen('game'); newGame(); });
 $('#goStage').addEventListener('click', () => setScreen('stage'));
@@ -7995,8 +8329,9 @@ $('#netCancel').addEventListener('click', async () => {
     }).catch(() => {});
     return;
   }
-  // Go home first so nothing restarts the search; a last-moment match is left to time out on the other side.
-  goHome();
+  // Leave the search screen first so nothing restarts the search; a last-moment match is left to time out on the other side.
+  hideSplash(); hideResult();
+  setScreen('rated');
   await cancelSearch();
 });
 // Two name fields (home and custom match) share one value.
@@ -8025,6 +8360,7 @@ $('#resignBtn').addEventListener('click', () => {
   else { ui.resignArm = Date.now() + 3000; render(); }
 });
 $('#exitBtn').addEventListener('click', () => {
+  if (!net.on && ui.practice) { endPractice(); setScreen('search'); return; }
   if (!net.on && ui.stage) { clearTimeout(cpuTimer); cpuTimer = null; hideSplash(); hideResult(); ui.stageCh = ui.stage.c; ui.stageSel = ui.stage.n; ui.stage = null; setScreen('chapter'); return; }
   if (!net.on) { goHome(); return; }
   const midGame = netPlaying() && G && !G.over && alive(G, 0);
@@ -8066,6 +8402,7 @@ document.addEventListener('visibilitychange', async () => {
     if (search.on) { ui.resumeSearch = true; const code = await cancelSearch(); if (code) joinRated(code); }
   } else if (ui.resumeSearch) {
     ui.resumeSearch = false;
+    if (ui.practice && !net.on && !search.on) { endPractice(); setScreen('search'); }
     if (ui.screen === 'search' && !net.on && !search.on) startSearch();
   }
 });
