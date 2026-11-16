@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<meta name="waribashi-version" content="11/16-2">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="指の本数を足して、相手の両手を消したら勝ち。教室の手遊び「わりばし」をスマホで。">
 <meta property="og:title" content="わりばし対戦">
@@ -1239,6 +1240,65 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .bosshero.angry .bh-name{color:#ffb3c1}
 .bosscard.angry{border-color:#ff6b8a}
 
+
+
+/* ===== A newer version is up ===== */
+.updbar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 78px);z-index:58;translate:-50% 0;width:min(520px,calc(100% - 24px));display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:10px 10px 10px 14px;border-radius:14px;border:2px solid var(--coin);background:var(--panel);box-shadow:0 14px 30px -10px rgba(0,0,0,.85);animation:ubIn .35s cubic-bezier(.2,.9,.3,1.2)}
+.updbar .ub-dot{width:10px;height:10px;border-radius:50%;background:var(--coin);box-shadow:0 0 0 0 rgba(242,207,91,.6);animation:ubPing 1.6s ease-out infinite}
+.updbar .ub-t{display:grid;min-width:0;line-height:1.35}
+.updbar b{font-size:13.5px}
+.updbar small{font-size:11.5px;color:var(--chalk-soft)}
+.updbar .btn{min-height:34px;padding:0 10px;font-size:12.5px;white-space:nowrap}
+@keyframes ubIn{from{opacity:0;translate:-50% 14px}}
+@keyframes ubPing{70%{box-shadow:0 0 0 9px rgba(242,207,91,0)}100%{box-shadow:0 0 0 0 rgba(242,207,91,0)}}
+@media (max-width:360px){.updbar{grid-template-columns:auto minmax(0,1fr) auto}.updbar #updLater{display:none}}
+@media (prefers-reduced-motion:reduce){.updbar,.updbar .ub-dot{animation:none!important}}
+/* ===== Weekday bosses and legendary bosses ===== */
+.bc-tag,.bh-tag{background:var(--bacc,#c9a2ff)}
+.bc-next{justify-self:start;margin-top:2px;padding:1px 9px;border-radius:999px;border:1.5px dashed #ffd36b;color:#ffd36b;font-size:11.5px;font-weight:800;line-height:1.6}
+.bosscard.legend{border-color:#e0b04a;background-color:#251a35;background-image:radial-gradient(ellipse 60% 80% at 18% 50%,rgba(255,200,100,.26),transparent 70%),radial-gradient(ellipse 50% 60% at 92% 0%,rgba(140,200,255,.16),transparent 70%),var(--noise);box-shadow:0 0 0 2px rgba(255,211,107,.35),0 0 24px -4px rgba(255,180,80,.55),inset 0 0 36px rgba(0,0,0,.35)}
+.bosscard.legend .bc-name{color:#ffe7a8}
+.bosscard.legend .bc-face{width:84px;filter:drop-shadow(0 0 10px rgba(255,211,107,.55))}
+.bosscard.legend .bc-tag{background:#ffd36b}
+.bosshero.legend{border-color:#e0b04a;background-color:#211730;background-image:radial-gradient(ellipse 70% 55% at 50% 30%,rgba(255,200,110,.24),transparent 70%),var(--noise);box-shadow:0 0 0 3px rgba(255,211,107,.25),inset 0 0 50px rgba(0,0,0,.45)}
+.bosshero.legend .bh-face{width:min(190px,50vw);filter:drop-shadow(0 0 16px rgba(255,211,107,.5))}
+.bosshero.legend[data-form="2"] .bh-face{filter:drop-shadow(0 0 18px rgba(255,120,50,.75))}
+.bosshero.legend[data-form="3"] .bh-face{filter:drop-shadow(0 0 20px rgba(200,140,255,.85))}
+.bosshero.legend .bh-name{color:#ffe7a8}
+.bosshero.legend .bh-tag{background:#ffd36b}
+.bosshero.legend .bh-hp .meter i{background:linear-gradient(90deg,#ff7d4a,#ffd36b)}
+.bh-quote{margin:0;font-size:14px;font-weight:700;color:var(--chalk);text-wrap:balance}
+.bh-forms{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.bh-forms li{padding:2px 10px;border-radius:999px;border:1.5px solid rgba(255,211,107,.45);font-size:12px;font-weight:800;color:var(--chalk-soft)}
+.bh-forms li.now{background:#ffd36b;border-color:#ffd36b;color:#1c1b18}
+.bh-forms li.done{text-decoration:line-through;opacity:.6}
+.sp-quote{margin:6px 0 0;font-weight:700;color:var(--chalk);text-align:center;text-wrap:balance}
+.sp-boss.legend{width:150px;filter:drop-shadow(0 0 14px rgba(255,211,107,.6))}
+.evcard.boss.legend{border-color:#e0b04a;box-shadow:0 0 18px -4px rgba(255,180,80,.55)}
+.btz{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:center;padding:14px;border-radius:12px;border:2px solid #e0b04a;background:radial-gradient(ellipse 70% 90% at 15% 50%,rgba(255,200,110,.2),transparent 70%),#1d1628;overflow:hidden}
+.btz-art{width:84px;filter:brightness(0) drop-shadow(0 0 7px rgba(255,211,107,.95));animation:bob 3.2s ease-in-out infinite}
+.btz-art svg{display:block;width:100%;height:auto;overflow:visible}
+.btz-txt{display:grid;gap:3px;min-width:0}
+.btz-k{justify-self:start;padding:0 9px;border-radius:999px;background:#ffd36b;color:#1c1b18;font-size:11px;font-weight:800;line-height:1.7;letter-spacing:.08em}
+.btz-name{font-family:var(--font-display);font-weight:400;font-size:20px;line-height:1.25;color:#ffe7a8}
+.btz-when{font-weight:800;font-size:13px;color:#ffd36b}
+.btz-txt p{margin:0;font-size:12.5px;color:var(--chalk-soft)}
+.bweek{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.bweek li{display:grid;grid-template-columns:3em 46px minmax(0,1fr);gap:10px;align-items:center;padding:6px 10px;border-radius:10px;background:var(--board-deep);border:1.5px solid var(--line)}
+.bweek li.today{border-color:var(--bacc,#c9a2ff);box-shadow:0 0 0 1px var(--bacc,#c9a2ff) inset}
+.bweek li.legend{border-color:#e0b04a;background:linear-gradient(90deg,rgba(255,211,107,.14),transparent 60%),var(--board-deep)}
+.bweek .wd{font-weight:800;font-size:13px;text-align:center;color:var(--chalk-soft)}
+.bweek li.today .wd{color:var(--chalk)}
+.bweek .wf svg{display:block;width:46px;height:auto;overflow:visible}
+.bweek b{font-size:14px;min-width:0}
+.bweek b small{display:block;font-size:11.5px;font-weight:400;color:var(--chalk-soft)}
+.bn-bossart{display:block;width:clamp(96px,30vw,126px);animation:bob 2.8s ease-in-out infinite}
+.bn-bossart svg{display:block;width:100%;height:auto;overflow:visible}
+.bn-bossart.sil{filter:brightness(0) drop-shadow(0 0 7px rgba(255,211,107,.95))}
+.bn.bn-boss{background-color:#2c2346;background-image:radial-gradient(ellipse 60% 70% at 82% 50%,rgba(201,162,255,.2),transparent 70%),var(--noise)}
+.bn.bn-boss.legend{border-color:#e0b04a;background-color:#221830;background-image:radial-gradient(ellipse 60% 70% at 82% 50%,rgba(255,200,110,.26),transparent 70%),var(--noise)}
+.bn.bn-boss.legend .bn-bossart:not(.sil){filter:drop-shadow(0 0 12px rgba(255,211,107,.6))}
+@media (prefers-reduced-motion:reduce){.btz-art,.bn-bossart{animation:none!important}}
 /* ===== My page: chalk and board pickers; shop link ===== */
 .gear{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
 .gear .gp{position:relative;display:grid;justify-items:center;align-content:start;gap:4px;min-width:0;padding:10px 6px 8px;border-radius:10px;border:1.5px solid var(--line);background:var(--board-deep);color:var(--chalk);cursor:pointer;font:inherit}
@@ -1391,6 +1451,10 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
           <span class="bn-txt"><span class="bn-tag" id="bnEvTag">EVENT</span><b class="bn-h" id="bnEvH">イベント</b><span class="bn-s" id="bnEvS"></span></span>
           <span class="bn-art art" id="artEvent"></span>
         </button>
+        <button type="button" class="bn bn-boss" data-go="boss" id="bnBoss" aria-label="ボスを見る" data-feat="boss">
+          <span class="bn-txt"><span class="bn-tag" id="bnBossTag">今日のボス</span><b class="bn-h" id="bnBossH">今日のボス</b><span class="bn-s" id="bnBossS"></span></span>
+          <span class="bn-art" id="artBoss"></span>
+        </button>
         <button type="button" class="bn" data-go="gacha" id="bnGacha" aria-label="ガチャを開く" data-feat="gacha">
           <span class="bn-txt"><span class="bn-tag" id="bnGaTag">GACHA</span><b class="bn-h" id="bnGaH">チョーク<br>ガチャ</b><span class="bn-s" id="bnGaS">ここでしか出ないチョーク・黒板。ダブりはかけらに</span></span>
           <span class="bn-art art" id="artGacha"></span>
@@ -1439,7 +1503,7 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
       <span class="bc-face" id="bcFace"></span>
       <span class="bc-txt"><span class="bc-tag" id="bcTag">今日のボス</span><b class="bc-name">黒板消し大王</b>
         <span class="bc-hp"><span class="meter"><i id="bcHp" style="width:100%"></i></span><span id="bcHpT">HP --</span></span>
-        <span class="bc-sub" id="bcSub"></span></span>
+        <span class="bc-sub" id="bcSub"></span><span class="bc-next" id="bcNext" hidden></span></span>
       <span class="bc-stamp" id="bcStamp" hidden>討伐！</span>
     </button>
     <div class="modes">
@@ -1567,45 +1631,57 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
 
   <!-- Today's boss -->
   <section class="screen narrow" id="scrBoss" hidden>
-    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>今日のボス</h2></div>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2 id="bossH2">今日のボス</h2></div>
+    <section class="btz" id="bossTeaser" hidden aria-label="伝説のボスの予告">
+      <span class="btz-art" id="btzArt"></span>
+      <span class="btz-txt"><span class="btz-k">出現予告</span><b class="btz-name" id="btzName"></b><span class="btz-when" id="btzWhen"></span><p id="btzText"></p></span>
+    </section>
     <div class="bosshero" id="bossHero">
       <div class="bh-face" id="bhFace"></div>
       <p class="bh-tag" id="bhTag"></p>
       <h3 class="bh-name" id="bhName">黒板消し大王</h3>
+      <p class="bh-quote" id="bhQuote"></p>
+      <ol class="bh-forms" id="bhForms" hidden aria-label="形態"></ol>
       <p class="bh-rule" id="bhRule"></p>
       <div class="bh-hp"><span class="meter"><i id="bhHp" style="width:100%"></i></span></div>
       <p class="bh-hpt" id="bhHpT"></p>
       <p class="bh-sub" id="bhSub"></p>
     </div>
     <button type="button" class="btn gold big" id="bossClaim" hidden>討伐報酬を受け取る</button>
-    <button type="button" class="btn gold big" id="bossClaim2" hidden>怒り大王の報酬を受け取る</button>
+    <button type="button" class="btn gold big" id="bossClaim2" hidden>怒りのボスの報酬を受け取る</button>
+    <button type="button" class="btn gold big" id="bossClaim3" hidden>第3形態討伐の報酬を受け取る</button>
     <button type="button" class="btn gold big" id="bossRankClaim" hidden>昨日のランキング報酬を受け取る</button>
     <button type="button" class="btn primary big" id="bossGo">挑戦する</button>
     <p class="note center" id="bossNote" style="margin:-6px 0 0"></p>
     <section class="panel">
       <h3>あなたの今日のスコア</h3>
       <div class="bscores" id="bossScores"></div>
-      <p class="note" style="margin:8px 0 0">いちばん高い3回ぶんと、オンライン対戦で消した手のぶんがダメージになります。ジュエル50で再挑戦でき、いちばん低い回より高ければ入れ替わります。</p>
+      <p class="note" style="margin:8px 0 0" id="bossScoreNote">いちばん高い3回ぶんと、オンライン対戦で消した手のぶんがダメージになります。ジュエル50で再挑戦でき、いちばん低い回より高ければ入れ替わります。</p>
       <ol class="bmiles" id="bossMiles"></ol>
     </section>
     <section class="panel">
       <h3>ごほうびロード <span class="tag mine" id="roadCount"></span></h3>
       <ol class="road" id="bossRoad"></ol>
-      <p class="note">大王が倒された日に参加していて、報酬を受け取ると「討伐」が1回増えます。限定アイテムはここでしか手に入りません。</p>
+      <p class="note">ボスが倒された日に参加していて、報酬を受け取ると「討伐」が1回増えます。限定アイテムはここでしか手に入りません。</p>
     </section>
     <section class="panel">
       <h3>今日のダメージランキング</h3>
       <ol class="rank" id="bossTop"></ol>
     </section>
     <section class="panel">
+      <h3>これからのボス</h3>
+      <ol class="bweek" id="bossWeek"></ol>
+    </section>
+    <section class="panel">
       <h3>ボス戦のルール</h3>
       <ul class="rules">
-        <li>大王は毎朝4:00に現れます。HPはプレイヤー全員で共通で、前の日に参加した人数に合わせて決まります。みんなの攻撃でHPを0にしたら討伐成功！</li>
-        <li>討伐すると「怒りの大王」になって復活。ミスが減り、ライフが4つになります。怒り大王も倒すと追加の報酬（ジュエル100・かけら20）。</li>
-        <li>挑戦は1日3回。ジュエル50で再挑戦もでき（1日5回まで）、いちばん低い回より高いスコアなら入れ替わります。大王の手を1本消すごとに100ダメージ、ライフを全部削るとボーナス300ダメージ。</li>
+        <li>ボスは毎朝4:00に現れます。曜日ごとにちがうボスが出て、ルールも変わります（合成なし、2進数など）。日曜のガイコツ博士は本気です。</li>
+        <li>HPはプレイヤー全員で共通で、前の日に参加した人数に合わせて決まります。みんなの攻撃でHPを0にしたら討伐成功！</li>
+        <li>討伐すると「怒り」モードで復活。ミスが減り、ライフが4つになります。怒りのボスも倒すと追加の報酬（ジュエル100・かけら20）。</li>
+        <li>挑戦は1日3回。ジュエル50で再挑戦もでき（1日5回まで）、いちばん低い回より高いスコアなら入れ替わります。ボスの手を1本消すごとに100ダメージ、ライフを全部削るとボーナス300ダメージ。</li>
         <li>自分のダメージが300・800・1500・2500に届くと報酬（コイン200・ジュエル50・ジュエル80・ガチャチケット1枚）。前の日のダメージランキングでは1位ジュエル200・2位150・3位100・4〜10位50。</li>
         <li>あなたの両手が消えるか、同じ局面が3回出たら挑戦終了。それまでのダメージはちゃんと入ります。</li>
-        <li>曜日ごとにルールが変わります（合成なし、2進数など）。日曜は大王が本気です。</li>
+        <li>たまに「伝説のボス」が1日だけ現れます。3つの形態をみんなで順番に倒し、挑戦は5回。完全討伐すると、ここでしか手に入らないチョークと称号がもらえます。出現の前から予告が出ます。</li>
         <li>ふだんのオンライン対戦でも、相手の手を1本消すと20ダメージ入ります。</li>
         <li>討伐できた日に参加していたら、コイン200・ジュエル50と「討伐」1回ぶんの報酬を受け取れます（その日の4:00まで）。</li>
       </ul>
@@ -1841,6 +1917,7 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
     </details>
     <button type="button" class="btn" id="goRules2">遊びかたを見る</button>
     <p class="note center" id="appVer" style="margin:0"></p>
+    <button type="button" class="btn sm" id="updCheck" style="justify-self:center">最新版かチェック</button>
   </section>
 
   <!-- Rated matches -->
@@ -2187,6 +2264,12 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
   <div class="rc-b"><button type="button" class="btn sm" id="recruitNo">あとで</button><button type="button" class="btn gold sm" id="recruitGo">受けて立つ</button></div>
 </div>
 <div class="practice-bar" id="practiceBar" hidden><i class="dotp" aria-hidden="true"></i><span id="practiceT">相手をさがし中…</span><button type="button" class="btn sm" id="practiceStop">さがすのをやめる</button></div>
+<div class="updbar" id="updBar" role="status" hidden>
+  <i class="ub-dot" aria-hidden="true"></i>
+  <span class="ub-t"><b>アップデートがあります</b><small id="updVer"></small></span>
+  <button type="button" class="btn sm" id="updLater">あとで</button>
+  <button type="button" class="btn sm gold" id="updGo">更新する</button>
+</div>
 <p class="toast" id="toast" role="status" hidden></p>
 <pre class="dbg" id="dbg" hidden></pre>
 
@@ -2472,7 +2555,7 @@ function showResult(){
   t.innerHTML = '';
   [...title].forEach((ch, i) => { const sp = document.createElement('span'); sp.textContent = ch; sp.style.animationDelay = (i * 0.09) + 's'; t.append(sp); });
   const by = o.by, why = o.reason === 'resign' && by !== undefined ? `${nm[by]}が投了` : o.reason === 'time' && by !== undefined ? `${nm[by]}の時間切れ` : o.type === 'draw' ? '同じ局面が3回出ました' : `${G.ply}手で決着`;
-  $('#resS').textContent = ui.stage ? `${ui.stage.id}「${ui.stage.ch.name}」・あなたの手数 ${ui.stage.moves}` : ui.puzzle ? `詰めわりばし #${ui.puzzle.num}（${ui.puzzle.d}手詰め）・${ui.puzzle.attempt}回目` : ui.boss ? `大王の手を${ui.boss.hands}本消した・${G.ply}手` : cpu && o.type === 'win' ? `CPU（${LEVEL_NAME[settings.level]}）・${why}` : kind === 'lose' && G.n > 2 ? `${nm[o.winner]}の勝ち・${why}` : why;
+  $('#resS').textContent = ui.stage ? `${ui.stage.id}「${ui.stage.ch.name}」・あなたの手数 ${ui.stage.moves}` : ui.puzzle ? `詰めわりばし #${ui.puzzle.num}（${ui.puzzle.d}手詰め）・${ui.puzzle.attempt}回目` : ui.boss ? `${ui.boss.base.name}の手を${ui.boss.hands}本消した・${G.ply}手` : cpu && o.type === 'win' ? `CPU（${LEVEL_NAME[settings.level]}）・${why}` : kind === 'lose' && G.n > 2 ? `${nm[o.winner]}の勝ち・${why}` : why;
   ui.resShown = {rate: false, coins: false};
   $('#resRows').innerHTML = '';
   el.hidden = false;
@@ -2566,10 +2649,15 @@ function updateResult(){
       }
       const r2 = document.createElement('div');
       r2.className = 'res-row'; r2.innerHTML = '<span></span><b></b>';
-      r2.firstChild.textContent = bs.phase === 1 ? 'みんなの合計' : '怒り大王への合計';
-      r2.querySelector('b').textContent = bs.loaded ? `${Math.min(bs.dmg - (bs.phase === 1 ? 0 : bs.hp), bs.hp)} / ${bs.hp}` : '…';
+      r2.firstChild.textContent = bs.legend ? `${bs.cur.fname}への合計` : bs.fno === 1 ? 'みんなの合計' : `怒りの${bs.info.name}への合計`;
+      r2.querySelector('b').textContent = bs.loaded ? `${Math.min(bs.dmg - (bs.fno - 1) * bs.hp, bs.hp)} / ${bs.hp}` : '…';
       rows.append(r2);
-      if (bs.down) { const r3 = document.createElement('div'); r3.className = 'res-row up'; r3.textContent = bs.down2 ? '怒りの大王もたおした！ 報酬を受け取ろう' : '大王を討伐した！ 報酬を受け取ろう'; rows.append(r3); }
+      if (bs.down) {
+        const r3 = document.createElement('div'); r3.className = 'res-row up';
+        r3.textContent = bs.done ? (bs.legend ? `${bs.info.name}を完全討伐した！ 報酬を受け取ろう` : `怒りの${bs.info.name}もたおした！ 報酬を受け取ろう`)
+          : bs.legend ? `${bs.info.forms[bs.phase - 2].fname}を撃破！ 報酬を受け取ろう` : `${bs.info.name}を討伐した！ 報酬を受け取ろう`;
+        rows.append(r3);
+      }
     }
     return;
   }
@@ -2708,7 +2796,47 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/15-18';
+const APP_VERSION = '11/16-2';
+// ----- New version: the page's <head> carries its version (build.py writes it). Now and then, and whenever the app comes
+// back to the front, read the head of the live page; if its version differs, offer a reload. ?debug&vfast checks every few seconds.
+const VER_FAST = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('vfast'); } catch(e) { return false; } })();
+const VER_EVERY = VER_FAST ? 3000 : 5 * 60000, VER_GAP = VER_FAST ? 1000 : 60000;
+let verAt = 0, verBusy = false;
+async function checkNewVersion(manual){
+  if (verBusy || !window.fetch || !/^https?:$/.test(location.protocol)) return null;
+  if (!manual && (ui.newVer || Date.now() - verAt < VER_GAP)) return null;
+  verBusy = true; verAt = Date.now();
+  try {
+    const res = await fetch(location.pathname + '?vcheck=' + Date.now(), {cache: 'no-store'});
+    if (!res.ok) return null;
+    let txt = '';
+    if (res.body && res.body.getReader && window.TextDecoder) {
+      const rd = res.body.getReader(), dec = new TextDecoder();
+      while (txt.length < 30000 && !/name="waribashi-version"[^>]*>/.test(txt)) { const r = await rd.read(); if (r.done) break; txt += dec.decode(r.value, {stream: true}); }
+      rd.cancel().catch(() => {});
+    } else txt = (await res.text()).slice(0, 30000);
+    const m = txt.match(/<meta name="waribashi-version" content="([^"]+)"/);
+    if (!m) return null;
+    if (m[1] !== APP_VERSION) { ui.newVer = m[1]; updBarTick(); }
+    return m[1];
+  } catch(e) { return null; }
+  finally { verBusy = false; }
+}
+// Shown only away from games and searches; "あとで" hides it for half an hour.
+function updBarTick(){
+  const bar = document.getElementById('updBar');
+  if (!bar) return;
+  const busy = net.on || net.connecting || search.on || ui.screen === 'game' || ui.screen === 'search' || ui.screen === 'lobby' || !$('#story').hidden;
+  const show = !!ui.newVer && !busy && !((ui.updSnooze || 0) > Date.now());
+  if (show && bar.hidden) $('#updVer').textContent = `バージョン ${ui.newVer} が出ました`;
+  if (bar.hidden === show) bar.hidden = !show;
+}
+// Reload past every cache: a new address for this one load, then the extra part is taken off again.
+function reloadNew(){
+  lsSet('waribashi-ver', APP_VERSION);
+  try { const q = location.search, v = '_v=' + Date.now().toString(36); location.replace(location.pathname + (q ? q + '&' + v : '?' + v) + location.hash); } catch(e) { location.reload(); }
+}
+try { const q = location.search; if (/[?&]_v=/.test(q)) { const q2 = q.replace(/[?&]_v=[^&]*/, '').replace(/^&/, '?'); history.replaceState(history.state, '', location.pathname + q2 + location.hash); } } catch(e) {}
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
@@ -2978,6 +3106,8 @@ const CHALKS = [
   {id:'rpred', name:'勝負師のチョーク', price:0, color:'#ff7a7a', fx:'thunder', fxc:'#fff1a8', fxc2:'#ffd2d2', g:'rgba(255,122,122,.7)', rmp:600},
   {id:'rpstreak', name:'連勝のチョーク', price:0, color:'#ffb35a', fx:'ember', fxc:'#ffd36b', fxc2:'#ff7a4a', g:'rgba(255,170,90,.7)', rmp:900},
   {id:'rptop', name:'頂点のチョーク', price:0, color:'#e7e1ff', fx:'shimmer', fxc:'#ffffff', fxc2:'#c9b8ff', g:'rgba(220,210,255,.75)', rmp:1500},
+  // limited: legendary bosses
+  {id:'dragon', name:'竜のチョーク', price:0, color:'#bfeaff', fx:'legend', fxc:'#ffd36b', fxc2:'#9fd8ff', g:'rgba(150,220,255,.85)', legend:'dragon', need:'伝説のボス「チョークドラゴン」の完全討伐'},
 ];
 // One limited chalk per month: tier 30 of that month's season pass.
 const SEASON_THEMES = {1:['初日の出','#ff9a5a','#ffe08a'], 2:['梅','#ff8fb0','#fff0f4'], 3:['菜の花','#f3e25b','#b8e66a'], 4:['桜吹雪','#ffc2d6','#fff7fa'],
@@ -3121,6 +3251,8 @@ TITLES.push({id: 'tlv10', name: 'わりばしの常連', need: 'Lv10の報酬', 
 TITLES.push({id: 'trp1', name: 'レート戦の常連', need: 'RPショップ', own: 'trp1', rmp: 300}, {id: 'trp2', name: '勝負師', need: 'RPショップ', own: 'trp2', rmp: 800},
   {id: 'trp3', name: '連勝街道', need: 'RPショップ', own: 'trp3', rmp: 1500});
 PLATES.push({id: 'prp', name: '対戦会場', need: 'RPショップ', own: 'prp', rmp: 1000});
+TITLES.push({id: 'tdragon', name: '竜を討つ者', need: '伝説のボス「チョークドラゴン」の完全討伐', own: 'tdragon', legend: 'dragon'});
+STAMPS.push({id: 'st_gao', text: 'ガオー！', face: 'fire', c: '#9fd8ff', name: '「ガオー！」', need: '伝説のボス「チョークドラゴン」の第1形態を討伐', legend: 'dragon'});
 STAMPS.push({id: 'st_shoubu', text: '勝負だ！', face: 'fire', c: '#ff7a7a', name: '「勝負だ！」', need: 'RPショップ', rmp: 200},
   {id: 'st_mouikkai', text: 'もう一回！', face: 'grin', c: '#9fe0ff', name: '「もう一回！」', need: 'RPショップ', rmp: 200});
 PLATES.push({id: 'plv20', name: '年季の入った黒板', need: 'Lv20の報酬', own: 'plv20', lvl: 20});
@@ -3164,9 +3296,9 @@ function myBoard(){
   const p = net.profile || {}, id = p.board || lsGet('waribashi-board') || 'bstd';
   return hasBoard(id) ? id : 'bstd';
 }
-const isLimited = c => !!(c.boss || c.rate || c.season || c.book || c.event || c.stars || c.lvl || c.rmp);
+const isLimited = c => !!(c.boss || c.rate || c.season || c.book || c.event || c.stars || c.lvl || c.rmp || c.legend);
 function howToGet(c, kind){
-  return c.gacha ? `ガチャ（${c.gacha}）・かけら${SHARD_COST[c.gacha]}` : c.event || c.stage ? c.need : c.rmp ? `RPショップ（RP ${c.rmp}）` : c.lvl ? `Lv${c.lvl}の報酬` : c.stars ? `ステージで★${c.stars}` : c.boss ? `ボス討伐${c.boss}回` : c.rate ? `${RANKS[tierOf(c.rate)].name}に届く（レート${c.rate}）` : c.season ? `${c.season}月のシーズンパス${kind === 'board' ? 22 : 30}段`
+  return c.gacha ? `ガチャ（${c.gacha}）・かけら${SHARD_COST[c.gacha]}` : c.event || c.stage || c.legend ? c.need : c.rmp ? `RPショップ（RP ${c.rmp}）` : c.lvl ? `Lv${c.lvl}の報酬` : c.stars ? `ステージで★${c.stars}` : c.boss ? `ボス討伐${c.boss}回` : c.rate ? `${RANKS[tierOf(c.rate)].name}に届く（レート${c.rate}）` : c.season ? `${c.season}月のシーズンパス${kind === 'board' ? 22 : 30}段`
     : c.book ? `図鑑${c.book}%の報酬` : c.price ? `ショップ・${c.price}コイン` : 'はじめから';
 }
 // Other months' season items and other events' items appear only once owned.
@@ -3660,7 +3792,7 @@ function cpuSay(list, chance, delay){
 function cpuReact(){
   if (!cpuTalks()) return;
   const gid = gameId();
-  if (ui.reactGid !== gid) { ui.reactGid = gid; ui.reactPly = G.ply; ui.reactOver = false; if (!G.ply) cpuSay(CPU_LINES.start, .5, 1200); return; }
+  if (ui.reactGid !== gid) { ui.reactGid = gid; ui.reactPly = G.ply; ui.reactOver = false; if (!G.ply) { const L = ui.boss && ui.boss.base && ui.boss.base.legend; cpuSay(L ? ['st_gao'] : CPU_LINES.start, L ? 1 : .5, 1200); } return; }
   if (G.ply > ui.reactPly) {
     const news = (G.log || []).filter(e => e.n > ui.reactPly);
     ui.reactPly = G.ply;
@@ -3679,7 +3811,7 @@ function cpuReact(){
 // ===================== Level rewards and feature unlocks =====================
 // New players open features as they level up; players from before this update keep everything (unl.all).
 const FEATS = {shop: {lv: 2, name: 'ショップ'}, rated: {lv: 3, name: 'レート戦'}, gacha: {lv: 3, name: 'ガチャ'}, puzzle: {lv: 3, name: '詰めわりばし'},
-  boss: {lv: 4, name: '大王ボス'}, pass: {lv: 4, name: 'シーズンパス'}, event: {lv: 5, name: '期間限定イベント'}};
+  boss: {lv: 4, name: '日替わりボス'}, pass: {lv: 4, name: 'シーズンパス'}, event: {lv: 5, name: '期間限定イベント'}};
 const SCREEN_FEAT = {shop: 'shop', puzzle: 'puzzle', boss: 'boss', pass: 'pass', event: 'event', rated: 'rated', rpshop: 'rated'};
 // ?noprog (and ?debug without &prog) turns locks and level rewards off, for the older test suites.
 const PROG_ON = (() => { try { const q = new URLSearchParams(location.search); return !q.has('noprog') && (!q.has('debug') || q.has('prog')); } catch(e) { return true; } })();
@@ -5148,6 +5280,8 @@ async function claimGuideDone(){
 
 // ===================== News =====================
 const NEWS = [
+  {id: 'n15', date: '2026-11-16', tag: '新機能', title: '曜日ごとにボスが変わる！ 伝説のボスも登場',
+    body: 'ボスが曜日ごとに7体になりました。月曜の黒板消し大王のほかに、三角定規ナイト（火）・赤ペン鬼教官（水）・ホッチキス将軍（木）・ものさし侍（金）・電卓魔人（土）・ガイコツ博士（日）が登場します。\nそして11/17（火）は1日だけ、伝説のボス「チョークドラゴン」が現れます。3つの形態をみんなで倒そう。挑戦は5回、完全討伐で限定の「竜のチョーク」と称号「竜を討つ者」がもらえます。'},
   {id: 'n14', date: '2026-11-16', tag: '新機能', title: 'レート戦画面・RPショップ・対戦募集のお知らせ',
     body: '「レート戦」を押すと専用の画面になりました。いまのランク・連勝・最近の試合・オンラインの人数が見られます。\nレート戦でRP（レートマッチポイント）がたまります（勝つと30・負けても10・3連勝から+10・その日はじめての勝利で+50）。RPショップで限定のチョーク・黒板・称号・スタンプや、ガチャチケットと交換できます。\nだれかがレート戦の相手をさがし始めると、アプリを開いている人に「受けて立つ」のお知らせが出ます。待っているあいだはCPUと練習もできます。2連勝以上だと、マッチングしたときに相手にも「○連勝中」が見えます。'},
   {id: 'n13', date: '2026-11-15', tag: 'おしらせ', title: 'チョークと黒板はマイページで変えられます',
@@ -5375,7 +5509,7 @@ function sharePuzzle(){
   else copyText(text + '\n' + url).then(() => toast('結果をコピーしました。SNSに貼ってね'), () => toast(text));
 }
 
-// ----- Today's boss: 黒板消し大王 -----
+// ----- Today's boss: a different one every weekday, and now and then a legendary one -----
 const BOSS_LIVES = 3, BOSS_HAND_DMG = 100, BOSS_CLEAR_BONUS = 300, BOSS_GAME_DMG = 20, BOSS_TRIES = 3, BOSS_REWARD = 200, BOSS_REWARD_J = 50;
 // HP grows with yesterday's players; after HP 0 the angry form has the same HP again. Retries cost jewels.
 const BOSS_HP_PER = 1200, BOSS_RETRY_COST = 50, BOSS_RETRY_MAX = 5, BOSS_REWARD2_J = 100, BOSS_REWARD2_SH = 20;
@@ -5383,53 +5517,215 @@ const BOSS_MILES = [{d: 300, coins: 200}, {d: 800, jewels: 50}, {d: 1500, jewels
 const BOSS_RANK_J = [200, 150, 100, 50, 50, 50, 50, 50, 50, 50];   // yesterday's ranking: 1st-3rd, then 4th-10th
 // My part: online damage plus my best three tries (try scores live in boss.sc as t1, t2, ...).
 const scoresOf = b => Object.values((b && b.sc) || {}).map(v => +v || 0).sort((x, y) => y - x);
-const bossContrib = b => (+((b || {}).online) || 0) + scoresOf(b).slice(0, BOSS_TRIES).reduce((a, v) => a + v, 0);
+const bossContrib = b => (+((b || {}).online) || 0) + scoresOf(b).slice(0, bossTries(bossDayInfo((b || {}).day))).reduce((a, v) => a + v, 0);
 const bossMilesReady = me => BOSS_MILES.filter(m => me.dmg >= m.d && !me.mi['m' + m.d]);
-// One twist per weekday of the boss day (index 0 = Sunday). skill = how often the boss plays the best move on its first life.
+// One boss per weekday (index 0 = Sunday), each with its own twist. skill = how often it plays the best move on its first life.
 const BOSS_DAYS = [
-  {tag:'日曜・本気の日', rule:'大王が本気。読みが鋭い', hp:5000, start:[1, 2], skill:.8},
-  {tag:'月曜・ふつうの日', rule:'いつものルール', hp:3000, start:[1, 1], skill:.45},
-  {tag:'火曜・合成封じ', rule:'合成なし', hp:3000, start:[1, 1], skill:.5, merge:false},
-  {tag:'水曜・きびしい日', rule:'5本以上で消える', hp:3000, start:[1, 1], skill:.5, overflow:'die'},
-  {tag:'木曜・分身封じ', rule:'分身なし', hp:3000, start:[1, 1], skill:.5, split:false},
-  {tag:'金曜・2本スタート', rule:'大王の手が2本ずつで始まる', hp:3000, start:[2, 2], skill:.5},
-  {tag:'土曜・2進数の日', rule:'2進数ルール（31で消える）', hp:5000, start:[1, 1], skill:.5, count:'binary'},
+  {id:'hakase', name:'ガイコツ博士', tag:'日曜・本気の日', rule:'博士が本気。読みが鋭い', quote:'ふぉっふぉっ…きみの手はもう読んでおるぞ', hp:5000, start:[1, 2], skill:.8, color:'#efe8cf', acc:'#9fe0ff'},
+  {id:'daioh', name:'黒板消し大王', tag:'月曜・ふつうの日', rule:'いつものルール', quote:'ぜーんぶ消してやるのだ！', hp:3000, start:[1, 1], skill:.45, color:'#d6a8ff', acc:'#c9a2ff'},
+  {id:'knight', name:'三角定規ナイト', tag:'火曜・合成封じ', rule:'合成なし', quote:'合成など邪道！ まっすぐ勝負だ', hp:3000, start:[1, 1], skill:.5, merge:false, color:'#8fd3ff', acc:'#8fd3ff'},
+  {id:'akapen', name:'赤ペン鬼教官', tag:'水曜・きびしい日', rule:'5本以上で消える', quote:'はみ出したら即バツだ！', hp:3000, start:[1, 1], skill:.5, overflow:'die', color:'#ff8a8a', acc:'#ff8a8a'},
+  {id:'hotchkiss', name:'ホッチキス将軍', tag:'木曜・分身封じ', rule:'分身なし', quote:'その手、パチンと留めてやる！', hp:3000, start:[1, 1], skill:.5, split:false, color:'#7fd6b0', acc:'#7fd6b0'},
+  {id:'samurai', name:'ものさし侍', tag:'金曜・二刀流', rule:'侍の手が2本ずつで始まる', quote:'二刀流、参る！', hp:3000, start:[2, 2], skill:.5, color:'#f3d774', acc:'#f3d774'},
+  {id:'dentaku', name:'電卓魔人', tag:'土曜・2進数の日', rule:'2進数ルール（31で消える）', quote:'ピポパ…すべては0と1だ', hp:5000, start:[1, 1], skill:.5, count:'binary', color:'#a8f0d0', acc:'#a8f0d0'},
 ];
+// Legendary bosses: one special day, three forms with shared HP each, five free tries, bigger prizes.
+const LEGENDS = {
+  dragon: {id:'dragon', legend:true, name:'チョークドラゴン', tag:'伝説のボス', rule:'いつものルール', quote:'白亜紀より目覚めし我に、挑むか…',
+    hp:6000, hpPer:900, tries:5, start:[1, 1], skill:.55, color:'#bfeaff', acc:'#ffd36b',
+    forms:[
+      {fname:'第1形態', name:'チョークドラゴン', rule:'いつものルール', start:[1, 1], skill:.55, lives:3, color:'#bfeaff', quote:'白亜紀より目覚めし我に、挑むか…'},
+      {fname:'第2形態', name:'炎のチョークドラゴン', rule:'合成なし・ドラゴンは1本と2本で始まる', start:[1, 2], skill:.7, lives:3, merge:false, color:'#ffb36b', quote:'グオオ…炎ですべて焼きはらう！'},
+      {fname:'第3形態', name:'真・チョークドラゴン', rule:'5本以上で消える・2本ずつで始まる・ライフ4', start:[2, 2], skill:.85, lives:4, overflow:'die', color:'#d9b8ff', quote:'これが我の真の姿だ！'},
+    ],
+    prizes:[{coins:300, jewels:100, kill:true, own:['st_gao']}, {jewels:150, shards:30}, {jewels:300, tickets:2, own:['dragon', 'tdragon']}]},
+};
+const LEGEND_DAYS = {'2026-11-17': 'dragon'};   // add more dates here
 const BOSS_CHALK = {id:'boss', color:'#d6a8ff'};
-// ?debug&bossday=N picks a weekday's boss for testing.
+// ?debug&bossday=N picks a weekday's boss for testing; ?debug&legend makes today legendary, ?debug&legendin=N N days from now.
 const BOSS_FORCE = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('bossday') ? (+q.get('bossday')) % 7 : -1; } catch(e) { return -1; } })();
-const bossDayInfo = day => BOSS_DAYS[BOSS_FORCE >= 0 ? BOSS_FORCE : new Date((day || dayKey()) + 'T00:00:00Z').getUTCDay()];
-const bossRules = b => ({overflow: b.overflow || 'wrap', split: b.split !== false, merge: b.merge !== false, base: b.count === 'binary' ? BIN : 5});
-function bossFace(down, angry){
-  if (angry && !down) return bossFace(false).replace('fill="#7d55c7"', 'fill="#b0365f"').split('r="6" fill="#fff"').join('r="6" fill="#ffd0d0"')
-    .replace('</g></svg>', '<path d="M96 30l7-6M100 36l9-2M92 26l2-9" stroke="#ff6b6b" stroke-width="4" stroke-linecap="round"/></g></svg>');
-  const eyes = down
-    ? '<path d="M36 57l12 12M48 57 36 69M72 57l12 12M84 57 72 69" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/>'
-    : '<path d="M30 50 50 57M90 50 70 57" stroke="#fff" stroke-width="5" stroke-linecap="round"/><circle cx="42" cy="63" r="6" fill="#fff"/><circle cx="78" cy="63" r="6" fill="#fff"/><circle cx="43.5" cy="64" r="2.8" fill="#24183d"/><circle cx="79.5" cy="64" r="2.8" fill="#24183d"/>';
-  return `<svg viewBox="0 0 120 108" aria-hidden="true"><g filter="url(#chalk)">`
-    + `<path d="M28 36 36 12 48 27 60 6 72 27 84 12 92 36Z" fill="#f3d774"/>`
-    + `<circle cx="36" cy="12" r="4" fill="#ff8f8f"/><circle cx="60" cy="6" r="4.5" fill="#9fd0f0"/><circle cx="84" cy="12" r="4" fill="#b8e6a3"/>`
-    + `<rect x="10" y="34" width="100" height="50" rx="12" fill="#7d55c7"/>`
-    + `<rect x="10" y="80" width="100" height="22" rx="7" fill="#dcd9ce"/><path d="M18 87h84M18 94h84" stroke="#a9a59a" stroke-width="2.5"/>`
-    + eyes
-    + (down ? '<path d="M50 77q10-5 20 0" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/>' : '<path d="M48 74q12 6 24 0" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/>')
-    + `</g></svg>`;
+const LEGEND_FORCE = (() => { try { const q = new URLSearchParams(location.search); if (!q.has('debug')) return null; if (q.has('legend')) return 0; if (q.has('legendin')) return +q.get('legendin') || 1; return q.has('bossday') ? -1 : null; } catch(e) { return null; } })();
+function legendOf(day){
+  day = day || dayKey();
+  if (LEGEND_FORCE !== null) return LEGEND_FORCE >= 0 && day === dayKey(serverNow() + LEGEND_FORCE * 86400000) ? LEGENDS.dragon : null;
+  return LEGENDS[LEGEND_DAYS[day]] || null;
 }
+const weekBoss = day => BOSS_DAYS[BOSS_FORCE >= 0 ? BOSS_FORCE : new Date((day || dayKey()) + 'T00:00:00Z').getUTCDay()];
+const bossDayInfo = day => legendOf(day) || weekBoss(day);
+// The next legendary day within a week (for the notice).
+function nextLegend(){
+  for (let i = 1; i <= 7; i++) { const d = dayKey(serverNow() + i * 86400000), L = legendOf(d); if (L) return {day: d, in: i, info: L}; }
+  return null;
+}
+const mdw = day => { const t = new Date(day + 'T00:00:00Z'); return `${t.getUTCMonth() + 1}/${t.getUTCDate()}（${'日月火水木金土'[t.getUTCDay()]}）`; };
+const bossRules = b => ({overflow: b.overflow || 'wrap', split: b.split !== false, merge: b.merge !== false, base: b.count === 'binary' ? BIN : 5});
+const bossForms = info => info.forms ? info.forms.length : 2;
+const bossTries = info => (info && info.tries) || BOSS_TRIES;
+const BOSS_PRIZES = [{coins: BOSS_REWARD, jewels: BOSS_REWARD_J, kill: true}, {jewels: BOSS_REWARD2_J, shards: BOSS_REWARD2_SH}];
+const bossPrizes = info => info.prizes || BOSS_PRIZES;
+// The form fought in a phase (1-based): its rules, look and lines. Weekday bosses come back angry after their first defeat.
+function bossForm(info, phase){
+  const F = bossForms(info), f = Math.min(Math.max(1, phase), F);
+  if (info.forms) return Object.assign({}, info, info.forms[f - 1], {form: f});
+  if (f >= 2) return Object.assign({}, info, {form: 2, angry: true, name: '怒りの' + info.name, lives: BOSS_LIVES + 1, skill: Math.min(.95, info.skill + .2), rule: info.rule + '・ミスが減ってライフ4', fname: '怒りモード'});
+  return Object.assign({}, info, {form: 1, lives: BOSS_LIVES});
+}
+function prizeText(p){
+  const out = [];
+  if (p.coins) out.push(`コイン${p.coins}`);
+  if (p.jewels) out.push(`ジュエル${p.jewels}`);
+  if (p.shards) out.push(`かけら${p.shards}`);
+  if (p.tickets) out.push(`ガチャチケット${p.tickets}枚`);
+  (p.own || []).forEach(id => { const c = CHALKS.find(x => x.id === id), t = TITLES.find(x => x.id === id), s = STAMPS.find(x => x.id === id); if (c) out.push(c.name); else if (t) out.push(`称号「${t.name}」`); else if (s) out.push(`スタンプ${s.name}`); });
+  return out.join('・');
+}
+
+// ----- Boss faces (chalk drawings, 120×108). down = defeated; angry / form = later forms.
+const bWrap = inner => `<svg viewBox="0 0 120 108" aria-hidden="true"><g filter="url(#chalk)">${inner}</g></svg>`;
+const bX = (x, y, c) => `<path d="M${x - 6} ${y - 6}l12 12M${x + 6} ${y - 6}l-12 12" stroke="${c || '#fff'}" stroke-width="4.5" stroke-linecap="round"/>`;
+function bEyes(x1, x2, y, down, o){
+  o = o || {};
+  if (down) return bX(x1, y, o.xc) + bX(x2, y, o.xc);
+  const r = o.r || 6, ink = o.ink || '#24183d', br = o.brow === false ? '' : `<path d="M${x1 - 12} ${y - 13} ${x1 + 8} ${y - 6}M${x2 + 12} ${y - 13} ${x2 - 8} ${y - 6}" stroke="${o.bc || '#fff'}" stroke-width="5" stroke-linecap="round"/>`;
+  return br + `<circle cx="${x1}" cy="${y}" r="${r}" fill="${o.white || '#fff'}"/><circle cx="${x2}" cy="${y}" r="${r}" fill="${o.white || '#fff'}"/>`
+    + `<circle cx="${x1 + 1.5}" cy="${y + 1}" r="${r * .47}" fill="${ink}"/><circle cx="${x2 + 1.5}" cy="${y + 1}" r="${r * .47}" fill="${ink}"/>`;
+}
+const bMouth = (cx, y, down, w, c) => { w = w || 12; c = c || '#fff'; return down
+  ? `<path d="M${cx - w + 2} ${y + 3}q${w - 2} -5 ${2 * w - 4} 0" stroke="${c}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`
+  : `<path d="M${cx - w} ${y}q${w} 6 ${2 * w} 0" stroke="${c}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`; };
+const bAnger = (x, y) => `<path d="M${x} ${y}l7-6M${x + 4} ${y + 6}l9-2M${x - 4} ${y - 4}l2-9" stroke="#ff6b6b" stroke-width="4" stroke-linecap="round"/>`;
+const BOSS_ART = {
+  daioh(down, f){
+    const angry = f >= 2 && !down;
+    const eyes = down
+      ? '<path d="M36 57l12 12M48 57 36 69M72 57l12 12M84 57 72 69" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/>'
+      : `<path d="M30 50 50 57M90 50 70 57" stroke="#fff" stroke-width="5" stroke-linecap="round"/><circle cx="42" cy="63" r="6" fill="${angry ? '#ffd0d0' : '#fff'}"/><circle cx="78" cy="63" r="6" fill="${angry ? '#ffd0d0' : '#fff'}"/><circle cx="43.5" cy="64" r="2.8" fill="#24183d"/><circle cx="79.5" cy="64" r="2.8" fill="#24183d"/>`;
+    return `<path d="M28 36 36 12 48 27 60 6 72 27 84 12 92 36Z" fill="#f3d774"/>`
+      + `<circle cx="36" cy="12" r="4" fill="#ff8f8f"/><circle cx="60" cy="6" r="4.5" fill="#9fd0f0"/><circle cx="84" cy="12" r="4" fill="#b8e6a3"/>`
+      + `<rect x="10" y="34" width="100" height="50" rx="12" fill="${angry ? '#b0365f' : '#7d55c7'}"/>`
+      + `<rect x="10" y="80" width="100" height="22" rx="7" fill="#dcd9ce"/><path d="M18 87h84M18 94h84" stroke="#a9a59a" stroke-width="2.5"/>`
+      + eyes
+      + (down ? '<path d="M50 77q10-5 20 0" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/>' : '<path d="M48 74q12 6 24 0" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/>')
+      + (angry ? bAnger(96, 30) : '');
+  },
+  hakase(down, f){
+    const angry = f >= 2 && !down, bone = angry ? '#f2d2c6' : '#efe8cf', glow = angry ? '#ff6b6b' : '#9fe0ff';
+    return `<path d="M20 108 36 90 60 102 84 90 100 108Z" fill="#f4f4ee"/><path d="M60 102v6" stroke="#9fe0ff" stroke-width="3"/>`
+      + `<path d="M22 62Q22 26 60 26Q98 26 98 62Q98 76 84 80V92H36V80Q22 76 22 62Z" fill="${bone}"/>`
+      + `<rect x="46" y="24" width="28" height="10" fill="#4a4066"/><path d="M26 22 60 8 94 22 60 36Z" fill="#5a4f80" stroke="#a99be0" stroke-width="2" stroke-linejoin="round"/><path d="M92 22v15" stroke="#f3d774" stroke-width="3"/><circle cx="92" cy="39" r="3.4" fill="#f3d774"/>`
+      + `<ellipse cx="44" cy="60" rx="12" ry="11" fill="#2a2438"/><ellipse cx="76" cy="60" rx="12" ry="11" fill="#2a2438"/>`
+      + (down ? bX(44, 60) + bX(76, 60) : `<circle cx="46" cy="61" r="4.2" fill="${glow}"/><circle cx="78" cy="61" r="4.2" fill="${glow}"/><path d="M30 44 54 50M90 44 66 50" stroke="#2a2438" stroke-width="4.5" stroke-linecap="round"/>`)
+      + `<circle cx="44" cy="60" r="15" fill="none" stroke="#f3d774" stroke-width="3"/><circle cx="76" cy="60" r="15" fill="none" stroke="#f3d774" stroke-width="3"/><path d="M58 58h4" stroke="#f3d774" stroke-width="3"/>`
+      + `<path d="M60 68 55 77h10Z" fill="#2a2438"/>`
+      + `<path d="M40 85h40M47 80v11M54 80v11M61 80v11M68 80v11M75 80v9" stroke="#2a2438" stroke-width="2.5"/>`
+      + (angry ? bAnger(98, 36) : '');
+  },
+  knight(down, f){
+    const angry = f >= 2 && !down, c = angry ? '#ff9db0' : '#8fd3ff';
+    let ticks = '';
+    for (let x = 22, i = 0; x <= 98; x += 8, i++) ticks += `M${x} 98v-${i % 2 ? 4 : 8}`;
+    return `<path d="M60 10Q66 -2 80 2Q72 6 66 16Z" fill="#ff8f8f"/>`
+      + `<path d="M60 12 108 98H12Z" fill="${c}" fill-opacity=".88" stroke="#eaf8ff" stroke-width="3" stroke-linejoin="round"/>`
+      + `<path d="M42 44 50 30" stroke="#fff" stroke-opacity=".55" stroke-width="3.5" stroke-linecap="round"/>`
+      + `<path d="${ticks}" stroke="#1d3b52" stroke-width="2.2"/>`
+      + bEyes(48, 72, 62, down, {bc: '#1d3b52', r: 5.5})
+      + (down ? '<path d="M54 84h12" stroke="#1d3b52" stroke-width="3.5" stroke-linecap="round"/>' : '<path d="M60 74 70 88H50Z" fill="#1d3b52"/>')
+      + (angry ? bAnger(88, 40) : '');
+  },
+  akapen(down, f){
+    const angry = f >= 2 && !down, body = angry ? '#ff3355' : '#e2504f', cap = angry ? '#7a1830' : '#a3303c';
+    return `<path d="M38 26 33 5 50 22Z M82 26 87 5 70 22Z" fill="#f3e6c4"/>`
+      + `<path d="M44 96h32L60 107Z" fill="#3a2a2a"/>`
+      + `<rect x="30" y="38" width="60" height="60" rx="10" fill="${body}"/>`
+      + `<rect x="28" y="18" width="64" height="32" rx="14" fill="${cap}"/><rect x="28" y="44" width="64" height="5" fill="#f3d774"/>`
+      + `<rect x="89" y="22" width="7" height="42" rx="3" fill="#c9cdd6"/>`
+      + bEyes(47, 73, 66, down, {r: 6})
+      + (down ? '<path d="M50 87q5-4 10 0t10 0" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/>' : '<path d="M50 86h20" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>')
+      + `<path d="M36 28l5 5 9-9" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`
+      + (angry ? bAnger(96, 70) : '');
+  },
+  hotchkiss(down, f){
+    const angry = f >= 2 && !down, c = angry ? '#c0445a' : '#3f9b74';
+    return `<rect x="10" y="78" width="102" height="18" rx="7" fill="#596574"/><circle cx="22" cy="76" r="8" fill="#9aa3ae"/>`
+      + `<path d="M14 42Q14 30 26 30H100Q110 30 110 42V62Q110 70 102 70H22Q14 70 14 62Z" fill="${c}"/>`
+      + `<path d="M100 70v8M94 70v8" stroke="#dfe3ea" stroke-width="2.5"/>`
+      + `<path d="M22 32Q60 -6 98 32Q60 20 22 32Z" fill="#4a6aa0" stroke="#f3d774" stroke-width="2.5" stroke-linejoin="round"/><path d="M60 12l2.4 5 5.4.6-4 3.6 1.1 5.3-4.9-2.7-4.9 2.7 1.1-5.3-4-3.6 5.4-.6Z" fill="#f3d774"/>`
+      + bEyes(50, 76, 46, down, {r: 5.5})
+      + (down ? bMouth(63, 60, true, 10) : `<path d="M47 60Q55 53 63 59Q71 53 79 60Q71 66 63 62Q55 66 47 60Z" fill="#f4f4ee"/>`)
+      + (angry ? bAnger(102, 22) : '');
+  },
+  samurai(down, f){
+    const angry = f >= 2 && !down, face = angry ? '#f2a65a' : '#e9c46a';
+    return `<g transform="rotate(-30 60 60)"><rect x="55" y="-4" width="10" height="120" rx="2" fill="#d8b25a"/><path d="M55 10h4M55 20h6M55 30h4M55 90h4M55 100h6" stroke="#7a5a20" stroke-width="2"/></g>`
+      + `<g transform="rotate(30 60 60)"><rect x="55" y="-4" width="10" height="120" rx="2" fill="#d8b25a"/><path d="M55 10h4M55 20h6M55 30h4M55 90h4M55 100h6" stroke="#7a5a20" stroke-width="2"/></g>`
+      + `<rect x="24" y="24" width="72" height="68" rx="20" fill="${face}"/>`
+      + `<path d="M24 52h8M24 60h5M24 68h8M24 76h5" stroke="#8a6a2a" stroke-width="2.5"/>`
+      + `<path d="M53 24Q60 4 67 24Z" fill="#2a2430"/><rect x="50" y="18" width="20" height="7" rx="3" fill="#2a2430"/>`
+      + `<rect x="22" y="33" width="76" height="9" fill="#e85a5a"/><path d="M97 37l12-7M97 40l13 3" stroke="#e85a5a" stroke-width="5" stroke-linecap="round"/>`
+      + bEyes(46, 74, 60, down, {bc: '#2a2430', r: 5.5})
+      + (down ? bMouth(60, 80, true, 10, '#2a2430') : '<path d="M50 80h20" stroke="#2a2430" stroke-width="3.5" stroke-linecap="round"/>')
+      + (angry ? bAnger(92, 54) : '');
+  },
+  dentaku(down, f){
+    const angry = f >= 2 && !down, body = angry ? '#6a2f3a' : '#4a5361', lcd = angry ? '#ffb3b3' : '#bfe8c8';
+    let keys = '';
+    for (let r = 0; r < 3; r++) for (let k = 0; k < 4; k++) keys += `<rect x="${28 + k * 17}" y="${62 + r * 13}" width="13" height="9" rx="2.5" fill="${k === 3 ? '#f3b26a' : r === 2 && k === 0 ? '#ff8f8f' : '#d9dde4'}"/>`;
+    return `<path d="M30 20 23 3 40 15Z M90 20 97 3 80 15Z" fill="#ff8f8f"/>`
+      + `<rect x="18" y="12" width="84" height="94" rx="14" fill="${body}"/>`
+      + `<rect x="27" y="22" width="66" height="32" rx="5" fill="${lcd}"/>`
+      + (down ? '<text x="60" y="45" text-anchor="middle" font-size="17" font-weight="900" fill="#24302a" font-family="ui-monospace,monospace">ERR</text>'
+        : '<path d="M36 28 52 33M84 28 68 33" stroke="#24302a" stroke-width="3.5" stroke-linecap="round"/><rect x="40" y="35" width="9" height="13" fill="#24302a"/><rect x="71" y="35" width="9" height="13" fill="#24302a"/>')
+      + keys
+      + (angry ? bAnger(98, 6) : '');
+  },
+  dragon(down, f){
+    f = Math.min(3, Math.max(1, f || 1));
+    const P = [null,
+      {body:'#e8f4f8', acc:'#9fd8ff', horn:'#f3e6c4', eye:'#ffd36b', snout:'#ffffff'},
+      {body:'#ffcf9a', acc:'#ff6a3a', horn:'#fff0c0', eye:'#fff3b0', snout:'#ffe2c4'},
+      {body:'#6b4fb0', acc:'#ffd36b', horn:'#ffd36b', eye:'#ff5a7a', snout:'#8a70cc'}][f];
+    let s = `<path d="M26 54Q4 34 0 6Q14 22 24 18Q18 34 32 42Z" fill="${P.acc}" fill-opacity=".72"/><path d="M94 54Q116 34 120 6Q106 22 96 18Q102 34 88 42Z" fill="${P.acc}" fill-opacity=".72"/>`
+      + `<path d="M14 26 26 36M106 26 94 36" stroke="${P.acc}" stroke-width="2" stroke-opacity=".8"/>`;
+    if (f === 2) s += `<path d="M38 28Q40 6 50 18Q54 0 62 16Q70 2 74 18Q82 8 84 28Z" fill="#ff8a3a"/><path d="M48 26Q52 14 56 22Q60 10 64 22Q68 14 72 26Z" fill="#ffd36b"/>`;
+    if (f === 3) s += `<path d="M30 42Q12 32 10 18Q22 28 34 32Z M90 42Q108 32 110 18Q98 28 86 32Z" fill="${P.horn}"/>`;
+    s += `<path d="M38 32Q24 12 29 1Q37 16 48 27Z" fill="${P.horn}"/><path d="M82 32Q96 12 91 1Q83 16 72 27Z" fill="${P.horn}"/>`
+      + `<path d="M24 42Q60 14 96 42L98 64Q60 100 22 64Z" fill="${P.body}"/>`
+      + `<path d="M50 32 60 25 70 32M54 38 60 33 66 38" stroke="${P.acc}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    if (f === 3) s += `<path d="M46 26 49 14 54 22 60 9 66 22 71 14 74 26Z" fill="#ffd36b"/><circle cx="60" cy="20" r="2.6" fill="#ff5a7a"/>`;
+    s += `<ellipse cx="60" cy="73" rx="22" ry="14" fill="${P.snout}"/>`
+      + `<ellipse cx="52" cy="70" rx="2.6" ry="3.4" fill="#24183d"/><ellipse cx="68" cy="70" rx="2.6" ry="3.4" fill="#24183d"/>`
+      + `<path d="M40 75Q22 79 8 96M80 75Q98 79 112 96" stroke="${P.acc}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+    s += down ? bX(42, 50) + bX(78, 50) + '<path d="M46 85q7-4 14 0t14 0" stroke="#24183d" stroke-width="3" fill="none" stroke-linecap="round"/>'
+      : `<path d="M30 42 50 47M90 42 70 47" stroke="${P.acc}" stroke-width="4" stroke-linecap="round"/>`
+        + `<path d="M32 51Q42 41 52 51Q42 57 32 51Z" fill="${P.eye}"/><path d="M88 51Q78 41 68 51Q78 57 88 51Z" fill="${P.eye}"/>`
+        + '<path d="M42 45v11M78 45v11" stroke="#24183d" stroke-width="3" stroke-linecap="round"/>'
+        + '<path d="M44 83Q60 91 76 83" stroke="#24183d" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M48 84 51 92 54 85Z M66 85 69 92 72 84Z" fill="#fff"/>';
+    return s;
+  },
+};
+// A boss's face: form 1 / 2 (angry) / 3; down = beaten.
+const bossArt = (info, down, form) => bWrap((BOSS_ART[(info && info.id) || 'daioh'] || BOSS_ART.daioh)(!!down, form || 1));
+const bossFace = (down, angry) => bossArt(BOSS_DAYS[1], down, angry ? 2 : 1);
+const bossArtNow = bs => bossArt(bs.info, bs.done, bs.fno);
 // My part of today's boss (stored in my profile) and everyone's (boss/<day>).
 function myBoss(){
-  const b = (net.profile || {}).boss || {}, day = dayKey();
-  if (b.day !== day) return {day, tries: 0, dmg: 0, claimed: false, claimed2: false, paid: 0, sc: [], online: 0, mi: {}, allowed: BOSS_TRIES};
+  const b = (net.profile || {}).boss || {}, day = dayKey(), T = bossTries(bossDayInfo(day));
+  if (b.day !== day) return {day, tries: 0, dmg: 0, claimed: false, claimed2: false, claimed3: false, cl: [false, false, false], paid: 0, sc: [], online: 0, mi: {}, allowed: T};
   const paid = +b.paid || 0;
-  return {day, tries: +b.tries || 0, dmg: +b.dmg || 0, claimed: !!b.claimed, claimed2: !!b.claimed2, paid, sc: scoresOf(b),
-    online: b.sc || b.online !== undefined ? +b.online || 0 : +b.dmg || 0, mi: b.mi || {}, allowed: BOSS_TRIES + paid};
+  return {day, tries: +b.tries || 0, dmg: +b.dmg || 0, claimed: !!b.claimed, claimed2: !!b.claimed2, claimed3: !!b.claimed3, cl: [!!b.claimed, !!b.claimed2, !!b.claimed3], paid, sc: scoresOf(b),
+    online: b.sc || b.online !== undefined ? +b.online || 0 : +b.dmg || 0, mi: b.mi || {}, allowed: T + paid};
 }
 function bossState(){
   const info = bossDayInfo(), d = (net.bossDay === dayKey() && net.bossData) || {}, dmg = Math.max(0, +d.dmg || 0), top = d.top || {};
   const list = Object.keys(top).map(uid => ({uid, name: String((top[uid] || {}).name || 'ななし').slice(0, 12), dmg: +((top[uid] || {}).dmg) || 0})).filter(x => x.dmg > 0).sort((a, b) => b.dmg - a.dmg);
-  const hp = Math.max(1, +d.hp || info.hp), phase = dmg < hp ? 1 : dmg < 2 * hp ? 2 : 3;
-  return {info, hp, dmg, phase, left: phase === 1 ? hp - dmg : phase === 2 ? 2 * hp - dmg : 0, down: dmg >= hp, down2: dmg >= 2 * hp, angry: phase >= 2,
-    players: list.length, top: list, loaded: !!net.bossData, err: !!net.bossErr};
+  const hp = Math.max(1, +d.hp || info.hp), F = bossForms(info), phase = Math.min(F + 1, Math.floor(dmg / hp) + 1), done = phase > F;
+  return {info, hp, dmg, phase, F, fno: Math.min(phase, F), cur: bossForm(info, phase), done, legend: !!info.legend, left: done ? 0 : phase * hp - dmg,
+    down: phase >= 2, down2: phase >= 3, angry: !info.legend && phase >= 2, players: list.length, top: list, loaded: !!net.bossData, err: !!net.bossErr};
 }
+const bossHpLabel = bs => bs.legend ? `${bs.cur.fname}HP` : bs.angry ? '怒りHP' : 'HP';
+// Forms beaten whose prize I have not taken yet (1-based).
+const bossClaimsReady = (bs, me) => { const out = []; for (let i = 1; i <= bs.F; i++) if (bs.phase > i && me.dmg > 0 && !me.cl[i - 1]) out.push(i); return out; };
+const bossDoneText = bs => bs.legend ? `${bs.info.name}を完全討伐！ 完全勝利` : `怒りの${bs.info.name}も討伐！ 完全勝利`;
 // Yesterday's ranking (for its top-3 bonus) and today's HP, fixed once from yesterday's players.
 const bossYRank = () => { const y = net.bossY; if (!y || y.day !== dayKey(serverNow() - 86400000) || !net.uid) return -1; const i = y.top.findIndex(r => r.uid === net.uid); return i >= 0 && i < BOSS_RANK_J.length ? i : -1; };
 const bossRankReady = () => bossYRank() >= 0 && ((net.profile || {}).bossRank || {}).day !== (net.bossY || {}).day;
@@ -5444,7 +5740,7 @@ async function loadBossYesterday(day){
   } catch(e) { ui.bossYFor = null; return; }
   net.bossY = {day: yday, top};
   if (!(net.bossData || {}).hp) {
-    const w = info.hp >= 5000 ? 1.5 : 1, hp = Math.max(info.hp, Math.ceil(top.length * BOSS_HP_PER * w / 100) * 100);
+    const per = info.hpPer || BOSS_HP_PER * (info.hp >= 5000 ? 1.5 : 1), hp = Math.max(info.hp, Math.ceil(top.length * per / 100) * 100);
     fb.runTransaction(fb.ref(fb.db, `boss/${day}/hp`), cur => cur ? undefined : hp).catch(() => {});
   }
   render();
@@ -5484,11 +5780,12 @@ async function startBossChallenge(){
     res = await fb.runTransaction(fb.ref(fb.db, `players/${net.uid}/boss`), cur => {
       const b = cur && cur.day === day ? Object.assign({}, cur) : {day, tries: 0, dmg: 0};
       if (!b.sc && b.online === undefined) b.online = +b.dmg || 0;
-      if ((+b.tries || 0) >= BOSS_TRIES + (+b.paid || 0)) return undefined;
-      const top3 = scoresOf(b).slice(0, BOSS_TRIES);
+      const T = bossTries(info);
+      if ((+b.tries || 0) >= T + (+b.paid || 0)) return undefined;
+      const top3 = scoresOf(b).slice(0, T);
       b.tries = (+b.tries || 0) + 1;
       tryNo = b.tries;
-      floor = b.tries > BOSS_TRIES ? (top3.length < BOSS_TRIES ? 0 : top3[BOSS_TRIES - 1]) : null;
+      floor = b.tries > T ? (top3.length < T ? 0 : top3[T - 1]) : null;
       return b;
     });
   } catch(e) { toast(errText(e, '挑戦を始められませんでした'), true); return; }
@@ -5496,13 +5793,15 @@ async function startBossChallenge(){
   bumpDaily({boss: 1});
   addXP(XP.boss);
   ui.puzzle = null; ui.stage = null;
-  const angry = bossState().angry;
-  ui.boss = {day, info, life: 1, hands: 0, dmg: 0, tryNo, floor, angry, lives: angry ? BOSS_LIVES + 1 : BOSS_LIVES, skill: angry ? Math.min(.95, info.skill + .2) : info.skill};
+  const form = bossForm(info, bossState().phase);
+  ui.boss = {day, info: form, base: info, form: form.form, life: 1, hands: 0, dmg: 0, tryNo, floor, angry: !!form.angry, lives: form.lives || BOSS_LIVES, skill: form.skill,
+    chalk: {id: 'boss', color: form.color || info.color || BOSS_CHALK.color}};
   setScreen('game');
   newBossGame();
   const body = $('#splashB');
-  body.innerHTML = `<div class="sp-boss">${bossFace(false, angry)}</div>`;
-  showSplash(angry ? '怒りの大王があらわれた！' : '黒板消し大王があらわれた！', `${info.tag}：${info.rule}` + (angry ? '・ライフ4' : '') + (floor !== null ? `・再挑戦（いちばん低い回 ${floor}）` : ''));
+  body.innerHTML = `<div class="sp-boss${info.legend ? ' legend' : ''}">${bossArt(info, false, form.form)}</div><p class="sp-quote"></p>`;
+  body.querySelector('.sp-quote').textContent = `「${form.quote || info.quote}」`;
+  showSplash(`${form.name}があらわれた！`, (info.legend ? `伝説のボス・${form.fname}：${form.rule}` : `${info.tag}：${form.rule}`) + (floor !== null ? `・再挑戦（いちばん低い回 ${floor}）` : ''));
 }
 function newBossGame(){
   clearTimeout(cpuTimer); cpuTimer = null; busy = false;
@@ -5521,7 +5820,7 @@ function bossAfterMove(m){
   const hit = m.kind === 'attack' && m.target === 1 && m.after === 0;
   if (hit) {
     b.hands++; b.dmg += BOSS_HAND_DMG; dmg += BOSS_HAND_DMG;
-    setTimeout(() => { const t = handBtns[1] && handBtns[1][m.to]; if (t) { const [x, y] = centerOf(t); floatText(x, y + 34, `${BOSS_HAND_DMG}ダメージ`, '#d6a8ff', true); } }, 120);
+    setTimeout(() => { const t = handBtns[1] && handBtns[1][m.to]; if (t) { const [x, y] = centerOf(t); floatText(x, y + 34, `${BOSS_HAND_DMG}ダメージ`, b.chalk ? b.chalk.color : '#d6a8ff', true); } }, 120);
   }
   if (G.over && G.over.type === 'win' && G.over.winner === 0) {
     if (b.life < b.lives) {
@@ -5533,7 +5832,7 @@ function bossAfterMove(m){
         const seat = $('#seat1');
         if (!seat) return;
         const [x, y] = centerOf(seat);
-        dust(x, y, ['#d6a8ff', '#f3d774', '#eceee4'], 44, 150);
+        dust(x, y, [b.chalk ? b.chalk.color : '#d6a8ff', '#f3d774', '#eceee4'], 44, 150);
         floatText(x, y - 30, `ダウン！ 残りライフ ${b.lives - b.life + 1}`, '#d6a8ff', true);
         sfx('up');
       }, 600);   // after the "消えた！" of the last hand
@@ -5545,18 +5844,24 @@ function bossAfterMove(m){
   if (dmg) bossDamage(dmg, b.tryNo);
   if (hit) { bumpStats(st => { st.bossHands = (+st.bossHands || 0) + 1; return st; }); addXP(XP.bossHand); }
 }
-async function claimBoss2(){
-  if (!bossState().down2) return 0;
-  const day = dayKey();
+// The prize for a beaten form (1-based): coins, jewels, shards, tickets, items, and a defeat for the reward road.
+async function claimBossP(i){
+  const bs = bossState(), pz = bossPrizes(bs.info)[i - 1];
+  if (!pz || bs.phase <= i) return null;
+  const day = dayKey(), f = i === 1 ? 'claimed' : 'claimed' + i;
   const res = await profileTx(cur => {
     const b = cur.boss || {};
-    if (b.day !== day || !(+b.dmg > 0) || b.claimed2) return undefined;
-    cur.boss = Object.assign({}, b, {claimed2: true});
-    cur.jewels = (+cur.jewels || 0) + BOSS_REWARD2_J;
-    cur.shards = (+cur.shards || 0) + BOSS_REWARD2_SH;
+    if (b.day !== day || !(+b.dmg > 0) || b[f]) return undefined;
+    cur.boss = Object.assign({}, b, {[f]: true});
+    if (pz.coins) cur.coins = (+cur.coins || 0) + pz.coins;
+    if (pz.jewels) cur.jewels = (+cur.jewels || 0) + pz.jewels;
+    if (pz.shards) cur.shards = (+cur.shards || 0) + pz.shards;
+    if (pz.tickets) cur.tickets = (+cur.tickets || 0) + pz.tickets;
+    if (pz.own) cur.owned = Object.assign({}, cur.owned || {}, Object.fromEntries(pz.own.map(id => [id, true])));
+    if (pz.kill) cur.st = Object.assign({}, cur.st || {}, {bossKills: (+((cur.st || {}).bossKills) || 0) + 1});
     return cur;
   });
-  return res && res.committed;
+  return res && res.committed ? pz : null;
 }
 async function claimBossMile(m){
   const day = dayKey();
@@ -5587,7 +5892,7 @@ async function buyBossRetry(){
   const day = dayKey();
   const res = await profileTx(cur => {
     const b = cur.boss && cur.boss.day === day ? Object.assign({}, cur.boss) : null;
-    if (!b || (+b.tries || 0) < BOSS_TRIES + (+b.paid || 0) || (+b.paid || 0) >= BOSS_RETRY_MAX || (+cur.jewels || 0) < BOSS_RETRY_COST) return undefined;
+    if (!b || (+b.tries || 0) < bossTries(bossDayInfo(day)) + (+b.paid || 0) || (+b.paid || 0) >= BOSS_RETRY_MAX || (+cur.jewels || 0) < BOSS_RETRY_COST) return undefined;
     b.paid = (+b.paid || 0) + 1;
     cur.boss = b;
     cur.jewels = (+cur.jewels || 0) - BOSS_RETRY_COST;
@@ -5595,21 +5900,7 @@ async function buyBossRetry(){
   });
   return res && res.committed;
 }
-const bossReady = () => { const bs = bossState(), me = myBoss(); return (bs.down && me.dmg > 0 && !me.claimed) || (bs.down2 && me.dmg > 0 && !me.claimed2) || bossMilesReady(me).length > 0 || bossRankReady(); };
-async function claimBoss(){
-  if (!bossState().down) return 0;
-  const day = dayKey();
-  const res = await profileTx(cur => {
-    const b = cur.boss || {};
-    if (b.day !== day || !(+b.dmg > 0) || b.claimed) return undefined;
-    cur.boss = Object.assign({}, b, {claimed: true});
-    cur.coins = (+cur.coins || 0) + BOSS_REWARD;
-    cur.jewels = (+cur.jewels || 0) + BOSS_REWARD_J;
-    cur.st = Object.assign({}, cur.st || {}, {bossKills: (+((cur.st || {}).bossKills) || 0) + 1});
-    return cur;
-  });
-  return res && res.committed ? BOSS_REWARD : 0;
-}
+const bossReady = () => { const bs = bossState(), me = myBoss(); return bossClaimsReady(bs, me).length > 0 || bossMilesReady(me).length > 0 || bossRankReady(); };
 function plateEl(info, size){
   info = info || {};
   const el = document.createElement('div');
@@ -5807,7 +6098,7 @@ function toLocal(S, seat){
 function names(){
   if (net.on && G && G.names) return G.names.map((x, k) => k === 0 ? 'あなた' : (x || '相手'));
   if (!net.on && ui.stage) return ['あなた', ui.stage.ch.who];
-  if (ui.boss) return ['あなた', '黒板消し大王'];
+  if (ui.boss) return ['あなた', ui.boss.base ? ui.boss.base.name : '黒板消し大王'];
   if (ui.puzzle) return ['あなた', '相手'];
   return settings.mode === 'cpu' ? ['あなた', 'CPU'] : ['下の人', '上の人'];
 }
@@ -5851,7 +6142,7 @@ function handSVG(n, top, i, ch, bin){
 // Chalk colour for a seat on the board: mine everywhere; other players' from the room.
 function seatChalk(k){
   if (!G) return null;
-  if (!net.on && ui.boss && k === 1) return BOSS_CHALK;
+  if (!net.on && ui.boss && k === 1) return ui.boss.chalk || BOSS_CHALK;
   if (!net.on && ui.stage && k === 1) return {id: 'stage', color: ui.stage.ch.c};
   if (k === 0) return chalkOf(myChalk());
   if (net.on && G.seats) { const p = ((net.room && net.room.players) || {})[G.seats[k]]; return chalkOf(p && p.chalk); }
@@ -6113,7 +6404,16 @@ function watchBoss(){
   net.bossOff = fb.onValue(fb.ref(fb.db, 'boss/' + day), s => {
     net.bossData = s.val() || {};
     const bs = bossState();
-    if (wasDown !== null && bs.phase > wasDown && myBoss().dmg > 0) celebrate('討伐<br>成功！', () => { const d = document.createElement('div'); d.innerHTML = bs.phase === 2 ? '<b>みんなで黒板消し大王をたおした！</b><span>…と思ったら「怒りの大王」が現れた！</span>' : '<b>怒りの大王もたおした！</b><span>ボス画面で追加の報酬を受け取ろう</span>'; return d; });
+    if (wasDown !== null && bs.phase > wasDown && myBoss().dmg > 0) celebrate(bs.legend ? (bs.done ? '完全<br>討伐！' : '撃破！') : '討伐<br>成功！', () => {
+      const d = document.createElement('div'), b = document.createElement('b'), sp = document.createElement('span'), nm = bs.info.name;
+      if (bs.legend) {
+        if (bs.done) { b.textContent = `伝説の${nm}を完全討伐！`; sp.textContent = 'ボス画面で限定チョークと称号を受け取ろう'; }
+        else { b.textContent = `${bs.info.forms[bs.phase - 2].name}を撃破！`; sp.textContent = `…${nm}が「${bs.cur.name}」に姿を変えた！`; }
+      } else if (bs.done) { b.textContent = `怒りの${nm}もたおした！`; sp.textContent = 'ボス画面で追加の報酬を受け取ろう'; }
+      else { b.textContent = `みんなで${nm}をたおした！`; sp.textContent = `…と思ったら「怒りの${nm}」が現れた！`; }
+      d.append(b, sp);
+      return d;
+    });
     wasDown = bs.phase;
     loadBossYesterday(day);
     render();
@@ -7071,6 +7371,7 @@ function renderHome(){
     const ga = $('#artGacha'), gk = live ? t.key : 'std';
     if (ga.dataset.k !== gk) { ga.dataset.k = gk; ga.innerHTML = (live ? t.pick : ['meteor', 'phoenix']).filter(id => CHALKS.some(c => c.id === id)).map(id => `<figure>${chalkFig(CHALKS.find(c => c.id === id))}</figure>`).join(''); }
   }
+  if (FIREBASE_CONFIG) renderBossBanner();
   if (net.profileLoaded) { const bp = bookPct(bookItems()); $('#bnBookRing').style.setProperty('--p', bp); $('#bnBookPct').textContent = bp + '%'; }
   const ok = !!FIREBASE_CONFIG, pu = $('#pickup'), msx = missionState();
   let tag = 'デイリー', name, cur = 0, goal = 0, coins = 0, left = '', ready = false, go = 'mission';
@@ -7230,9 +7531,10 @@ function renderEvents(){
       title: t.name, sub: `イベントpt ${pt}・` + (evRank === null ? '順位 …' : evRank === Infinity ? (pt ? '圏外' : 'まだ参加していません') : `${evRank}位`),
       meter: Math.min(1, pt / EV_MILES[EV_MILES.length - 1].pt), meterT: `${pt}pt`, badge: n ? '報酬' : ev.live ? '開催中' : ''}));
   }
-  list.append(evCard({go: 'boss', cls: 'boss', color: bs.angry && !bs.down2 ? '#ff6b8a' : '#c9a2ff', art: bossFace(bs.down2, bs.angry), tag: `今日のボス・${bs.info.tag}`, title: bs.angry && !bs.down2 ? '怒りの黒板消し大王' : '黒板消し大王',
-    sub: bossReady() ? '報酬を受け取ろう！' : bs.down2 ? '完全討伐！ また明日' : `挑戦 ${me.tries}/${me.allowed}・参加 ${bs.players}人`,
-    meter: bs.loaded ? bs.left / bs.hp : 1, meterT: bs.down2 ? '0%' : `${bs.angry ? '怒りHP' : 'HP'} ${bs.loaded ? Math.round(bs.left / bs.hp * 100) : 100}%`, badge: bossReady() ? '報酬' : ''}));
+  list.append(evCard({go: 'boss', cls: 'boss' + (bs.legend ? ' legend' : ''), color: bs.legend ? '#ffd36b' : bs.angry && !bs.done ? '#ff6b8a' : (bs.info.acc || '#c9a2ff'), art: bossArtNow(bs),
+    tag: bs.legend ? `伝説のボス・今日だけ・${bs.cur.fname}` : `今日のボス・${bs.info.tag}`, title: bs.done ? bs.info.name : bs.cur.name,
+    sub: bossReady() ? '報酬を受け取ろう！' : bs.done ? '完全討伐！ また明日' : `挑戦 ${me.tries}/${me.allowed}・参加 ${bs.players}人`,
+    meter: bs.loaded ? bs.left / bs.hp : 1, meterT: bs.done ? '0%' : `${bossHpLabel(bs)} ${bs.loaded ? Math.round(bs.left / bs.hp * 100) : 100}%`, badge: bossReady() ? '報酬' : bs.legend ? '伝説' : ''}));
   list.append(evCard({go: 'puzzle', color: 'var(--p2)', art: '<span class="ev-icon">詰</span>', tag: `毎日1問・#${pz.num}`, title: `詰めわりばし（${pz.d}手詰め）`,
     sub: mp.solved ? `正解！（${mp.at || mp.tries}回目）・連続${mp.streak}日` : mp.tries ? `挑戦中（${mp.tries}回）` : 'まだ挑戦していません', badge: mp.solved ? '' : 'NEW'}));
   list.append(evCard({go: 'pass', color: th[1], art: `<span class="ev-icon" style="font-size:20px">${seasonMonth()}月</span>`, tag: `シーズンパス・あと${daysLeftInSeason()}日`, title: `「${th[0]}」シーズン`,
@@ -7369,51 +7671,114 @@ function renderBossCard(){
   card.hidden = !ok;
   if (!ok) return;
   const bs = bossState(), me = myBoss(), canClaim = bossReady();
-  if (!unchanged($('#bcFace'), String([bs.down2, bs.angry]))) $('#bcFace').innerHTML = bossFace(bs.down2, bs.angry);
-  $('#bcTag').textContent = `今日のボス・${bs.info.tag}` + (bs.angry && !bs.down2 ? '・怒り' : '');
-  $('#goBoss .bc-name').textContent = bs.angry && !bs.down2 ? '怒りの黒板消し大王' : '黒板消し大王';
+  if (!unchanged($('#bcFace'), String([bs.info.id, bs.done, bs.fno]))) $('#bcFace').innerHTML = bossArtNow(bs);
+  $('#bcTag').textContent = bs.legend ? `伝説のボス・今日だけ・${bs.cur.fname}` : `今日のボス・${bs.info.tag}` + (bs.angry && !bs.done ? '・怒り' : '');
+  $('#goBoss .bc-name').textContent = bs.done ? bs.info.name : bs.cur.name;
+  card.style.setProperty('--bacc', bs.info.acc || '#c9a2ff');
   const pct = bs.loaded ? Math.round(bs.left / bs.hp * 100) : 100;
   $('#bcHp').style.width = pct + '%';
-  $('#bcHpT').textContent = bs.err ? 'HP ?' : `${bs.angry ? '怒りHP' : 'HP'} ${pct}%`;
+  $('#bcHpT').textContent = bs.err ? 'HP ?' : `${bossHpLabel(bs)} ${pct}%`;
+  const nx = bs.legend ? null : nextLegend(), bn = $('#bcNext');
+  bn.hidden = !nx;
+  if (nx) bn.textContent = nx.in === 1 ? `予告：あした 伝説のボス「${nx.info.name}」出現！` : `予告：${mdw(nx.day)} 伝説のボス出現！`;
   $('#bcSub').textContent = canClaim ? '報酬を受け取ろう！' : bs.err ? 'ボスのデータを読めません' : `挑戦 ${me.tries}/${me.allowed}・参加 ${bs.players}人`;
-  $('#bcStamp').hidden = !bs.down2;
-  card.classList.toggle('down', bs.down2);
-  card.classList.toggle('angry', bs.angry && !bs.down2);
+  $('#bcStamp').hidden = !bs.done;
+  card.classList.toggle('down', bs.done);
+  card.classList.toggle('angry', bs.angry && !bs.done);
+  card.classList.toggle('legend', bs.legend);
   card.classList.toggle('claim', canClaim);
 }
+// Home banner: today's boss, the legendary one on its day, and its notice up to three days before.
+function renderBossBanner(){
+  const bn = $('#bnBoss'), bs = bossState(), nx = bs.legend ? null : nextLegend(), tz = !!nx && nx.in <= 3, gold = bs.legend || tz;
+  bn.classList.toggle('legend', gold);
+  bn.style.setProperty('--c', gold ? '#ffd36b' : (bs.info.acc || '#c9a2ff'));
+  $('#bnBossTag').textContent = bs.legend ? '伝説のボス・今日だけ' : tz ? '出現予告' : `今日のボス・${bs.info.tag.split('・')[0]}`;
+  const h = $('#bnBossH'), lines = bs.legend ? [bs.info.name, '出現！'] : tz ? ['伝説のボス', nx.in === 1 ? 'あした出現！' : `${mdw(nx.day)}出現！`] : [bs.done ? bs.info.name : bs.cur.name];
+  if (h.dataset.k !== lines.join('|')) { h.dataset.k = lines.join('|'); h.textContent = ''; lines.forEach((x, i) => { if (i) h.append(document.createElement('br')); h.append(x); }); }
+  $('#bnBossS').textContent = bs.legend ? `${bossForms(bs.info)}つの形態をみんなで倒そう。挑戦は${bossTries(bs.info)}回・完全討伐で限定チョーク`
+    : tz ? `「${nx.info.name}」が目をさます…。完全討伐で限定チョークと称号` : `${bs.cur.rule}・「${bs.cur.quote || bs.info.quote}」`;
+  const a = $('#artBoss'), k = tz ? 'tz' + nx.day : `${bs.info.id}:${bs.done}:${bs.fno}`;
+  if (a.dataset.k !== k) { a.dataset.k = k; a.innerHTML = `<span class="bn-bossart${tz ? ' sil' : ''}">${tz ? bossArt(nx.info, false, 1) : bossArtNow(bs)}</span>`; }
+}
+// The notice of a legendary boss (the day before and earlier), and the bosses of the next seven days.
+function renderBossNotice(bs){
+  const nx = bs.legend ? null : nextLegend(), tz = $('#bossTeaser');
+  tz.hidden = !nx;
+  if (nx && !unchanged(tz, nx.day + ':' + nx.in)) {
+    const pz = bossPrizes(nx.info);
+    $('#btzArt').innerHTML = bossArt(nx.info, false, 1);
+    $('#btzName').textContent = `伝説のボス「${nx.info.name}」`;
+    $('#btzWhen').textContent = nx.in === 1 ? `あした ${mdw(nx.day)} 4:00から1日だけ！` : `${mdw(nx.day)} 4:00から1日だけ（あと${nx.in}日）`;
+    $('#btzText').textContent = `${bossForms(nx.info)}つの形態をみんなで順番に倒そう。挑戦は${bossTries(nx.info)}回。完全討伐で${prizeText(pz[pz.length - 1])}！`;
+  }
+  const wk = $('#bossWeek'), today = dayKey();
+  if (unchanged(wk, today + ':' + (nx ? nx.day : ''))) return;
+  wk.innerHTML = '';
+  for (let i = 0; i < 7; i++) {
+    const d = dayKey(serverNow() + i * 86400000), info = bossDayInfo(d), li = document.createElement('li');
+    li.className = (i === 0 ? 'today' : '') + (info.legend ? ' legend' : '');
+    li.style.setProperty('--bacc', info.acc || '#c9a2ff');
+    li.innerHTML = '<span class="wd"></span><span class="wf"></span><b></b>';
+    li.querySelector('.wd').textContent = i === 0 ? '今日' : i === 1 ? 'あした' : '日月火水木金土'[new Date(d + 'T00:00:00Z').getUTCDay()];
+    li.querySelector('.wf').innerHTML = bossArt(info, false, 1);
+    const b = li.querySelector('b'), sm = document.createElement('small');
+    b.textContent = info.name;
+    sm.textContent = info.legend ? `伝説のボス・${bossForms(info)}つの形態` : `${info.tag.split('・')[1]}：${info.rule}`;
+    b.append(sm);
+    wk.append(li);
+  }
+}
 function renderBoss(){
-  const bs = bossState(), me = myBoss(), st = statsOf(net.profile), left = me.allowed - me.tries, canClaim = bs.down && me.dmg > 0 && !me.claimed;
-  const face = $('#bhFace');
-  if (!unchanged(face, String([bs.down2, bs.angry]))) face.innerHTML = bossFace(bs.down2, bs.angry);
-  $('#bossHero').classList.toggle('down', bs.down2);
-  $('#bossHero').classList.toggle('angry', bs.angry && !bs.down2);
-  $('#bhTag').textContent = bs.info.tag + (bs.angry && !bs.down2 ? '・怒りモード' : '');
-  $('#bhName').textContent = bs.angry && !bs.down2 ? '怒りの黒板消し大王' : '黒板消し大王';
-  $('#bhRule').textContent = `今日のルール：${bs.info.rule}` + (bs.angry && !bs.down2 ? '・ミスが減ってライフ4' : '');
+  const bs = bossState(), me = myBoss(), st = statsOf(net.profile), left = me.allowed - me.tries, T = bossTries(bs.info);
+  $('#bossH2').textContent = bs.legend ? '伝説のボス' : '今日のボス';
+  const face = $('#bhFace'), hero = $('#bossHero');
+  if (!unchanged(face, String([bs.info.id, bs.done, bs.fno]))) face.innerHTML = bossArtNow(bs);
+  hero.classList.toggle('down', bs.done);
+  hero.classList.toggle('angry', bs.angry && !bs.done);
+  hero.classList.toggle('legend', bs.legend);
+  hero.dataset.form = bs.fno;
+  hero.style.setProperty('--bacc', bs.info.acc || '#c9a2ff');
+  $('#bhTag').textContent = bs.legend ? `${bs.info.tag}・今日だけ・${bs.cur.fname}` : bs.info.tag + (bs.angry && !bs.done ? '・怒りモード' : '');
+  $('#bhName').textContent = bs.done ? bs.info.name : bs.cur.name;
+  $('#bhQuote').textContent = bs.done ? (bs.legend ? '「ぐぬ…見事だ。また会おう…」' : '「お、おぼえてろ〜！」') : `「${bs.cur.quote || bs.info.quote}」`;
+  $('#bhRule').textContent = `今日のルール：${bs.cur.rule}`;
+  const fm = $('#bhForms');
+  fm.hidden = !bs.legend;
+  if (bs.legend && !unchanged(fm, String(bs.phase))) {
+    fm.innerHTML = '';
+    bs.info.forms.forEach((x, i) => { const li = document.createElement('li'); li.className = i + 1 < bs.phase ? 'done' : i + 1 === bs.phase ? 'now' : ''; li.textContent = x.fname; fm.append(li); });
+  }
   const pct = bs.loaded ? Math.round(bs.left / bs.hp * 100) : 100;
   $('#bhHp').style.width = pct + '%';
-  $('#bhHpT').textContent = bs.err ? 'HP ？' : bs.down2 ? '怒りの大王も討伐！ 完全勝利' : `${bs.angry ? '怒りHP' : 'HP'} ${bs.left.toLocaleString()} / ${bs.hp.toLocaleString()}`;
+  $('#bhHpT').textContent = bs.err ? 'HP ？' : bs.done ? bossDoneText(bs) : `${bossHpLabel(bs)} ${bs.left.toLocaleString()} / ${bs.hp.toLocaleString()}`;
+  renderBossNotice(bs);
   $('#bhSub').textContent = `参加 ${bs.players}人・あなたのダメージ ${me.dmg}・のこり ${fmtLeft(msToReset())}`;
   const go = $('#bossGo'), canRetry = left <= 0 && me.paid < BOSS_RETRY_MAX;
   go.disabled = !net.fb || (left <= 0 && (!canRetry || myJewels() < BOSS_RETRY_COST));
   go.textContent = left > 0 ? `挑戦する（残り${left}回）` : canRetry ? `ジュエル${BOSS_RETRY_COST}で再挑戦（今日あと${BOSS_RETRY_MAX - me.paid}回）` : '今日の挑戦は終わり（4:00に回復）';
   go.classList.toggle('gold', left <= 0 && canRetry);
   go.classList.toggle('primary', !(left <= 0 && canRetry));
-  $('#bossClaim').hidden = !canClaim;
-  $('#bossClaim').textContent = `討伐報酬を受け取る（コイン${BOSS_REWARD}・ジュエル${BOSS_REWARD_J}）`;
-  $('#bossClaim2').hidden = !(bs.down2 && me.dmg > 0 && !me.claimed2);
-  $('#bossClaim2').textContent = `怒り大王の報酬を受け取る（ジュエル${BOSS_REWARD2_J}・かけら${BOSS_REWARD2_SH}）`;
+  const ready = bossClaimsReady(bs, me), pzs = bossPrizes(bs.info);
+  [1, 2, 3].forEach(i => {
+    const b = $('#bossClaim' + (i === 1 ? '' : i)), on = ready.includes(i);
+    b.hidden = !on;
+    if (on) b.textContent = (bs.legend ? `${bs.info.forms[i - 1].fname}討伐の報酬を受け取る` : i === 1 ? '討伐報酬を受け取る' : `怒りの${bs.info.name}の報酬を受け取る`) + `（${prizeText(pzs[i - 1])}）`;
+  });
   const rr = bossYRank();
   $('#bossRankClaim').hidden = !bossRankReady();
   if (rr >= 0) $('#bossRankClaim').textContent = `昨日のダメージランキング${rr + 1}位！ ジュエル${BOSS_RANK_J[rr]}を受け取る`;
+  const nextName = bs.legend ? bs.cur.name : `怒りの${bs.info.name}`;
   $('#bossNote').textContent = bs.err ? 'ボスのデータを読み書きできません。Firebaseのルールに boss を追加してください。'
-    : bs.down2 && me.claimed2 ? '今日の報酬は全部受け取り済み。また明日！' : bs.down && me.claimed && !bs.down2 ? '怒りの大王を倒すと追加の報酬！' : bs.down && !me.dmg ? '大王はもう倒されました。今からでも怒りの大王に挑めます！' : '';
+    : bs.done && me.dmg > 0 && !ready.length ? '今日の報酬は全部受け取り済み。また明日！' : bs.done ? '' : bs.down && !me.dmg ? `今からでも${nextName}に挑めます！ ダメージを入れると、倒した形態の報酬も受け取れます`
+    : bs.down && !ready.length ? `${nextName}を倒すと追加の報酬！` : '';
+  $('#bossScoreNote').textContent = `いちばん高い${T}回ぶんと、オンライン対戦で消した手のぶんがダメージになります。ジュエル${BOSS_RETRY_COST}で再挑戦でき、いちばん低い回より高ければ入れ替わります。`;
   // my tries: the best three count
   const sb = $('#bossScores');
-  if (!unchanged(sb, JSON.stringify([me.sc, me.online, me.dmg]))) {
+  if (!unchanged(sb, JSON.stringify([me.sc, me.online, me.dmg, T]))) {
     sb.innerHTML = '';
     if (!me.sc.length) { const n = document.createElement('span'); n.className = 'sum'; n.style.marginLeft = '0'; n.textContent = 'まだ挑戦していません'; sb.append(n); }
-    me.sc.forEach((v, i) => { const c = document.createElement('span'); c.className = 'sc ' + (i < BOSS_TRIES ? 'top' : 'out'); c.textContent = v; sb.append(c); });
+    me.sc.forEach((v, i) => { const c = document.createElement('span'); c.className = 'sc ' + (i < T ? 'top' : 'out'); c.textContent = v; sb.append(c); });
     const sum = document.createElement('span'); sum.className = 'sum'; sum.textContent = (me.online ? `オンライン +${me.online}・` : '') + `合計 ${me.dmg}`; sb.append(sum);
   }
   const ml = $('#bossMiles');
@@ -7764,11 +8129,11 @@ function renderGame(){
     let tt = '', tc = '';
     const nameP = seatEl.querySelector('.name');
     let bf = nameP.querySelector('.bface');
-    const bossSeat = !net.on && ui.boss && k === 1, stageSeat = !net.on && ui.stage && k === 1, faceKey = bossSeat ? 'boss' : stageSeat ? 'st' + ui.stage.c : '';
+    const bossSeat = !net.on && ui.boss && k === 1, stageSeat = !net.on && ui.stage && k === 1, faceKey = bossSeat ? `boss:${ui.boss.base ? ui.boss.base.id : ''}:${ui.boss.form || 1}` : stageSeat ? 'st' + ui.stage.c : '';
     if (bf && bf.dataset.k !== faceKey) { bf.remove(); bf = null; }
     if (faceKey && !bf) {
       const tmp = document.createElement('span');
-      tmp.innerHTML = bossSeat ? `<span class="bface">${bossFace(false)}</span>` : avatarHTML(ui.stage.ch, 'bface');
+      tmp.innerHTML = bossSeat ? `<span class="bface">${bossArt(ui.boss.base, false, ui.boss.form)}</span>` : avatarHTML(ui.stage.ch, 'bface');
       bf = tmp.firstElementChild; bf.dataset.k = faceKey; nameP.prepend(bf);
     }
     if (stageSeat) { tt = ui.stage.boss ? 'BOSS' : STAGE_LEVEL[ui.stage.level]; tc = 'boss'; }
@@ -7907,7 +8272,7 @@ function renderStrip(act, ms, nm){
   if (net.on && !net.connected) msg.textContent = 'インターネットにつながっていません';
   else if (net.on && !alive(G, 0)) msg.textContent = 'あなたは脱落しました。最後まで見られます';
   else if (net.on && G.turn !== 0) msg.textContent = G.seats && !(net.room.online || {})[G.seats[G.turn]] ? '接続が切れています（時間切れで脱落）' : '考え中…';
-  else if (ui.boss && Date.now() < (ui.bossMsgUntil || 0)) msg.textContent = '大王が起き上がった！';
+  else if (ui.boss && Date.now() < (ui.bossMsgUntil || 0)) msg.textContent = `${ui.boss.base ? ui.boss.base.name : 'ボス'}が起き上がった！`;
   else if (!isHuman(G.turn)) msg.textContent = '考え中…';
   else if (busy || net.busy) msg.textContent = '';
   else if (panel) { const r = rules(); msg.textContent = r.split && r.merge ? '分身か合成を選んでください' : r.split ? '配り方を選んでください' : 'これでよければタップして合成'; }
@@ -8123,6 +8488,7 @@ function tick(){
     else { $('#practiceBar').hidden = ui.screen !== 'game'; document.body.classList.toggle('practicing', ui.screen === 'game'); $('#practiceT').textContent = `相手をさがし中… ${Math.floor((now - (ui.searchSince || search.since || now)) / 1000)}秒`; }
   }
   if (!$('#recruit').hidden) checkRecruit();
+  if (ui.newVer) updBarTick();
   if ((ui.resignArm && now > ui.resignArm) || (ui.exitArm && now > ui.exitArm)) {
     if (ui.resignArm && now > ui.resignArm) ui.resignArm = 0;
     if (ui.exitArm && now > ui.exitArm) ui.exitArm = 0;
@@ -8179,8 +8545,8 @@ $('#passClaim').addEventListener('click', async () => {
 $('#bossGo').addEventListener('click', async () => {
   const me = myBoss(), go = $('#bossGo');
   if (me.allowed - me.tries <= 0) {
-    const fl = me.sc.length >= BOSS_TRIES ? me.sc[BOSS_TRIES - 1] : 0;
-    const ok = await confirmBuy({title: '再挑戦しますか？', art: `<span class="sp-boss" style="width:84px;display:block;animation:none">${bossFace(false, bossState().angry)}</span>`, name: '大王にもう一度挑戦',
+    const bs = bossState(), T = bossTries(bs.info), fl = me.sc.length >= T ? me.sc[T - 1] : 0;
+    const ok = await confirmBuy({title: '再挑戦しますか？', art: `<span class="sp-boss" style="width:84px;display:block;animation:none">${bossArtNow(bs)}</span>`, name: `${bs.cur.name}にもう一度挑戦`,
       cur: 'jewels', cost: BOSS_RETRY_COST, have: myJewels(), ok: '再挑戦する', note: `今日いちばん低い回（${fl}）より高いスコアなら入れ替わります`});
     if (!ok) return;
     go.disabled = true;
@@ -8189,11 +8555,12 @@ $('#bossGo').addEventListener('click', async () => {
   go.disabled = true;
   startBossChallenge().finally(() => { if (ui.screen === 'boss') renderBoss(); });
 });
-$('#bossClaim2').addEventListener('click', async () => {
-  const b = $('#bossClaim2'); b.disabled = true;
-  if (await claimBoss2()) { sfx('win'); toast(`ジュエル +${BOSS_REWARD2_J}・かけら +${BOSS_REWARD2_SH}`); }
+['#bossClaim2', '#bossClaim3'].forEach((sel, k) => $(sel).addEventListener('click', async () => {
+  const b = $(sel); b.disabled = true;
+  const pz = await claimBossP(k + 2);
+  if (pz) { const [x, y] = centerOf($('#bhFace')); dust(x, y, ['#f2cf5b', '#ffd36b', '#fff6c4'], 40, 140); sfx('win'); toast(`${prizeText(pz)} を受け取りました`); }
   b.disabled = false; render();
-});
+}));
 $('#bossRankClaim').addEventListener('click', async () => {
   const b = $('#bossRankClaim'); b.disabled = true;
   const j = await claimBossRank();
@@ -8203,9 +8570,13 @@ $('#bossRankClaim').addEventListener('click', async () => {
 $('#bossClaim').addEventListener('click', async () => {
   const b = $('#bossClaim'), from = centerOf(b);
   b.disabled = true;
-  const got = await claimBoss();
+  const pz = await claimBossP(1);
   b.disabled = false;
-  if (got) { flyCoins(from, got); floatText(from[0], from[1] - 10, `+${got}`, 'var(--coin)'); const [x, y] = centerOf($('#bhFace')); dust(x, y, ['#f2cf5b', '#d6a8ff', '#fff6c4'], 40, 140); sfx('win'); }
+  if (pz) {
+    if (pz.coins) { flyCoins(from, pz.coins); floatText(from[0], from[1] - 10, `+${pz.coins}`, 'var(--coin)'); }
+    const [x, y] = centerOf($('#bhFace')); dust(x, y, ['#f2cf5b', '#d6a8ff', '#fff6c4'], 40, 140); sfx('win');
+    if (pz.own) toast(`${prizeText(pz)} を受け取りました`);
+  }
   render();
 });
 $('#goRules2').addEventListener('click', () => setScreen('rules'));
@@ -8414,6 +8785,24 @@ const today = new Date();
 $('#date').innerHTML = `<span class="tcy">${today.getMonth()+1}</span>月<span class="tcy">${today.getDate()}</span>日（${'日月火水木金土'[today.getDay()]}）`;
 $('#radarHand').innerHTML = handSVG(2, false, 0, null);
 $('#appVer').textContent = `バージョン ${APP_VERSION}`;
+$('#updGo').addEventListener('click', reloadNew);
+$('#updLater').addEventListener('click', () => { ui.updSnooze = Date.now() + 30 * 60000; updBarTick(); });
+$('#updCheck').addEventListener('click', async () => {
+  const b = $('#updCheck'); b.disabled = true;
+  const v = await checkNewVersion(true);
+  b.disabled = false;
+  if (v === null) toast('チェックできませんでした。通信を確認してね', true);
+  else if (v === APP_VERSION) toast(`最新版です（バージョン ${APP_VERSION}）`);
+  else { ui.updSnooze = 0; updBarTick(); toast(`新しいバージョン ${v} があります`); }
+});
+setTimeout(() => checkNewVersion(), VER_FAST ? 1000 : 15000);
+setInterval(() => { if (!document.hidden && Date.now() - verAt >= VER_EVERY) checkNewVersion(); }, VER_FAST ? 1000 : 30000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) checkNewVersion(); });
+setTimeout(() => {
+  const was = lsGet('waribashi-ver');
+  if (was && was !== APP_VERSION) toast(`アップデートしました（バージョン ${APP_VERSION}）。新しい機能は「お知らせ」で！`);
+  lsSet('waribashi-ver', APP_VERSION);
+}, 1800);
 (() => {
   const defs = document.getElementById('cg-gold').parentNode, NS = 'http://www.w3.org/2000/svg';
   for (let m = 1; m <= 12; m++) {
