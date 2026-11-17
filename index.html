@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="waribashi-version" content="11/17-4">
+<meta name="waribashi-version" content="11/17-5">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="指の本数を足して、相手の両手を消したら勝ち。教室の手遊び「わりばし」をスマホで。">
 <meta property="og:title" content="わりばし対戦">
@@ -638,6 +638,8 @@ fieldset:disabled .opts span{cursor:default}
 .road li.got .rs{color:var(--coin)}
 .seat .bface{display:inline-block;width:34px;vertical-align:middle;margin-right:4px}
 .tag.boss{color:#e7d6ff;border-color:#c9a2ff;letter-spacing:.06em}
+.tag.hp{color:#9fe0a8;border-color:#9fe0a8;font-variant-numeric:tabular-nums}
+.tag.hp.low{color:#ff9a9a;border-color:#ff9a9a}
 .sp-boss{width:120px;margin:0 auto;animation:bob 2.6s ease-in-out infinite}
 .pl-flag{background-color:#9e2b2b;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.07) 0 8px,transparent 8px 16px),linear-gradient(160deg,#c13b3b,#7c1f2a);--pf:#fff4e6;--pa:#ffd36b;--pe:#5a1520}
 .pl-throne{background-color:#3a2263;background-image:radial-gradient(circle at 85% 20%,rgba(255,220,130,.5) 0 2px,transparent 3px),linear-gradient(115deg,#4b2b84 0%,#7d55c7 45%,#c9a2ff 60%,#5b3696 100%);--pf:#fff7dd;--pa:#f6dc83;--pe:#2a1647}
@@ -1829,7 +1831,7 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
           <span class="bn-art art" id="artPass"></span>
         </button>
         <button type="button" class="bn" data-go="bin" style="--c:var(--p2)" aria-label="2進数ルール：CPU対戦で遊ぶ">
-          <span class="bn-txt"><span class="bn-tag">NEW</span><b class="bn-h">2進数ルール<br>登場！</b><span class="bn-s">指1本ずつが 1・2・4・8・16。31で消える</span></span>
+          <span class="bn-txt"><span class="bn-tag">NEW</span><b class="bn-h">2進数ルール<br>登場！</b><span class="bn-s">指1本ずつが 1・2・4・8・16。31以上で消える</span></span>
           <span class="bn-art art" id="artBin"></span>
         </button>
         <button type="button" class="bn" data-go="mission" style="--c:var(--coin)" aria-label="デイリーミッションを見る">
@@ -1864,7 +1866,7 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
           <span class="pu-side"><span class="coin" id="puCoins" hidden></span><span id="puLeft"></span></span>
         </button>
         <p class="hsay htip" id="homeTip" hidden aria-live="polite"><span class="tk-tag">ヒント</span><span class="tk-t" id="ticker"></span></p>
-        <button type="button" class="hchar" id="homeChar" aria-label="わりばしくんに話しかける"></button>
+        <button type="button" class="hchar" id="homeChar" aria-label="おてもとくんに話しかける"></button>
         <p class="hdate" aria-hidden="true"><span id="hDate"></span><span class="hduty">日直<b id="hDuty"></b></span></p>
       </div>
       <div class="htray" aria-hidden="true"><i class="ck"></i><i class="ck pk"></i><i class="ck yl"></i><i class="er"></i></div>
@@ -2046,7 +2048,7 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
         <li>討伐すると「怒り」モードで復活。ミスが減り、ライフが4つになります。怒りのボスも倒すと追加の報酬（ジュエル100・かけら20）。</li>
         <li>挑戦は1日3回。ジュエル50で再挑戦もでき（1日5回まで）、いちばん低い回より高いスコアなら入れ替わります。ボスの手を1本消すごとに100ダメージ、ライフを全部削るとボーナス300ダメージ。</li>
         <li>自分のダメージが300・800・1500・2500に届くと報酬（コイン200・ジュエル50・ジュエル80・ガチャチケット1枚）。前の日のダメージランキングでは1位ジュエル200・2位150・3位100・4〜10位50。</li>
-        <li>あなたの両手が消えるか、同じ局面が3回出たら挑戦終了。それまでのダメージはちゃんと入ります。</li>
+        <li>あなたにもHPが200あります。手を1本消されるたびに50ダメージ。両手が消えてもHPが残っていれば、1本ずつで起き上がって続けられます。HPが0になったら挑戦終了。それまでのダメージはちゃんと入ります。</li>
         <li>たまに「伝説のボス」が1日だけ現れます。3つの形態をみんなで順番に倒し、挑戦は5回。完全討伐すると、ここでしか手に入らないチョークと称号がもらえます。出現の前から予告が出ます。</li>
         <li>ふだんのオンライン対戦でも、相手の手を1本消すと20ダメージ入ります。</li>
         <li>討伐できた日に参加していたら、コイン200・ジュエル50と「討伐」1回ぶんの報酬を受け取れます（その日の4:00まで）。</li>
@@ -2077,7 +2079,7 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
         <li>分身：自分の両手の合計を配り直せる。左右を入れ替えるだけの配り方と、片手を0にする配り方はできない。消えた手も分身で復活できる。</li>
         <li>合成：両手の指を片方の手にまとめられる（1と3→4、2と4→6本なので1本）。まとめた結果で手が消える合成はできない。</li>
         <li>3人以上のときは、好きな相手の手をタッチできる。両手が消えた人は脱落して、最後まで残った人の勝ち。</li>
-        <li>2進数ルール（CPU対戦・カスタムマッチ）：指1本ずつが1・2・4・8・16。立っている指の合計が手の数で、5本全部が立つ31ぴったりで消えて、32以上は31を引く（32→1、35→4）。</li>
+        <li>2進数ルール：指1本ずつが1・2・4・8・16。立っている指の合計が手の数で、31以上になった手は消えます（ステージ・ボス・詰めわりばし）。CPU対戦とカスタムマッチでは「31ぴったりで消えて、32以上は31を引く（32→1、35→4）」も選べます。</li>
         <li>オンラインは持ち時間つき。時間切れと投了は脱落。同じ局面が3回出たら引き分け。</li>
       </ul>
     </section>
@@ -3323,7 +3325,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/17-4';
+const APP_VERSION = '11/17-5';
 // ----- New version: the page's <head> carries its version (build.py writes it). Now and then, and whenever the app comes
 // back to the front, read the head of the live page; if its version differs, offer a reload. ?debug&vfast checks every few seconds.
 const VER_FAST = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('vfast'); } catch(e) { return false; } })();
@@ -3791,7 +3793,7 @@ const STAGE_CH = [
   {name: '合成できない', who: 'ばらばらくん', face: 'grin', c: '#f4a6bb', rule: {merge: false}, desc: '合成なし'},
   {name: '5以上で消える', who: 'ぎりぎりさん', face: 'sweat', c: '#ffa48c', rule: {overflow: 'die'}, desc: '5本以上になったら消える'},
   {name: '宇宙人の星', who: 'ピポ星人', face: 'shock', c: '#c8b4f4', rule: {}, desc: '6本ぴったり・4本ぴったりで消える星', alien: true},
-  {name: '2進数の塔', who: 'ロボ先生', face: 'think', c: '#9fc8ff', rule: {base: 31}, desc: '2進数ルール'},
+  {name: '2進数の塔', who: 'ロボ先生', face: 'think', c: '#9fc8ff', rule: {base: 31, overflow: 'die'}, desc: '2進数ルール'},
   {name: 'ハンデ戦', who: 'くせもの番長', face: 'smug', c: '#ff9a5a', rule: {}, desc: '相手の指が多い・相手が先手', handicap: true},
   {name: '制限手数', who: 'とけい先生', face: 'fire', c: '#ffd36b', rule: {}, desc: '決められた手数のうちに勝つ', limit: true},
   {name: '最強の教室', who: '黒板の王', face: 'crown', c: '#f2cf5b', rule: {}, desc: 'いろんなルールで、さいきょうCPU', mix: true},
@@ -5167,7 +5169,7 @@ function chFace(o, ex){
 }
 
 const CHARA_ART = {
-  // はじめから: わりばしくん — a pair of disposable chopsticks; the split ends are his legs, the paper sleeve says おてもと
+  // はじめから: おてもとくん — a pair of disposable chopsticks; the split ends are his legs, the paper sleeve says おてもと
   waribo: ex => `
     <ellipse cx="100" cy="293" rx="48" ry="5" fill="currentColor" fill-opacity=".2" stroke="none"/>
     <path d="M66 54Q66 34 86 34H95L100 45L105 34H114Q134 34 134 54V196H66Z" ${chFill(.9)}/>
@@ -6238,8 +6240,10 @@ async function claimGuideDone(){
 
 // ===================== News =====================
 const NEWS = [
+  {id: 'n22', date: '2026-11-17', tag: 'おしらせ', title: 'ボス戦であなたにもHPがつきました',
+    body: 'ボス戦のルールが変わりました。\n・あなたにもHPが200あります。手を1本消されるたびに50ダメージ。両手が消えてもHPが残っていれば、1本ずつで起き上がって続けられます\n・そのぶん、ボスのHPは1.5倍になりました（あしたのボスから）\n・2進数ルールは、ステージ・ボス・詰めわりばしで「31以上で消える」になりました。CPU対戦とカスタムマッチでは、今まで通り選べます\n・はじめからいるキャラの名前は「おてもとくん」です'},
   {id: 'n21', date: '2026-11-17', tag: 'NEW', title: 'ホーム画面が「教室の黒板」になりました',
-    body: 'ホーム画面を新しくしました。\n・ホームの黒板に、キャラが立つようになりました。タップするとヒントを教えてくれます\n・コレクション（前のマイページ）の「キャラ」で、ホームに呼ぶキャラを選べます。はじめは「わりばしくん」。ストーリーの章をクリアしたキャラや、討伐したボスも呼べます\n・名前の変更・引き継ぎ・設定・お知らせ・遊びかたは、右上の「MENU」に入りました\n・デイリーミッションは、下の「ミッション」から見られます'},
+    body: 'ホーム画面を新しくしました。\n・ホームの黒板に、キャラが立つようになりました。タップするとヒントを教えてくれます\n・コレクション（前のマイページ）の「キャラ」で、ホームに呼ぶキャラを選べます。はじめは「おてもとくん」。ストーリーの章をクリアしたキャラや、討伐したボスも呼べます\n・名前の変更・引き継ぎ・設定・お知らせ・遊びかたは、右上の「MENU」に入りました\n・デイリーミッションは、下の「ミッション」から見られます'},
   {id: 'n20', date: '2026-11-17', tag: 'おしらせ', title: 'レート戦の結果はサーバーが判定するようになりました',
     body: 'レート戦の結果とレートの計算を、サーバーがするようになりました。\n・同じ相手との回数の制限はなくなりました。友達と何回でも遊べます\n・作ったばかりのアカウントとの試合は、レートがほとんど動きません\n・すぐに投了・時間切れになった試合（3手ずつ指す前）はノーカウントのままです'},
   {id: 'n19', date: '2026-11-17', tag: 'おしらせ', title: 'ボス戦の引き分けがなくなりました',
@@ -6378,7 +6382,8 @@ function puzzleOf(day){
   let d = PUZ_LEN[new Date(day + 'T00:00:00Z').getUTCDay()], e;
   if (PUZ_FORCE) { const [fd, fi] = PUZ_FORCE.split(':').map(Number); d = fd; e = PUZ.pool[d][fi % PUZ.pool[d].length]; }
   else {
-    const list = PUZ.pool[d], small = list.filter(x => x[0] < 8), big = list.filter(x => x[0] >= 8);
+    // binary puzzles only with "31 or more vanishes" (rule set 9); the 32→1 ones (8) take too long
+    const list = PUZ.pool[d], small = list.filter(x => x[0] < 8), big = list.filter(x => x[0] === 9);
     const src = small.length && (rnd() < .65 || !big.length) ? small : big;
     e = src[Math.floor(rnd() * src.length)];
   }
@@ -6480,6 +6485,8 @@ function sharePuzzle(){
 }
 
 // ----- Today's boss: a different one every weekday, and now and then a legendary one -----
+// You have HP in a boss fight: a lost hand costs 50; with both hands gone and HP left you get up with 1 and 1.
+const BOSS_ME_HP = 200, BOSS_ME_HIT = 50, BOSS_HP_MUL = 1.5;   // fights last longer, so the boss has 1.5x the HP
 const BOSS_LIVES = 3, BOSS_HAND_DMG = 100, BOSS_CLEAR_BONUS = 300, BOSS_GAME_DMG = 20, BOSS_TRIES = 3, BOSS_REWARD = 200, BOSS_REWARD_J = 50;
 // HP grows with yesterday's players; after HP 0 the angry form has the same HP again. Retries cost jewels.
 const BOSS_HP_PER = 1200, BOSS_RETRY_COST = 50, BOSS_RETRY_MAX = 5, BOSS_REWARD2_J = 100, BOSS_REWARD2_SH = 20;
@@ -6497,7 +6504,7 @@ const BOSS_DAYS = [
   {id:'akapen', name:'赤ペン鬼教官', tag:'水曜・きびしい日', rule:'5本以上で消える', quote:'はみ出したら即バツだ！', hp:3000, start:[1, 1], skill:.5, overflow:'die', color:'#ff8a8a', acc:'#ff8a8a'},
   {id:'hotchkiss', name:'ホッチキス将軍', tag:'木曜・分身封じ', rule:'分身なし', quote:'その手、パチンと留めてやる！', hp:3000, start:[1, 1], skill:.5, split:false, color:'#7fd6b0', acc:'#7fd6b0'},
   {id:'samurai', name:'ものさし侍', tag:'金曜・二刀流', rule:'侍の手が2本ずつで始まる', quote:'二刀流、参る！', hp:3000, start:[2, 2], skill:.5, color:'#f3d774', acc:'#f3d774'},
-  {id:'dentaku', name:'電卓魔人', tag:'土曜・2進数の日', rule:'2進数ルール（31で消える）', quote:'ピポパ…すべては0と1だ', hp:5000, start:[1, 1], skill:.5, count:'binary', color:'#a8f0d0', acc:'#a8f0d0'},
+  {id:'dentaku', name:'電卓魔人', tag:'土曜・2進数の日', rule:'2進数ルール（31以上で消える）', overflow:'die', quote:'ピポパ…すべては0と1だ', hp:5000, start:[1, 1], skill:.5, count:'binary', color:'#a8f0d0', acc:'#a8f0d0'},
 ];
 // Legendary bosses: one special day, three forms with shared HP each, five free tries, bigger prizes.
 const LEGENDS = {
@@ -6688,7 +6695,7 @@ function myBoss(){
 function bossState(){
   const info = bossDayInfo(), d = (net.bossDay === dayKey() && net.bossData) || {}, dmg = Math.max(0, +d.dmg || 0), top = d.top || {};
   const list = Object.keys(top).map(uid => ({uid, name: String((top[uid] || {}).name || 'ななし').slice(0, 12), dmg: +((top[uid] || {}).dmg) || 0})).filter(x => x.dmg > 0).sort((a, b) => b.dmg - a.dmg);
-  const hp = Math.max(1, +d.hp || info.hp), F = bossForms(info), phase = Math.min(F + 1, Math.floor(dmg / hp) + 1), done = phase > F;
+  const hp = Math.max(1, +d.hp || Math.ceil(info.hp * BOSS_HP_MUL / 100) * 100), F = bossForms(info), phase = Math.min(F + 1, Math.floor(dmg / hp) + 1), done = phase > F;
   return {info, hp, dmg, phase, F, fno: Math.min(phase, F), cur: bossForm(info, phase), done, legend: !!info.legend, left: done ? 0 : phase * hp - dmg,
     down: phase >= 2, down2: phase >= 3, angry: !info.legend && phase >= 2, players: list.length, top: list, loaded: !!net.bossData, err: !!net.bossErr};
 }
@@ -6710,7 +6717,7 @@ async function loadBossYesterday(day){
   } catch(e) { ui.bossYFor = null; return; }
   net.bossY = {day: yday, top};
   if (!(net.bossData || {}).hp) {
-    const per = info.hpPer || BOSS_HP_PER * (info.hp >= 5000 ? 1.5 : 1), hp = Math.max(info.hp, Math.ceil(top.length * per / 100) * 100);
+    const per = info.hpPer || BOSS_HP_PER * (info.hp >= 5000 ? 1.5 : 1), hp = Math.ceil(Math.max(info.hp, top.length * per) * BOSS_HP_MUL / 100) * 100;
     fb.runTransaction(fb.ref(fb.db, `boss/${day}/hp`), cur => cur ? undefined : hp).catch(() => {});
   }
   render();
@@ -6764,7 +6771,7 @@ async function startBossChallenge(){
   addXP(XP.boss);
   ui.puzzle = null; ui.stage = null;
   const form = bossForm(info, bossState().phase);
-  ui.boss = {day, info: form, base: info, form: form.form, life: 1, hands: 0, dmg: 0, tryNo, floor, angry: !!form.angry, lives: form.lives || BOSS_LIVES, skill: form.skill,
+  ui.boss = {day, info: form, base: info, form: form.form, life: 1, hands: 0, dmg: 0, hp: BOSS_ME_HP, tryNo, floor, angry: !!form.angry, lives: form.lives || BOSS_LIVES, skill: form.skill,
     chalk: {id: 'boss', color: form.color || info.color || BOSS_CHALK.color}};
   setScreen('game');
   newBossGame();
@@ -6792,6 +6799,26 @@ function bossAfterMove(m){
   if (hit) {
     b.hands++; b.dmg += BOSS_HAND_DMG; dmg += BOSS_HAND_DMG;
     setTimeout(() => { const t = handBtns[1] && handBtns[1][m.to]; if (t) { const [x, y] = centerOf(t); floatText(x, y + 34, `${BOSS_HAND_DMG}ダメージ`, b.chalk ? b.chalk.color : '#d6a8ff', true); } }, 120);
+  }
+  // the boss took one of my hands
+  if (m.kind === 'attack' && m.target === 0 && m.after === 0 && b.hp > 0) {
+    b.hp = Math.max(0, b.hp - BOSS_ME_HIT);
+    setTimeout(() => { const t = handBtns[0] && handBtns[0][m.to]; if (t) { const [x, y] = centerOf(t); floatText(x, y - 34, `-${BOSS_ME_HIT}`, '#ff8f8f', true); } }, 120);
+    if (b.hp <= 0 && !G.over) G = Object.assign({}, G, {over: {type: 'win', winner: 1, reason: 'hp'}});
+  }
+  if (G.over && G.over.type === 'win' && G.over.winner === 1 && b.hp > 0) {
+    // both hands gone but HP left: get up with 1 and 1, my turn
+    G = Object.assign({}, G, {over: null, hands: [[1, 1], [...G.hands[1]]], turn: 0, seen: {}});
+    G.seen[posKeyOf(G)] = 1;
+    ui.bossMeUntil = Date.now() + 1800;
+    setTimeout(() => {
+      const seat = $('#seat0');
+      if (!seat) return;
+      const [x, y] = centerOf(seat);
+      dust(x, y, ['#9fe0a8', '#f3d774', '#eceee4'], 36, 130);
+      floatText(x, y - 30, `復活！ のこりHP ${b.hp}`, '#9fe0a8', true);
+      sfx('up');
+    }, 600);
   }
   if (G.over && G.over.type === 'win' && G.over.winner === 0) {
     if (b.life < b.lives) {
@@ -7156,7 +7183,12 @@ const sourceHand = () => { if (sel !== null) return sel; const l = liveHands(G.t
 const stateIdx = p => { const h = G.hands; return solver().sid(h[p][0], h[p][1], h[1-p][0], h[1-p][1]); };
 const movesAt = p => { const h = G.hands; return genMoves(h[p][0], h[p][1], h[1-p][0], h[1-p][1], rules()); };
 // Test pages only (?debug): make every next position one that has already been seen twice.
-if (DEBUG) window.__wb = {primeRepeat(){ if (!G) return 0; let n = 0; for (const m of movesAt(G.turn)) { G.seen[posKeyOf(step(G, {...m, target: 1 - G.turn}, 0))] = 2; n++; } return n; }, over: () => G && G.over};
+if (DEBUG) window.__wb = {primeRepeat(){ if (!G) return 0; let n = 0; for (const m of movesAt(G.turn)) { G.seen[posKeyOf(step(G, {...m, target: 1 - G.turn}, 0))] = 2; n++; } return n; }, over: () => G && G.over,
+  // tests: set a position in a CPU/boss game, read the boss fight, rule sets
+  pos(h0, h1, turn){ if (!G || G.over) return false; clearTimeout(cpuTimer); cpuTimer = null; G = Object.assign({}, G, {hands: [[...h0], [...h1]], turn, seen: {}}); G.seen[posKeyOf(G)] = 1; render(); maybeCpu(); return true; },
+  bossHp: v => { if (ui.boss) { ui.boss.hp = v; render(); } return ui.boss && ui.boss.hp; },
+  boss: () => ui.boss && {hp: ui.boss.hp, life: ui.boss.life, dmg: ui.boss.dmg, over: G && G.over, hands: G && G.hands, turn: G && G.turn},
+  stageRule: (c, n) => stageDef(c, n).rule, puzzleRules: day => puzzleOf(day).rules, bossRules: id => bossRules(bossInfoOf(id))};
 
 function evalChild(next){
   const s = solver(), r = s.res[next], d = s.dist[next];
@@ -8591,13 +8623,13 @@ function renderHome(){
   }
   $('#puzBadge').hidden = !(ok && net.profileLoaded && featOpen('puzzle') && !myPuzzle().solved);
 }
-// Characters for the home board: わりばしくん from the start, story characters when their chapter is cleared,
+// Characters for the home board: おてもとくん from the start, story characters when their chapter is cleared,
 // bosses when their defeat reward is taken (players/<uid>/chars/<bossId>).
 const HC_COLOR = '#ffcf86';
 const bossInfoOf = id => BOSS_DAYS.find(b => b.id === id) || LEGENDS[id] || null;
 function charaList(){
   const st = FIREBASE_CONFIG ? stageStars() : {}, got = (net.profile || {}).chars || {};
-  const out = [{kind: 'start', id: 'waribo', name: 'わりばしくん', c: HC_COLOR, have: true, art: true, need: 'はじめから'}];
+  const out = [{kind: 'start', id: 'waribo', name: 'おてもとくん', c: HC_COLOR, have: true, art: true, need: 'はじめから'}];
   STAGE_CH.forEach((ch, i) => out.push({kind: 'story', id: ch.id, name: ch.who, c: ch.c, ch, have: !FIREBASE_CONFIG || (+st[`${i + 1}-${STAGE_N}`] || 0) > 0, art: !!CHARA_ART[ch.id],
     need: `ステージ第${i + 1}章「${ch.name}」をクリア`, short: `第${i + 1}章をクリア`}));
   [...BOSS_DAYS, ...Object.values(LEGENDS)].forEach(b => out.push({kind: 'boss', id: b.id, name: b.name, c: b.color || '#c9a2ff', have: !!got[b.id], art: true,
@@ -9424,6 +9456,7 @@ function renderGame(){
     }
     if (stageSeat) { tt = ui.stage.boss ? 'BOSS' : STAGE_LEVEL[ui.stage.level]; tc = 'boss'; }
     else if (!net.on && ui.puzzle && k === 1) { tt = `${ui.puzzle.d}手詰め`; tc = 'boss'; }
+    else if (!net.on && ui.boss && k === 0) { tt = `HP ${ui.boss.hp}`; tc = 'hp' + (ui.boss.hp <= BOSS_ME_HIT ? ' low' : ''); }
     else if (bossSeat) { const L = ui.boss.lives, left = L - ui.boss.life + (G.over && ui.boss.cleared ? 0 : 1); tt = 'ライフ ' + '●'.repeat(Math.max(0, left)) + '○'.repeat(L - Math.max(0, left)); tc = 'boss'; }
     else if (out) { tt = '脱落'; tc = 'out'; }
     else if (net.on && k > 0 && G.seats && !online[G.seats[k]]) { tt = '切断中'; tc = 'off'; }
@@ -9558,12 +9591,13 @@ function renderStrip(act, ms, nm){
   turn.style.color = (seatChalk(G.turn) || {}).color || '';
   turn.textContent = `${nm[G.turn]}の番`;
   if (ui.puzzle) { ev.textContent = `${ui.puzzle.d}手詰め・のこり${ui.puzzle.left}手（${ruleShort(ui.puzzle.rules)}）`; ev.hidden = false; }
-  if (ui.boss) { ev.textContent = `ライフ ${ui.boss.lives - ui.boss.life + 1}/${ui.boss.lives}・与えたダメージ ${ui.boss.dmg}`; ev.hidden = false; }
+  if (ui.boss) { ev.textContent = `ボスのライフ ${ui.boss.lives - ui.boss.life + 1}/${ui.boss.lives}・あなたのHP ${ui.boss.hp}・与えたダメージ ${ui.boss.dmg}`; ev.hidden = false; }
   if (ui.stage) { const sg = ui.stage; ev.textContent = `${sg.id}・あなたの手数 ${sg.moves}${sg.limit ? `/${sg.limit}` : ''}（${ruleShort(sg.rule)}）`; ev.hidden = false; }
   if (net.on && !net.connected) msg.textContent = 'インターネットにつながっていません';
   else if (net.on && !alive(G, 0)) msg.textContent = 'あなたは脱落しました。最後まで見られます';
   else if (net.on && G.turn !== 0) msg.textContent = G.seats && !(net.room.online || {})[G.seats[G.turn]] ? '接続が切れています（時間切れで脱落）' : '考え中…';
   else if (ui.boss && Date.now() < (ui.bossMsgUntil || 0)) msg.textContent = `${ui.boss.base ? ui.boss.base.name : 'ボス'}が起き上がった！`;
+  else if (ui.boss && Date.now() < (ui.bossMeUntil || 0)) msg.textContent = `あなたが起き上がった！ のこりHP ${ui.boss.hp}`;
   else if (!isHuman(G.turn)) msg.textContent = '考え中…';
   else if (busy || net.busy) msg.textContent = '';
   else if (panel) { const r = rules(); msg.textContent = r.split && r.merge ? '分身か合成を選んでください' : r.split ? '配り方を選んでください' : 'これでよければタップして合成'; }
@@ -9925,7 +9959,7 @@ $$('details.fold').forEach(d => {
 $('#pickup').addEventListener('click', () => { const go = $('#pickup').dataset.go || 'mission'; if (go === 'mission') ui.missionTab = 'daily'; setScreen(go); });
 $$('#bnTrack .bn').forEach(b => b.addEventListener('click', () => {
   const go = b.dataset.go;
-  if (go === 'bin') { settings.count = 'binary'; saveSettings(); setScreen('cpu'); }
+  if (go === 'bin') { settings.count = 'binary'; settings.overflow = 'die'; saveSettings(); setScreen('cpu'); }
   else if (FIREBASE_CONFIG || go === 'rank') {
     if (go === 'mission') ui.missionTab = 'daily';
     if (go === 'gacha' || go === 'shop') { ui.shopTab = go === 'gacha' ? 'gacha' : 'chalk'; ui.buyArm = null; setScreen('shop'); }
