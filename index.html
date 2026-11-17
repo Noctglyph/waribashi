@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="waribashi-version" content="11/17-3">
+<meta name="waribashi-version" content="11/17-4">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="指の本数を足して、相手の両手を消したら勝ち。教室の手遊び「わりばし」をスマホで。">
 <meta property="og:title" content="わりばし対戦">
@@ -1443,7 +1443,282 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
 .board-wrap[data-bd="brp2"]{--board:#2a1420;--wood:#a8862e;--wood-hi:#ffe9a8}
 .board-wrap[data-bd="brp2"] .board{border-image:linear-gradient(135deg,#8f6f18,#fff3c2 25%,#c79a2c 50%,#fff6cf 75%,#8a6a12) 1;background-image:radial-gradient(ellipse 60% 45% at 50% 0%,rgba(255,215,120,.22),transparent 70%),repeating-conic-gradient(from 0deg at 50% -20%,rgba(255,220,140,.06) 0 6deg,transparent 6deg 18deg),var(--noise)}
 .pl-prp{background-color:#13202e;background-image:radial-gradient(ellipse 50% 90% at 100% 50%,rgba(159,224,255,.3),transparent 70%),linear-gradient(115deg,#13202e,#1f3550 60%,#13202e);--pf:#e9f6ff;--pa:#9fe0ff;--pe:#08121c}
+/* ===================== Home v2: the class blackboard ===================== */
+/* Top bar: player (Lv ring + title + name) · money · menu */
+.topbar{grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:10px;padding:10px 0 8px}
+.tb-me{display:flex;align-items:center;gap:10px;min-width:0;padding:0;border:0;border-radius:0;background:none;text-align:left;cursor:pointer;line-height:1.25}
+.tb-me:hover{border:0}
+.tb-me:hover .tb-lv{transform:scale(1.04)}
+.tb-lv{--xp:0;position:relative;flex:none;display:grid;place-items:center;align-content:center;width:48px;height:48px;border-radius:50%;background:conic-gradient(var(--you) calc(var(--xp) * 1%),rgba(236,238,228,.14) 0);transition:transform .15s ease}
+.tb-lv::before{content:"";position:absolute;inset:4px;border-radius:50%;background-color:var(--board);background-image:var(--noise);box-shadow:inset 0 0 10px rgba(0,0,0,.45)}
+.tb-lv small{position:relative;font-size:9px;font-weight:800;letter-spacing:.12em;line-height:1;color:var(--chalk-soft)}
+.tb-lv b{position:relative;font-family:var(--font-display);font-weight:400;font-size:19px;line-height:1.05;font-variant-numeric:tabular-nums}
+.tb-who{display:grid;min-width:0}
+.tb-who .tb-title{font-size:11px}
+.tb-who .nm{font-family:var(--font-display);font-size:20px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-money{display:grid;gap:4px}
+.tb-money .coin,.tb-money .jwl{justify-content:space-between;min-width:92px;padding:1px 10px 1px 6px;border-radius:999px;background:rgba(0,0,0,.32);box-shadow:inset 0 0 0 1px var(--line);font-size:13px;line-height:1.6}
+.tb-money .coin::before,.tb-money .jwl::before{width:1.05em;height:1.05em}
+.tb-menu{position:relative;display:grid;place-items:center;align-content:center;gap:4px;width:50px;height:50px;padding:0;border-radius:12px;border:2.5px solid var(--wood);background-color:var(--board);background-image:var(--noise);box-shadow:inset 0 0 12px rgba(0,0,0,.35),0 3px 0 #3e2817;color:var(--chalk);cursor:pointer}
+.tb-menu:hover{border-color:var(--wood-hi)}
+.tb-menu:active{transform:translateY(2px);box-shadow:inset 0 0 12px rgba(0,0,0,.35),0 1px 0 #3e2817}
+.tb-menu:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.tb-menu .hb{display:grid;gap:4px;width:20px}
+.tb-menu .hb i{display:block;height:2.6px;border-radius:2px;background:var(--chalk)}
+.tb-menu small{font-size:8.5px;font-weight:800;letter-spacing:.14em;line-height:1;color:var(--chalk-soft)}
+.tb-menu .tab-badge{top:-7px;left:auto;right:-7px}
+
+/* The board */
+.home2{gap:12px}
+.hboard{position:relative;display:grid;gap:4px;padding:10px 10px 0;border:7px solid var(--wood);border-top-color:var(--wood-hi);border-bottom:0;border-radius:14px 14px 4px 4px;background-color:var(--board);background-image:radial-gradient(ellipse 46% 16% at 34% 70%,rgba(236,238,228,.065),transparent 72%),radial-gradient(ellipse 30% 12% at 70% 88%,rgba(236,238,228,.05),transparent 72%),radial-gradient(ellipse 38% 14% at 22% 42%,rgba(236,238,228,.04),transparent 72%),var(--noise);box-shadow:inset 0 0 50px rgba(0,0,0,.42),inset 0 0 0 1px rgba(0,0,0,.35)}
+.hboard .banners{gap:2px}
+.hboard .bn-track{border-radius:10px}
+.hboard .bn{min-height:120px;padding:8px 8px 8px 14px;border:2px solid rgba(236,238,228,.3);border-radius:10px;background-color:rgba(0,0,0,.16);background-image:radial-gradient(ellipse 70% 60% at 85% 50%,rgba(236,238,228,.06),transparent 70%);box-shadow:none}
+.hboard .bn-h{font-size:clamp(20px,6.2vw,27px)}
+.hboard .bn-s{font-size:11.5px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hboard .bn-tag{font-size:10px}
+.hboard .bn-art{zoom:.74}
+.hboard .bn-dots button{height:16px;width:20px}
+.hboard .bn-dots button::before{width:6px;height:6px}
+.hboard .bn-dots button[aria-current="true"]::before{width:16px;height:6px}
+
+.hstage{position:relative;height:clamp(196px,calc(100svh - 560px),330px)}
+/* Chalk-drawn icons on the left edge */
+.hrail{position:absolute;left:0;top:2px;z-index:3;display:grid;gap:6px}
+.mag{--mc:var(--chalk);position:relative;display:grid;justify-items:center;gap:0;width:58px;padding:0;border:0;background:none;color:var(--chalk);cursor:pointer;font:inherit;line-height:1.25}
+.mag .mg{position:relative;display:grid;place-items:center;width:48px;height:48px;color:var(--mc);transition:transform .15s ease}
+.mag .mg > svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.mag .mg .ring{fill:currentColor;fill-opacity:.08;stroke:currentColor;stroke-width:2.8}
+.mag .mg .ic{fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+.mag .mg text{fill:currentColor;stroke:currentColor;stroke-width:.5;font-family:var(--font-display);font-size:22px}
+.mag:hover .mg{transform:rotate(-6deg) scale(1.05)}
+.mag:active .mg{transform:scale(.94)}
+.mag:focus-visible{outline:2px solid var(--chalk);outline-offset:2px;border-radius:10px}
+.mag > b{font-size:10.5px;font-weight:800;letter-spacing:.03em;color:var(--chalk-soft);font-variant-numeric:tabular-nums}
+.mag .tab-badge{top:-3px;left:auto;right:1px}
+.mag .tab-badge.dot{min-width:11px;width:11px;height:11px;padding:0;top:1px;right:6px}
+.m-rank .emb{position:relative;width:28px;height:28px;vertical-align:0}
+.m-rank > b{font-family:var(--font-display);font-weight:400;font-size:15px;letter-spacing:0;line-height:1.1;color:var(--chalk)}
+.m-rank .tb-sub{font-size:9px;font-weight:700;line-height:1.2;white-space:nowrap;color:var(--chalk-soft)}
+.m-gift{--mc:var(--p1)}
+.m-gift.has .mg{animation:wig 2.4s ease-in-out infinite}
+@keyframes wig{0%,80%,100%{transform:none}84%{transform:rotate(-10deg)}88%{transform:rotate(9deg)}92%{transform:rotate(-6deg)}96%{transform:rotate(3deg)}}
+.m-puz{--mc:var(--p2)}
+
+/* Speech bubble: what to do next (the pickup), or a hint when the character is tapped */
+.hsay{position:absolute;left:64px;top:8px;z-index:4;display:grid;grid-template-columns:minmax(0,1fr);gap:2px;width:min(168px,calc(100% - 64px - 150px));min-width:118px;padding:6px 9px 7px;border:0;border-radius:11px;background:#f4f1e4;color:#22302a;text-align:left;box-shadow:0 10px 18px -10px rgba(0,0,0,.85);font:inherit;cursor:pointer;animation:sayIn .4s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes sayIn{from{transform:scale(.85) translateY(6px);opacity:0}to{transform:none;opacity:1}}
+.hsay::after{content:"";position:absolute;right:-8px;top:16px;border:6px solid transparent;border-left:9px solid #f4f1e4;border-right:0}
+.hsay:hover{border:0}
+.hsay:focus-visible{outline:3px solid var(--you);outline-offset:2px}
+.hsay .pu-tag{grid-column:auto;font-size:8.5px;font-weight:800;line-height:1.6;padding:0 6px;border:0;background:#2f6b53;color:#f4f1e4}
+.hsay .pu-name{grid-column:auto;font-size:11.5px;font-weight:800;line-height:1.38;color:#1d2823;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.hsay .pu-prog{grid-column:auto;gap:5px;font-size:9.5px;font-weight:700;color:#4a5751}
+.hsay .pu-prog .meter{height:4px;background:rgba(34,48,42,.14)}
+.hsay .pu-prog .meter i{background:#3c8a68}
+.hsay .pu-side{grid-column:auto;grid-row:auto;display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:9px;color:#5d6862}
+.hsay .pu-side .coin{font-size:10.5px;color:#9a6b00}
+.hsay .pu-side .coin::before{box-shadow:inset 0 0 0 1px #9c7012}
+.pickup.hsay.ready{background:#fff2bf;box-shadow:0 0 0 3px var(--coin),0 10px 18px -10px rgba(0,0,0,.85)}
+.pickup.hsay.ready::after{border-left-color:#fff2bf}
+.pickup.hsay.ready .pu-tag{background:#b8860b;color:#fff8de}
+.htip{display:block;cursor:default}
+.htip .tk-tag{display:inline-block;margin:0 0 2px;font-size:8.5px;padding:0 6px;background:#d96a86;color:#fff}
+.htip .tk-t{display:block;white-space:normal;overflow:visible;font-size:11.5px;font-weight:700;line-height:1.42;color:#1d2823}
+
+/* The character, standing behind the chalk tray */
+.hchar{position:absolute;right:20px;bottom:-16px;z-index:1;height:calc(100% + 10px);aspect-ratio:2/3;padding:0;border:0;background:none;cursor:pointer}
+.hchar:focus-visible{outline:2px solid var(--chalk);outline-offset:-6px;border-radius:12px}
+.hchar svg,.hchar img{display:block;width:100%;height:100%;object-fit:contain;transform-origin:50% 100%;animation:breathe 4.2s ease-in-out infinite}
+.hchar.hop svg,.hchar.hop img{animation:hop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes breathe{50%{transform:translateY(-2px) scaleY(1.008)}}
+@keyframes hop{40%{transform:translateY(-12px)}}
+/* Date and 日直 on the right edge, as written on a real classroom board */
+.hdate{position:absolute;right:-4px;top:2px;z-index:0;margin:0;display:flex;gap:14px;writing-mode:vertical-rl;font-family:var(--font-display);font-size:13px;line-height:1;letter-spacing:.14em;color:rgba(236,238,228,.55);pointer-events:none}
+.hdate .tcy{text-combine-upright:all;-webkit-text-combine:horizontal}
+.hduty b{font-weight:400;margin-top:6px;max-height:8em;overflow:hidden}
+/* Chalk tray */
+.htray{position:relative;z-index:5;height:15px;margin:0 -19px;border-radius:3px 3px 5px 5px;background:linear-gradient(180deg,#b07a4d,var(--wood) 40%,#4c301b);box-shadow:0 10px 16px -8px rgba(0,0,0,.8)}
+.htray i{position:absolute;bottom:9px}
+.htray .ck{left:22%;width:24px;height:6px;border-radius:3px;background:#f2f0e6;box-shadow:inset -4px 0 0 rgba(0,0,0,.1)}
+.htray .ck.pk{left:calc(22% + 30px);width:16px;background:#f5a9bd;transform:rotate(-8deg)}
+.htray .ck.yl{left:calc(22% + 52px);width:20px;background:#f3d774}
+.htray .er{left:8%;width:36px;height:12px;border-radius:3px;background:linear-gradient(180deg,#3d5c9e 0 58%,#d8d2c0 58%)}
+
+/* Play buttons */
+.hmodes{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px}
+.hm{--c:var(--you);position:relative;display:grid;align-content:center;min-width:0;padding:8px 10px;border-radius:12px;border:3px solid var(--wood);background-color:var(--board);background-image:var(--noise);box-shadow:inset 0 0 26px rgba(0,0,0,.3),0 4px 0 #3e2817;text-align:left;color:var(--chalk);cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
+.hm:hover:not(:disabled){border-color:var(--wood-hi)}
+.hm:active:not(:disabled){transform:translateY(3px);box-shadow:inset 0 0 26px rgba(0,0,0,.3),0 1px 0 #3e2817}
+.hm:focus-visible{outline:2px solid var(--chalk);outline-offset:3px}
+.hm:disabled{opacity:.45;cursor:default}
+.hm-k{font-family:var(--font-display);font-weight:400;font-size:19px;line-height:1.2}
+.hm-x{min-width:0;font-size:10.5px;font-weight:700;line-height:1.35;color:var(--chalk-soft);font-variant-numeric:tabular-nums}
+.hm-stage{grid-column:span 5;grid-template-columns:auto minmax(0,1fr);column-gap:7px;min-height:64px;padding:6px 8px}
+.hm-stage .cav{grid-row:1/span 2;width:34px;height:34px}
+.hm-stage .hm-k{font-size:17px}
+.hm-stage .hm-x{color:var(--you);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hmodes .bosscard{grid-column:span 7;grid-template-columns:auto minmax(0,1fr);gap:0 8px;min-height:64px;padding:5px 8px;border-width:3px;box-shadow:inset 0 0 26px rgba(0,0,0,.35),0 4px 0 #2a1d3e}
+.hmodes .bc-face{width:42px}
+.hmodes .bosscard.legend .bc-face{width:46px}
+.hmodes .bc-txt{gap:1px}
+.hmodes .bc-tag{max-width:100%;font-size:9px;line-height:1.6;padding:0 6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hmodes .bc-name{font-size:15px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hmodes .bc-hp{gap:5px;font-size:9px}
+.hmodes .bc-hp .meter{height:6px}
+.hmodes .bc-sub{display:none}
+.hmodes .bc-next{margin:1px 0 0;font-size:9px;padding:0 6px;line-height:1.5;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hmodes .bc-stamp{right:5px;top:4px;padding:0 6px;border-width:2px;font-size:12px}
+.hmodes .lockb{top:6px;right:6px}
+.hm-pair{grid-column:span 5;display:grid;gap:8px}
+.hm-sm{grid-template-columns:auto minmax(0,1fr);column-gap:8px;align-content:center;min-height:46px;padding:4px 8px 4px 7px}
+.hm-ic{grid-row:1/span 2;width:28px;height:28px;fill:none;stroke:var(--c);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hm-sm .hm-k{font-size:15px;line-height:1.15;color:var(--c)}
+.hm-sm .hm-d{font-size:9.5px;line-height:1.3;color:var(--chalk-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hm.c2{--c:var(--p2)}
+.hm.c1{--c:var(--p1)}
+.hm-rated{grid-column:span 7;grid-template-columns:minmax(0,1fr) auto;column-gap:6px;min-height:100px;padding:10px 8px 10px 14px;border-width:4px;border-top-color:var(--wood-hi);background-color:#1f3d33;background-image:radial-gradient(ellipse 60% 85% at 84% 50%,rgba(243,215,116,.2),transparent 72%),radial-gradient(ellipse 40% 50% at 20% 0%,rgba(236,238,228,.07),transparent 70%),var(--noise);box-shadow:inset 0 0 30px rgba(0,0,0,.38),0 4px 0 #3e2817,0 10px 22px -12px rgba(243,215,116,.45)}
+.hm-rated .hm-k{grid-column:1;font-size:26px;white-space:nowrap;line-height:1.1;color:var(--you);letter-spacing:.02em;text-shadow:0 0 16px rgba(243,215,116,.4)}
+.hm-rated .hm-x{grid-column:1;font-size:10.5px}
+.hm-rated .hm-x .emb{width:1.35em;height:1.35em}
+.hm-rated .hm-x b{color:var(--chalk)!important;font-weight:800}
+.hm-rated .hm-x .hm-w{display:block;color:#9fe0a8}
+.hm-go{grid-column:2;grid-row:1/span 2;width:56px;height:56px;transform:rotate(-9deg);transition:transform .15s ease}
+.hm-go svg{display:block;width:100%;height:100%;overflow:visible}
+.hm-go circle{fill:#f3d774;fill-opacity:.08;stroke:#f3d774;stroke-width:3.2}
+.hm-go text{fill:#f3d774;stroke:#f3d774;stroke-width:.5;font-family:var(--font-display);font-size:19px;letter-spacing:.02em}
+.hm-rated:hover:not(:disabled) .hm-go{transform:rotate(0) scale(1.05)}
+.hm-rated.wait .hm-go{animation:stampy 1.4s ease-in-out infinite}
+@keyframes stampy{0%,100%{transform:rotate(-9deg) scale(1)}50%{transform:rotate(-4deg) scale(1.09)}}
+/* A lower board and bigger buttons: a one-line banner, the board about 3/4 of before */
+.hboard .bn{min-height:84px;padding:6px 8px 6px 12px}
+.hboard .bn-h{font-size:clamp(17px,5vw,21px);line-height:1.15}
+.hboard .bn-h br{display:none}
+.hboard .bn-s{-webkit-line-clamp:1;font-size:10.5px}
+.hboard .bn-tag{font-size:9px;line-height:1.6}
+.hboard .bn-art{zoom:.5}
+.hstage{height:clamp(176px,calc(100svh - 616px),260px)}
+.hsay{top:4px}
+.hrail{gap:1px}
+.mag .mg{width:42px;height:42px}
+.m-rank .emb{width:24px;height:24px}
+.mag .mg text{font-size:21px}
+.hmodes{gap:10px}
+.hm-stage,.hmodes .bosscard{min-height:96px}
+.hm-stage{grid-template-columns:none;justify-items:start;align-content:center;row-gap:2px}
+.hm-stage .cav{grid-row:auto;width:36px;height:36px}
+.hm-stage .hm-k{font-size:19px}
+.hmodes .bc-face{width:48px}
+.hmodes .bosscard.legend .bc-face{width:50px}
+.hmodes .bc-name{font-size:15px}
+.hm-pair{gap:10px}
+.hm-sm{min-height:70px;padding:6px 10px}
+.hm-ic{width:32px;height:32px}
+.hm-sm .hm-k{font-size:18px}
+.hm-sm .hm-d{font-size:10.5px}
+.hm-rated{min-height:150px;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto 1fr;align-content:stretch;padding:14px 12px 12px 16px}
+.hm-rated .hm-k{grid-column:1/-1;font-size:32px}
+.hm-rated .hm-x{grid-column:1;grid-row:2;align-self:end;font-size:11.5px}
+.hm-go{grid-column:2;grid-row:2;align-self:end;width:66px;height:66px}
+@media (min-width:600px){
+  .hstage{height:clamp(200px,calc(100svh - 620px),520px)}
+  .hsay{width:min(200px,calc(100% - 64px - 190px))}
+}
+/* short screens (small phones, laptops): compact buttons so it all fits without scrolling */
+@media (max-height:780px){
+  .hstage{height:clamp(150px,calc(100svh - 500px),240px)}
+  .hmodes,.hm-pair{gap:8px}
+  .hm-stage,.hmodes .bosscard{min-height:62px}
+  .hm-stage{grid-template-columns:auto minmax(0,1fr);justify-items:stretch;column-gap:7px}
+  .hm-stage .cav{grid-row:1/span 2;width:34px;height:34px}
+  .hm-stage .hm-k{font-size:17px}
+  .hmodes .bc-face{width:42px}
+  .hm-sm{min-height:46px}
+  .hm-ic{width:28px;height:28px}
+  .hm-sm .hm-k{font-size:15px}
+  .hm-rated{min-height:100px;padding:10px 10px 10px 14px}
+  .hm-rated .hm-k{font-size:26px}
+  .hm-go{width:52px;height:52px}
+  .hduty{display:none}
+  .mag .mg{width:38px;height:38px}
+  .m-rank .emb{width:22px;height:22px}
+  .m-rank .tb-sub{display:none}
+  .mag > b{font-size:9.5px}
+  .mag .mg text{font-size:20px}
+}
+
+/* ===================== Menu (☰) ===================== */
+.mn-me{display:grid;gap:10px}
+.mn-me h3{margin:0}
+.mn-me .uidline{margin:0}
+.mn-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.mn-t{position:relative;display:grid;justify-items:center;align-content:start;gap:3px;min-width:0;min-height:104px;padding:14px 6px 10px;border-radius:14px;border:3px solid var(--wood);background-color:var(--board);background-image:var(--noise);box-shadow:inset 0 0 22px rgba(0,0,0,.3),0 4px 0 #3e2817;color:var(--chalk);text-align:center;cursor:pointer;font:inherit;transition:transform .12s ease}
+.mn-t:hover{border-color:var(--wood-hi)}
+.mn-t:active{transform:translateY(3px);box-shadow:inset 0 0 22px rgba(0,0,0,.3),0 1px 0 #3e2817}
+.mn-t:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.mn-t:disabled{opacity:.6}
+.mn-t svg{width:30px;height:30px;margin-bottom:3px;fill:none;stroke:var(--you);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mn-t b{font-family:var(--font-display);font-weight:400;font-size:16px;line-height:1.2}
+.mn-t small{display:block;margin-top:auto;max-width:100%;font-size:10.5px;line-height:1.35;color:var(--chalk-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mn-t .nb-new{position:absolute;top:-8px;right:-6px;font-style:normal}
+.mn-t .nb-t{white-space:nowrap}
+#scrMenu .fold{scroll-margin-top:84px}
+
+/* ===================== Collection ===================== */
+.coll .shead{justify-content:space-between}
+.cl-book{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:4px 12px 4px 5px;border-radius:999px;border:2px solid var(--wood);background:var(--panel);color:var(--chalk);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.cl-book .bb-ic{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--coin);color:#2a2311;font-family:var(--font-display);font-size:15px}
+.cl-book .bb-p{font-family:var(--font-display);font-weight:400;font-size:15px;color:var(--coin)}
+.cl-book:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.cl-hero{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;padding:12px;border-radius:14px;border:1px solid var(--line);background:radial-gradient(ellipse 60% 90% at 20% 50%,rgba(243,215,116,.1),transparent 70%),var(--panel)}
+.cl-look{width:124px}
+.cl-look .bsw{max-width:none}
+.cl-look .bsw .board{padding:22px 0;border-width:6px}
+.cl-look .bsw svg{width:58px}
+.cl-k{margin:0 0 4px;font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--chalk-soft)}
+.cl-now{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;margin:0;font-size:13.5px}
+.cl-now dt{color:var(--chalk-soft);font-size:12px}
+.cl-now dd{margin:0;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cl-tabs{position:sticky;top:calc(env(safe-area-inset-top,0px) + 68px);z-index:6;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px;padding:4px;border-radius:14px;border:2.5px solid var(--wood);background:var(--board-deep);box-shadow:0 8px 14px -10px rgba(0,0,0,.8)}
+.cl-tabs button{min-width:0;min-height:38px;padding:2px 0;border-radius:10px;border:0;background:none;color:var(--chalk-soft);font:inherit;font-size:12.5px;font-weight:800;letter-spacing:-.02em;white-space:nowrap;cursor:pointer}
+.cl-tabs button[aria-selected="true"]{border-color:var(--you);background:var(--you);color:#2a2311}
+.cl-tabs button:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.coll .fold[data-ct-panel] > summary{cursor:default}
+.coll .fold[data-ct-panel] > summary::after{display:none}
+.cl-rec{display:grid;gap:16px}
+
+/* A boss on the home board floats instead of standing */
+.hchar.boss{height:auto;width:min(196px,50%);aspect-ratio:auto;right:16px;bottom:22%}
+.hchar.boss svg{height:auto;transform-origin:50% 60%;animation:bob 2.6s ease-in-out infinite;filter:drop-shadow(0 14px 10px rgba(0,0,0,.35))}
+.hchar.boss.hop svg{animation:hop .45s cubic-bezier(.3,1.6,.5,1)}
+
+/* Characters in the collection */
+.cl-chars .fold-s{margin:-4px 0 10px}
+.chgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.chg-h{grid-column:1/-1;margin:8px 0 -2px;font-size:12px;font-weight:800;letter-spacing:.1em;color:var(--chalk-soft)}
+.chg-h:first-child{margin-top:0}
+.chc{position:relative;display:grid;justify-items:center;align-content:start;gap:1px;min-width:0;padding:8px 4px 8px;border-radius:12px;border:2.5px solid var(--wood);background-color:var(--board);background-image:var(--noise);box-shadow:inset 0 0 18px rgba(0,0,0,.32);color:var(--chalk);font:inherit;text-align:center;cursor:pointer;transition:transform .12s ease}
+.chc:hover{border-color:var(--wood-hi)}
+.chc:active{transform:scale(.97)}
+.chc:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.chc-art{display:grid;place-items:end center;width:100%;height:100px;overflow:hidden}
+.chc-art svg{display:block;height:100%;width:auto;max-width:100%}
+.chc.bs .chc-art{place-items:center}
+.chc.bs .chc-art svg{width:88%;height:auto}
+.chc-art .cav{margin-bottom:4px}
+.chc-n{max-width:100%;font-size:12px;font-weight:800;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chc-s{font-size:9.5px;line-height:1.3;color:var(--chalk-soft);text-wrap:balance}
+.chc.on{border-color:var(--you);box-shadow:inset 0 0 18px rgba(0,0,0,.32),0 0 0 2px rgba(243,215,116,.35)}
+.chc.on .chc-s{color:var(--you);font-weight:800}
+.chc.on::after{content:"ホーム";position:absolute;top:-8px;right:-4px;padding:0 7px;border-radius:999px;background:var(--you);color:#2a2311;font-size:9.5px;font-weight:800;line-height:1.7}
+.chc.lock{cursor:help}
+.chc.lock .chc-art{filter:brightness(0);opacity:.38}
+.chc.lock .chc-n{color:var(--chalk-faint)}
+.chc.wip .chc-art{opacity:.75}
+.chc-art .cav.xl{width:76px;height:76px}
+
 @media (prefers-reduced-motion:reduce){
+  .hchar svg,.hsay,.hm-rated .hm-go{animation:none!important}
   .recruit,.practice-bar .dotp{animation:none!important}
   .cfm,.cfm-card{animation:none!important}
   .story,.st-ch.pop,.st-next{animation:none!important}
@@ -1461,6 +1736,13 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="chalkS" x="-10%" y="-10%" width="120%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="2" seed="7" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -1.5 0 0 0 1.8" result="m"/>
+    <feComposite in="SourceGraphic" in2="m" operator="in" result="g"/>
+    <feTurbulence type="turbulence" baseFrequency="0.06" numOctaves="2" seed="3" result="w"/>
+    <feDisplacementMap in="g" in2="w" scale="1.6" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
   <filter id="chalk" x="-10%" y="-10%" width="120%" height="120%">
     <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="4" result="grainNoise"/>
     <feColorMatrix in="grainNoise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -2.4 0 0 0 1.75" result="mask"/>
@@ -1513,14 +1795,18 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
 
 <div class="app">
   <header class="topbar">
-    <button type="button" class="tb-box tb-rate" id="tbRank" aria-label="ランキングを見る"><span class="emb" id="barEmb" aria-hidden="true"></span><b id="barRate">1500</b><span class="tb-sub" id="barTier">シルバー Ⅱ</span></button>
-    <button type="button" class="tb-me" id="homePlate" aria-label="プロフィールを開く"><span class="tb-title"><b id="barLv">Lv.1</b><span id="barTitle">ルーキー</span></span><span class="nm" id="barName">ななし</span><span class="tb-money"><span class="coin" id="barCoins">0</span><span class="jwl" id="barJewels">0</span></span></button>
-    <button type="button" class="tb-box tb-daily" id="tbDaily" aria-label="今日のミッション"><small>DAILY</small><b id="tbDailyN">0/3</b><span class="tb-sub" id="tbDailyLeft">--:--</span></button>
+    <button type="button" class="tb-me" id="homePlate" aria-label="プロフィールと名前">
+      <span class="tb-lv" id="tbLv" aria-hidden="true"><small>Lv</small><b id="barLv">1</b></span>
+      <span class="tb-who"><span class="tb-title" id="barTitle">ルーキー</span><span class="nm" id="barName">ななし</span></span>
+    </button>
+    <span class="tb-money"><span class="coin" id="barCoins">0</span><span class="jwl" id="barJewels">0</span></span>
+    <button type="button" class="tb-menu" id="goMenu" aria-label="メニュー"><span class="hb" aria-hidden="true"><i></i><i></i><i></i></span><small>MENU</small><i class="tab-badge" id="menuBadge" hidden></i></button>
   </header>
 
   <!-- Home -->
-  <section class="screen narrow" id="scrHome">
-    <div class="banners">
+  <section class="screen narrow home2" id="scrHome">
+    <div class="hboard">
+      <div class="banners">
       <div class="bn-track" id="bnTrack" aria-roledescription="カルーセル" aria-label="おしらせ">
         <button type="button" class="bn" data-go="event" id="bnEvent" aria-label="イベントを開く" data-feat="event">
           <span class="bn-txt"><span class="bn-tag" id="bnEvTag">EVENT</span><b class="bn-h" id="bnEvH">イベント</b><span class="bn-s" id="bnEvS"></span></span>
@@ -1564,52 +1850,54 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
         </button>
       </div>
       <div class="bn-dots" id="bnDots"></div>
-      <button type="button" class="bn-help" id="goRules">遊び<br>かた</button>
-    </div>
-    <div class="nbrow">
-      <button type="button" class="newsbar" id="newsBar"><span class="nb-tag">お知らせ</span><span class="nb-t" id="newsT"></span><span class="nb-new" id="newsNew" hidden>NEW</span></button>
-      <button type="button" class="giftbtn" id="goGifts" aria-label="受け取りBOX" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="9.5" rx="1.5"/><rect x="2.8" y="7.5" width="18.4" height="4" rx="1"/><path d="M12 7.5v13"/><path d="M12 7.5c-1.6-3.6-6-4.2-5.6-1.6.3 1.6 3.4 1.6 5.6 1.6zM12 7.5c1.6-3.6 6-4.2 5.6-1.6-.3 1.6-3.4 1.6-5.6 1.6z"/></svg><span>BOX</span><i class="tab-badge" id="giftBadge" hidden></i></button>
-    </div>
-    <p class="sec-label">ピックアップ</p>
-    <button type="button" class="pickup" id="pickup">
-      <span class="pu-tag" id="puTag">デイリー</span>
-      <b class="pu-name" id="puName">読み込み中…</b>
-      <span class="pu-prog" id="puProg"><span class="meter"><i id="puMeter"></i></span><span id="puCount"></span></span>
-      <span class="pu-side"><span class="coin" id="puCoins" hidden></span><span id="puLeft"></span></span>
-    </button>
-    <button type="button" class="bosscard" id="goBoss" aria-label="今日のボス" data-feat="boss">
-      <span class="bc-face" id="bcFace"></span>
-      <span class="bc-txt"><span class="bc-tag" id="bcTag">今日のボス</span><b class="bc-name">黒板消し大王</b>
-        <span class="bc-hp"><span class="meter"><i id="bcHp" style="width:100%"></i></span><span id="bcHpT">HP --</span></span>
-        <span class="bc-sub" id="bcSub"></span><span class="bc-next" id="bcNext" hidden></span></span>
-      <span class="bc-stamp" id="bcStamp" hidden>討伐！</span>
-    </button>
-    <div class="modes">
-      <button type="button" class="mode main" id="goRated" data-feat="rated">
-        <span class="mode-k">レート戦</span>
-        <span class="mode-d">近い強さの人と1対1・1手30秒</span>
-        <span class="mode-x" id="homeRate">レート 1500・まだ0戦</span>
-        <span class="mode-go" aria-hidden="true">対戦</span>
-      </button>
-      <button type="button" class="mode stagec" id="goStage">
-        <span class="cav" id="homeStageAv" style="--cc:#f2cf5b"></span>
-        <span class="mode-k">ステージ</span>
-        <span class="mode-d">CPUのキャラと、章ごとにちがうルールで勝負</span>
-        <span class="mode-x" id="homeStage">★0</span>
-        <span class="stg-go" aria-hidden="true">★</span>
-      </button>
-      <div class="mode-row">
-        <button type="button" class="mode c2" id="goCustom">
-          <span class="mode-k">カスタム</span>
-          <span class="mode-d">友達と2〜4人。部屋番号で集まる</span>
-        </button>
-        <button type="button" class="mode c1" id="goCpu">
-          <span class="mode-k">CPU対戦</span>
-          <span class="mode-d">ひとりで練習。2人で1台も</span>
-        </button>
       </div>
+      <div class="hstage">
+        <div class="hrail">
+          <button type="button" class="mag m-rank" id="tbRank" aria-label="ランキングを見る"><span class="mg"><svg viewBox="0 0 48 48" aria-hidden="true"><g filter="url(#chalkS)"><circle class="ring" cx="24" cy="24" r="20.5"/></g></svg><span class="emb" id="barEmb" aria-hidden="true"></span></span><b id="barRate">1500</b><span class="tb-sub" id="barTier">シルバー Ⅱ</span></button>
+          <button type="button" class="mag m-gift" id="goGifts" aria-label="受け取りBOX"><span class="mg"><svg viewBox="0 0 48 48" aria-hidden="true"><g filter="url(#chalkS)"><circle class="ring" cx="24" cy="24" r="20.5"/><g class="ic" transform="translate(12 11.5)"><rect x="4" y="11" width="16" height="9.5" rx="1.5"/><rect x="2.8" y="7.5" width="18.4" height="4" rx="1"/><path d="M12 7.5v13"/><path d="M12 7.5c-1.6-3.6-6-4.2-5.6-1.6.3 1.6 3.4 1.6 5.6 1.6zM12 7.5c1.6-3.6 6-4.2 5.6-1.6-.3 1.6-3.4 1.6-5.6 1.6z"/></g></g></svg></span><b>BOX</b><i class="tab-badge" id="giftBadge" hidden></i></button>
+          <button type="button" class="mag m-puz" id="goPuzzleMag" data-feat="puzzle" aria-label="詰めわりばし"><span class="mg"><svg viewBox="0 0 48 48" aria-hidden="true"><g filter="url(#chalkS)"><circle class="ring" cx="24" cy="24" r="20.5"/><text x="24" y="31.5" text-anchor="middle">詰</text></g></svg></span><b>毎日1問</b><i class="tab-badge dot" id="puzBadge" hidden></i></button>
+        </div>
+        <button type="button" class="pickup hsay" id="pickup">
+          <span class="pu-tag" id="puTag">デイリー</span>
+          <b class="pu-name" id="puName">読み込み中…</b>
+          <span class="pu-prog" id="puProg"><span class="meter"><i id="puMeter"></i></span><span id="puCount"></span></span>
+          <span class="pu-side"><span class="coin" id="puCoins" hidden></span><span id="puLeft"></span></span>
+        </button>
+        <p class="hsay htip" id="homeTip" hidden aria-live="polite"><span class="tk-tag">ヒント</span><span class="tk-t" id="ticker"></span></p>
+        <button type="button" class="hchar" id="homeChar" aria-label="わりばしくんに話しかける"></button>
+        <p class="hdate" aria-hidden="true"><span id="hDate"></span><span class="hduty">日直<b id="hDuty"></b></span></p>
+      </div>
+      <div class="htray" aria-hidden="true"><i class="ck"></i><i class="ck pk"></i><i class="ck yl"></i><i class="er"></i></div>
     </div>
-    <p class="ticker"><span class="tk-tag">ヒント</span><span class="tk-t" id="ticker"></span></p>
+    <div class="hmodes">
+      <button type="button" class="hm hm-stage" id="goStage">
+        <span class="cav" id="homeStageAv" style="--cc:#f2cf5b"></span>
+        <span class="hm-k">ステージ</span>
+        <span class="hm-x" id="homeStage">★0</span>
+      </button>
+      <button type="button" class="hm bosscard" id="goBoss" aria-label="今日のボス" data-feat="boss">
+        <span class="bc-face" id="bcFace"></span>
+        <span class="bc-txt"><span class="bc-tag" id="bcTag">今日のボス</span><b class="bc-name">黒板消し大王</b>
+          <span class="bc-hp"><span class="meter"><i id="bcHp" style="width:100%"></i></span><span id="bcHpT">HP --</span></span>
+          <span class="bc-sub" id="bcSub"></span><span class="bc-next" id="bcNext" hidden></span></span>
+        <span class="bc-stamp" id="bcStamp" hidden>討伐！</span>
+      </button>
+      <div class="hm-pair">
+      <button type="button" class="hm hm-sm c2" id="goCustom">
+        <svg class="hm-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8.5" r="3"/><circle cx="16.5" cy="9.5" r="2.5"/><path d="M3 19a5.5 5.5 0 0 1 11 0"/><path d="M14.6 14.4A4.6 4.6 0 0 1 21.5 18.5"/></svg>
+        <span class="hm-k">カスタム</span><span class="hm-d">友達と2〜4人</span>
+      </button>
+      <button type="button" class="hm hm-sm c1" id="goCpu">
+        <svg class="hm-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="7" width="14" height="11" rx="3"/><path d="M12 7V4"/><circle cx="12" cy="3.4" r="1"/><circle cx="9.3" cy="12" r="1.3"/><circle cx="14.7" cy="12" r="1.3"/><path d="M9.5 15.2h5"/><path d="M3 11.5v3M21 11.5v3"/></svg>
+        <span class="hm-k">CPU</span><span class="hm-d">ひとりで練習</span>
+      </button>
+      </div>
+      <button type="button" class="hm hm-rated" id="goRated" data-feat="rated">
+        <span class="hm-k">レート戦</span>
+        <span class="hm-x" id="homeRate">レート 1500・まだ0戦</span>
+        <span class="hm-go" aria-hidden="true"><svg viewBox="0 0 64 64"><g filter="url(#chalkS)"><circle cx="32" cy="32" r="27"/><text x="32" y="39" text-anchor="middle">対戦</text></g></svg></span>
+      </button>
+    </div>
     <p class="note" id="homeNote" hidden>オンライン対戦はまだ準備中です。</p>
   </section>
 
@@ -1679,7 +1967,7 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
         <li>ボスに挑戦 20（手を1本消すごとに +5）・詰めわりばし正解 40</li>
         <li>100ポイントで1段。8段でプレート、15段で称号、22段で黒板、30段でエフェクトチョーク。どれもその月だけの限定です。</li>
         <li>30段のあとは300ポイントごとにボーナス段（コイン100）が10段まで。シーズンは毎月1日の4:00に切り替わります。</li>
-        <li>ポイントはプレイヤーレベルにもたまります（マイページで見られます）。</li>
+        <li>ポイントはプレイヤーレベルにもたまります（コレクションの「記録」で見られます）。</li>
       </ul>
     </section>
   </section>
@@ -1914,14 +2202,31 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
       <p class="dnote"><span>毎朝4:00に入れ替わり・各1回まで</span><span id="dLeft"></span></p>
       <div class="shop" id="dGrid"></div>
     </div>
-    <p class="shop-hint" id="shopHint" hidden><span id="shopHintT">持っているチョークはマイページで変えられます</span><button type="button" class="btn sm" id="shopToGear">マイページで変える</button></p>
+    <p class="shop-hint" id="shopHint" hidden><span id="shopHintT">持っているチョークはコレクションで変えられます</span><button type="button" class="btn sm" id="shopToGear">コレクションで変える</button></p>
     <div class="shop" id="shopGrid" role="tabpanel" hidden></div>
     <div class="shop" id="shopBoards" role="tabpanel" hidden></div>
   </section>
 
   <!-- Nameplate editor -->
-  <section class="screen narrow" id="scrPlate" hidden>
-    <div class="shead"><h2>マイページ</h2></div>
+  <section class="screen narrow coll" id="scrPlate" hidden>
+    <div class="shead"><h2>コレクション</h2><button type="button" class="cl-book" id="goBook"><span class="bb-ic" aria-hidden="true">図</span>図鑑<b class="bb-p" id="bookPct">0%</b></button></div>
+    <div class="cl-hero">
+      <div class="cl-look" id="clLook" aria-hidden="true"></div>
+      <div class="cl-wear">
+        <p class="cl-k">いま使っているもの</p>
+        <dl class="cl-now" id="clNow"></dl>
+      </div>
+    </div>
+    <div class="pf-plate" id="homePlateBox"></div>
+    <div class="cl-tabs" id="clTabs" role="tablist" aria-label="コレクションの種類">
+      <button type="button" role="tab" data-ct="chara">キャラ</button>
+      <button type="button" role="tab" data-ct="chalk">チョーク</button>
+      <button type="button" role="tab" data-ct="board">黒板</button>
+      <button type="button" role="tab" data-ct="plate">プレート</button>
+      <button type="button" role="tab" data-ct="stamp">スタンプ</button>
+      <button type="button" role="tab" data-ct="rec">記録</button>
+    </div>
+    <div class="cl-rec" data-ct-panel="rec">
     <div class="lvcard" id="lvCard"><span class="lv-n"><small>Lv.</small><span id="lvN">1</span></span><b id="lvNext"></b><div class="ph-xp"><span class="meter"><i id="lvXp"></i></span><span id="lvXpT"></span></div></div>
     <p class="lv-unl" id="lvUnl" hidden></p>
     <details class="panel fold" id="lvRoadBox" data-fold="lv" hidden>
@@ -1929,40 +2234,61 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
       <ol class="road" id="lvRoad"></ol>
       <p class="note" style="margin:10px 0 0">レベルが上がるたびにコイン100・ジュエル50。5レベルごとにガチャチケット1枚、Lv10・20・30・50では限定アイテム。上がったときに自動で受け取ります。</p>
     </details>
-    <div class="pf-plate" id="homePlateBox"></div>
     <div class="myrank" id="pfRank"></div>
-    <button type="button" class="bookbtn" id="goBook"><span class="bb-ic" aria-hidden="true">図</span><span class="bb-t"><b>わりばし図鑑</b><small>チョーク・黒板・称号・プレート・エンブレム</small></span><span class="bb-p" id="bookPct">0%</span></button>
-    <div class="field">
-      <label for="netName">名前</label>
-      <input class="input" id="netName" maxlength="12" autocomplete="nickname" placeholder="例：ゆー">
     </div>
-    <details class="panel fold" id="foldTitle" data-fold="title">
+    <section class="panel cl-chars" data-ct-panel="chara">
+      <h3>キャラ <span class="tag mine" id="charCount"></span></h3>
+      <p class="fold-s">集めたキャラを、ホームの黒板に呼べます</p>
+      <div class="chgrid" id="charGrid"></div>
+    </section>
+    <details class="panel fold" data-ct-panel="plate" id="foldTitle" data-fold="title">
       <summary><h3>称号 <span class="tag mine" id="titleCount"></span></h3><span class="fold-s" id="foldTitleS"></span></summary>
       <div class="picks" id="titlePicks"></div>
     </details>
-    <details class="panel fold" id="foldPlate" data-fold="plate">
+    <details class="panel fold" data-ct-panel="plate" id="foldPlate" data-fold="plate">
       <summary><h3>プレート <span class="tag mine" id="plateCount"></span></h3><span class="fold-s" id="foldPlateS"></span></summary>
       <div class="picks plates" id="platePicks"></div>
     </details>
-    <details class="panel fold" id="foldChalk" data-fold="chalk">
+    <details class="panel fold" data-ct-panel="chalk" id="foldChalk" data-fold="chalk">
       <summary><h3>チョーク <span class="tag mine" id="chalkCount"></span></h3><span class="fold-s" id="foldChalkS"></span></summary>
       <div class="gear" id="chalkPicks"></div>
       <p class="gear-more">ほかのチョークはショップ・ガチャ・イベントなどで手に入ります<button type="button" class="btn sm" data-goshop="chalk">ショップへ</button></p>
     </details>
-    <details class="panel fold" id="foldBoard" data-fold="board">
+    <details class="panel fold" data-ct-panel="board" id="foldBoard" data-fold="board">
       <summary><h3>黒板 <span class="tag mine" id="boardCount"></span></h3><span class="fold-s" id="foldBoardS"></span></summary>
       <div class="gear" id="boardPicks"></div>
       <p class="gear-more">黒板を変えると、自分の盤面の見た目が変わります<button type="button" class="btn sm" data-goshop="board">ショップへ</button></p>
     </details>
-    <details class="panel fold" id="foldStamp" data-fold="stamp">
+    <details class="panel fold" data-ct-panel="stamp" id="foldStamp" data-fold="stamp">
       <summary><h3>スタンプ <span class="tag mine" id="stampCount"></span></h3><span class="fold-s">対戦中に送れるスタンプを8個まで選べます</span></summary>
       <div class="stpick" id="stampPicks"></div>
     </details>
-    <details class="panel fold" id="foldStats" data-fold="stats">
+    <details class="panel fold" data-ct-panel="rec" id="foldStats" data-fold="stats">
       <summary><h3>あなたの記録</h3><span class="fold-s" id="foldStatsS"></span></summary>
       <dl class="facts" id="myStats"></dl>
       <p class="note">記録・称号・プレートはオンライン対戦（レート戦とカスタムマッチ）で増えます。CPUの称号はCPU対戦で手に入ります。</p>
     </details>
+  </section>
+
+  <!-- Menu (☰) -->
+  <section class="screen narrow mnu" id="scrMenu" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>メニュー</h2></div>
+    <section class="panel mn-me">
+      <h3>プロフィール</h3>
+    <div class="field">
+      <label for="netName">名前</label>
+      <input class="input" id="netName" maxlength="12" autocomplete="nickname" placeholder="例：ゆー">
+    </div>
+    <p class="uidline" id="uidLine" hidden><span id="myUid"></span><button type="button" class="btn sm" id="copyUid">コピー</button></p>
+    </section>
+    <div class="mn-grid">
+      <button type="button" class="mn-t" id="newsBar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l6 4V6L7 10z"/><path d="M16.5 9a4 4 0 0 1 0 6"/><path d="M18.8 6.5a7.5 7.5 0 0 1 0 11"/></svg><b>お知らせ</b><small class="nb-t" id="newsT"></small><i class="nb-new" id="newsNew" hidden>NEW</i></button>
+      <button type="button" class="mn-t" id="goRules"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.4c-.7.3-1 .8-1 1.5v.6"/><circle cx="12" cy="16.6" r=".6" fill="currentColor"/></svg><b>遊びかた</b><small>ルールと技</small></button>
+      <button type="button" class="mn-t" id="mnAcct"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><b>引き継ぎ</b><small id="mnAcctS">ほかの端末で遊ぶ</small></button>
+      <button type="button" class="mn-t" id="mnSet"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.2M12 18.8V21M3 12h2.2M18.8 12H21M5.6 5.6l1.6 1.6M16.8 16.8l1.6 1.6M5.6 18.4l1.6-1.6M16.8 7.2l1.6-1.6"/></svg><b>設定</b><small>音・BGM・表示</small></button>
+      <button type="button" class="mn-t" id="updCheck"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12a7 7 0 1 1-2.1-5"/><path d="M19 4.5V8h-3.5"/></svg><b>更新確認</b><small id="appVer"></small></button>
+      <button type="button" class="mn-t" id="goAdmin" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5a3.5 3.5 0 0 0-4.6 4.6L4.5 15.5l2 2 .9-.9 1.2 1.2 1.4-1.4-1.2-1.2 3.1-3.1a3.5 3.5 0 0 0 4.6-4.6l-2 2-2-2z"/></svg><b>管理者</b><small>配布・レート</small></button>
+    </div>
     <details class="panel fold" id="foldAcct" data-fold="acct" hidden>
       <summary><h3>アカウント連携</h3><span class="fold-s" id="foldAcctS"></span></summary>
       <div class="acct">
@@ -2037,11 +2363,6 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
         </fieldset>
       </div>
     </details>
-    <button type="button" class="btn" id="goRules2">遊びかたを見る</button>
-    <p class="note center" id="appVer" style="margin:0"></p>
-    <button type="button" class="btn sm" id="updCheck" style="justify-self:center">最新版かチェック</button>
-    <p class="uidline" id="uidLine" hidden><span id="myUid"></span><button type="button" class="btn sm" id="copyUid">コピー</button></p>
-    <button type="button" class="btn" id="goAdmin" hidden>配布（管理者）</button>
   </section>
 
   <!-- Rated matches -->
@@ -2413,7 +2734,7 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
     <button type="button" class="tab" id="goMission" data-tab="mission"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="m8.5 11 1.6 1.6L13 9.7"/><path d="M8.5 16.5h7"/></svg><span>ミッション</span><i class="tab-badge" id="missionBadge" hidden></i></button>
     <button type="button" class="tab" id="goShop" data-tab="shop" data-feat="shop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span>ショップ</span></button>
     <button type="button" class="tab" id="goFriends" data-tab="friends"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3.2"/><path d="M3 19a6 6 0 0 1 12 0"/><circle cx="16.5" cy="8" r="2.6"/><path d="M15.5 13.2A5 5 0 0 1 21 18"/></svg><span>フレンド</span><i class="tab-badge" id="friendBadge" hidden></i></button>
-    <button type="button" class="tab" id="goProfile" data-tab="plate"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg><span>マイページ</span></button>
+    <button type="button" class="tab" id="goProfile" data-tab="plate"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h16v10.5H4z"/><path d="M3 6.5h18v3H3z"/><path d="M10 13h4"/></svg><span>コレクション</span></button>
   </div>
 </nav>
 <div class="result" id="result" hidden role="dialog" aria-modal="true" aria-labelledby="resT">
@@ -3002,7 +3323,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/17-3';
+const APP_VERSION = '11/17-4';
 // ----- New version: the page's <head> carries its version (build.py writes it). Now and then, and whenever the app comes
 // back to the front, read the head of the live page; if its version differs, offer a reload. ?debug&vfast checks every few seconds.
 const VER_FAST = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('vfast'); } catch(e) { return false; } })();
@@ -3904,7 +4225,7 @@ function renderBook(){
   }
   $$('#bkTabs [data-bk]').forEach(t => t.setAttribute('aria-selected', String(t.dataset.bk === tab)));
   const list = b.items.filter(x => x.cat === tab), look = myLook(), grid = $('#bkGrid');
-  $('#bkNote').textContent = `${BOOK_TABS[tab]}　${list.filter(x => x.have).length} / ${list.length}` + (tab === 'emblem' ? '・最高レートで集まる' : tab === 'stamp' ? '・使うスタンプはマイページで選べる' : '・持っているものは押すと使える');
+  $('#bkNote').textContent = `${BOOK_TABS[tab]}　${list.filter(x => x.have).length} / ${list.length}` + (tab === 'emblem' ? '・最高レートで集まる' : tab === 'stamp' ? '・使うスタンプはコレクションで選べる' : '・持っているものは押すと使える');
   const using = {chalk: myChalk(), board: myBoard(), title: look.title, plate: look.plate}[tab];
   if (unchanged(grid, JSON.stringify([tab, list.map(x => [x.id, x.have]), using, typedName()]))) return;
   grid.innerHTML = '';
@@ -4846,6 +5167,18 @@ function chFace(o, ex){
 }
 
 const CHARA_ART = {
+  // はじめから: わりばしくん — a pair of disposable chopsticks; the split ends are his legs, the paper sleeve says おてもと
+  waribo: ex => `
+    <ellipse cx="100" cy="293" rx="48" ry="5" fill="currentColor" fill-opacity=".2" stroke="none"/>
+    <path d="M66 54Q66 34 86 34H95L100 45L105 34H114Q134 34 134 54V196H66Z" ${chFill(.9)}/>
+    <path d="M75 62Q72 112 77 186M125 64Q129 122 123 188" stroke-width="1.7" opacity=".5"/>
+    ${chFace({l: [84, 94], r: [116, 94], m: [100, 118], cute: true, cheek: true, size: 1.35}, ex)}
+    <path d="M68 196L97 196L72 282H60Z" ${chFill(.9)}/><path d="M103 196L132 196L140 282H128Z" ${chFill(.9)}/>
+    <path d="M100 170V196M97 196l-3 8 4 4M103 196l4 7-3 5" stroke-width="2"/>
+    <path d="M66 176Q46 182 40 200"/><circle cx="38" cy="206" r="7.5" ${chFill(.45)}/>
+    ${ex === 'smile' || ex === 'surprise' ? '<path d="M134 170Q156 160 160 134"/><circle cx="161" cy="128" r="7.5" ' + chFill(.45) + '/>' : '<path d="M134 176Q154 182 160 200"/><circle cx="162" cy="206" r="7.5" ' + chFill(.45) + '/>'}
+    <ellipse cx="66" cy="286" rx="10" ry="4" ${chFill(.4, '#8b5a3c')}/><ellipse cx="134" cy="286" rx="10" ry="4" ${chFill(.4, '#8b5a3c')}/>
+    <g transform="rotate(-5 100 150)"><rect x="56" y="134" width="88" height="34" rx="3" fill="#fffaf0" fill-opacity=".95" stroke="#fffaf0"/><path d="M57 140H143" stroke="#ff7a7a" stroke-width="5"/><text x="100" y="161" text-anchor="middle" font-size="17" font-family="Yusei Magic,Hiragino Maru Gothic ProN,sans-serif" fill="#d22f3a" stroke="#d22f3a" stroke-width=".6">おてもと</text></g>`,
   // 第1章 いいんちょう: bob hair, square glasses, armband, clipboard
   iincho: ex => `
     <path d="M52 84Q50 32 100 28Q150 32 148 84L150 130Q128 140 122 120L78 120Q72 140 50 130Z" ${chFill(.62)}/>
@@ -5842,7 +6175,7 @@ function renderEvent(){
 const passTierOf = p => { const v = (p && p.lv) || {}; return v.sid === seasonId() ? seasonTierOf(+v.sxp || 0) : 0; };
 const evPtMax = p => Math.max(0, ...Object.values((p && p.evs) || {}).map(v => +((v || {}).pt) || 0));
 const GUIDE = [
-  {d: 1, id: 'name', name: 'マイページで名前を決める', ok: p => !!(p.name && p.name !== 'ななし'), coins: 50},
+  {d: 1, id: 'name', name: 'メニューで名前を決める', ok: p => !!(p.name && p.name !== 'ななし'), coins: 50},
   {d: 1, id: 'cpu', name: 'CPU（ふつう以上）に1勝する', ok: (p, st) => st.cpuNormal >= 1, coins: 100},
   {d: 1, id: 'stage', name: 'ステージ1-1をクリアする', ok: p => +((((p.stage || {}).s) || {})['1-1']) > 0, coins: 100},
   {d: 2, id: 'daily', name: 'デイリーミッションを3つクリア', ok: (p, st) => st.dailyDone >= 3, tickets: 1},
@@ -5905,6 +6238,8 @@ async function claimGuideDone(){
 
 // ===================== News =====================
 const NEWS = [
+  {id: 'n21', date: '2026-11-17', tag: 'NEW', title: 'ホーム画面が「教室の黒板」になりました',
+    body: 'ホーム画面を新しくしました。\n・ホームの黒板に、キャラが立つようになりました。タップするとヒントを教えてくれます\n・コレクション（前のマイページ）の「キャラ」で、ホームに呼ぶキャラを選べます。はじめは「わりばしくん」。ストーリーの章をクリアしたキャラや、討伐したボスも呼べます\n・名前の変更・引き継ぎ・設定・お知らせ・遊びかたは、右上の「MENU」に入りました\n・デイリーミッションは、下の「ミッション」から見られます'},
   {id: 'n20', date: '2026-11-17', tag: 'おしらせ', title: 'レート戦の結果はサーバーが判定するようになりました',
     body: 'レート戦の結果とレートの計算を、サーバーがするようになりました。\n・同じ相手との回数の制限はなくなりました。友達と何回でも遊べます\n・作ったばかりのアカウントとの試合は、レートがほとんど動きません\n・すぐに投了・時間切れになった試合（3手ずつ指す前）はノーカウントのままです'},
   {id: 'n19', date: '2026-11-17', tag: 'おしらせ', title: 'ボス戦の引き分けがなくなりました',
@@ -6495,6 +6830,7 @@ async function claimBossP(i){
     if (pz.tickets) cur.tickets = (+cur.tickets || 0) + pz.tickets;
     if (pz.own) cur.owned = Object.assign({}, cur.owned || {}, Object.fromEntries(pz.own.map(id => [id, true])));
     if (pz.kill) cur.st = Object.assign({}, cur.st || {}, {bossKills: (+((cur.st || {}).bossKills) || 0) + 1});
+    if (bs.info && bs.info.id) cur.chars = Object.assign({}, cur.chars || {}, {[bs.info.id]: true});
     return cur;
   });
   return res && res.committed ? pz : null;
@@ -7015,9 +7351,9 @@ function watchGlobal(fb){
     const after = unlocked(statsOf(net.profile));
     if (!first) {
       CHALKS.filter(c => !c.price && c.id !== 'auto' && !c.gacha && !hasChalk(c.id, prevProfile || {}) && hasChalk(c.id)).forEach(c =>
-        celebrate('チョーク<br>ゲット！', () => itemBanner(chalkFig(c), c.name, (c.season ? 'シーズン限定' : '限定チョーク') + '。マイページの「チョーク」で選べます')));
+        celebrate('チョーク<br>ゲット！', () => itemBanner(chalkFig(c), c.name, (c.season ? 'シーズン限定' : '限定チョーク') + '。コレクションの「チョーク」で選べます')));
       BOARDS.filter(b => !b.price && b.id !== 'bstd' && !b.gacha && !hasBoard(b.id, prevProfile || {}) && hasBoard(b.id)).forEach(b =>
-        celebrate('黒板<br>ゲット！', () => itemBanner(boardSwatch(b.id, chalkOf(myChalk())), b.name, 'マイページの「黒板」で選べます')));
+        celebrate('黒板<br>ゲット！', () => itemBanner(boardSwatch(b.id, chalkOf(myChalk())), b.name, 'コレクションの「黒板」で選べます')));
       const p0 = statsOf(prevProfile || {}).maxRate, p1 = statsOf(net.profile).maxRate;
       if (tierOf(p1) > tierOf(p0) && tierOf(p1) >= 2) celebrate('ランク<br>到達！', () => itemBanner(`<span class="emb r${tierOf(p1)}" style="width:34px;height:34px">${emblemSVG(tierOf(p1), 0)}</span>`, `${RANKS[tierOf(p1)].name}のエンブレム`, '図鑑に記録されました'));
       after.titles.filter(x => !before.titles.includes(x) && !(TITLES.find(t => t.id === x) || {}).gacha).forEach(x =>
@@ -7510,7 +7846,7 @@ async function buyChalk(id){
     return cur;
   });
   if (res && res.committed) {
-    lsSet('waribashi-chalk', id); toast(`${c.name}を買って使用中にしました。マイページの「チョーク」でいつでも変えられます`); updateRoomEntry(); sfx('unlock');
+    lsSet('waribashi-chalk', id); toast(`${c.name}を買って使用中にしました。コレクションの「チョーク」でいつでも変えられます`); updateRoomEntry(); sfx('unlock');
     const it = [...$$('#shopGrid .item')].find(x => x.querySelector('b') && x.querySelector('b').textContent === c.name);
     if (it) { const [x, y] = centerOf(it); chalkDust(x, y, c, c.color, 34, 100); }
   }
@@ -7528,7 +7864,7 @@ async function buyBoard(id){
     return cur;
   });
   if (res && res.committed) {
-    lsSet('waribashi-board', id); toast(`${b.name}を買って使用中にしました。マイページの「黒板」でいつでも変えられます`); sfx('unlock');
+    lsSet('waribashi-board', id); toast(`${b.name}を買って使用中にしました。コレクションの「黒板」でいつでも変えられます`); sfx('unlock');
     const it = [...$$('#shopBoards .item')].find(x => x.querySelector('b') && x.querySelector('b').textContent === b.name);
     if (it) { const [x, y] = centerOf(it); dust(x, y, ['#fff6c4', '#eceee4'], 30, 90, 'star'); }
   }
@@ -7994,10 +8330,10 @@ async function tryMatch(sg){
 }
 
 // ===================== Screens =====================
-const SCREENS = {home:'#scrHome', cpu:'#scrCpu', plate:'#scrPlate', mission:'#scrMission', shop:'#scrShop', rank:'#scrRank', rules:'#scrRules', boss:'#scrBoss', events:'#scrEvents', pass:'#scrPass', puzzle:'#scrPuzzle', friends:'#scrFriends', book:'#scrBook', event:'#scrEvent', news:'#scrNews', stage:'#scrStage', chapter:'#scrChapter', rated:'#scrRated', rpshop:'#scrRpShop', gifts:'#scrGifts', admin:'#scrAdmin', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
+const SCREENS = {home:'#scrHome', menu:'#scrMenu', cpu:'#scrCpu', plate:'#scrPlate', mission:'#scrMission', shop:'#scrShop', rank:'#scrRank', rules:'#scrRules', boss:'#scrBoss', events:'#scrEvents', pass:'#scrPass', puzzle:'#scrPuzzle', friends:'#scrFriends', book:'#scrBook', event:'#scrEvent', news:'#scrNews', stage:'#scrStage', chapter:'#scrChapter', rated:'#scrRated', rpshop:'#scrRpShop', gifts:'#scrGifts', admin:'#scrAdmin', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
 // The tab bar stays on the menu screens and steps aside for matching and play.
-const TABBED = ['home', 'events', 'mission', 'shop', 'friends', 'plate', 'rank', 'rules', 'cpu', 'custom', 'boss', 'pass', 'puzzle', 'book', 'event', 'news', 'stage', 'chapter', 'rated', 'rpshop', 'gifts', 'admin'];
-const TAB_OF = {boss: 'events', pass: 'events', puzzle: 'events', event: 'events', rank: 'friends', book: 'plate', news: 'home', stage: 'home', chapter: 'home', rated: 'home', rpshop: 'home', gifts: 'home', admin: 'plate'};
+const TABBED = ['home', 'menu', 'events', 'mission', 'shop', 'friends', 'plate', 'rank', 'rules', 'cpu', 'custom', 'boss', 'pass', 'puzzle', 'book', 'event', 'news', 'stage', 'chapter', 'rated', 'rpshop', 'gifts', 'admin'];
+const TAB_OF = {menu: 'home', rules: 'home', boss: 'events', pass: 'events', puzzle: 'events', event: 'events', rank: 'friends', book: 'plate', news: 'home', stage: 'home', chapter: 'home', rated: 'home', rpshop: 'home', gifts: 'home', admin: 'plate'};
 function showChrome(s){
   const tabs = TABBED.includes(s);
   $('#tabbar').hidden = !tabs;
@@ -8090,7 +8426,8 @@ function render(){
   if (ui.screen === 'chapter') renderChapter();
   if (ui.screen === 'news') renderNews();
   if (ui.screen === 'plate') renderLevel();
-  if (ui.screen === 'plate') renderAcct();
+  if (ui.screen === 'menu') renderAcct();
+  if (ui.screen === 'plate') renderColl();
   if (ui.loginShow && ui.screen === 'home' && $('#result').hidden && $('#splash').hidden) { const l = ui.loginShow; ui.loginShow = null; showLogin(l); }
   if (ui.screen === 'home') renderHome();
   if (ui.screen === 'game') renderGame();
@@ -8104,7 +8441,6 @@ function renderChrome(){
   $('#barTitle').textContent = titleName(myLook().title);
   const mr = myRating(), coins = myCoins();
   $('#tbRank').hidden = !ok;
-  $('#tbDaily').hidden = !ok;
   $('#barCoins').hidden = !ok;
   showCoins(coins);
   $('#barJewels').hidden = !ok;
@@ -8115,7 +8451,12 @@ function renderChrome(){
   if (be.dataset.k !== ek) { be.dataset.k = ek; be.className = 'emb r' + rk.i; be.innerHTML = emblemSVG(rk.i, rk.div); }
   for (const id of ['#goMission', '#goShop', '#goEvents', '#goFriends']) $(id).disabled = !ok;
   const lv = myLevel();
-  $('#barLv').textContent = `Lv.${lv.level}`;
+  $('#barLv').textContent = lv.level;
+  $('#tbLv').style.setProperty('--xp', Math.round(Math.min(1, lv.into / Math.max(1, lv.need)) * 100));
+  $('#homePlate').setAttribute('aria-label', `Lv.${lv.level} ${typedName()}：プロフィールと名前`);
+  $('#menuBadge').hidden = !(net.profileLoaded && newsUnread());
+  syncChars();
+  $('#menuBadge').textContent = '!';
   const inv = liveInvites().length + Object.keys(net.frIn || {}).length;
   $('#friendBadge').hidden = !inv;
   $('#friendBadge').textContent = `${inv}`;
@@ -8125,10 +8466,6 @@ function renderChrome(){
   const msx = missionState(), nReady = msx.readyDaily + msx.readyNormal + (FIREBASE_CONFIG && net.profileLoaded ? guideState().ready : 0);
   $('#missionBadge').hidden = !nReady;
   $('#missionBadge').textContent = `${nReady}`;
-  const dDone = msx.daily.filter(m => m.state !== 'todo').length;
-  $('#tbDailyN').textContent = msx.daily.length ? `${dDone}/${msx.daily.length}` : '-';
-  $('#tbDaily').classList.toggle('ready', msx.readyDaily > 0);
-  $('#tbDaily').setAttribute('aria-label', `今日のミッション ${dDone}/${msx.daily.length || 3}`);
   const myCh = chalkOf(myChalk()), radar = $('.radar');
   if (radar.dataset.key !== myChalk()) { radar.dataset.key = myChalk(); $('#radarHand').innerHTML = handSVG(2, false, 0, myCh); }
   $('#radarHand').style.color = myCh ? myCh.color : '';
@@ -8137,12 +8474,11 @@ function renderChrome(){
   $('#barRate').textContent = mr;
   $('#barRate').className = tierCls(mr);
   const hr = $('#homeRate');
-  hr.textContent = 'レート ';
-  hr.append(rateEl(mr), `（${tierName(mr)}）・` + (g ? `${+p.rw || 0}勝${+p.rl || 0}敗${+p.rd ? (+p.rd) + '分' : ''}` : 'まだ0戦'));
-  hr.prepend(emblemEl(mr));
+  hr.textContent = '';
+  hr.append(emblemEl(mr), rateEl(mr), `・` + (g ? `${+p.rw || 0}勝${+p.rl || 0}敗${+p.rd ? (+p.rd) + '分' : ''}` : 'まだ0戦'));
   const nw = recruitList().length, sk = myRStreak();
-  if (nw) { const w = document.createElement('b'); w.style.color = '#9fe0a8'; w.textContent = `・いま${nw}人が相手待ち！`; hr.append(w); }
-  else if (sk >= 2) hr.append(`・${sk}連勝中`);
+  $('#goRated').classList.toggle('wait', !!nw);
+  if (nw || sk >= 2) { const w = document.createElement('span'); w.className = 'hm-w'; w.textContent = nw ? `いま${nw}人が相手待ち！` : `${sk}連勝中`; hr.append(w); }
   const hb = $('#homePlateBox');
   hb.innerHTML = '';
   hb.append(plateEl(Object.assign({name: typedName(), rating: ok ? mr : 0}, myLook()), 'lg'));
@@ -8224,7 +8560,7 @@ function renderHome(){
   if (net.profileLoaded) { const bp = bookPct(bookItems()); $('#bnBookRing').style.setProperty('--p', bp); $('#bnBookPct').textContent = bp + '%'; }
   const ok = !!FIREBASE_CONFIG, pu = $('#pickup'), msx = missionState();
   let tag = 'デイリー', name, cur = 0, goal = 0, coins = 0, left = '', ready = false, go = 'mission';
-  if (!lsGet(NAME_KEY)) { tag = 'はじめに'; name = 'プロフィールで名前と称号を決めよう'; go = 'plate'; }
+  if (!lsGet(NAME_KEY)) { tag = 'はじめに'; name = '右上のメニューで名前を決めよう！'; go = 'menu'; }
   else if (!ok) { tag = 'おしらせ'; name = 'CPU対戦で練習しよう'; go = 'cpu'; }
   else if (!msx.daily.length) { name = '読み込み中…'; }
   else {
@@ -8244,6 +8580,112 @@ function renderHome(){
   $('#puCoins').textContent = coins;
   $('#puLeft').textContent = left;
   if (!$('#ticker').textContent) $('#ticker').textContent = TIPS[ui.tip = Math.floor(Math.random() * TIPS.length)];
+  ui.puReady = ready;
+  renderHomeChar();
+  {
+    const d = new Date(serverNow() + 9 * 3600000), k = d.toISOString().slice(0, 10) + typedName();
+    if (!unchanged($('#hDate'), k)) {
+      $('#hDate').innerHTML = `<span class="tcy">${d.getUTCMonth() + 1}</span>月<span class="tcy">${d.getUTCDate()}</span>日（${'日月火水木金土'[d.getUTCDay()]}）`;
+      $('#hDuty').textContent = typedName();
+    }
+  }
+  $('#puzBadge').hidden = !(ok && net.profileLoaded && featOpen('puzzle') && !myPuzzle().solved);
+}
+// Characters for the home board: わりばしくん from the start, story characters when their chapter is cleared,
+// bosses when their defeat reward is taken (players/<uid>/chars/<bossId>).
+const HC_COLOR = '#ffcf86';
+const bossInfoOf = id => BOSS_DAYS.find(b => b.id === id) || LEGENDS[id] || null;
+function charaList(){
+  const st = FIREBASE_CONFIG ? stageStars() : {}, got = (net.profile || {}).chars || {};
+  const out = [{kind: 'start', id: 'waribo', name: 'わりばしくん', c: HC_COLOR, have: true, art: true, need: 'はじめから'}];
+  STAGE_CH.forEach((ch, i) => out.push({kind: 'story', id: ch.id, name: ch.who, c: ch.c, ch, have: !FIREBASE_CONFIG || (+st[`${i + 1}-${STAGE_N}`] || 0) > 0, art: !!CHARA_ART[ch.id],
+    need: `ステージ第${i + 1}章「${ch.name}」をクリア`, short: `第${i + 1}章をクリア`}));
+  [...BOSS_DAYS, ...Object.values(LEGENDS)].forEach(b => out.push({kind: 'boss', id: b.id, name: b.name, c: b.color || '#c9a2ff', have: !!got[b.id], art: true,
+    need: b.legend ? `伝説のボス「${b.name}」を討伐して、報酬を受け取る` : `${b.tag.split('・')[0]}のボス「${b.name}」を討伐して、報酬を受け取る`,
+    short: b.legend ? '伝説のボスを討伐' : `${b.tag.split('・')[0]}のボスを討伐`}));
+  return out;
+}
+function myHomeChar(){
+  const list = charaList(), id = (net.profile || {}).homeChar || lsGet('waribashi-homechar') || 'waribo', c = list.find(x => x.id === id);
+  return c && c.have && c.art ? c : list[0];
+}
+function setHomeChar(id){
+  lsSet('waribashi-homechar', id);
+  ui.tipUntil = 0; ui.tapN = 0; ui.charEx = '';
+  net.profile = Object.assign({}, net.profile || {}, {homeChar: id});
+  if (net.fb && net.uid) net.fb.update(net.fb.ref(net.fb.db, 'players/' + net.uid), {homeChar: id}).catch(() => {});
+  render();
+}
+function homeCharArt(c, ex){
+  if (c.kind === 'boss') return bossArt(bossInfoOf(c.id), false, ex === 'surprise' ? 2 : 1);
+  if (c.id === 'waribo') return charaSVG('waribo', ex, HC_COLOR);
+  return charaStand(c.id, ex);
+}
+// A boss whose reward I took today, from before bosses were collected, joins too.
+function syncChars(){
+  const p = net.profile || {}, b = p.boss || {};
+  if (!net.fb || !net.uid || !net.profileLoaded || !b.day || !(b.claimed || b.claimed2 || b.claimed3)) return;
+  const info = bossDayInfo(b.day);
+  if (!info || (p.chars || {})[info.id] || ui.charSync === b.day + info.id) return;
+  ui.charSync = b.day + info.id;
+  net.fb.update(net.fb.ref(net.fb.db, `players/${net.uid}/chars`), {[info.id]: true}).catch(() => {});
+}
+function renderCharGrid(){
+  const list = charaList(), on = myHomeChar().id, grid = $('#charGrid');
+  $('#charCount').textContent = `${list.filter(c => c.have).length}/${list.length}`;
+  if (unchanged(grid, JSON.stringify([on, list.map(c => c.have ? 1 : 0)]))) return;
+  grid.innerHTML = '';
+  for (const [kind, head] of [['start', 'はじめから'], ['story', 'ストーリー'], ['boss', 'ボス']]) {
+    const h = document.createElement('p'); h.className = 'chg-h'; h.textContent = head; grid.append(h);
+    list.filter(c => c.kind === kind).forEach(c => {
+      const b = document.createElement('button'), ok = c.have && c.art;
+      b.type = 'button'; b.dataset.id = c.id;
+      b.className = 'chc' + (c.kind === 'boss' ? ' bs' : '') + (c.id === on ? ' on' : '') + (!c.have ? ' lock' : !c.art ? ' wip' : '');
+      b.innerHTML = '<span class="chc-art"></span><b class="chc-n"></b><small class="chc-s"></small>';
+      b.querySelector('.chc-art').innerHTML = c.art ? homeCharArt(c, 'normal') : avatarHTML(c.ch, 'xl');
+      b.querySelector('.chc-n').textContent = c.name;
+      b.querySelector('.chc-s').textContent = c.id === on ? 'ホームにいる' : ok ? 'タップで呼ぶ' : c.have ? '絵を準備中' : c.short || c.need;
+      b.setAttribute('aria-label', `${c.name}：${c.id === on ? 'ホームにいる' : ok ? 'ホームに呼ぶ' : c.have ? '絵を準備中' : c.need}`);
+      b.addEventListener('click', () => {
+        if (c.id === on) return;
+        if (ok) { setHomeChar(c.id); toast(`${c.name}をホームに呼んだよ`); }
+        else toast(c.have ? `${c.name}の全身の絵は準備中です` : `${c.need}と仲間になります`);
+      });
+      grid.append(b);
+    });
+  }
+}
+// The character on the home board. Tap for a hint (a boss shouts its line); they smile when a reward is waiting.
+// コレクション: one kind at a time, with a look at what you have on.
+function renderColl(){
+  const cur = ui.collTab || 'chara';
+  renderCharGrid();
+  $$('#clTabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.ct === cur)));
+  $$('#scrPlate [data-ct-panel]').forEach(el => { el.hidden = el.dataset.ctPanel !== cur; if (el.tagName === 'DETAILS') el.open = true; });
+  const chId = myChalk(), ch = chalkOf(chId), bd = myBoard(), lk = $('#clLook'), k = chId + ':' + bd + ':' + myHomeChar().id;
+  if (lk.dataset.k !== k) {
+    lk.dataset.k = k;
+    lk.innerHTML = boardSwatch(bd, ch);
+    applyFx(lk, ch);
+    const nm = (list, id) => ((list.find(x => x.id === id) || {}).name || '');
+    const dl = $('#clNow'); dl.innerHTML = '';
+    for (const [t, v] of [['ホーム', myHomeChar().name], ['チョーク', ch ? ch.name : 'いつもの色'], ['黒板', nm(BOARDS, bd)], ['称号', titleName(myLook().title)]]) {
+      const dt = document.createElement('dt'), dd = document.createElement('dd');
+      dt.textContent = t; dd.textContent = v || '—'; dl.append(dt, dd);
+    }
+  }
+}
+function renderHomeChar(){
+  const tip = performance.now() < (ui.tipUntil || 0);
+  $('#homeTip').hidden = !tip;
+  $('#pickup').hidden = tip;
+  const hc = myHomeChar(), ex = tip ? (ui.charEx || 'smile') : ui.puReady ? 'smile' : 'normal', el = $('#homeChar'), k = hc.id + ':' + ex;
+  if (el.dataset.k !== k) {
+    el.dataset.k = k;
+    el.classList.toggle('boss', hc.kind === 'boss');
+    el.innerHTML = homeCharArt(hc, ex);
+    el.setAttribute('aria-label', `${hc.name}に話しかける`);
+  }
 }
 function personPlate(id, fallbackName){
   const fp = (net.people || {})[id] || {}, rated = ratedGames(fp) > 0;
@@ -8476,8 +8918,9 @@ function renderGear(){
 }
 // Open My page on one of its panels.
 function openFold(id){
-  setScreen('plate');
   const d = $(id);
+  if (d && d.dataset.ctPanel) ui.collTab = d.dataset.ctPanel;   // the collection shows one kind at a time
+  setScreen('plate');
   if (!d) return;
   d.open = true;
   setTimeout(() => d.scrollIntoView({behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start'}), 60);
@@ -8697,13 +9140,7 @@ function markBanner(i){ $$('#bnDots button').forEach((d, k) => d.setAttribute('a
 function homeTick(now){
   if (!ui.bnAt) ui.bnAt = now;
   if (now - ui.bnAt > 6000 && now > (ui.bnHold || 0) && !document.hidden) { ui.bnAt = now; showBanner(bannerIndex() + 1, true); }
-  if (!ui.tipAt) ui.tipAt = now;
-  if (now - ui.tipAt > 8000) {
-    ui.tipAt = now;
-    const el = $('#ticker');
-    el.classList.add('fade');
-    setTimeout(() => { ui.tip = ((ui.tip || 0) + 1) % TIPS.length; el.textContent = TIPS[ui.tip]; el.classList.remove('fade'); }, 300);
-  }
+  if (ui.tipUntil && performance.now() > ui.tipUntil) { ui.tipUntil = 0; renderHomeChar(); }
 }
 function dailyNoteText(){
   const earned = Math.min(GAME_COIN_CAP, +dailyOf(net.profile).p.earned || 0);
@@ -8802,7 +9239,7 @@ function renderShop(){
     board: '黒板を変えると、対戦するときの自分の盤面の見た目が変わります（相手の画面はそのまま）。',
     chalk: 'チョークを変えると、自分の手がその色になります。対戦相手の画面でも同じに見えます。エフェクトチョークは光ったり、星や花びらが舞ったりします。'}[tab];
   $('#shopHint').hidden = !(tab === 'chalk' || tab === 'board');
-  $('#shopHintT').textContent = `持っている${boards ? '黒板' : 'チョーク'}は、マイページで変えられます`;
+  $('#shopHintT').textContent = `持っている${boards ? '黒板' : 'チョーク'}は、コレクションで変えられます`;
   if (tab === 'gacha') { renderGacha(); return; }
   if (tab === 'daily') { renderDaily(); return; }
   const grid = boards ? $('#shopBoards') : $('#shopGrid'), armed = ui.buyArm && ui.buyArm.until > now ? ui.buyArm.id : '';
@@ -9348,8 +9785,6 @@ function tick(){
     }
   } else c.hidden = true;
   if (FIREBASE_CONFIG) {
-    const ms = msToReset(), txt = `あと${Math.floor(ms / 3600000)}:${String(Math.floor(ms % 3600000 / 60000)).padStart(2, '0')}`;
-    if ($('#tbDailyLeft').textContent !== txt) $('#tbDailyLeft').textContent = txt;
   }
   if (net.fb && net.uid && net.bossDay && net.bossDay !== dayKey()) { watchBoss(); render(); }
   if (net.profileLoaded && ui.loginChecked && ui.loginChecked !== dayKey()) checkLogin();
@@ -9380,13 +9815,33 @@ setInterval(tick, 250);
 
 // ===================== Events =====================
 $('#goCpu').addEventListener('click', () => setScreen('cpu'));
-$('#homePlate').addEventListener('click', () => setScreen('plate'));
+$('#homePlate').addEventListener('click', () => setScreen('menu'));
+$('#goMenu').addEventListener('click', () => setScreen('menu'));
+$('#goPuzzleMag').addEventListener('click', () => setScreen('puzzle'));
+$('#homeChar').addEventListener('click', () => {
+  const el = $('#homeChar');
+  const hc = myHomeChar(), bi = hc.kind === 'boss' ? bossInfoOf(hc.id) : null;
+  ui.tapN = (ui.tapN || 0) + 1;
+  if (bi && ui.tapN % 2) { $('#homeTip .tk-tag').textContent = hc.name; $('#ticker').textContent = `「${bi.quote}」`; ui.charEx = 'surprise'; }
+  else {
+    ui.tip = ((ui.tip === undefined ? Math.floor(Math.random() * TIPS.length) : ui.tip) + 1) % TIPS.length;
+    $('#homeTip .tk-tag').textContent = 'ヒント';
+    $('#ticker').textContent = TIPS[ui.tip];
+    ui.charEx = bi ? 'normal' : ['smile', 'surprise', 'smile', 'normal'][ui.tip % 4];
+  }
+  ui.tipUntil = performance.now() + 7000;
+  renderHomeChar();
+  el.classList.remove('hop'); void el.offsetWidth; el.classList.add('hop');
+});
+$('#homeTip').addEventListener('click', () => { ui.tipUntil = 0; renderHomeChar(); });
+$$('#clTabs button').forEach(b => b.addEventListener('click', () => { ui.collTab = b.dataset.ct; renderColl(); }));
+$$('#scrPlate details.fold[data-ct-panel] > summary').forEach(sm => sm.addEventListener('click', e => e.preventDefault()));
+for (const [b, f] of [['#mnAcct', '#foldAcct'], ['#mnSet', '#foldSet']]) $(b).addEventListener('click', () => { const d = $(f); d.hidden = false; d.open = true; try { d.scrollIntoView({behavior: 'smooth', block: 'start'}); } catch(e) {} });
 $$('#tabbar .tab').forEach(t => t.addEventListener('click', () => {
   if (t.dataset.tab === 'shop') { ui.buyArm = null; if (ui.screen !== 'shop') ui.shopTab = ui.shopTab || 'gacha'; }
   if (t.dataset.tab === 'home') goHome(); else setScreen(t.dataset.tab);
 }));
 $('#tbRank').addEventListener('click', () => setScreen('rank'));
-$('#tbDaily').addEventListener('click', () => { ui.missionTab = 'daily'; setScreen('mission'); });
 $('#goRules').addEventListener('click', () => setScreen('rules'));
 $('#goBoss').addEventListener('click', () => setScreen('boss'));
 $('#tabFr').addEventListener('click', () => { ui.frTab = 'list'; renderFriends(); });
@@ -9460,7 +9915,6 @@ $('#bossClaim').addEventListener('click', async () => {
   }
   render();
 });
-$('#goRules2').addEventListener('click', () => setScreen('rules'));
 $('#shopToGear').addEventListener('click', () => openFold(ui.shopTab === 'board' ? '#foldBoard' : '#foldChalk'));
 $$('[data-goshop]').forEach(b => b.addEventListener('click', () => { ui.shopTab = b.dataset.goshop; setScreen('shop'); }));
 // folded panels remember whether they were open
