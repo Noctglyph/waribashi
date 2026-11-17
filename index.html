@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="waribashi-version" content="11/16-5">
+<meta name="waribashi-version" content="11/17-3">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="指の本数を足して、相手の両手を消したら勝ち。教室の手遊び「わりばし」をスマホで。">
 <meta property="og:title" content="わりばし対戦">
@@ -2062,7 +2062,7 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
       <h3>最近の試合</h3>
       <ol class="rt-hist" id="rtHist"></ol>
     </section>
-    <p class="note" style="margin:0">1対1・1手30秒・ふつうのルール。同じ相手とのレート変動は1日3回まで、すぐに決着した試合はノーカウントです。勝つとレートが上がり、負けると下がります。相手が見つからないあいだは、CPUと練習しながら待てます。</p>
+    <p class="note" style="margin:0">1対1・1手30秒・ふつうのルール。結果はサーバーが判定します。作ったばかりのアカウントとの試合はレートがほとんど動かず、すぐに決着した試合はノーカウントです。勝つとレートが上がり、負けると下がります。相手が見つからないあいだは、CPUと練習しながら待てます。</p>
   </section>
 
   <!-- RP shop -->
@@ -2128,8 +2128,9 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
     </section>
     <section class="panel adm" id="admPlayers">
       <h3>プレイヤー管理</h3>
-      <div class="adm-pick"><input class="input mono" id="admFind" maxlength="8" autocomplete="off" placeholder="フレンドコード（6文字）"><button type="button" class="btn" id="admFindGo">さがす</button></div>
-      <p class="note" style="margin:0">ランキングの「管理」ボタンからも開けます。</p>
+      <div class="adm-pick"><input class="input" id="admFind" maxlength="12" autocomplete="off" placeholder="名前かフレンドコード"><button type="button" class="btn" id="admFindGo">さがす</button></div>
+      <ol class="adm-list" id="admFound" hidden></ol>
+      <p class="note" style="margin:0">ランキングの「管理」ボタンや、対戦履歴の相手からも開けます。</p>
       <div class="ap" id="admPlayer" hidden>
         <b class="ap-name" id="apName"></b>
         <p class="ap-stats" id="apStats"></p>
@@ -2138,6 +2139,7 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
         <p class="note" id="apSelf" hidden style="margin:0">（あなた自身のアカウントです）</p>
         <span class="label">最近のレート戦</span>
         <ol class="adm-list" id="apHist"></ol>
+        <div class="adm-pick"><input class="input mono" type="number" inputmode="numeric" id="apRate" min="0" max="4000" placeholder="例：1600"><button type="button" class="btn" id="apRateGo">このレートにする</button></div>
         <div class="acct-btns"><button type="button" class="btn" id="apRank">ランキングから外す</button><button type="button" class="btn" id="apRated">レート戦を止める</button><button type="button" class="btn danger" id="apReset">レートと戦績をリセット</button></div>
       </div>
       <span class="label">ランキングから外した人・レート戦を止めた人</span>
@@ -2866,7 +2868,7 @@ function updateResult(){
       const row = document.createElement('div');
       row.className = 'res-row';
       row.innerHTML = '<span>レート</span><b></b>';
-      row.querySelector('b').textContent = `変動なし（${RATE_WHY[rr ? rr.why : 'short']}）`;
+      row.querySelector('b').textContent = `変動なし（${RATE_WHY[rr ? rr.why : 'short'] || '記録されませんでした'}）`;
       rows.append(row);
     } else if (S && S.over && rr) {
       ui.resShown.rate = true;
@@ -3000,7 +3002,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/16-5';
+const APP_VERSION = '11/17-3';
 // ----- New version: the page's <head> carries its version (build.py writes it). Now and then, and whenever the app comes
 // back to the front, read the head of the live page; if its version differs, offer a reload. ?debug&vfast checks every few seconds.
 const VER_FAST = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('vfast'); } catch(e) { return false; } })();
@@ -4191,6 +4193,9 @@ async function acctLink(pw){
 // Taking over another account replaces this one on this device: the page starts again on the other account.
 function acctSwitched(msg){
   try { sessionStorage.setItem('waribashi-acctmsg', msg); } catch(e) {}
+  // this device's name and look belonged to the account it leaves
+  ['waribashi-title', 'waribashi-plate', 'waribashi-chalk', 'waribashi-board'].forEach(k => lsSet(k, ''));
+  lsSet(NAME_KEY, ''); lsSet('waribashi-adopt', '1');
   location.reload();
 }
 function acctOpen(mode){
@@ -4578,8 +4583,8 @@ const RP_GOODS = [{id: 'tk', name: 'ガチャチケット', tickets: 1, cost: 15
 const rpItems = () => [...CHALKS.filter(c => c.rmp).map(c => ({kind: 'chalk', it: c})), ...BOARDS.filter(b => b.rmp).map(b => ({kind: 'board', it: b})),
   ...TITLES.filter(t => t.rmp).map(t => ({kind: 'title', it: t})), ...PLATES.filter(t => t.rmp).map(t => ({kind: 'plate', it: t})), ...STAMPS.filter(t => t.rmp).map(t => ({kind: 'stamp', it: t}))];
 // After a rated game: RP, the rated win streak and the recent-games list (one transaction).
-async function rewardRated(S, d, room){
-  const key = `rmp:${net.code}:${room.createdAt}`;
+async function rewardRated(S, d, room, code){
+  const key = `rmp:${code || net.code}:${room.createdAt}`;
   const oppUid = (S.seats || []).find(u => u !== net.uid), opp = (room.players || {})[oppUid] || {};
   let got = null;
   const res = await profileTx(cur => {
@@ -4595,7 +4600,7 @@ async function rewardRated(S, d, room){
     cur.rbest = Math.max(+cur.rbest || 0, stk);
     cur.rhk = key;
     const h = Object.assign({}, cur.rhist || {}), t = serverNow();
-    h['h' + t] = {t, o: String(opp.name || '相手').slice(0, 12), or: Math.round(+opp.rating) || BASE_RATE, w: win ? 1 : draw ? 0.5 : 0, d: d.delta};
+    h['h' + t] = {t, o: String(opp.name || '相手').slice(0, 12), or: Math.round(+opp.rating) || BASE_RATE, w: win ? 1 : draw ? 0.5 : 0, d: d.delta, u: String(oppUid || '').slice(0, 40)};
     Object.keys(h).sort().slice(0, Math.max(0, Object.keys(h).length - RHIST_N)).forEach(k => delete h[k]);
     cur.rhist = h;
     got = {key, gain, notes, stk};
@@ -5900,6 +5905,10 @@ async function claimGuideDone(){
 
 // ===================== News =====================
 const NEWS = [
+  {id: 'n20', date: '2026-11-17', tag: 'おしらせ', title: 'レート戦の結果はサーバーが判定するようになりました',
+    body: 'レート戦の結果とレートの計算を、サーバーがするようになりました。\n・同じ相手との回数の制限はなくなりました。友達と何回でも遊べます\n・作ったばかりのアカウントとの試合は、レートがほとんど動きません\n・すぐに投了・時間切れになった試合（3手ずつ指す前）はノーカウントのままです'},
+  {id: 'n19', date: '2026-11-17', tag: 'おしらせ', title: 'ボス戦の引き分けがなくなりました',
+    body: 'ボス戦では、同じ局面がくり返されても引き分けにならなくなりました。ボスもくり返しをさけて、ちがう手を指してきます。\nあわせて、データを引き継いだときに名前が前の端末のままになっていたのを直しました。'},
   {id: 'n18', date: '2026-11-16', tag: 'おしらせ', title: 'レート戦のルールを少し変えました',
     body: 'みんなが公平に楽しめるように、レート戦のルールを変えました。\n・同じ相手とのレート変動は1日3回まで（4回目からは対戦できますが、レートとRPは変わりません）\n・すぐに投了・時間切れになった試合（3手ずつ指す前）はノーカウント\n・同じ端末のアカウントどうしはマッチしません\n・ランキングに入るのは、レート戦10戦以上・ちがう相手5人以上と対戦した人です'},
   {id: 'n17', date: '2026-11-16', tag: '新機能', title: 'アカウント連携ができるようになりました',
@@ -6436,6 +6445,7 @@ function newBossGame(){
   G = initState({n: 2, first: 0});
   G.hands[1] = [...ui.boss.info.start];
   G.seen = {[posKeyOf(G)]: 1};
+  G.norep = true;
   sel = null; panel = null;
   render(); maybeCpu();
 }
@@ -6658,7 +6668,7 @@ function step(S0, m, now){
   S.seen = S.seen || {};
   const k = posKeyOf(S);
   S.seen[k] = (S.seen[k] || 0) + 1;
-  if (S.seen[k] >= 3) S.over = {type:'draw'};
+  if (S.seen[k] >= 3 && !S.norep) S.over = {type:'draw'};   // boss fights (norep) never end in a draw
   else if (S.limit) S.turnAt = now || 0;
   return S;
 }
@@ -6705,6 +6715,9 @@ function normState(r){
   const seats = arr(r.seats).map(String), names = arr(r.names).map(String);
   if (seats.length) S.seats = seats;
   if (names.length) S.names = names;
+  if (r.rated) S.rated = 1;
+  if (typeof r.mid === 'string') S.mid = r.mid.slice(0, 64);
+  if (r.devs && typeof r.devs === 'object') S.devs = Object.fromEntries(Object.entries(r.devs).slice(0, 8).map(([k, v]) => [k, String(v).slice(0, 24)]));
   return S;
 }
 
@@ -6806,6 +6819,8 @@ const liveHands = k => [0, 1].filter(i => G.hands[k][i] > 0);
 const sourceHand = () => { if (sel !== null) return sel; const l = liveHands(G.turn); return l.length === 1 ? l[0] : null; };
 const stateIdx = p => { const h = G.hands; return solver().sid(h[p][0], h[p][1], h[1-p][0], h[1-p][1]); };
 const movesAt = p => { const h = G.hands; return genMoves(h[p][0], h[p][1], h[1-p][0], h[1-p][1], rules()); };
+// Test pages only (?debug): make every next position one that has already been seen twice.
+if (DEBUG) window.__wb = {primeRepeat(){ if (!G) return 0; let n = 0; for (const m of movesAt(G.turn)) { G.seen[posKeyOf(step(G, {...m, target: 1 - G.turn}, 0))] = 2; n++; } return n; }, over: () => G && G.over};
 
 function evalChild(next){
   const s = solver(), r = s.res[next], d = s.dist[next];
@@ -6851,9 +6866,9 @@ function chooseCpuMove(){
   const s = solver(), ms = movesAt(G.turn);
   if (!s.ready || !ms.length) return null;
   const score = m => s.res[m.next] === -1 ? 1000 - s.dist[m.next] : s.res[m.next] === 1 ? -1000 + s.dist[m.next] : 0;
-  const best = () => {
+  const best = (from = ms) => {
     let top = -Infinity, list = [];
-    for (const m of ms) { const v = score(m); if (v > top) { top = v; list = [m]; } else if (v === top) list.push(m); }
+    for (const m of from) { const v = score(m); if (v > top) { top = v; list = [m]; } else if (v === top) list.push(m); }
     return pick(list);
   };
   let m;
@@ -6861,7 +6876,11 @@ function chooseCpuMove(){
     // the longest defence (and the quickest win, if the puzzle side ever slips)
     const sc = x => s.res[x.next] === -1 ? 9000 - s.dist[x.next] : s.res[x.next] === 0 ? 5000 : 1000 + s.dist[x.next];
     m = ms.reduce((a, b) => sc(b) > sc(a) ? b : a);
-  } else if (ui.boss) m = Math.random() < Math.min(.95, ui.boss.skill + (ui.boss.life - 1) * .12) ? best() : randomMove(ms);
+  } else if (ui.boss) {
+    // a boss fight has no draws: rather than the same position a third time, the boss plays something else
+    const fresh = ms.filter(x => ((G.seen || {})[posKeyOf(step(G, {...x, target: 1 - G.turn}, 0))] || 0) < 2), pool = fresh.length ? fresh : ms;
+    m = Math.random() < Math.min(.95, ui.boss.skill + (ui.boss.life - 1) * .12) ? best(pool) : randomMove(pool);
+  }
   else if (ui.stage) {
     const lv = ui.stage.level;
     if (lv === 'strong') m = !ui.stage.hard || Math.random() < ui.stage.hard ? best() : randomMove(ms);
@@ -6990,7 +7009,7 @@ function watchGlobal(fb){
     net.profile = s.val();
     net.profileLoaded = true;
     if (!(net.profile || {}).code) setTimeout(ensureCode, 600);
-    if (first) { ensureUnl(); setTimeout(checkLogin, 400); setTimeout(() => { presence(true); watchInvites(); watchFriendData(); migrateFriends(); ensureGuide(); watchLobby(); watchGifts(); }, 0); setTimeout(claimLevels, 1500); }
+    if (first) { adoptProfileName(); ensureUnl(); setTimeout(checkLogin, 400); setTimeout(() => { presence(true); watchInvites(); watchFriendData(); migrateFriends(); ensureGuide(); watchLobby(); watchGifts(); }, 0); setTimeout(claimLevels, 1500); }
     else if (levelOfProfile(net.profile) > levelOfProfile(prevProfile)) claimLevels();
     checkUnlocks();
     const after = unlocked(statsOf(net.profile));
@@ -7046,6 +7065,15 @@ function watchBoss(){
     loadBossYesterday(day);
     render();
   }, () => { net.bossErr = true; net.bossData = {}; render(); });
+}
+// The name is kept on the device too. After taking over an account, or on a device with no name yet, the account's name wins.
+function adoptProfileName(){
+  const nm = String((net.profile || {}).name || '').trim().slice(0, 12), adopt = lsGet('waribashi-adopt') === '1';
+  if (adopt) lsSet('waribashi-adopt', '0');
+  if (!nm || (lsGet(NAME_KEY) && !adopt)) return;
+  lsSet(NAME_KEY, nm);
+  nameInputs.forEach(i => { i.value = nm; });
+  renderChrome();
 }
 const saveName = fb => fb.update(fb.ref(fb.db, 'players/' + net.uid), Object.assign({name: typedName()}, myLook())).catch(() => {});
 // Keep my entry in the lobby's member list in step with my nameplate.
@@ -7169,7 +7197,7 @@ async function leaveRoom(msg){
   if (netPlaying() && G && !G.over && alive(G, 0)) {
     const res = await netResign();
     const S = res && res.committed ? normState(res.snapshot.val()) : null;
-    if (S) { if (isRated()) await applyRating(S); else await recordGame(S); }
+    if (S) { if (isRated()) applyRating(S); else await recordGame(S); }   // the server's judgement may take a moment: don't wait for it here
   }
   const wasRated = !!(net.room && net.room.kind === 'rated');
   detach();
@@ -7535,8 +7563,8 @@ function recordCpu(S){
 // Against win trading with second accounts: a rated game counts only if it went on for a while (no resign or time-out
 // in the first moves), was not between two accounts on one device, and was not the fourth (or later) game of the day
 // against the same rival. The ranking lists players with enough games against enough different rivals.
-const RATED_SAME_MAX = 3, RATED_MIN_PLY = 6, RANK_MIN_GAMES = 10, RANK_MIN_OPP = 5;
-const RATE_WHY = {short: 'すぐに決着した試合はノーカウント', same: `同じ相手とは1日${RATED_SAME_MAX}回まで`, device: '同じ端末のアカウントどうし', err: 'うまく記録できませんでした'};
+const RATED_MIN_PLY = 6, RANK_MIN_GAMES = 10, RANK_MIN_OPP = 5;
+const RATE_WHY = {short: 'すぐに決着した試合はノーカウント', device: '同じ端末のアカウントどうし', ban: 'レート戦を止められています', err: 'サーバーから結果が届きませんでした'};
 let devId = null;
 function myDevice(){
   if (devId) return devId;
@@ -7556,12 +7584,34 @@ function rankNeed(p){
 }
 
 // ----- the admin's player check: rating, record, recent rivals, and two switches (ranking / rated games), plus a reset
+// A friend code opens that player; anything else looks for names that start with it.
 async function adminFind(raw){
-  const code = String(raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
-  if (code.length !== 6) { toast('フレンドコードは6文字です', true); return; }
-  const uid = await readOnce('codes/' + code, 7000);
-  if (!uid || typeof uid !== 'string') { toast('そのコードの人は見つかりません', true); return; }
-  adminLoad(uid);
+  const q = String(raw || '').trim(), code = q.toUpperCase().replace(/[^A-Z0-9]/g, ''), box = $('#admFound');
+  box.hidden = true;
+  if (!q) return;
+  if (code.length === 6 && code === q.toUpperCase()) {
+    const uid = await readOnce('codes/' + code, 7000);
+    if (uid && typeof uid === 'string') { adminLoad(uid); return; }
+  }
+  const fb = net.fb;
+  let found = {};
+  try { found = (await fb.get(fb.query(fb.ref(fb.db, 'players'), fb.orderByChild('name'), fb.startAt(q), fb.endAt(q + '\uf8ff'), fb.limitToFirst(20)))).val() || {}; }
+  catch(e) { toast(errText(e, 'さがせませんでした'), true); return; }
+  const list = Object.entries(found).filter(([, p]) => p && String(p.name || '').startsWith(q)).slice(0, 20);
+  box.innerHTML = '';
+  if (!list.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = 'その名前の人は見つかりません'; box.append(li); }
+  list.forEach(([uid, p]) => {
+    const li = document.createElement('li');
+    li.innerHTML = '<span class="al-t"><b></b><small></small></span>';
+    li.querySelector('b').textContent = String(p.name || 'ななし').slice(0, 12);
+    li.querySelector('small').textContent = `レート ${BASE_RATE + Math.round(+p.rp || 0)}・${+p.rw || 0}勝${+p.rl || 0}敗・コード ${p.code || 'なし'}`;
+    const bt = document.createElement('button');
+    bt.type = 'button'; bt.className = 'btn sm'; bt.textContent = 'みる';
+    bt.addEventListener('click', () => adminLoad(uid));
+    li.append(bt);
+    box.append(li);
+  });
+  box.hidden = false;
 }
 async function adminLoad(uid){
   ui.admUid = uid; ui.admP = null;
@@ -7593,6 +7643,7 @@ function renderAdminPlayer(){
   $('#apWarn').hidden = !warn.length;
   $('#apWarn').textContent = warn.length ? '気になるところ：' + warn.join('／') : '';
   const ol = $('#apHist');
+  if (!unchanged(ol, JSON.stringify(h))) {           // rebuilt only when it changes (a button under the finger must stay put)
   ol.innerHTML = '';
   if (!h.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = '最近のレート戦はありません'; ol.append(li); }
   h.forEach(r => {
@@ -7601,13 +7652,20 @@ function renderAdminPlayer(){
     li.querySelector('b').textContent = `${r.w === 1 ? '勝ち' : r.w === 0 ? '負け' : '引分'}　${r.o}（${r.or}）`;
     li.querySelector('small').textContent = jstMD(r.t);
     li.querySelector('.al-n').textContent = (r.d > 0 ? '+' : '') + r.d;
+    if (r.u) {
+      const bt = document.createElement('button');
+      bt.type = 'button'; bt.className = 'btn sm'; bt.textContent = '相手をみる';
+      bt.addEventListener('click', () => adminLoad(r.u));
+      li.append(bt);
+    }
     ol.append(li);
   });
+  }
   $('#apRank').textContent = ban.rank ? 'ランキングに戻す' : 'ランキングから外す';
   $('#apRated').textContent = ban.rated ? 'レート戦を使えるように戻す' : 'レート戦を止める';
   $('#apState').textContent = [ban.rank ? 'ランキングから外しています' : '', ban.rated ? 'レート戦を止めています' : ''].filter(Boolean).join('・') || 'ふつう';
   const self = uid === net.uid;
-  ['#apRank', '#apRated', '#apReset'].forEach(s => { $(s).disabled = !!ui.admBusy; });
+  ['#apRank', '#apRated', '#apReset', '#apRateGo'].forEach(s => { $(s).disabled = !!ui.admBusy; });
   $('#apSelf').hidden = !self;
 }
 async function adminBan(kind){
@@ -7638,10 +7696,22 @@ async function adminReset(){
   if (!ok) return;
   ui.admBusy = true; renderAdminPlayer();
   try {
-    await fb.update(fb.ref(fb.db, 'players/' + uid), {rp: 0, rw: 0, rl: 0, rd: 0, ropn: 0, ropp: null, rstk: 0, rvs: null});
+    await fb.update(fb.ref(fb.db, 'players/' + uid), {rp: 0, rw: 0, rl: 0, rd: 0, ropn: 0, ropp: null, rstk: 0, rvs: null, rpAt: null});
+    await fb.set(fb.ref(fb.db, 'srv/' + uid), null).catch(() => {});
     toast('リセットしました');
-    adminLoad(uid);
+    if (ui.admUid === uid) adminLoad(uid);   // only if the admin is still looking at this player
   } catch(e) { toast(errText(e, 'リセットできませんでした'), true); }
+  ui.admBusy = false; renderAdminPlayer();
+}
+async function adminSetRate(){
+  const uid = ui.admUid, fb = net.fb, p = ui.admP || {}, v = Math.round(+$('#apRate').value);
+  if (!uid || !fb || ui.admBusy) return;
+  if (!(v >= 0 && v <= 4000)) { toast('0〜4000の数字を入れてね', true); return; }
+  const ok = await confirmBuy({title: 'レートを変えますか？', name: String(p.name || 'ななし').slice(0, 12), note: `レート ${BASE_RATE + Math.round(+p.rp || 0)} → ${v}（戦績はそのまま）`, ok: '変える'});
+  if (!ok) return;
+  ui.admBusy = true; renderAdminPlayer();
+  try { await fb.update(fb.ref(fb.db, 'players/' + uid), {rp: v - BASE_RATE}); toast(`レートを ${v} にしました`); $('#apRate').value = ''; if (ui.admUid === uid) adminLoad(uid); }
+  catch(e) { toast(errText(e, '変えられませんでした'), true); }
   ui.admBusy = false; renderAdminPlayer();
 }
 function renderAdminBans(){
@@ -7672,44 +7742,35 @@ function ratingChange(room, S, seat){
   const delta = Math.round(ELO_K * (score - expect));
   return {from: rm, to: rm + delta, delta, score};
 }
-// Each player applies only their own rating, once per match; the room keeps a flag so a reload can't apply it twice.
+// The server (Cloud Functions) judges every rated game and writes both ratings; it puts the result in judge/<key>.
+const judgeKey = (code, S) => S && typeof S.mid === 'string' && /^[A-Za-z0-9_-]{1,64}$/.test(S.mid) ? S.mid
+  : `${code}-${(S && +S.ply) || 0}-${((S && S.seats) || []).join('-')}`.replace(/[^A-Za-z0-9_-]/g, '').slice(0, 120);
+function waitJudge(k, ms){
+  return new Promise(done => {
+    const fb = net.fb;
+    let off = null, end = false;
+    const fin = v => { if (end) return; end = true; clearTimeout(t); try { if (off) off(); } catch(e) {} done(v); };
+    const t = setTimeout(() => fin(null), ms);
+    try { off = fb.onValue(fb.ref(fb.db, 'judge/' + k), s => { const v = s.val(); if (v && v.res) fin(v); }, () => fin(null)); } catch(e) { fin(null); }
+  });
+}
+// After a rated game: wait for the server's judgement, then this player's RP, history and coins.
 async function applyRating(S){
   if (!S || !S.over || !net.room || net.room.kind !== 'rated') return;
   const key = `rated:${net.code}:${net.room.createdAt}`;
   if (counted.has(key)) return;
   counted.add(key);
   const fb = net.fb, code = net.code, seat = net.seat, room = net.room, uid = net.uid;
-  const opp = (S.seats || []).find(u => u !== uid) || '', ps = room.players || {}, day = dayKey();
   try {
     const res = await fb.runTransaction(fb.ref(fb.db, `rooms/${code}/applied/${uid}`), cur => cur ? undefined : true);
     if (!res.committed) return;
-    const d = ratingChange(room, S, seat), myDev = (ps[uid] || {}).dev, oDev = (ps[opp] || {}).dev;
-    let why = rateEarly(S) ? 'short' : myDev && oDev && myDev === oDev ? 'device' : '', newOpp = false;
-    if (!why) {
-      // the same rival counts three times a day; a new rival adds to the number of different rivals
-      let same = false;
-      const t = await profileTx(cur => {
-        const v = cur.rvs && cur.rvs.day === day ? cur.rvs : {day, n: {}}, n = +((v.n || {})[opp || 'x']) || 0;
-        same = n >= RATED_SAME_MAX;
-        if (same) return undefined;
-        const seen = Object.assign({}, cur.ropp || {});
-        newOpp = !!opp && !seen[opp];
-        if (newOpp) seen[opp] = 1;
-        cur.rvs = {day, n: Object.assign({}, v.n || {}, {[opp || 'x']: n + 1})};
-        cur.ropp = seen;
-        return cur;
-      });
-      why = same ? 'same' : t && t.committed ? '' : 'err';
-    }
-    ui.rateRes = {key, why, d};
+    const j = await waitJudge(judgeKey(code, S), 25000), mine = j && j.res && j.res[uid];
+    if (!mine) { ui.rateRes = {key, why: 'err', d: null}; render(); dbg('no judgement from the server'); return; }
+    const d = {from: +mine.from || BASE_RATE, to: +mine.to || BASE_RATE, delta: +mine.d || 0, score: +mine.s};
+    ui.rateRes = {key, why: mine.why === 'new' ? '' : String(mine.why || ''), small: mine.why === 'new', d};
     render();
-    if (why) { dbg('rated game not counted: ' + why); return; }
-    const field = d.score === 1 ? 'rw' : d.score === 0 ? 'rl' : 'rd';
-    const upd = {rp: fb.increment(d.delta), [field]: fb.increment(1), rpAt: fb.serverTimestamp(), name: typedName()};
-    if (newOpp) upd.ropn = fb.increment(1);
-    try { await fb.update(fb.ref(fb.db, 'players/' + uid), upd); }
-    catch(e) { ui.rateRes = {key, why: 'err', d}; render(); return; }
-    await rewardRated(S, d, room);
+    if (ui.rateRes.why) { dbg('rated game not counted: ' + ui.rateRes.why); return; }
+    await rewardRated(S, d, room, code);
     await recordGame(S, d.to, {code, createdAt: room.createdAt, seat});
   } catch(e) {}
 }
@@ -7902,7 +7963,8 @@ async function tryMatch(sg){
     const seats = shuffle([net.uid, oppUid]);
     code = await createRoomRecord({kind:'rated', status:'playing', games:1, rules: Object.assign({}, RATED_RULES, {limit: RATED_LIMIT}), players: pls,
       waitUntil: serverNow() + JOIN_WAIT,
-      state: initState({n: 2, seats, names: seats.map(u => pls[u].name), game: 1, limit: RATED_LIMIT, turnAt: 0})});
+      state: Object.assign(initState({n: 2, seats, names: seats.map(u => pls[u].name), game: 1, limit: RATED_LIMIT, turnAt: 0}),
+        {rated: 1, mid: 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8), devs: {[net.uid]: myDevice(), [oppUid]: pls[oppUid].dev || ''}})});
     if (sg !== search.gen) return;
     const res = await fb.runTransaction(fb.ref(db, 'queue'), cur => {
       if (cur === null) return null;
@@ -9027,15 +9089,16 @@ function renderStrip(act, ms, nm){
       const S = normState(net.room.state);
       const rr = rateRes();
       if (S && S.over && ((rr && rr.why) || (!rr && rateEarly(S)))) {
-        ev.textContent = `レート変動なし（${RATE_WHY[rr ? rr.why : 'short']}）`;
+        ev.textContent = `レート変動なし（${RATE_WHY[rr ? rr.why : 'short'] || '記録されませんでした'}）`;
         ev.hidden = false;
       } else if (S && S.over && rr) {
         const d = rr.d, k0 = rankOf(d.from), k1 = rankOf(d.to);
         ev.textContent = 'レート ';
         ev.append(rateEl(d.from, 'span'), ' → ', rateEl(d.to, 'span'), `（${d.delta >= 0 ? '+' : ''}${d.delta}）`);
         if (k1.step !== k0.step) ev.append(k1.step > k0.step ? `　${k1.label}に上がった！` : `　${k1.label}に下がった`);
+        if (rr.small) ev.append('（相手か自分が、作ったばかりのアカウント）');
         ev.hidden = false;
-      }
+      } else if (S && S.over && !rr) { ev.textContent = 'レートを集計中…'; ev.hidden = false; }
       again.textContent = '次の相手をさがす';
     } else if (net.on) {
       again.textContent = isHost() ? 'ロビーにもどる' : 'ホストを待っています…';
@@ -9430,6 +9493,7 @@ $('#admFind').addEventListener('keydown', e => { if (e.key === 'Enter') adminFin
 $('#apRank').addEventListener('click', () => adminBan('rank'));
 $('#apRated').addEventListener('click', () => adminBan('rated'));
 $('#apReset').addEventListener('click', adminReset);
+$('#apRateGo').addEventListener('click', adminSetRate);
 $('#copyUid').addEventListener('click', () => copyText(net.uid || '').then(() => toast('ユーザーIDをコピーしました'), () => toast(net.uid || '')));
 const askPull = (n, ticket) => async () => {
   if (ui.pulling) return;
