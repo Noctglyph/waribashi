@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="waribashi-version" content="11/18-6">
+<meta name="waribashi-version" content="11/18-7">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="指の本数を足して、相手の両手を消したら勝ち。教室の手遊び「わりばし」をスマホで。">
 <meta property="og:title" content="わりばし対戦">
@@ -1257,8 +1257,11 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .stp svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
 .chhero .ch-rw .rwi .stp{width:22px;height:22px}
 .chhero .ch-rw.done .rwi{border-style:solid;border-color:var(--win)}
-.stlist{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.stc{--lc:var(--win);position:relative;display:grid;grid-template-columns:42px 40px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;min-height:74px;padding:10px 12px 10px 10px;border-radius:12px;border:1.5px solid var(--line);
+.stlist{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.stlist>li{border-radius:12px}
+.stlist>li.open{border:2px solid var(--you);background-color:var(--board-deep);background-image:var(--noise);box-shadow:0 8px 20px -10px rgba(0,0,0,.7)}
+.stlist>li.open>.stc{border-color:transparent;background:none}
+.stc{--lc:var(--win);position:relative;display:grid;grid-template-columns:42px 40px minmax(0,1fr) auto 16px;gap:10px;align-items:center;width:100%;min-height:74px;padding:10px 12px 10px 10px;border-radius:12px;border:1.5px solid var(--line);
   background-color:var(--board-deep);background-image:var(--noise);color:var(--chalk);cursor:pointer;font:inherit;text-align:left;transition:border-color .15s}
 .stc:hover:not(:disabled){border-color:var(--chalk-soft)}
 .stc.lv-normal{--lc:var(--p2)}
@@ -1277,51 +1280,44 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .stc .sc-rw{display:grid;justify-items:end;gap:2px;font-size:12px}
 .stc .sc-rw .coin,.stc .sc-rw .jwl{color:var(--chalk-soft)}
 .stc .sc-rw small{font-size:9.5px;font-weight:700;color:var(--chalk-faint);letter-spacing:.04em}
-.stc .sc-clear{position:absolute;right:12px;top:50%;width:52px;color:#ff8a8a;transform:translateY(-50%) rotate(-10deg);pointer-events:none;opacity:.95}
+.stc .sc-clear{position:absolute;right:30px;top:50%;width:52px;color:#ff8a8a;transform:translateY(-50%) rotate(-10deg);pointer-events:none;opacity:.95}
 .stc.clear .sc-rw{visibility:hidden}
 .stc .sc-clear svg{display:block;width:100%;height:auto}
 .stc .sc-new{position:absolute;right:10px;top:-10px;font-family:var(--font-display);font-size:15px;color:var(--p1);transform:rotate(-6deg);letter-spacing:.04em;text-shadow:0 1px 0 rgba(0,0,0,.5)}
-.stc.boss{min-height:92px;grid-template-columns:42px 54px minmax(0,1fr) auto;border-color:color-mix(in srgb,var(--cc) 60%,transparent);border-width:2px;background-image:radial-gradient(ellipse 50% 70% at 20% 50%,rgba(236,238,228,.06),transparent 70%),var(--noise)}
+.stc.boss{min-height:92px;grid-template-columns:42px 54px minmax(0,1fr) auto 16px;border-color:color-mix(in srgb,var(--cc) 60%,transparent);border-width:2px;background-image:radial-gradient(ellipse 50% 70% at 20% 50%,rgba(236,238,228,.06),transparent 70%),var(--noise)}
 .stc.boss .sc-medal b{font-size:12px;letter-spacing:.04em;color:var(--p3)}
 .stc.boss .sc-medal{border-color:var(--p3)}
 .stc.boss .sc-face .cav{width:52px;height:52px}
 .stc.boss .sc-lv{color:var(--p3);border-color:var(--p3)}
-.stc[aria-pressed="true"]{border-color:var(--you);box-shadow:inset 0 0 0 1px var(--you)}
+.stc .sc-chev{width:16px;height:16px;color:var(--chalk-soft);transition:transform .2s}
+.stc .sc-chev svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.stc[aria-expanded="true"] .sc-chev{transform:rotate(180deg);color:var(--you)}
+.stc:disabled .sc-chev{visibility:hidden}
 .stc:disabled{cursor:default;opacity:.42}
 .stc:focus-visible{outline:2px solid var(--chalk);outline-offset:3px}
-/* the stage's details: a blackboard under the card */
-.stdetail{--cc:var(--you);display:grid;gap:12px;margin:-2px 0 6px;padding:14px;border:7px solid var(--wood);border-top-color:var(--wood-hi);border-radius:12px;color:var(--chalk);
-  background-color:var(--board);background-image:radial-gradient(ellipse 50% 22% at 30% 20%,rgba(236,238,228,.06),transparent 72%),var(--noise);box-shadow:inset 0 0 40px rgba(0,0,0,.42);animation:stIn .2s ease-out}
-.sd-head{display:flex;align-items:center;gap:10px}
-.sd-head h3{margin:0;flex:1;font-family:var(--font-display);font-weight:400;font-size:21px}
-.sd-head .st3{font-size:17px;color:var(--chalk-faint)}
-.sd-head .st3 i{font-style:normal;color:var(--you)}
-.sd-vs{display:grid;grid-template-columns:82px minmax(0,1fr);gap:12px;align-items:center;padding:8px 10px;border-radius:12px;border:1.5px dashed var(--chalk-faint)}
-.sd-vs .sd-fig{display:grid;place-items:center}
-.sd-vs .sd-fig .cav{width:74px;height:74px;background:transparent;box-shadow:inset 0 0 0 3px var(--cc)}
-.sd-vs .sd-fig .chbust{display:block;width:80px}
-.sd-vs .sd-fig .chbust svg{display:block;width:100%;height:auto}
-.sd-vs .sd-who{display:grid;gap:4px;min-width:0}
-.sd-vs .sd-boss{justify-self:start;font-size:11px;font-weight:800;letter-spacing:.12em;padding:0 8px;border-radius:4px;border:1.5px solid var(--lose);color:var(--lose)}
-.sd-vs b{font-size:17px}
-.sd-vs .sd-diff{font-size:12px;color:var(--chalk-soft)}
-.sd-vs .sd-diff i{font-style:normal;color:var(--lose);letter-spacing:.08em}
-.sd-vs .sd-rules{display:flex;flex-wrap:wrap;gap:4px}
-.sd-vs .sd-rules span{font-size:10.5px;font-weight:700;padding:0 8px;border-radius:999px;border:1.5px solid var(--cc);color:var(--cc)}
+/* the open card's body */
+.stdetail{--cc:var(--you);display:grid;gap:12px;margin:0 12px;padding:12px 0 14px;border-top:1.5px dashed var(--chalk-faint);color:var(--chalk);animation:stOpen .22s ease-out}
+@keyframes stOpen{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.sd-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px}
+.sd-head h3{margin:0;font-family:var(--font-display);font-weight:400;font-size:19px}
+.sd-head .sd-who{font-size:13px;color:var(--chalk-soft)}
+.sd-head .sd-diff{margin-left:auto;font-size:11.5px;color:var(--chalk-soft);white-space:nowrap}
+.sd-head .sd-diff i{font-style:normal;color:var(--lose);letter-spacing:.06em}
+.sd-rules{display:flex;flex-wrap:wrap;gap:5px}
+.sd-rules span{font-size:11px;font-weight:700;padding:0 9px;border-radius:999px;border:1.5px solid var(--cc);color:var(--cc)}
 .stdetail .fair{margin:0;padding:6px 10px;border-radius:9px;border:1.5px solid var(--win);color:var(--win);font-size:12.5px;font-weight:700}
-.sd-lbl{display:block;margin:0 0 6px;font-size:11.5px;font-weight:700;letter-spacing:.12em;color:var(--chalk-soft);border-bottom:1.5px dashed var(--chalk-faint);padding-bottom:3px}
-.sd-items{display:flex;flex-wrap:wrap;gap:12px}
-.sd-item{position:relative;display:grid;place-items:center;width:56px;height:56px;border-radius:10px;border:1.5px dashed var(--chalk-soft);color:var(--chalk)}
-.sd-item .ic{font-size:0;gap:0}
-.sd-item .ic.coin::before,.sd-item .ic.jwl::before{width:28px;height:28px}
-.sd-item .cav{width:40px;height:40px;background:transparent}
-.sd-item .stp{width:34px;height:34px}
-.sd-item small{position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);padding:0 6px;border-radius:999px;background:var(--board);color:var(--chalk);font-size:10.5px;font-weight:700;white-space:nowrap}
-.sd-item.got{opacity:.5}
-.stconds{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:13.5px}
+.stdetail .facts{gap:4px;font-size:13.5px}
+.stdetail .facts div{grid-template-columns:4.6em minmax(0,1fr)}
+.sd-lbl{display:block;margin:0 0 4px;font-size:11.5px;font-weight:700;letter-spacing:.12em;color:var(--chalk-soft)}
+.stconds{list-style:none;margin:0;padding:0;display:grid;gap:2px;font-size:13.5px}
 .stconds li{display:flex;gap:8px;align-items:baseline}
 .stconds li::before{content:"★";color:var(--you)}
-.stdetail .note{margin:0}
+.sd-items{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:13.5px}
+.sd-item{display:inline-flex;align-items:center;gap:6px}
+.sd-item .coin,.sd-item .jwl{font-size:14px}
+.sd-item .cav{width:26px;height:26px;background:transparent}
+.sd-item .stp{width:24px;height:24px}
+.sd-items.got .sd-item.first{opacity:.45;text-decoration:line-through}
 .stdetail #stGo{width:100%;font-family:var(--font-display);font-weight:400;font-size:22px;letter-spacing:.1em}
 .res-stars{display:flex;justify-content:center;gap:10px;font-size:40px;line-height:1;color:var(--chalk-faint)}
 .res-stars i{font-style:normal}
@@ -3736,7 +3732,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/18-6';
+const APP_VERSION = '11/18-7';
 // ----- New version: the page's <head> carries its version (build.py writes it). Now and then, and whenever the app comes
 // back to the front, read the head of the live page; if its version differs, offer a reload. ?debug&vfast checks every few seconds.
 const VER_FAST = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('vfast'); } catch(e) { return false; } })();
@@ -6269,6 +6265,24 @@ function mapRoute(){
 const stampFace = c => { const [, , face, col] = STAGE_STAMPS[c - 1]; return `<span class="stp" style="--sc:${col}"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="21" r="15"/>${STAMP_FACES[face] || ''}</svg></span>`; };
 // 花丸: the teacher's red-chalk flower circle for a cleared room / stage
 const ICO_HANAMARU = '<svg viewBox="0 0 64 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" filter="url(#chalkS)"><path d="M32 22c7 0 11 4 11 10s-5 11-11 11-12-4-12-11c0-9 8-15 17-15 10 0 18 8 18 18"/><path d="M32 5c4 0 6 3 7 5 3-2 7-2 9 1 3 2 3 6 2 9 3 1 6 4 6 8s-3 7-6 8c1 3 1 7-2 9-2 3-6 3-9 1-1 3-3 6-7 6s-6-3-7-6c-3 2-7 2-9-1-3-2-3-6-2-9-3-1-6-4-6-8s3-7 6-8c-1-3-1-7 2-9 2-3 6-3 9-1 1-2 3-5 7-5z"/></g></svg>';
+const ICO_CHEV = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5"/></svg>';
+// Tapping a stage card opens it in place; tapping the open card closes it. The tapped card stays where it was on screen.
+function stageToggle(n){
+  const at = () => { const b = $(`#stgGrid .stc[data-n="${n}"]`); return b ? b.getBoundingClientRect().top : 0; };
+  const was = !ui.stageShut && ui.stageSel === n, top0 = at();
+  if (was) ui.stageShut = true; else { ui.stageSel = n; ui.stageShut = false; }
+  renderChapter();
+  const dy = at() - top0;
+  if (dy) window.scrollBy(0, dy);
+  if (was) return;
+  requestAnimationFrame(() => {
+    const d = $('#stDetail'), tab = $('.tabbar'), bar = $('.topbar');
+    if (!d || d.hidden) return;
+    const floor = innerHeight - (tab ? tab.getBoundingClientRect().height : 0) - 8, over = d.getBoundingClientRect().bottom - floor;
+    const room = at() - (bar ? bar.getBoundingClientRect().bottom : 0) - 8;
+    if (over > 0 && room > 0) window.scrollBy({top: Math.min(over, room), behavior: reduceMotion.matches ? 'auto' : 'smooth'});
+  });
+}
 const ICO_LOCK = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>';
 const ICO_CHEST = '<svg viewBox="0 0 48 40" aria-hidden="true"><path d="M5 16h38v20H5z" fill="#c0392b" stroke="#5a1a0c" stroke-width="2.4"/><path d="M5 16c0-9 7-12 19-12s19 3 19 12z" fill="#e0533a" stroke="#5a1a0c" stroke-width="2.4"/><path d="M5 16h38M17 6v30M31 6v30" stroke="#f3d774" stroke-width="2.6"/><rect x="20.5" y="14" width="7" height="9" rx="1.5" fill="#f3d774" stroke="#5a1a0c" stroke-width="1.6"/></svg>';
 // what stands in each room (viewBox 0 0 120 96), in the chapter's colour
@@ -6353,7 +6367,7 @@ function renderStage(){
       nm.textContent = i === 8 ? `第9章 ${CH_ROOMS[i]}` : ch.name;
       if (open) { const st = document.createElement('i'); st.textContent = `★${sum}`; nm.append(st); }
       if (!open) b.querySelector('.rm-lock span').textContent = `第${c - 1}章をクリアで解放`;
-      b.addEventListener('click', () => { ui.stageCh = c; ui.stageSel = null; setScreen('chapter'); });
+      b.addEventListener('click', () => { ui.stageCh = c; ui.stageSel = null; ui.stageShut = false; setScreen('chapter'); });
       li.append(b); ol.append(li);
     });
     // me, at the door of the room I am in; after clearing a chapter I walk up to the next one and its lights come on
@@ -6434,9 +6448,9 @@ function renderChapter(){
       sbox.append(b);
     });
   }
-  const grid = $('#stgGrid'), det = $('#stDetail');
+  const grid = $('#stgGrid'), det = $('#stDetail'), openN = ui.stageShut ? 0 : ui.stageSel;
   grid.style.setProperty('--cc', ch.c);
-  if (!unchanged(grid, JSON.stringify([c, s, ui.stageSel]))) {
+  if (!unchanged(grid, JSON.stringify([c, s, openN]))) {
     grid.parentElement.append(det);   // keep the detail panel while the list is rebuilt
     grid.innerHTML = '';
     let nextN = 0;
@@ -6444,14 +6458,14 @@ function renderChapter(){
     for (let n = 1; n <= STAGE_N; n++) {
       const st = stageDef(c, n), got = +s[st.id] || 0, open = stageOpen(c, n, s), li = document.createElement('li'), b = document.createElement('button');
       b.type = 'button'; b.className = `stc lv-${st.level}` + (st.boss ? ' boss' : '') + (got ? ' clear' : ''); b.disabled = !open; b.dataset.n = n;
-      b.setAttribute('aria-pressed', String(ui.stageSel === n));
+      b.setAttribute('aria-expanded', String(openN === n)); b.setAttribute('aria-controls', 'stDetail');
       b.setAttribute('aria-label', `${st.id}・★${got}`);
       const lvT = st.boss ? 'BOSS' : ({weak: '初級', normal: '中級', strong: '上級'})[st.level];
       const title = st.boss ? `ボス戦 ${ch.who}` : st.dr ? '必勝の局面から' : st.level === 'weak' ? 'ウォーミングアップ' : st.level === 'normal' ? 'ふつうの勝負' : '本気の勝負';
       b.innerHTML = `<span class="sc-medal"><b>${st.boss ? 'BOSS' : n}</b></span><span class="sc-face">${avatarHTML(ch)}</span>`
         + `<span class="sc-mid"><span class="sc-tags"><span class="sc-lv">${lvT}</span></span><b class="sc-t"></b><span class="st3">${'<i>★</i>'.repeat(got)}${'★'.repeat(3 - got)}</span></span>`
-        + `<span class="sc-rw"></span>` + (got ? `<span class="sc-clear" title="クリア">${ICO_HANAMARU}</span>` : '') + (n === nextN ? '<span class="sc-new">NEW!</span>' : '');
-      b.querySelector('.sc-t').textContent = !open ? '🔒 前のステージをクリアで解放' : title;
+        + `<span class="sc-rw"></span><span class="sc-chev">${ICO_CHEV}</span>` + (got ? `<span class="sc-clear" title="クリア">${ICO_HANAMARU}</span>` : '') + (n === nextN ? '<span class="sc-new">NEW!</span>' : '');
+      b.querySelector('.sc-t').textContent = !open ? '🔒 前をクリアで解放' : title;
       const tg = b.querySelector('.sc-tags');
       const addTag = t => { const x = document.createElement('span'); x.className = 'sc-tg'; x.textContent = t; tg.append(x); };
       if (ch.handicap) addTag('ハンデ');
@@ -6460,38 +6474,39 @@ function renderChapter(){
       const rw = b.querySelector('.sc-rw');
       if (got) rw.innerHTML = `<small>もらった</small><span class="jwl">${got * 10}</span>`;
       else rw.innerHTML = `<small>はじめて</small><span class="coin">${st.coins}</span><span class="jwl">${st.boss ? 80 : 30}</span>`;
-      b.addEventListener('click', () => { ui.stageSel = n; renderChapter(); requestAnimationFrame(() => { const d = $('#stDetail'); if (d && d.getBoundingClientRect().bottom > innerHeight) d.scrollIntoView({block: 'nearest', behavior: reduceMotion.matches ? 'auto' : 'smooth'}); }); });
+      b.addEventListener('click', () => stageToggle(n));
       li.append(b); grid.append(li);
-      if (ui.stageSel === n) { const dl = document.createElement('li'); dl.className = 'stdet-li'; dl.append(det); grid.append(dl); }
+      if (openN === n) { li.classList.add('open'); li.append(det); }
     }
   }
-  det.hidden = false;
-  const n = ui.stageSel, st = stageDef(c, n), plan = stagePlan(st), got = +s[st.id] || 0, box = $('#stDetail');
+  det.hidden = !openN;
+  if (!openN) return;
+  const n = openN, st = stageDef(c, n), plan = stagePlan(st), got = +s[st.id] || 0, box = $('#stDetail');
   box.style.setProperty('--cc', ch.c);
   if (unchanged(box, JSON.stringify([st.id, !!plan, got, stageOpen(c, n, s)]))) return;
-  const fig = CHARA_BUST[ch.id] ? `<span class="chbust">${charaSVG(ch.id, 'normal', ch.c).replace('viewBox="0 0 200 300"', `viewBox="${CHARA_BUST[ch.id]}"`)}</span>` : avatarHTML(ch);
   const diff = st.boss ? 5 : st.level === 'weak' ? 1 : st.level === 'normal' ? 2 + (st.skill > .5 ? 1 : 0) : 4;
-  box.innerHTML = `<div class="sd-head"><h3></h3><span class="st3">${'<i>★</i>'.repeat(got)}${'★'.repeat(3 - got)}</span></div>`
-    + `<div class="sd-vs"><span class="sd-fig">${fig}</span><div class="sd-who">${st.boss ? '<span class="sd-boss">ボス</span>' : ''}<b></b><span class="sd-diff">むずかしさ <i>${'●'.repeat(diff)}${'○'.repeat(5 - diff)}</i></span><div class="sd-rules"></div></div></div>`
-    + '<dl class="facts"></dl><div><span class="sd-lbl">★の条件</span><ul class="stconds"></ul></div><div><span class="sd-lbl">初回クリア報酬</span><div class="sd-items"></div></div><p class="note"></p>';
+  box.innerHTML = `<div class="sd-head"><h3></h3><span class="sd-who"></span><span class="sd-diff">むずかしさ <i>${'●'.repeat(diff)}${'○'.repeat(5 - diff)}</i></span></div>`
+    + '<div class="sd-rules"></div><dl class="facts"></dl><div><span class="sd-lbl">★の条件</span><ul class="stconds"></ul></div>'
+    + `<div><span class="sd-lbl">${got ? 'ごほうび（はじめての分はもらった）' : 'ごほうび'}</span><div class="sd-items${got ? ' got' : ''}"></div></div>`;
   box.querySelector('h3').textContent = `${st.id}${st.boss ? '（ボス）' : ''}`;
-  box.querySelector('.sd-who b').textContent = ch.who;
+  box.querySelector('.sd-who').textContent = `vs ${ch.who}（${levelLabel(st)}）`;
   ruleShort(st.rule).split('・').concat(ch.handicap ? ['ハンデ'] : [], plan && plan.limit ? [`${plan.limit}手以内`] : []).forEach(t => { const x = document.createElement('span'); x.textContent = t; box.querySelector('.sd-rules').append(x); });
-  if (ch.handicap) { const f = document.createElement('p'); f.className = 'fair'; f.textContent = handiNote; box.querySelector('.sd-vs').after(f); }
-  const facts = [['相手', `${ch.who}（${levelLabel(st)}）`], ['ルール', ruleShort(st.rule)]];
+  if (ch.handicap) { const f = document.createElement('p'); f.className = 'fair'; f.textContent = handiNote; box.querySelector('.sd-rules').after(f); }
+  const facts = [];
   if (plan) facts.push(['はじまり', `あなた ${plan.mine.join('・')}／相手 ${plan.his.join('・')}・${st.first ? '相手が先手' : 'あなたが先手'}`]);
+  else facts.push(['じゅんび', '局面を計算中…']);
   if (plan && plan.limit) facts.push(['手数', `${plan.limit}手以内に勝てないと負け`]);
   facts.forEach(([k, v]) => { const d = document.createElement('div'); d.innerHTML = '<dt></dt><dd></dd>'; d.firstChild.textContent = k; d.lastChild.textContent = v; box.querySelector('.facts').append(d); });
   const ul = box.querySelector('.stconds');
   ['勝つ', ...(plan ? plan.stars.map(condText) : ['…'])].forEach(t => { const li = document.createElement('li'); li.textContent = t; ul.append(li); });
-  const items = box.querySelector('.sd-items'), item = (html, label) => { const d = document.createElement('span'); d.className = 'sd-item' + (got ? ' got' : ''); d.innerHTML = html + '<small></small>'; d.querySelector('small').textContent = label; items.append(d); };
-  item('<span class="ic coin"></span>', `×${st.coins}`);
-  item('<span class="ic jwl"></span>', `×${st.boss ? 80 : 30}`);
+  const items = box.querySelector('.sd-items'), item = (html, label, first) => { const d = document.createElement('span'); d.className = 'sd-item' + (first ? ' first' : ''); d.innerHTML = html + '<span></span>'; d.lastChild.textContent = label; items.append(d); };
+  item(`<span class="coin">${st.coins}</span>`, 'はじめてクリア', true);
+  item('<span class="jwl">10</span>', '★1つごと');
   if (st.boss) {
-    item(stampFace(c), 'スタンプ');
-    item(avatarHTML(ch), '仲間');
+    item('<span class="jwl">50</span>', 'ボスに勝つ', true);
+    item(stampFace(c), `スタンプ「${STAGE_STAMPS[c - 1][1]}」`, true);
+    item(avatarHTML(ch), `${ch.who}が仲間に`, true);
   }
-  box.querySelector('.note').textContent = `いまの★ ${got}/3・はじめてクリアでコイン${st.coins}${st.boss ? `・ジュエル50・スタンプ「${STAGE_STAMPS[c - 1][1]}」` : ''}・★1つにつきジュエル10`;
   const go = document.createElement('button');
   go.type = 'button'; go.className = 'btn primary big'; go.id = 'stGo';
   go.disabled = !stageOpen(c, n, s);
@@ -7092,7 +7107,7 @@ async function claimGuideDone(){
 // ===================== News =====================
 const NEWS = [
   {id: 'n26', date: '2026-11-18', tag: 'NEW', title: 'ステージが「夜の学校マップ」になりました',
-    body: 'ステージ画面を新しくしました。\n・学校の部屋を1つずつ進んでいくマップになりました。クリアした部屋には花丸がつきます\n・章の画面とステージの説明が黒板になり、★の条件やはじめてクリアの報酬が見やすくなりました\n・第2章は「時間割どおり」に変わりました。決められた手数のうちに勝てばクリアです（手数はゆるめ）\n・第7章のハンデ戦は、相手の指が多くても、正しく指せば必ず勝てる局面から始まるようになりました\n・木曜のボス「ホッチキス将軍」は、分身を禁止するかわりに、3ターンごとにあなたの手を1つパチン留めしてきます\n・「分身なし」のルールは、ステージ・ボス・塔・詰めわりばしではなくなりました（同じ局面のくり返しを防ぐため）。CPU対戦とカスタムマッチでは今まで通り選べます'},
+    body: 'ステージ画面を新しくしました。\n・学校の部屋を1つずつ進んでいくマップになりました。クリアした部屋には花丸がつきます\n・章の画面が黒板になりました。ステージはタップするとその場で開いて、★の条件やごほうびが見られます（もう一度タップで閉じます）\n・第2章は「時間割どおり」に変わりました。決められた手数のうちに勝てばクリアです（手数はゆるめ）\n・第7章のハンデ戦は、相手の指が多くても、正しく指せば必ず勝てる局面から始まるようになりました\n・木曜のボス「ホッチキス将軍」は、分身を禁止するかわりに、3ターンごとにあなたの手を1つパチン留めしてきます\n・「分身なし」のルールは、ステージ・ボス・塔・詰めわりばしではなくなりました（同じ局面のくり返しを防ぐため）。CPU対戦とカスタムマッチでは今まで通り選べます'},
   {id: 'n25', date: '2026-11-18', tag: 'NEW', title: '「能力バトル」が登場しました',
     body: 'キャラごとのスキルを使って戦う「能力バトル」ができました。\n・左手と右手に別々のチョークをつけられます。エフェクトつきのチョークには「ほのお」「こおり」などの能力があります\n・CPU対戦の設定と、フレンドとの部屋（2人）で「能力バトル：あり」にすると遊べます\n・自分の番が来るたびにチョークゲージが1たまり、3たまったらスキルを使えます\n・使えるのは、コレクションで仲間にしたキャラ。ステージやボスで仲間を増やそう\n・レート戦にはありません'},
   {id: 'n24', date: '2026-11-18', tag: 'おしらせ', title: 'レート戦の引き分けでレートが動かなくなりました',
@@ -11673,7 +11688,7 @@ $('#exitBtn').addEventListener('click', () => {
     }
     clearTimeout(cpuTimer); cpuTimer = null; hideSplash(); hideResult(); ui.stage = null; setScreen('tower'); return;
   }
-  if (!net.on && ui.stage) { clearTimeout(cpuTimer); cpuTimer = null; hideSplash(); hideResult(); ui.stageCh = ui.stage.c; ui.stageSel = ui.stage.n; ui.stage = null; setScreen('chapter'); return; }
+  if (!net.on && ui.stage) { clearTimeout(cpuTimer); cpuTimer = null; hideSplash(); hideResult(); ui.stageCh = ui.stage.c; ui.stageSel = ui.stage.n; ui.stageShut = false; ui.stage = null; setScreen('chapter'); return; }
   if (!net.on) { goHome(); return; }
   const midGame = netPlaying() && G && !G.over && alive(G, 0);
   if (!midGame) { leaveRoom(); return; }
@@ -11684,7 +11699,7 @@ $('#again').addEventListener('click', () => {
   if (!net.on && ui.stage && ui.stage.tower) { if (ui.stage.result && ui.stage.result.reward) startTowerFloor(); return; }
   if (!net.on && ui.stage) {
     const sg = ui.stage, nx = nextStage(sg.c, sg.n);
-    if (sg.result && sg.result.won && nx) { ui.stageCh = nx[0]; ui.stageSel = nx[1]; startStage(nx[0], nx[1]); }
+    if (sg.result && sg.result.won && nx) { ui.stageCh = nx[0]; ui.stageSel = nx[1]; ui.stageShut = false; startStage(nx[0], nx[1]); }
     else newStageGame();
     return;
   }
