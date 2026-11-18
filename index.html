@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="waribashi-version" content="11/18-5">
+<meta name="waribashi-version" content="11/18-6">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="指の本数を足して、相手の両手を消したら勝ち。教室の手遊び「わりばし」をスマホで。">
 <meta property="og:title" content="わりばし対戦">
@@ -1170,39 +1170,159 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .mode.stagec .mode-k{font-size:26px}
 .mode.stagec .mode-d{font-size:12.5px}
 .mode.stagec .stg-go{grid-column:3;grid-row:1/span 3;font-family:var(--font-display);font-size:30px;color:var(--c);transform:rotate(-6deg)}
-.chlist{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.chcard{--cc:var(--you);display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:2px 12px;align-items:center;width:100%;padding:12px 14px;border-radius:12px;border:3px solid var(--wood);background-color:var(--board);background-image:var(--noise);box-shadow:inset 0 0 24px rgba(0,0,0,.28);color:var(--chalk);text-align:left;cursor:pointer;font:inherit}
-.chcard:focus-visible{outline:2px solid var(--chalk);outline-offset:3px}
-.chcard .cav{grid-row:1/span 3;width:56px;height:56px}
-.chcard .ch-k{font-size:11.5px;font-weight:700;letter-spacing:.08em;color:var(--cc)}
-.chcard b{font-family:var(--font-display);font-weight:400;font-size:21px;line-height:1.2}
-.chcard small{grid-column:2;font-size:12px;color:var(--chalk-soft)}
-.chcard .ch-st{grid-column:3;grid-row:1/span 3;display:grid;justify-items:end;gap:2px;font-size:12px;color:var(--chalk-soft)}
-.chcard .ch-st .stars{font-size:15px}
-.chcard:disabled{opacity:.42;cursor:default}
-.chcard.clear{border-color:var(--cc)}
-.chhero{--cc:var(--you);display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 14px;align-items:center;padding:14px 16px;border-radius:12px;border:4px solid var(--cc);background-color:var(--board);background-image:var(--noise);box-shadow:inset 0 0 30px rgba(0,0,0,.3)}
-.chhero .cav{grid-row:1/span 3;width:70px;height:70px}
-.chhero .ch-k{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--cc)}
-.chhero b{font-family:var(--font-display);font-weight:400;font-size:26px;line-height:1.2}
-.chhero small{font-size:12.5px;color:var(--chalk-soft)}
-.stgrid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
-.stc{position:relative;display:grid;justify-items:center;align-content:center;gap:3px;width:100%;min-height:72px;padding:8px 2px;border-radius:10px;border:1.5px solid var(--line);background:var(--board-deep);color:var(--chalk);cursor:pointer;font:inherit}
-.stc b{font-family:var(--font-display);font-weight:400;font-size:20px;line-height:1.05}
-.stc .st3{font-size:12px;letter-spacing:.02em;color:var(--chalk-faint)}
-.stc .st3 i{font-style:normal;color:var(--coin)}
-.stc .lv{font-size:9.5px;font-weight:700;color:var(--chalk-soft)}
-.stc.boss{border-color:var(--cc);background:linear-gradient(160deg,rgba(255,255,255,.06),transparent 60%),var(--board-deep)}
-.stc.boss .lv{color:var(--cc)}
-.stc[aria-pressed="true"]{border-color:var(--you);box-shadow:0 0 0 1.5px var(--you) inset}
-.stc:disabled{opacity:.38;cursor:default}
-.stc:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
-.stdetail{display:grid;gap:10px}
-.stdetail h3{margin:0}
+/* ----- Stage: the school at night ----- */
+.schoolmap{list-style:none;margin:0;padding:0;position:relative;width:100%;border-radius:18px;overflow:hidden;border:4px solid #4a2c12;background:#0b1028;box-shadow:0 18px 34px -16px rgba(0,0,0,.9)}
+.schoolmap > li{position:absolute}
+.schoolmap .mp-bg{inset:0;pointer-events:none}
+.schoolmap .mp-bg svg{display:block;width:100%;height:100%}
+.mp-route{fill:none;stroke:rgba(255,236,170,.28);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 10}
+.mp-route.done{stroke:var(--you);stroke-width:4;stroke-dasharray:none;opacity:.9;filter:drop-shadow(0 0 3px rgba(243,215,116,.6))}
+.mp-twinkle{animation:twk 3s ease-in-out infinite}
+.mp-twinkle:nth-child(3n){animation-delay:-1s}.mp-twinkle:nth-child(3n+1){animation-delay:-2s}
+@keyframes twk{50%{opacity:.25}}
+/* a room, seen with its front wall taken away */
+.chcard.room{--cc:var(--you);position:absolute;display:block;padding:0;border:0;font:inherit;cursor:pointer;text-align:center;border-radius:4px 4px 2px 2px;overflow:visible;-webkit-tap-highlight-color:transparent;
+  background:radial-gradient(ellipse 90% 70% at 50% 18%,#d9a052 0%,#9a6328 55%,#6a401a 76%,#4a2c12 76%,#3a210c 100%);box-shadow:inset 0 0 0 3px #1c2233,0 0 22px rgba(255,190,90,.5);transition:transform .18s,box-shadow .3s}
+.chcard.room::before{content:"";position:absolute;inset:3px;border-radius:2px;background:radial-gradient(ellipse 50% 22% at 50% 2%,rgba(255,244,200,.85),transparent 80%);pointer-events:none}
+.chcard.room:hover,.chcard.room:focus-visible{transform:translateY(-2px)}
+.chcard.room:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.room .rm-bb{position:absolute;left:50%;top:9%;transform:translateX(-50%);width:62%;padding:2px 4px 3px;border-radius:3px;background:#1f3a2c;border:3px solid #8a5a2b;color:#eef2e6;box-shadow:0 2px 0 rgba(0,0,0,.25);line-height:1.15}
+.room .rm-bb small{display:block;font-size:9px;font-weight:800;letter-spacing:.08em;color:#ffe9a8}
+.room .rm-bb b{display:block;font-family:var(--font-display);font-weight:400;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.room .rm-fx{position:absolute;left:5%;bottom:24%;width:42%;color:var(--cc);filter:drop-shadow(0 2px 0 rgba(0,0,0,.35))}
+.room .rm-fx svg{display:block;width:100%;height:auto}
+.room .rm-fx svg [fill="#24402f"]{fill:#3a2410}
+.room .rm-ch{position:absolute;right:4%;bottom:24%;width:40%;display:grid;place-items:end center}
+.room .rm-ch svg{display:block;width:100%;height:auto;overflow:visible}
+.room .rm-ch .cav{width:46px;height:46px;background:#2a2824;box-shadow:inset 0 0 0 2px var(--cc),0 0 12px rgba(0,0,0,.5)}
+.room .rm-ch.stand{bottom:22%;width:34%}
+.room .rm-ch.stand svg{max-height:74px}
+.room .rm-nm{position:absolute;left:50%;bottom:-2px;transform:translate(-50%,50%);z-index:2;max-width:112%;padding:2px 10px 3px;border-radius:6px;background:linear-gradient(var(--wood-hi),var(--wood));border:2px solid #4a2c12;box-shadow:0 2px 0 #3a210c;color:var(--chalk);font-size:11.5px;font-weight:700;line-height:1.3;white-space:nowrap}
+.room .rm-nm i{font-style:normal;color:var(--you);margin-left:4px;font-variant-numeric:tabular-nums}
+.room .rm-clear{position:absolute;left:-10px;top:-12px;z-index:2;width:40px;color:#ff8a8a;transform:rotate(-12deg);filter:drop-shadow(0 1px 1px rgba(0,0,0,.6))}
+.room .rm-clear svg{display:block;width:100%;height:auto}
+.room .rm-next{position:absolute;left:50%;top:-16px;transform:translateX(-50%);z-index:3;font-family:var(--font-display);font-size:16px;letter-spacing:.06em;color:#2a2824;background:var(--you);padding:0 12px;border-radius:999px;box-shadow:0 2px 0 rgba(0,0,0,.45);animation:nextBob 1.3s ease-in-out infinite}
+.room .rm-next::after{content:"";position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--you);border-bottom:0}
+@keyframes nextBob{50%{transform:translate(-50%,-4px)}}
+.chcard.room.cur{box-shadow:inset 0 0 0 3px #1c2233,0 0 0 2.5px var(--you),0 0 24px 4px rgba(243,215,116,.5);animation:curGlow 1.8s ease-in-out infinite}
+@keyframes curGlow{50%{box-shadow:inset 0 0 0 3px #1c2233,0 0 0 2.5px var(--you),0 0 34px 8px rgba(243,215,116,.7)}}
+/* lights off: locked */
+.chcard.room:disabled{cursor:default;background:linear-gradient(180deg,#3a4866 0%,#28344e 76%,#1a1f2c 76%,#141822 100%);box-shadow:inset 0 0 0 3px #1c2233,inset 0 0 30px rgba(0,0,0,.6)}
+.chcard.room:disabled::before{background:repeating-linear-gradient(180deg,rgba(150,170,210,.16) 0 5px,rgba(20,26,44,.28) 5px 10px);z-index:1}
+.chcard.room:disabled .rm-bb{background:#0e1a14;border-color:#3a2a18;color:transparent}
+.chcard.room:disabled .rm-bb small{color:transparent}
+.chcard.room:disabled .rm-fx{opacity:.18;filter:none}
+.chcard.room:disabled .rm-ch{filter:brightness(0);opacity:.85}
+.chcard.room:disabled .rm-nm{filter:grayscale(1) brightness(.6)}
+.room .rm-lock{position:absolute;inset:0;z-index:2;display:grid;place-content:center;justify-items:center;gap:2px;color:#e9e3d2;font-size:10.5px;font-weight:800;text-shadow:0 1px 2px #000}
+.room .rm-lock svg{width:26px;height:26px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.7))}
+/* the roof: the king's throne under the moon */
+.chcard.room.roof{background:radial-gradient(ellipse 80% 70% at 50% 90%,rgba(255,211,107,.35),transparent 70%);box-shadow:none;border-radius:12px}
+.chcard.room.roof::before{display:none}
+.chcard.room.roof .rm-bb{display:none}
+.chcard.room.roof .rm-fx{left:50%;bottom:20%;width:70%;transform:translateX(-50%);color:#f2cf5b}
+.chcard.room.roof .rm-ch{right:auto;left:50%;transform:translateX(-50%);bottom:42%;width:34%}
+.chcard.room.roof:disabled{background:none}
+.chcard.room.roof.cur{box-shadow:0 0 0 2.5px var(--you),0 0 26px 4px rgba(243,215,116,.5)}
+.mapme{width:11%;transform:translate(-50%,-92%);pointer-events:none;z-index:4;filter:drop-shadow(0 4px 3px rgba(0,0,0,.7));transition:left 1.4s cubic-bezier(.45,0,.3,1),top 1.4s cubic-bezier(.45,0,.3,1)}
+.mapme svg{display:block;width:100%;height:auto;animation:meHop 1.4s ease-in-out infinite}
+@keyframes meHop{50%{transform:translateY(-5px)}}
+.chcard.room.lighton{animation:lightOn 1.2s ease-out}
+@keyframes lightOn{0%{filter:brightness(.15)}35%{filter:brightness(1.8)}55%{filter:brightness(.4)}100%{filter:brightness(1)}}
+@media (prefers-reduced-motion: reduce){.mapme svg,.room .rm-next,.chcard.room.cur,.mp-twinkle,.chcard.room.lighton{animation:none}.mapme{transition:none}}
+/* ----- Stage: a chapter (a blackboard in a wooden frame, chalk on it) ----- */
+.chhero{--cc:var(--you);position:relative;display:grid;grid-template-columns:minmax(96px,33%) minmax(0,1fr);gap:6px 12px;align-items:end;padding:14px 14px 12px;border:7px solid var(--wood);border-top-color:var(--wood-hi);border-radius:14px;
+  background-color:var(--board);background-image:radial-gradient(ellipse 40% 34% at 20% 62%,rgba(236,238,228,.07),transparent 72%),radial-gradient(ellipse 50% 20% at 70% 18%,rgba(236,238,228,.05),transparent 72%),var(--noise);box-shadow:inset 0 0 44px rgba(0,0,0,.42)}
+.chhero .ch-fig{position:relative;align-self:end;display:grid;justify-items:center;align-content:end;min-height:116px}
+.chhero .ch-fig .chbust{display:block;width:100%}
+.chhero .ch-fig .chbust svg{display:block;width:100%;height:auto}
+.chhero .ch-fig .cav{width:96px;height:96px;background:transparent;box-shadow:inset 0 0 0 3px var(--cc)}
+.chhero .ch-fig .ch-who{margin-top:4px;padding:0 10px;border-radius:6px;background:linear-gradient(var(--wood-hi),var(--wood));border:1.5px solid #4a2c12;color:var(--chalk);font-size:12px;font-weight:700;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.chhero .ch-info{display:grid;gap:6px;min-width:0;align-self:center}
+.chhero .ch-k{font-size:11.5px;font-weight:700;letter-spacing:.1em;color:var(--chalk-soft)}
+.chhero .ch-n{justify-self:start;max-width:100%;font-family:var(--font-display);font-weight:400;font-size:25px;line-height:1.2;color:var(--chalk);padding-bottom:3px;
+  background:linear-gradient(90deg,var(--cc),var(--cc)) left bottom/100% 3px no-repeat;border-radius:1px}
+.chhero .ch-q{position:relative;margin:2px 0 0;padding:6px 10px;border-radius:12px;border:1.5px solid var(--chalk-soft);color:var(--chalk);font-size:12.5px;line-height:1.55}
+.chhero .ch-q::before{content:"";position:absolute;left:-8px;bottom:12px;width:12px;height:12px;border-left:1.5px solid var(--chalk-soft);border-bottom:1.5px solid var(--chalk-soft);background:var(--board);transform:rotate(45deg)}
+.chhero .ch-tags{display:flex;flex-wrap:wrap;gap:5px}
+.chhero .ch-tags span{font-size:11px;font-weight:700;padding:0 9px;border-radius:999px;border:1.5px solid var(--cc);color:var(--cc)}
+.chhero .ch-prog{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;margin-top:6px}
+.chhero .ch-prog .meter{height:10px;border-radius:999px;border:1.5px solid var(--chalk-faint);overflow:hidden}
+.chhero .ch-prog .meter i{display:block;height:100%;background:var(--you);opacity:.85}
+.chhero .ch-prog small{font-size:13px;font-weight:700;color:var(--you);font-variant-numeric:tabular-nums}
+.chhero .ch-rw{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0;font-size:12px;color:var(--chalk-soft);line-height:1.5}
+.chhero .ch-rw .rwi{display:inline-flex;align-items:center;gap:6px;padding:2px 10px 2px 4px;border-radius:999px;border:1.5px dashed var(--chalk-faint);color:var(--chalk)}
+.chhero .ch-rw .rwi .cav{width:24px;height:24px}
+.stp{display:inline-grid;place-items:center;color:var(--sc,var(--you))}
+.stp svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
+.chhero .ch-rw .rwi .stp{width:22px;height:22px}
+.chhero .ch-rw.done .rwi{border-style:solid;border-color:var(--win)}
+.stlist{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.stc{--lc:var(--win);position:relative;display:grid;grid-template-columns:42px 40px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;min-height:74px;padding:10px 12px 10px 10px;border-radius:12px;border:1.5px solid var(--line);
+  background-color:var(--board-deep);background-image:var(--noise);color:var(--chalk);cursor:pointer;font:inherit;text-align:left;transition:border-color .15s}
+.stc:hover:not(:disabled){border-color:var(--chalk-soft)}
+.stc.lv-normal{--lc:var(--p2)}
+.stc.lv-strong{--lc:var(--lose)}
+.stc .sc-medal{display:grid;place-items:center;width:40px;height:40px;border:2.5px solid var(--chalk-soft);border-radius:52% 48% 50% 46%/48% 54% 46% 52%}
+.stc .sc-medal b{font-family:var(--font-display);font-weight:400;font-size:21px;line-height:1;color:var(--chalk)}
+.stc .sc-face{display:grid;place-items:center}
+.stc .sc-face .cav{width:38px;height:38px;background:transparent}
+.stc .sc-mid{display:grid;gap:3px;min-width:0}
+.stc .sc-tags{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}
+.stc .sc-lv{font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--lc);border-bottom:2px solid var(--lc);line-height:1.3}
+.stc .sc-tg{font-size:10.5px;font-weight:700;color:var(--chalk-soft)}
+.stc .sc-t{font-size:14.5px;font-weight:700;line-height:1.25;overflow-wrap:anywhere}
+.stc .st3{font-size:15px;letter-spacing:.04em;color:var(--chalk-faint);line-height:1}
+.stc .st3 i{font-style:normal;color:var(--you)}
+.stc .sc-rw{display:grid;justify-items:end;gap:2px;font-size:12px}
+.stc .sc-rw .coin,.stc .sc-rw .jwl{color:var(--chalk-soft)}
+.stc .sc-rw small{font-size:9.5px;font-weight:700;color:var(--chalk-faint);letter-spacing:.04em}
+.stc .sc-clear{position:absolute;right:12px;top:50%;width:52px;color:#ff8a8a;transform:translateY(-50%) rotate(-10deg);pointer-events:none;opacity:.95}
+.stc.clear .sc-rw{visibility:hidden}
+.stc .sc-clear svg{display:block;width:100%;height:auto}
+.stc .sc-new{position:absolute;right:10px;top:-10px;font-family:var(--font-display);font-size:15px;color:var(--p1);transform:rotate(-6deg);letter-spacing:.04em;text-shadow:0 1px 0 rgba(0,0,0,.5)}
+.stc.boss{min-height:92px;grid-template-columns:42px 54px minmax(0,1fr) auto;border-color:color-mix(in srgb,var(--cc) 60%,transparent);border-width:2px;background-image:radial-gradient(ellipse 50% 70% at 20% 50%,rgba(236,238,228,.06),transparent 70%),var(--noise)}
+.stc.boss .sc-medal b{font-size:12px;letter-spacing:.04em;color:var(--p3)}
+.stc.boss .sc-medal{border-color:var(--p3)}
+.stc.boss .sc-face .cav{width:52px;height:52px}
+.stc.boss .sc-lv{color:var(--p3);border-color:var(--p3)}
+.stc[aria-pressed="true"]{border-color:var(--you);box-shadow:inset 0 0 0 1px var(--you)}
+.stc:disabled{cursor:default;opacity:.42}
+.stc:focus-visible{outline:2px solid var(--chalk);outline-offset:3px}
+/* the stage's details: a blackboard under the card */
+.stdetail{--cc:var(--you);display:grid;gap:12px;margin:-2px 0 6px;padding:14px;border:7px solid var(--wood);border-top-color:var(--wood-hi);border-radius:12px;color:var(--chalk);
+  background-color:var(--board);background-image:radial-gradient(ellipse 50% 22% at 30% 20%,rgba(236,238,228,.06),transparent 72%),var(--noise);box-shadow:inset 0 0 40px rgba(0,0,0,.42);animation:stIn .2s ease-out}
+.sd-head{display:flex;align-items:center;gap:10px}
+.sd-head h3{margin:0;flex:1;font-family:var(--font-display);font-weight:400;font-size:21px}
+.sd-head .st3{font-size:17px;color:var(--chalk-faint)}
+.sd-head .st3 i{font-style:normal;color:var(--you)}
+.sd-vs{display:grid;grid-template-columns:82px minmax(0,1fr);gap:12px;align-items:center;padding:8px 10px;border-radius:12px;border:1.5px dashed var(--chalk-faint)}
+.sd-vs .sd-fig{display:grid;place-items:center}
+.sd-vs .sd-fig .cav{width:74px;height:74px;background:transparent;box-shadow:inset 0 0 0 3px var(--cc)}
+.sd-vs .sd-fig .chbust{display:block;width:80px}
+.sd-vs .sd-fig .chbust svg{display:block;width:100%;height:auto}
+.sd-vs .sd-who{display:grid;gap:4px;min-width:0}
+.sd-vs .sd-boss{justify-self:start;font-size:11px;font-weight:800;letter-spacing:.12em;padding:0 8px;border-radius:4px;border:1.5px solid var(--lose);color:var(--lose)}
+.sd-vs b{font-size:17px}
+.sd-vs .sd-diff{font-size:12px;color:var(--chalk-soft)}
+.sd-vs .sd-diff i{font-style:normal;color:var(--lose);letter-spacing:.08em}
+.sd-vs .sd-rules{display:flex;flex-wrap:wrap;gap:4px}
+.sd-vs .sd-rules span{font-size:10.5px;font-weight:700;padding:0 8px;border-radius:999px;border:1.5px solid var(--cc);color:var(--cc)}
+.stdetail .fair{margin:0;padding:6px 10px;border-radius:9px;border:1.5px solid var(--win);color:var(--win);font-size:12.5px;font-weight:700}
+.sd-lbl{display:block;margin:0 0 6px;font-size:11.5px;font-weight:700;letter-spacing:.12em;color:var(--chalk-soft);border-bottom:1.5px dashed var(--chalk-faint);padding-bottom:3px}
+.sd-items{display:flex;flex-wrap:wrap;gap:12px}
+.sd-item{position:relative;display:grid;place-items:center;width:56px;height:56px;border-radius:10px;border:1.5px dashed var(--chalk-soft);color:var(--chalk)}
+.sd-item .ic{font-size:0;gap:0}
+.sd-item .ic.coin::before,.sd-item .ic.jwl::before{width:28px;height:28px}
+.sd-item .cav{width:40px;height:40px;background:transparent}
+.sd-item .stp{width:34px;height:34px}
+.sd-item small{position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);padding:0 6px;border-radius:999px;background:var(--board);color:var(--chalk);font-size:10.5px;font-weight:700;white-space:nowrap}
+.sd-item.got{opacity:.5}
 .stconds{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:13.5px}
 .stconds li{display:flex;gap:8px;align-items:baseline}
-.stconds li::before{content:"★";color:var(--coin)}
+.stconds li::before{content:"★";color:var(--you)}
 .stdetail .note{margin:0}
+.stdetail #stGo{width:100%;font-family:var(--font-display);font-weight:400;font-size:22px;letter-spacing:.1em}
 .res-stars{display:flex;justify-content:center;gap:10px;font-size:40px;line-height:1;color:var(--chalk-faint)}
 .res-stars i{font-style:normal}
 .res-stars i.on{color:var(--coin);text-shadow:0 0 14px rgba(242,207,91,.8);animation:starIn .45s cubic-bezier(.2,.9,.3,1.6) both}
@@ -2138,7 +2258,7 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
       <h3>塔のルール</h3>
       <ul class="rules">
         <li>1階ごとにCPUと1回勝負。勝てば次の階へ。階は無限に続きます。</li>
-        <li>階ごとにルールが変わります（分身なし・合成なし・5以上で消える・4本や6本で消える・2進数・ハンデ戦・手数制限…）。21階からは2つのルールが混ざることも。</li>
+        <li>階ごとにルールが変わります（合成なし・5以上で消える・4本や6本で消える・2進数・ハンデ戦・手数制限…）。21階からは2つのルールが混ざることも。</li>
         <li>上の階ほどCPUが強くなります。10階ごとに「番人」がいます。</li>
         <li>負けたら1階からやり直し。最高記録は残ります。</li>
         <li>階と階のあいだなら、いつやめてもOK。次はその階から続きができます。対戦の途中でやめると負けになります。</li>
@@ -2711,8 +2831,8 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
   <!-- Stage mode: chapters -->
   <section class="screen narrow" id="scrStage" hidden>
     <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>ステージ</h2><span class="stars big" id="stgTotal">★0</span></div>
-    <p class="note" style="margin:0">章ごとにルールとCPUのキャラが変わります。前のステージをクリアすると次に進めます。★を集めるとジュエルや報酬がもらえます。</p>
-    <ol class="chlist" id="chList"></ol>
+    <p class="note" style="margin:0">学校の部屋ごとにルールと相手が変わります。ボスに勝つと次の部屋へ。★を集めるとジュエルや報酬がもらえます。</p>
+    <ol class="schoolmap" id="chList" aria-label="学校マップ"></ol>
     <section class="panel">
       <h3>★をあつめた報酬</h3>
       <ol class="road" id="stgRoad"></ol>
@@ -2724,8 +2844,8 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
     <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2 id="chTitle">第1章</h2><span class="stars big" id="chStars">★0</span></div>
     <div class="chhero" id="chHero"></div>
     <div class="ch-story" id="chStory" hidden></div>
-    <ol class="stgrid" id="stgGrid"></ol>
-    <section class="panel stdetail" id="stDetail"></section>
+    <ol class="stlist" id="stgGrid"></ol>
+    <section class="stdetail" id="stDetail"></section>
   </section>
 
   <!-- Limited-time event -->
@@ -3616,7 +3736,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/18-5';
+const APP_VERSION = '11/18-6';
 // ----- New version: the page's <head> carries its version (build.py writes it). Now and then, and whenever the app comes
 // back to the front, read the head of the live page; if its version differs, offer a reload. ?debug&vfast checks every few seconds.
 const VER_FAST = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('vfast'); } catch(e) { return false; } })();
@@ -4083,12 +4203,12 @@ PLATES.push({id: 'plv20', name: '年季の入った黒板', need: 'Lv20の報酬
 const STAGE_N = 10;
 const STAGE_CH = [
   {name: 'はじめての教室', who: 'いいんちょう', face: 'smile', c: '#9fd0f0', rule: {}, desc: 'ふつうのルール'},
-  {name: '分身できない', who: 'かたぶつ先生', face: 'bow', c: '#b8e6a3', rule: {split: false}, desc: '分身なし'},
+  {name: '時間割どおり', who: 'かたぶつ先生', face: 'bow', c: '#b8e6a3', rule: {}, desc: '決められた手数のうちに勝つ（ゆるめ）', limit: true, loose: true},
   {name: '合成できない', who: 'ばらばらくん', face: 'grin', c: '#f4a6bb', rule: {merge: false}, desc: '合成なし'},
   {name: '5以上で消える', who: 'ぎりぎりさん', face: 'sweat', c: '#ffa48c', rule: {overflow: 'die'}, desc: '5本以上になったら消える'},
   {name: '宇宙人の星', who: 'ピポ星人', face: 'shock', c: '#c8b4f4', rule: {}, desc: '6本ぴったり・4本ぴったりで消える星', alien: true},
   {name: '2進数の塔', who: 'ロボ先生', face: 'think', c: '#9fc8ff', rule: {base: 31, overflow: 'die'}, desc: '2進数ルール'},
-  {name: 'ハンデ戦', who: 'くせもの番長', face: 'smug', c: '#ff9a5a', rule: {}, desc: '相手の指が多い・相手が先手', handicap: true},
+  {name: 'ハンデ戦', who: 'くせもの番長', face: 'smug', c: '#ff9a5a', rule: {}, desc: '相手の指が多い（正しく指せば勝てる）', handicap: true},
   {name: '制限手数', who: 'とけい先生', face: 'fire', c: '#ffd36b', rule: {}, desc: '決められた手数のうちに勝つ', limit: true},
   {name: '最強の教室', who: '黒板の王', face: 'crown', c: '#f2cf5b', rule: {}, desc: 'いろんなルールで、さいきょうCPU', mix: true},
 ];
@@ -5618,9 +5738,9 @@ const STORY = {
     ['iincho', 'surprise', '……でも、今の手。分身で数をそろえてから一気に消すなんて、どこで覚えたの？'],
     ['me', '', '（なんとなく、だけど……）'],
     ['iincho', 'smile', 'ふふっ、楽しかった！ あなた、けっこう強いのね。'],
-    ['iincho', 'normal', 'となりの教室には「かたぶつ先生」がいるわ。分身を禁止してくる、ちょっとこわい先生よ。'],
+    ['iincho', 'normal', 'となりの教室には「かたぶつ先生」がいるわ。時間割にきびしくて、決められた手数のうちに勝たないと許してくれないの。'],
     ['iincho', 'smile', '困ったら、いつでもわたしに声をかけてね。がんばって、{name}さん！'],
-    ['n', '', '第2章「分身できない」に進めるようになった！'],
+    ['n', '', '第2章「時間割どおり」に進めるようになった！'],
   ],
 };
 const STORY_PARTS = [['s', 'はじまり'], ['b', 'ボス戦の前'], ['e', 'クリア後']];
@@ -5717,7 +5837,7 @@ function stageDef(c, n){
   let rule = Object.assign({}, base, ch.rule);
   if (ch.alien) rule.base = n % 2 ? 6 : 4;
   if (ch.mix) { const src = STAGE_CH[(n - 1) % 7]; rule = Object.assign({}, base, src.rule, src.alien ? {base: n % 2 ? 6 : 4} : {}); }
-  const boss = n === STAGE_N, first = ch.handicap && n % 2 === 0 ? 1 : 0, L = stageLevel(c, n), level = L.level;
+  const boss = n === STAGE_N, first = 0, L = stageLevel(c, n), level = L.level;
   // strong stages start from a position that is a win for me with best play (picked with the solver), d = its length in plies;
   // a strong stage with no range is the normal start against a CPU that plays its best move with probability "skill"
   const dr = level !== 'strong' || L.open ? null : L.dr || (boss ? [9, 15] : ch.mix ? [3 + n, 5 + n] : n === 7 ? [3, 5] : n === 8 ? [5, 7] : [7, 9]);
@@ -5745,7 +5865,7 @@ function pickStart(st){
     const id = stateId(B, a, b, c, d), res = S.res[id], dist = S.dist[id];
     if ((cpuFirst ? res !== -1 : res !== 1) || dist < lo || dist > hi) continue;
     const mine = cpuFirst ? [c, d] : [a, b], his = cpuFirst ? [a, b] : [c, d];
-    if (st.ch.handicap && his[0] + his[1] < mine[0] + mine[1] + 2) continue;
+    if (st.ch.handicap && his[0] + his[1] < mine[0] + mine[1] + 1) continue;
     cand.push({mine, his, dist});
   }
   if (!cand.length) return null;
@@ -5760,7 +5880,6 @@ function pickStart(st){
 // everyone (seeded by the floor number), so the ranking of the highest floor is fair. players/<uid>/tower = {f, best, at, busy}
 const TOWER_RULES = [
   {k: 'normal', name: 'ふつう', from: 1},
-  {k: 'nosplit', name: '分身なし', rule: {split: false}, from: 2, g: 'split'},
   {k: 'nomerge', name: '合成なし', rule: {merge: false}, from: 2, g: 'merge'},
   {k: 'die', name: '5以上で消える', rule: {overflow: 'die'}, from: 4, g: 'over'},
   {k: 'hand', name: 'ハンデ戦', from: 6, g: 'hand'},
@@ -5794,7 +5913,7 @@ function towerDef(n){
   const g = guard ? towerGuard(n) : null, rname = picks.map(x => x.name).join('・');
   const ch = Object.assign({face: TOWER_FACES[n % TOWER_FACES.length], c: '#9fe0ff'}, g && g.ch ? g.ch : {}, g && g.b ? {face: 'crown', c: g.b.color || '#c9a2ff'} : {},
     {name: rname, who: g ? (g.ch ? g.ch.who : g.b.name) : `${n}階の門番`, handicap: hand, limit, mix: false, alien: false});
-  return {id: 'T' + n, c: 0, n, ch, rule, level, boss: guard, first: hand && rnd() < .5 ? 1 : 0, dr, fixed: null, skill, open: false, coins: 0,
+  return {id: 'T' + n, c: 0, n, ch, rule, level, boss: guard, first: 0, dr, fixed: null, skill, open: false, coins: 0,
     tower: true, rname, gBoss: g && g.b ? g.b : null};
 }
 const myTower = () => { const t = (net.profile || {}).tower || {}; return {f: Math.max(1, +t.f || 1), best: +t.best || 0, busy: +t.busy || 0, at: +t.at || 0}; };
@@ -6001,7 +6120,7 @@ const planCache = {};
 function stagePlan(st){
   if (planCache[st.id]) return planCache[st.id];
   const S = solverFor(st.rule);
-  if (st.dr && !S.ready) {
+  if ((st.dr || st.ch.handicap) && !S.ready) {
     if (!S.waiters) { S.waiters = true; const iv = setInterval(() => { if (S.ready) { clearInterval(iv); render(); } }, 250); }
     return null;
   }
@@ -6013,20 +6132,31 @@ function makePlan(st){
   let mine = [1, 1], his = [1, 1], best = 0, hard = 0;
   const fixed = st.fixed || (st.ch.handicap ? HANDICAP[(st.n - 1) % HANDICAP.length] : null);
   if (st.open) hard = st.skill;
-  if (st.dr) {
+  if (st.dr && !st.ch.handicap) {
     if (!solverFor(st.rule).ready) return null;
     const p = pickStart(st);
     if (p) { mine = p.mine; his = p.his; best = st.first ? p.dist / 2 : (p.dist + 1) / 2; }
     // no long forced win under this rule: the normal start against a CPU that almost never slips
     else hard = st.ch.handicap ? .8 : st.boss ? .92 : .86;
   }
-  if (!best && fixed) { mine = [...fixed[0]]; his = [...fixed[1]]; }
+  if (st.ch.handicap) {
+    // ハンデ戦: the CPU has more fingers, yet the start is a win for me with correct play (picked with the solver; I move
+    // first, since with splitting a CPU that moves first with more fingers can always hold on)
+    if (!solverFor(st.rule).ready) return null;
+    const range = st.boss ? [15, 25] : st.level === 'weak' ? [3, 7] : st.level === 'normal' ? [5, 15] : [11, 21];
+    const p = pickStart(Object.assign({}, st, {first: 0, dr: range})) || pickStart(Object.assign({}, st, {first: 0, dr: [1, 31]}));
+    if (p) { mine = p.mine; his = p.his; best = (p.dist + 1) / 2; hard = 0; }
+  }
+  else if (!best && fixed) { mine = [...fixed[0]]; his = [...fixed[1]]; }
   const M = st.rule.base === BIN ? 16 : 12;
-  const limit = st.ch.limit ? (best ? best + 2 : st.n <= 3 ? 12 : 10) : 0;
-  const stars = best ? [{t: 'moves', n: best + (limit ? 1 : 2)}, {t: 'moves', n: best, best: true}]
-    : [{t: 'moves', n: limit ? limit - 3 : M}, {t: 'nolose'}];
+  const loose = !!st.ch.loose;
+  const limit = st.ch.limit ? (best ? best + (loose ? 6 : 2) : st.n <= 3 ? (loose ? 16 : 12) : (loose ? 14 : 10)) : 0;
+  const stars = best && st.ch.handicap && !st.boss && st.level !== 'strong' ? [{t: 'moves', n: best + 4}, {t: 'nolose'}]
+    : best ? [{t: 'moves', n: best + (limit ? (loose ? 3 : 1) : 2)}, {t: 'moves', n: best, best: true}]
+    : [{t: 'moves', n: limit ? limit - (loose ? 5 : 3) : M}, {t: 'nolose'}];
   return {mine, his, best, limit, stars, hard};
 }
+const handiNote = '相手の指が多いけど、正しく指せば必ず勝てる局面です';
 const condText = c => c.t === 'nolose' ? '手を1本も消されずに勝つ' : c.best ? `最短（${c.n}手）で勝つ` : `${c.n}手以内に勝つ`;
 const stageStars = prof => (((prof || net.profile || {}).stage || {}).s) || {};
 const starCount = prof => Math.max(Object.values(stageStars(prof)).reduce((a, v) => a + (+v || 0), 0), statsOf(prof || net.profile).stageStars);
@@ -6107,26 +6237,144 @@ async function saveStage(sg, stars){
   });
   return res && res.committed ? rw : {none: true};
 }
+// ----- The school map: the school at night, cut open floor by floor. I climb from the gate at the bottom to the roof,
+// where the king's throne waits under the moon. Rooms I have cleared have their lights on; locked rooms are dark.
+const CH_ROOMS = ['1年1組', '職員室', '図工室', '保健室', '天文室', 'パソコン室', '空き教室', '時計の間', '屋上の玉座'];
+const CH_QUOTES = ['わたしに勝てたら、この学園の一員よ！', '授業は時間割どおり。決められた手数のうちに勝ちなさい。', '合成なんてしないで、ばらばらのまま勝負しようぜ！',
+  '5本をこえたら即アウト……ぎりぎりを攻めてみて！', 'ピポ……ワタシノ星デハ、6本ト4本デ消エル。', '0と1で考えなさい。2進数の授業を始めます。',
+  '指の数ならオレのほうが上だ。それでも勝てるか？', 'チクタク……手数が切れる前に、決めてみせなさい。', 'すべてのルールを使いこなす者だけが、王に挑める。'];
+const MAP_W = 360, MAP_SKY = 300, MAP_FH = 196, MAP_FLOORS = 4, MAP_H = MAP_SKY + MAP_FLOORS * MAP_FH + 150;
+const ROOM_AT = [[0, 'L'], [0, 'R'], [1, 'R'], [1, 'L'], [2, 'L'], [2, 'R'], [3, 'R'], [3, 'L']];
+const mapH = () => MAP_H;
+const floorTop = f => MAP_SKY + (MAP_FLOORS - 1 - f) * MAP_FH;
+const corY = f => floorTop(f) + 178;
+function roomBox(i){
+  if (i === 8) return {x: 104, y: MAP_SKY - 176, w: 152, h: 150};
+  const [f, side] = ROOM_AT[i];
+  return {x: side === 'L' ? 50 : 184, y: floorTop(f) + 24, w: 126, h: 134};
+}
+const doorX = i => { const b = roomBox(i); return b.x + b.w / 2; };
+// the way up: corridors, and fire escapes outside the walls between floors
+function mapRoute(){
+  const L = 22, R = 338, pts = [[44, MAP_H - 38]], at = [];
+  const go = (x, y) => pts.push([x, y]);
+  const door = (i, y) => { go(doorX(i), y); at[i] = pts.length - 1; };
+  go(44, corY(0)); door(0, corY(0)); door(1, corY(0));
+  go(R, corY(0)); go(R, corY(1)); door(2, corY(1)); door(3, corY(1));
+  go(L, corY(1)); go(L, corY(2)); door(4, corY(2)); door(5, corY(2));
+  go(R, corY(2)); go(R, corY(3)); door(6, corY(3)); door(7, corY(3));
+  go(L, corY(3)); go(L, MAP_SKY - 18); go(150, MAP_SKY - 18); at[8] = pts.length - 1;
+  return {pts, at};
+}
+const stampFace = c => { const [, , face, col] = STAGE_STAMPS[c - 1]; return `<span class="stp" style="--sc:${col}"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="21" r="15"/>${STAMP_FACES[face] || ''}</svg></span>`; };
+// 花丸: the teacher's red-chalk flower circle for a cleared room / stage
+const ICO_HANAMARU = '<svg viewBox="0 0 64 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" filter="url(#chalkS)"><path d="M32 22c7 0 11 4 11 10s-5 11-11 11-12-4-12-11c0-9 8-15 17-15 10 0 18 8 18 18"/><path d="M32 5c4 0 6 3 7 5 3-2 7-2 9 1 3 2 3 6 2 9 3 1 6 4 6 8s-3 7-6 8c1 3 1 7-2 9-2 3-6 3-9 1-1 3-3 6-7 6s-6-3-7-6c-3 2-7 2-9-1-3-2-3-6-2-9-3-1-6-4-6-8s3-7 6-8c-1-3-1-7 2-9 2-3 6-3 9-1 1-2 3-5 7-5z"/></g></svg>';
+const ICO_LOCK = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>';
+const ICO_CHEST = '<svg viewBox="0 0 48 40" aria-hidden="true"><path d="M5 16h38v20H5z" fill="#c0392b" stroke="#5a1a0c" stroke-width="2.4"/><path d="M5 16c0-9 7-12 19-12s19 3 19 12z" fill="#e0533a" stroke="#5a1a0c" stroke-width="2.4"/><path d="M5 16h38M17 6v30M31 6v30" stroke="#f3d774" stroke-width="2.6"/><rect x="20.5" y="14" width="7" height="9" rx="1.5" fill="#f3d774" stroke="#5a1a0c" stroke-width="1.6"/></svg>';
+// what stands in each room (viewBox 0 0 120 96), in the chapter's colour
+function roomArt(i){
+  const S = 'fill="#24402f" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"', L = 'fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"';
+  const arts = [
+    `<path d="M14 60h52v8H14zM18 68v22M62 68v22" ${S}/><path d="M70 50h36v8H70zM74 58v32M102 58v32" ${S}/><path d="M24 46h30v14H24z" ${S}/>`,
+    `<path d="M10 56h70v10H10zM14 66v24M76 66v24" ${S}/><rect x="18" y="38" width="22" height="18" rx="2" ${S}/><circle cx="96" cy="44" r="14" ${S}/><path d="M96 36v8l6 4" ${L}/>`,
+    `<path d="M60 18c-30 0-50 16-50 36 0 16 15 24 31 22 8-1 9 5 7 9-2 5 4 8 12 8 30 0 48-19 48-40S90 18 60 18z" ${S}/><circle cx="38" cy="44" r="6" fill="#ff8f8f"/><circle cx="58" cy="34" r="6" fill="#f3d774"/><circle cx="80" cy="40" r="6" fill="#8fc8ff"/><circle cx="86" cy="60" r="6" fill="#9fe0a8"/>`,
+    `<path d="M10 60h80v12H10zM16 72v18M84 72v18" ${S}/><path d="M14 48h30v12H14z" ${S}/><path d="M92 30h16v8h8v16h-8v8H92v-8h-8V38h8z" fill="#ff8f8f" stroke="currentColor" stroke-width="2"/>`,
+    `<path d="M30 90l20-40M70 90 50 50" ${L}/><path d="M38 46 92 18l6 12-54 28z" ${S}/><path d="M12 20l2 4 4 1-4 2-2 4-1-4-4-2 4-1zM104 56l1.5 3 3 1-3 1.5-1.5 3-1-3-3-1.5 3-1z" fill="#f3d774"/>`,
+    `<rect x="18" y="22" width="76" height="50" rx="5" ${S}/><path d="M48 72v10M64 72v10M36 86h40" ${L}/><text x="56" y="54" text-anchor="middle" font-size="18" fill="currentColor" stroke="none" style="font-family:monospace">0101</text>`,
+    `<path d="M10 64h44v8H10zM14 72v18M50 72v18" ${S}/><path d="M66 70h44v8H66z" ${S}/><path d="M72 78l-4 12M104 78l4 12" ${L}/><path d="M20 40l10 18M40 36l-6 22" ${L}/>`,
+    `<circle cx="60" cy="48" r="38" ${S}/><circle cx="60" cy="48" r="30" ${L}/><path d="M60 26v22l14 10" ${L}/><path d="M60 14v4M60 78v4M26 48h4M90 48h4" ${L}/>`,
+    `<path d="M30 92V52l10-8h40l10 8v40z" ${S}/><path d="M36 44V20l12 10 12-16 12 16 12-10v24" fill="#f3d774" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M22 92h76" ${L}/>`,
+  ];
+  return `<svg viewBox="0 0 120 96" aria-hidden="true">${arts[i] || arts[0]}</svg>`;
+}
+// The chapter I am on: the first open one whose boss I have not beaten (the last one when all are done).
+function curChapter(s){
+  for (let c = 1; c <= STAGE_CH.length; c++) if (stageOpen(c, 1, s) && !(+s[`${c}-${STAGE_N}`] || 0)) return c;
+  return STAGE_CH.length;
+}
+// the night: the sky, the moon, the school, the yard and the gate (drawn once)
+function mapBackdrop(){
+  const W = MAP_W, H = MAP_H, rnd = seeded(7);
+  let stars = '';
+  for (let k = 0; k < 46; k++) { const x = rnd() * W, y = rnd() * (MAP_SKY - 30), r = .6 + rnd() * 1.4; stars += `<circle class="mp-twinkle" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(2)}" fill="#fff" opacity="${(.4 + rnd() * .6).toFixed(2)}"/>`; }
+  let floors = '', wins = '';
+  for (let f = 0; f < MAP_FLOORS; f++) {
+    const t = floorTop(f);
+    floors += `<rect x="40" y="${t + MAP_FH - 10}" width="280" height="10" fill="#4a556e"/><text x="47" y="${t + 20}" font-size="11" fill="#8fa0c0" font-weight="800">${f + 1}F</text>`;
+  }
+  const stair = (x, f) => { const y0 = corY(f), y1 = corY(f + 1); let d = ''; const n = 6; for (let k = 0; k <= n; k++) { const y = y0 - (y0 - y1) * k / n; d += `M${x - 12} ${y}h24`; } return `<path d="M${x - 14} ${y0}V${y1}M${x + 14} ${y0}V${y1}" stroke="#5a6680" stroke-width="2.4"/><path d="${d}" stroke="#7a86a0" stroke-width="2"/>`; };
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><defs>
+    <linearGradient id="mpSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#070b1e"/><stop offset=".55" stop-color="#16224a"/><stop offset="1" stop-color="#2b3d6b"/></linearGradient>
+    <radialGradient id="mpMoon" cx=".5" cy=".5" r=".5"><stop offset=".55" stop-color="rgba(255,244,200,.55)"/><stop offset="1" stop-color="rgba(255,244,200,0)"/></radialGradient>
+    <pattern id="mpBrick" width="24" height="12" patternUnits="userSpaceOnUse"><path d="M0 12h24M12 0v6M0 6h24M24 6v6" stroke="rgba(255,255,255,.05)" stroke-width="1"/></pattern>
+    <linearGradient id="mpYard" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d3326"/><stop offset="1" stop-color="#132219"/></linearGradient></defs>
+    <rect width="${W}" height="${MAP_SKY + 40}" fill="url(#mpSky)"/>${stars}
+    <circle cx="292" cy="78" r="58" fill="url(#mpMoon)"/><circle cx="292" cy="78" r="26" fill="#fff4c8"/><circle cx="302" cy="72" r="24" fill="#16224a" opacity=".9"/>
+    <path d="M0 ${MAP_SKY - 30}q40-26 80-8t90 0 100-14 90 10v${MAP_FH}H0z" fill="#101a33"/>
+    <rect x="40" y="${MAP_SKY}" width="280" height="${MAP_FLOORS * MAP_FH}" fill="#273047"/><rect x="40" y="${MAP_SKY}" width="280" height="${MAP_FLOORS * MAP_FH}" fill="url(#mpBrick)"/>
+    <rect x="34" y="${MAP_SKY - 14}" width="292" height="16" rx="3" fill="#4a556e"/>${floors}
+    <rect x="40" y="${MAP_SKY}" width="280" height="${MAP_FLOORS * MAP_FH}" fill="none" stroke="#11172a" stroke-width="3"/>
+    ${stair(338, 0)}${stair(22, 1)}${stair(338, 2)}<path d="M22 ${corY(3)}V${MAP_SKY - 18}" stroke="#5a6680" stroke-width="2.4"/>${(() => { let d = ''; for (let k = 0; k <= 8; k++) { const y = corY(3) - (corY(3) - MAP_SKY + 18) * k / 8; d += `M10 ${y}h24`; } return `<path d="${d}" stroke="#7a86a0" stroke-width="2"/>`; })()}
+    <rect y="${MAP_SKY + MAP_FLOORS * MAP_FH}" width="${W}" height="${H - MAP_SKY - MAP_FLOORS * MAP_FH}" fill="url(#mpYard)"/>
+    <ellipse cx="230" cy="${H - 60}" rx="120" ry="34" fill="none" stroke="rgba(236,238,228,.12)" stroke-width="3"/>
+    <path d="M18 ${H - 18}V${H - 70}M70 ${H - 18}V${H - 70}" stroke="#8a93a8" stroke-width="7" stroke-linecap="round"/><path d="M12 ${H - 78}h64" stroke="#8a93a8" stroke-width="5" stroke-linecap="round"/>
+    <rect x="22" y="${H - 104}" width="96" height="20" rx="4" fill="#f0e2bd" stroke="#6a4a22" stroke-width="2"/><text x="70" y="${H - 89}" text-anchor="middle" font-size="11" font-weight="800" fill="#3a2610">わりばし学園</text>
+    <text x="96" y="${H - 30}" font-size="13" font-weight="800" fill="#ffd36b">START</text></svg>`;
+}
 function renderStage(){
   const s = stageStars(), total = starCount(), max = STAGE_CH.length * STAGE_N * 3;
   $('#stgTotal').textContent = `★${total}/${max}`;
-  const ol = $('#chList');
-  if (!unchanged(ol, JSON.stringify(s))) {
+  const ol = $('#chList'), cur = curChapter(s), H = MAP_H;
+  if (!unchanged(ol, JSON.stringify([s, cur]))) {
     ol.innerHTML = '';
+    ol.style.aspectRatio = `${MAP_W} / ${H}`;
+    const {pts, at} = mapRoute(), line = (a, b) => 'M' + pts.slice(a, b + 1).map(p => p.join(' ')).join('L');
+    const bg = document.createElement('li');
+    bg.className = 'mp-bg';
+    bg.innerHTML = mapBackdrop().replace('</svg>', `<path class="mp-route" d="${line(0, pts.length - 1)}"/><path class="mp-route done" d="${line(0, at[cur - 1])}"/></svg>`);
+    ol.append(bg);
+    const pct = (v, of) => (v / of * 100) + '%';
     STAGE_CH.forEach((ch, i) => {
-      const c = i + 1, open = stageOpen(c, 1, s), got = Array.from({length: STAGE_N}, (_, k) => +s[`${c}-${k + 1}`] || 0);
-      const li = document.createElement('li'), b = document.createElement('button');
-      b.type = 'button'; b.className = 'chcard' + (got[STAGE_N - 1] ? ' clear' : ''); b.disabled = !open; b.dataset.ch = c;
+      const c = i + 1, open = stageOpen(c, 1, s), got = Array.from({length: STAGE_N}, (_, k) => +s[`${c}-${k + 1}`] || 0), clear = got[STAGE_N - 1] > 0, sum = got.reduce((a, v) => a + v, 0);
+      const box = roomBox(i), li = document.createElement('li'), b = document.createElement('button');
+      li.style.cssText = `left:${pct(box.x, MAP_W)};top:${pct(box.y, H)};width:${pct(box.w, MAP_W)};height:${pct(box.h, H)}`;
+      b.type = 'button'; b.className = 'chcard room' + (i === 8 ? ' roof' : '') + (clear ? ' clear' : '') + (open && c === cur && !clear ? ' cur' : '');
+      b.style.cssText = 'inset:0';
+      b.disabled = !open; b.dataset.ch = c;
       b.style.setProperty('--cc', ch.c);
-      b.innerHTML = avatarHTML(ch) + '<span class="ch-k"></span><b></b><small></small><span class="ch-st"><span class="stars"></span><span></span></span>';
-      b.querySelector('.ch-k').textContent = `第${c}章・${ch.who}`;
-      b.querySelector('b').textContent = ch.name;
-      b.querySelector('small').textContent = open ? ch.desc : `第${c - 1}章をクリアすると挑戦できます`;
-      b.querySelector('.stars').textContent = `★${got.reduce((a, v) => a + v, 0)}/${STAGE_N * 3}`;
-      b.querySelector('.ch-st span:last-child').textContent = got[STAGE_N - 1] ? 'クリア！' : open ? `${got.filter(Boolean).length}/${STAGE_N}` : 'ロック中';
+      b.setAttribute('aria-label', `第${c}章 ${CH_ROOMS[i]}「${ch.name}」${open ? `★${sum}/${STAGE_N * 3}` : 'まだ行けません'}`);
+      const stand = !!CHARA_ART[ch.id];
+      b.innerHTML = `<span class="rm-bb"><small>第${c}章</small><b></b></span><span class="rm-fx">${roomArt(i)}</span>`
+        + `<span class="rm-ch${stand ? ' stand' : ''}">${stand ? charaSVG(ch.id, 'normal', ch.c) : avatarHTML(ch)}</span>`
+        + `<span class="rm-nm"></span>` + (clear ? `<span class="rm-clear" title="クリア">${ICO_HANAMARU}</span>` : '')
+        + (!open ? `<span class="rm-lock">${ICO_LOCK}<span></span></span>` : '') + (open && c === cur && !clear ? '<span class="rm-next">NEXT</span>' : '');
+      b.querySelector('.rm-bb b').textContent = CH_ROOMS[i];
+      const nm = b.querySelector('.rm-nm');
+      nm.textContent = i === 8 ? `第9章 ${CH_ROOMS[i]}` : ch.name;
+      if (open) { const st = document.createElement('i'); st.textContent = `★${sum}`; nm.append(st); }
+      if (!open) b.querySelector('.rm-lock span').textContent = `第${c - 1}章をクリアで解放`;
       b.addEventListener('click', () => { ui.stageCh = c; ui.stageSel = null; setScreen('chapter'); });
       li.append(b); ol.append(li);
     });
+    // me, at the door of the room I am in; after clearing a chapter I walk up to the next one and its lights come on
+    const me = document.createElement('li'), place = c => { const p = pts[at[c - 1]]; return [pct(p[0] + (c === 9 ? -66 : roomBox(c - 1).x < 180 ? -70 : 70), MAP_W), pct(c === 9 ? p[1] - 6 : floorTop(ROOM_AT[c - 1][0]) + MAP_FH - 9, H)]; };
+    me.className = 'mapme';
+    me.innerHTML = charaSVG('waribo', '', HC_COLOR);
+    const was = +lsGet('waribashi-mapcur') || cur;
+    const [x0, y0] = place(Math.min(was, cur));
+    me.style.left = x0; me.style.top = y0;
+    ol.append(me);
+    if (was < cur) {
+      const room = ol.querySelector(`.chcard[data-ch="${cur}"]`);
+      setTimeout(() => { const [x1, y1] = place(cur); me.style.left = x1; me.style.top = y1; }, 450);
+      setTimeout(() => { if (room) { room.classList.add('lighton'); sfx('up'); } }, 1900);
+    }
+    lsSet('waribashi-mapcur', String(cur));
+  }
+  if (!ui.mapScrolled && ui.screen === 'stage') {
+    ui.mapScrolled = true;
+    const node = ol.querySelector(`.chcard[data-ch="${cur}"]`);
+    if (node) requestAnimationFrame(() => node.scrollIntoView({block: 'center', behavior: 'auto'}));
   }
   const road = $('#stgRoad');
   if (!unchanged(road, JSON.stringify([total, myChalk()]))) {
@@ -6149,15 +6397,30 @@ function renderStage(){
 function renderChapter(){
   const c = ui.stageCh || 1, ch = STAGE_CH[c - 1], s = stageStars();
   if (!ui.stageSel) { let n = 1; while (n < STAGE_N && (+s[`${c}-${n}`] || 0) > 0 && stageOpen(c, n + 1, s)) n++; ui.stageSel = n; }
-  $('#chTitle').textContent = `第${c}章`;
-  $('#chStars').textContent = `★${Array.from({length: STAGE_N}, (_, k) => +s[`${c}-${k + 1}`] || 0).reduce((a, v) => a + v, 0)}/${STAGE_N * 3}`;
+  const chGot = Array.from({length: STAGE_N}, (_, k) => +s[`${c}-${k + 1}`] || 0), chSum = chGot.reduce((a, v) => a + v, 0), beat = chGot[STAGE_N - 1] > 0;
+  $('#chTitle').textContent = `第${c}章 ${CH_ROOMS[c - 1]}`;
+  $('#chStars').textContent = `★${chSum}/${STAGE_N * 3}`;
   const hero = $('#chHero');
   hero.style.setProperty('--cc', ch.c);
-  if (!unchanged(hero, String(c))) {
-    hero.innerHTML = (CHARA_BUST[ch.id] ? `<span class="chbust">${charaSVG(ch.id, 'normal', ch.c).replace('viewBox="0 0 200 300"', `viewBox="${CHARA_BUST[ch.id]}"`)}</span>` : avatarHTML(ch)) + '<span class="ch-k"></span><b></b><small></small>';
-    hero.querySelector('.ch-k').textContent = `第${c}章・相手は${ch.who}`;
-    hero.querySelector('b').textContent = ch.name;
-    hero.querySelector('small').textContent = `${ch.desc}。10面目のボスに勝つとスタンプ「${STAGE_STAMPS[c - 1][1]}」`;
+  if (!unchanged(hero, JSON.stringify([c, chSum, beat]))) {
+    const fig = CHARA_BUST[ch.id] ? `<span class="chbust">${charaSVG(ch.id, 'normal', ch.c).replace('viewBox="0 0 200 300"', `viewBox="${CHARA_BUST[ch.id]}"`)}</span>` : avatarHTML(ch);
+    hero.innerHTML = `<div class="ch-fig">${fig}<span class="ch-who"></span></div><div class="ch-info"><span class="ch-k"></span><b class="ch-n"></b><p class="ch-q"></p><div class="ch-tags"></div></div>`
+      + '<div class="ch-prog"><span class="meter"><i></i></span><small></small></div><p class="ch-rw"></p>';
+    hero.querySelector('.ch-k').textContent = `第${c}章・${CH_ROOMS[c - 1]}`;
+    hero.querySelector('.ch-who').textContent = ch.who;
+    hero.querySelector('.ch-n').textContent = ch.name;
+    const tags = [ch.desc];
+    if (ch.handicap) tags.push('正しく指せば勝てる');
+    tags.forEach(t => { const sp = document.createElement('span'); sp.textContent = t; hero.querySelector('.ch-tags').append(sp); });
+    hero.querySelector('.ch-q').textContent = `「${CH_QUOTES[c - 1]}」`;
+    hero.querySelector('.ch-prog i').style.width = (chSum / (STAGE_N * 3) * 100) + '%';
+    hero.querySelector('.ch-prog small').textContent = `★${chSum}/${STAGE_N * 3}`;
+    const rw = hero.querySelector('.ch-rw');
+    rw.classList.toggle('done', beat);
+    rw.append(beat ? 'ボスに勝った！' : 'ボスに勝つと');
+    const r1 = document.createElement('span'); r1.className = 'rwi'; r1.innerHTML = `${stampFace(c)}<span></span>`; r1.lastChild.textContent = `スタンプ「${STAGE_STAMPS[c - 1][1]}」`;
+    const r2 = document.createElement('span'); r2.className = 'rwi'; r2.innerHTML = `${avatarHTML(ch)}<span></span>`; r2.lastChild.textContent = `${ch.who}が仲間に`;
+    rw.append(r1, r2);
   }
   const sbox = $('#chStory'), parts = STORY_PARTS.filter(([p]) => STORY[c + p]);
   sbox.hidden = !parts.length;
@@ -6171,35 +6434,68 @@ function renderChapter(){
       sbox.append(b);
     });
   }
-  const grid = $('#stgGrid');
+  const grid = $('#stgGrid'), det = $('#stDetail');
   grid.style.setProperty('--cc', ch.c);
   if (!unchanged(grid, JSON.stringify([c, s, ui.stageSel]))) {
+    grid.parentElement.append(det);   // keep the detail panel while the list is rebuilt
     grid.innerHTML = '';
+    let nextN = 0;
+    for (let n = 1; n <= STAGE_N; n++) if (!nextN && stageOpen(c, n, s) && !(+s[`${c}-${n}`] || 0)) nextN = n;
     for (let n = 1; n <= STAGE_N; n++) {
       const st = stageDef(c, n), got = +s[st.id] || 0, open = stageOpen(c, n, s), li = document.createElement('li'), b = document.createElement('button');
-      b.type = 'button'; b.className = 'stc' + (st.boss ? ' boss' : ''); b.disabled = !open; b.dataset.n = n;
+      b.type = 'button'; b.className = `stc lv-${st.level}` + (st.boss ? ' boss' : '') + (got ? ' clear' : ''); b.disabled = !open; b.dataset.n = n;
       b.setAttribute('aria-pressed', String(ui.stageSel === n));
       b.setAttribute('aria-label', `${st.id}・★${got}`);
-      b.innerHTML = `<span class="lv">${st.boss ? 'BOSS' : STAGE_LEVEL[st.level]}</span><b>${n}</b><span class="st3">${'<i>★</i>'.repeat(got)}${'☆'.repeat(3 - got)}</span>`;
-      b.addEventListener('click', () => { ui.stageSel = n; renderChapter(); });
+      const lvT = st.boss ? 'BOSS' : ({weak: '初級', normal: '中級', strong: '上級'})[st.level];
+      const title = st.boss ? `ボス戦 ${ch.who}` : st.dr ? '必勝の局面から' : st.level === 'weak' ? 'ウォーミングアップ' : st.level === 'normal' ? 'ふつうの勝負' : '本気の勝負';
+      b.innerHTML = `<span class="sc-medal"><b>${st.boss ? 'BOSS' : n}</b></span><span class="sc-face">${avatarHTML(ch)}</span>`
+        + `<span class="sc-mid"><span class="sc-tags"><span class="sc-lv">${lvT}</span></span><b class="sc-t"></b><span class="st3">${'<i>★</i>'.repeat(got)}${'★'.repeat(3 - got)}</span></span>`
+        + `<span class="sc-rw"></span>` + (got ? `<span class="sc-clear" title="クリア">${ICO_HANAMARU}</span>` : '') + (n === nextN ? '<span class="sc-new">NEW!</span>' : '');
+      b.querySelector('.sc-t').textContent = !open ? '🔒 前のステージをクリアで解放' : title;
+      const tg = b.querySelector('.sc-tags');
+      const addTag = t => { const x = document.createElement('span'); x.className = 'sc-tg'; x.textContent = t; tg.append(x); };
+      if (ch.handicap) addTag('ハンデ');
+      if (ch.limit) addTag(ch.loose ? '手数ゆるめ' : '手数制限');
+      if (ch.mix || ch.alien) addTag(ruleShort(st.rule).split('・')[0]);
+      const rw = b.querySelector('.sc-rw');
+      if (got) rw.innerHTML = `<small>もらった</small><span class="jwl">${got * 10}</span>`;
+      else rw.innerHTML = `<small>はじめて</small><span class="coin">${st.coins}</span><span class="jwl">${st.boss ? 80 : 30}</span>`;
+      b.addEventListener('click', () => { ui.stageSel = n; renderChapter(); requestAnimationFrame(() => { const d = $('#stDetail'); if (d && d.getBoundingClientRect().bottom > innerHeight) d.scrollIntoView({block: 'nearest', behavior: reduceMotion.matches ? 'auto' : 'smooth'}); }); });
       li.append(b); grid.append(li);
+      if (ui.stageSel === n) { const dl = document.createElement('li'); dl.className = 'stdet-li'; dl.append(det); grid.append(dl); }
     }
   }
+  det.hidden = false;
   const n = ui.stageSel, st = stageDef(c, n), plan = stagePlan(st), got = +s[st.id] || 0, box = $('#stDetail');
+  box.style.setProperty('--cc', ch.c);
   if (unchanged(box, JSON.stringify([st.id, !!plan, got, stageOpen(c, n, s)]))) return;
-  box.innerHTML = '<h3></h3><dl class="facts"></dl><ul class="stconds"></ul><p class="note"></p>';
+  const fig = CHARA_BUST[ch.id] ? `<span class="chbust">${charaSVG(ch.id, 'normal', ch.c).replace('viewBox="0 0 200 300"', `viewBox="${CHARA_BUST[ch.id]}"`)}</span>` : avatarHTML(ch);
+  const diff = st.boss ? 5 : st.level === 'weak' ? 1 : st.level === 'normal' ? 2 + (st.skill > .5 ? 1 : 0) : 4;
+  box.innerHTML = `<div class="sd-head"><h3></h3><span class="st3">${'<i>★</i>'.repeat(got)}${'★'.repeat(3 - got)}</span></div>`
+    + `<div class="sd-vs"><span class="sd-fig">${fig}</span><div class="sd-who">${st.boss ? '<span class="sd-boss">ボス</span>' : ''}<b></b><span class="sd-diff">むずかしさ <i>${'●'.repeat(diff)}${'○'.repeat(5 - diff)}</i></span><div class="sd-rules"></div></div></div>`
+    + '<dl class="facts"></dl><div><span class="sd-lbl">★の条件</span><ul class="stconds"></ul></div><div><span class="sd-lbl">初回クリア報酬</span><div class="sd-items"></div></div><p class="note"></p>';
   box.querySelector('h3').textContent = `${st.id}${st.boss ? '（ボス）' : ''}`;
+  box.querySelector('.sd-who b').textContent = ch.who;
+  ruleShort(st.rule).split('・').concat(ch.handicap ? ['ハンデ'] : [], plan && plan.limit ? [`${plan.limit}手以内`] : []).forEach(t => { const x = document.createElement('span'); x.textContent = t; box.querySelector('.sd-rules').append(x); });
+  if (ch.handicap) { const f = document.createElement('p'); f.className = 'fair'; f.textContent = handiNote; box.querySelector('.sd-vs').after(f); }
   const facts = [['相手', `${ch.who}（${levelLabel(st)}）`], ['ルール', ruleShort(st.rule)]];
   if (plan) facts.push(['はじまり', `あなた ${plan.mine.join('・')}／相手 ${plan.his.join('・')}・${st.first ? '相手が先手' : 'あなたが先手'}`]);
   if (plan && plan.limit) facts.push(['手数', `${plan.limit}手以内に勝てないと負け`]);
   facts.forEach(([k, v]) => { const d = document.createElement('div'); d.innerHTML = '<dt></dt><dd></dd>'; d.firstChild.textContent = k; d.lastChild.textContent = v; box.querySelector('.facts').append(d); });
   const ul = box.querySelector('.stconds');
   ['勝つ', ...(plan ? plan.stars.map(condText) : ['…'])].forEach(t => { const li = document.createElement('li'); li.textContent = t; ul.append(li); });
+  const items = box.querySelector('.sd-items'), item = (html, label) => { const d = document.createElement('span'); d.className = 'sd-item' + (got ? ' got' : ''); d.innerHTML = html + '<small></small>'; d.querySelector('small').textContent = label; items.append(d); };
+  item('<span class="ic coin"></span>', `×${st.coins}`);
+  item('<span class="ic jwl"></span>', `×${st.boss ? 80 : 30}`);
+  if (st.boss) {
+    item(stampFace(c), 'スタンプ');
+    item(avatarHTML(ch), '仲間');
+  }
   box.querySelector('.note').textContent = `いまの★ ${got}/3・はじめてクリアでコイン${st.coins}${st.boss ? `・ジュエル50・スタンプ「${STAGE_STAMPS[c - 1][1]}」` : ''}・★1つにつきジュエル10`;
   const go = document.createElement('button');
   go.type = 'button'; go.className = 'btn primary big'; go.id = 'stGo';
   go.disabled = !stageOpen(c, n, s);
-  go.textContent = !go.disabled ? (got ? 'もう一度挑戦する' : '挑戦する') : 'まだ挑戦できません';
+  go.textContent = !go.disabled ? (got ? 'もう一度' : '出発する') : 'まだ行けません';
   go.addEventListener('click', () => startStage(c, n));
   box.append(go);
 }
@@ -6795,6 +7091,8 @@ async function claimGuideDone(){
 
 // ===================== News =====================
 const NEWS = [
+  {id: 'n26', date: '2026-11-18', tag: 'NEW', title: 'ステージが「夜の学校マップ」になりました',
+    body: 'ステージ画面を新しくしました。\n・学校の部屋を1つずつ進んでいくマップになりました。クリアした部屋には花丸がつきます\n・章の画面とステージの説明が黒板になり、★の条件やはじめてクリアの報酬が見やすくなりました\n・第2章は「時間割どおり」に変わりました。決められた手数のうちに勝てばクリアです（手数はゆるめ）\n・第7章のハンデ戦は、相手の指が多くても、正しく指せば必ず勝てる局面から始まるようになりました\n・木曜のボス「ホッチキス将軍」は、分身を禁止するかわりに、3ターンごとにあなたの手を1つパチン留めしてきます\n・「分身なし」のルールは、ステージ・ボス・塔・詰めわりばしではなくなりました（同じ局面のくり返しを防ぐため）。CPU対戦とカスタムマッチでは今まで通り選べます'},
   {id: 'n25', date: '2026-11-18', tag: 'NEW', title: '「能力バトル」が登場しました',
     body: 'キャラごとのスキルを使って戦う「能力バトル」ができました。\n・左手と右手に別々のチョークをつけられます。エフェクトつきのチョークには「ほのお」「こおり」などの能力があります\n・CPU対戦の設定と、フレンドとの部屋（2人）で「能力バトル：あり」にすると遊べます\n・自分の番が来るたびにチョークゲージが1たまり、3たまったらスキルを使えます\n・使えるのは、コレクションで仲間にしたキャラ。ステージやボスで仲間を増やそう\n・レート戦にはありません'},
   {id: 'n24', date: '2026-11-18', tag: 'おしらせ', title: 'レート戦の引き分けでレートが動かなくなりました',
@@ -6944,7 +7242,7 @@ function puzzleOf(day){
   if (PUZ_FORCE) { const [fd, fi] = PUZ_FORCE.split(':').map(Number); d = fd; e = PUZ.pool[d][fi % PUZ.pool[d].length]; }
   else {
     // binary puzzles only with "31 or more vanishes" (rule set 9); the 32→1 ones (8) take too long
-    const list = PUZ.pool[d], small = list.filter(x => x[0] < 8), big = list.filter(x => x[0] === 9);
+    const list = PUZ.pool[d], small = list.filter(x => x[0] < 8 && PUZ.rules[x[0]][2]), big = list.filter(x => x[0] === 9);   // splitting is always allowed
     const src = small.length && (rnd() < .65 || !big.length) ? small : big;
     e = src[Math.floor(rnd() * src.length)];
   }
@@ -7063,7 +7361,7 @@ const BOSS_DAYS = [
   {id:'daioh', name:'黒板消し大王', tag:'月曜・ふつうの日', rule:'いつものルール', quote:'ぜーんぶ消してやるのだ！', hp:3000, start:[1, 1], skill:.45, color:'#d6a8ff', acc:'#c9a2ff'},
   {id:'knight', name:'三角定規ナイト', tag:'火曜・合成封じ', rule:'合成なし', quote:'合成など邪道！ まっすぐ勝負だ', hp:3000, start:[1, 1], skill:.5, merge:false, color:'#8fd3ff', acc:'#8fd3ff'},
   {id:'akapen', name:'赤ペン鬼教官', tag:'水曜・きびしい日', rule:'5本以上で消える', quote:'はみ出したら即バツだ！', hp:3000, start:[1, 1], skill:.5, overflow:'die', color:'#ff8a8a', acc:'#ff8a8a'},
-  {id:'hotchkiss', name:'ホッチキス将軍', tag:'木曜・分身封じ', rule:'分身なし', quote:'その手、パチンと留めてやる！', hp:3000, start:[1, 1], skill:.5, split:false, color:'#7fd6b0', acc:'#7fd6b0'},
+  {id:'hotchkiss', name:'ホッチキス将軍', tag:'木曜・パチン留め', rule:'ボスが3ターンごとに、あなたの手を1つパチン留め（次の番タッチできない）', quote:'その手、パチンと留めてやる！', hp:3000, start:[1, 1], skill:.5, pachin:true, color:'#7fd6b0', acc:'#7fd6b0'},
   {id:'samurai', name:'ものさし侍', tag:'金曜・二刀流', rule:'侍の手が2本ずつで始まる', quote:'二刀流、参る！', hp:3000, start:[2, 2], skill:.5, color:'#f3d774', acc:'#f3d774'},
   {id:'dentaku', name:'電卓魔人', tag:'土曜・2進数の日', rule:'2進数ルール（31以上で消える）', overflow:'die', quote:'ピポパ…すべては0と1だ', hp:5000, start:[1, 1], skill:.5, count:'binary', color:'#a8f0d0', acc:'#a8f0d0'},
 ];
@@ -7349,6 +7647,8 @@ function newBossGame(){
   G.hands[1] = [...ui.boss.info.start];
   G.seen = {[posKeyOf(G)]: 1};
   G.norep = true;
+  // ホッチキス将軍: only the boss has a skill (no chalks, no gauge of mine)
+  if ((ui.boss.base || ui.boss.info).pachin || ui.boss.info.pachin) G.ab = {c: ['', 'hotchkiss'], g: [0, 0], gd: [0, 0], fz: [-1, -1], rv: [0, 0], k: null, iu: [[0, 0], [0, 0]]};
   sel = null; panel = null;
   render(); maybeCpu();
 }
@@ -7548,6 +7848,7 @@ const AB_MAX = 3;
 const SKILLS = {
   kazoe:  {name: 'かぞえなおし', desc: '自分の手を1つえらんで、1本ふやすか、へらす'},
   chui:   {name: 'ちゅうい！', desc: '相手の手を1つえらぶ。相手は次の番、その手でタッチできない'},
+  pachin: {name: 'パチン留め', desc: '相手の手を1つホッチキスで留める。相手は次の番、その手でタッチできない'},
   guard:  {name: 'ガード', desc: '相手が次にあなたの手にさわったとき、1回だけはじく'},
   irekae: {name: 'いれかえ', desc: '自分の手と相手の手の本数を入れかえる'},
   revive: {name: 'ふっかつ', desc: '消えた手を1本で復活させる（1試合1回）'},
@@ -7561,9 +7862,9 @@ const SKILLS = {
 };
 const CHAR_SKILL = {waribo: 'kazoe', iincho: 'chui', katabutsu: 'guard', barabara: 'irekae', girigiri: 'revive', pipo: 'copy',
   robo: 'double', bancho: 'renda', tokei: 'stop', king: 'nagi',
-  hakase: 'copy', daioh: 'erase', knight: 'guard', akapen: 'batsu', hotchkiss: 'chui', samurai: 'renda', dentaku: 'irekae', dragon: 'nagi'};
+  hakase: 'copy', daioh: 'erase', knight: 'guard', akapen: 'batsu', hotchkiss: 'pachin', samurai: 'renda', dentaku: 'irekae', dragon: 'nagi'};
 // skills that touch the other side's hands (a guard stops them)
-const AB_TOUCH = new Set(['chui', 'irekae', 'renda', 'nagi', 'erase', 'batsu']);
+const AB_TOUCH = new Set(['chui', 'pachin', 'irekae', 'renda', 'nagi', 'erase', 'batsu']);
 // Chalk abilities: an effect chalk on a hand gives that hand a lasting ability (ordinary touches only, not skills).
 const CHALK_AB = {
   fire:    {name: 'ほのお', desc: 'この手でタッチすると、1本多く足す'},
@@ -7626,7 +7927,7 @@ function abAttackApply(S, p, q, m, e){
 function abAdd(w, v, r){ const B = r.base || 5, x = w + v; return x < B ? x : r.overflow === 'wrap' ? x - B : 0; }
 // Every way to use the skill now. Each option carries the hands it leaves (h: [mine, theirs]), so applying it needs no rules.
 function abOptions(S, r){
-  if (!abOn(S) || S.over || S.n !== 2 || S.ab.g[S.turn] < AB_MAX) return [];
+  if (!abOn(S) || S.over || S.n !== 2 || !S.ab.c[S.turn] || S.ab.g[S.turn] < AB_MAX) return [];
   const p = S.turn, q = 1 - p, me = S.hands[p], op = S.hands[q], B = r.base || 5, sk = abSk(S, p), out = [];
   const LR = ['左', '右'], u = isBin(r) ? '' : '本', blk = AB_TOUCH.has(sk) && !!S.ab.gd[q];
   const add = (h, label, extra) => out.push(Object.assign({kind: 'skill', sk, target: q, h: [h[0], h[1]], label, blk}, extra || {}));
@@ -7659,7 +7960,7 @@ function abOptions(S, r){
   }
   for (let t = 0; t < 2; t++) {
     if (!live(op, t)) continue;
-    if (sk === 'chui' && (live(op, 1 - t) || S.ab.fz[q] !== t)) add([[...me], [...op]], `相手の${LR[t]}の手（${x(op[t])}）を止める`, {to: t});
+    if ((sk === 'chui' || sk === 'pachin') && (live(op, 1 - t) || S.ab.fz[q] !== t)) add([[...me], [...op]], `相手の${LR[t]}の手（${x(op[t])}）を止める`, {to: t});
     if (sk === 'erase' && op[t] !== 1) { const o = [...op]; o[t] = 1; add([[...me], o], `相手の${LR[t]} ${x(op[t])} → 1${u}`, {to: t}); }
     if (sk === 'batsu') { const o = [...op]; o[t] = abAdd(o[t], 2, r); add([[...me], o], `相手の${LR[t]} ${x(op[t])} → ${x(o[t])}`, {to: t}); }
   }
@@ -7719,7 +8020,7 @@ function step(S0, m, now){
     else {
       S.hands[p] = [...m.h[0]]; S.hands[q] = [...m.h[1]];
       if (m.sk === 'guard') ab.gd[p] = 1;
-      if (m.sk === 'chui') ab.fz[q] = m.to;
+      if (m.sk === 'chui' || m.sk === 'pachin') ab.fz[q] = m.to;
       if (m.sk === 'revive') ab.rv[p] = 1;
       if (m.sk === 'stop') e.stop = 1;
     }
@@ -7842,7 +8143,7 @@ function logText(e, nm){
     if (e.blk) return `スキル「${sk.name}」→ ガードではじかれた`;
     if (e.sk === 'guard') return `スキル「${sk.name}」：ガードをはった`;
     if (e.sk === 'stop') return `スキル「${sk.name}」：${nm[e.q]}の番をとばした`;
-    if (e.sk === 'chui') return `スキル「${sk.name}」：${nm[e.q]}の手を1つ止めた`;
+    if (e.sk === 'chui' || e.sk === 'pachin') return `スキル「${sk.name}」：${nm[e.q]}の手を1つ止めた`;
     const mine = hs(e.f) !== hs(e.t), theirs = hs(e.ob) !== hs(e.oa);
     return `スキル「${sk.name}」：` + [mine ? `自分 ${hs(e.f)} → ${hs(e.t)}` : '', theirs ? `${nm[e.q]} ${hs(e.ob)} → ${hs(e.oa)}` : ''].filter(Boolean).join('・') + (e.ko ? '（両手が消えた）' : '');
   }
@@ -7933,7 +8234,9 @@ if (DEBUG) window.__wb = {primeRepeat(){ if (!G) return 0; let n = 0; for (const
   pos(h0, h1, turn){ if (!G || G.over) return false; clearTimeout(cpuTimer); cpuTimer = null; G = Object.assign({}, G, {hands: [[...h0], [...h1]], turn, seen: {}}); G.seen[posKeyOf(G)] = 1; render(); maybeCpu(); return true; },
   bossHp: v => { if (ui.boss) { ui.boss.hp = v; render(); } return ui.boss && ui.boss.hp; },
   boss: () => ui.boss && {hp: ui.boss.hp, life: ui.boss.life, dmg: ui.boss.dmg, over: G && G.over, hands: G && G.hands, turn: G && G.turn},
-  stageRule: (c, n) => stageDef(c, n).rule, puzzleRules: day => puzzleOf(day).rules, bossRules: id => bossRules(bossInfoOf(id)),
+  stageRule: (c, n) => stageDef(c, n).rule,
+  stagePlan(c, n){ const st = stageDef(c, n), p = stagePlan(st); if (!p) return null; const S = solverFor(st.rule), mv = st.first ? p.his : p.mine, ot = st.first ? p.mine : p.his, id = S.sid(mv[0], mv[1], ot[0], ot[1]);
+    return {mine: p.mine, his: p.his, first: st.first, limit: p.limit, best: p.best, level: st.level, split: st.rule.split, meWin: st.first ? S.res[id] === -1 : S.res[id] === 1, stars: p.stars}; }, puzzleRules: day => puzzleOf(day).rules, bossRules: id => bossRules(bossInfoOf(id)),
   towerDef: n => { const d = towerDef(n); return {rname: d.rname, level: d.level, dr: d.dr, skill: d.skill, boss: d.boss, rule: d.rule, who: d.ch.who, first: d.first, limit: d.ch.limit, hand: d.ch.handicap, gBoss: !!d.gBoss}; },
   stage: () => ui.stage && {n: ui.stage.n, tower: !!ui.stage.tower, done: ui.stage.done, result: ui.stage.result, mine: ui.stage.mine, his: ui.stage.his},
   net: () => ({lobby: !!net.lobbyOff, board: net.boardSrc, onlineN: net.onlineN, pubDenied: !!net.pubDenied}),
@@ -8033,8 +8336,23 @@ function abCpuMove(){
   const kill = scored.filter(x => x.v >= 5000);
   return kill.length && Math.random() < 0.7 ? pick(kill).m : any();
 }
+// The Thursday boss staples the hand that would help me most (looked at with the solved table).
+function abBossSkill(){
+  const r = rules(), s = solver(), opts = abOptions(G, r);
+  if (!opts.length || !s.ready) return null;
+  const tab = (S2, who) => { const a = S2.hands[who], b = S2.hands[1 - who], id = s.sid(a[0], a[1], b[0], b[1]), v = s.res[id], d = s.dist[id]; return v === 1 ? 1000 - d : v === -1 ? -1000 + d : 0; };
+  let best = null, bv = Infinity;
+  for (const o of opts) {
+    const S2 = step(G, o, 0);
+    let mv = -Infinity;
+    for (const m of legalMoves(S2, r)) { const S3 = step(S2, m, 0); mv = Math.max(mv, S3.over ? (S3.over.type === 'win' && S3.over.winner === 0 ? 5000 : 0) : -tab(S3, 1)); }
+    if (mv < bv) { bv = mv; best = o; }
+  }
+  return best;
+}
 function chooseCpuMove(){
-  if (abOn(G)) return abCpuMove();
+  if (abOn(G) && ui.boss && G.ab.g[1] >= AB_MAX) { const o = abBossSkill(); if (o) return o; }
+  if (abOn(G) && !ui.boss) return abCpuMove();
   const s = solver(), ms = movesAt(G.turn);
   if (!s.ready || !ms.length) return null;
   const score = m => s.res[m.next] === -1 ? 1000 - s.dist[m.next] : s.res[m.next] === 1 ? -1000 + s.dist[m.next] : 0;
@@ -9281,6 +9599,7 @@ function setScreen(s, back){
       if (i >= 0) h.length = i;
       else if (!NO_RETURN.includes(ui.screen)) h.push(ui.screen);
     }
+    if (s !== 'stage') ui.mapScrolled = false;
     ui.screen = s;
     syncLobbyListen();
     for (const k in SCREENS) $(SCREENS[k]).hidden = k !== s;
@@ -10397,7 +10716,7 @@ function renderGame(){
     let tt = '', tc = '';
     const nameP = seatEl.querySelector('.name');
     let bf = nameP.querySelector('.bface');
-    const bossSeat = !net.on && ui.boss && k === 1, stageSeat = !net.on && ui.stage && k === 1, abSeat = abOn(G) && G.n === 2,
+    const bossSeat = !net.on && ui.boss && k === 1, stageSeat = !net.on && ui.stage && k === 1, abSeat = abOn(G) && G.n === 2 && !ui.boss,
       faceKey = bossSeat ? `boss:${ui.boss.base ? ui.boss.base.id : ''}:${ui.boss.form || 1}` : stageSeat ? 'st' + (ui.stage.tower ? ui.stage.id : ui.stage.c) : abSeat ? 'ab:' + G.ab.c[k] : '';
     if (bf && bf.dataset.k !== faceKey) { bf.remove(); bf = null; }
     if (faceKey && !bf) {
@@ -10474,8 +10793,8 @@ function renderGame(){
   $('#anaPanel').hidden = net.on || !!ui.boss || !!ui.puzzle || !!ui.stage || abOn(G);
   if (!net.on && !ui.boss && !ui.puzzle && !ui.stage && !abOn(G)) renderAnalysis();
   renderSkillBtn(act);
-  $('#abInfoBtn').hidden = !abOn(G);
-  if (!abOn(G)) $('#abInfo').hidden = true;
+  $('#abInfoBtn').hidden = !abOn(G) || !!ui.boss;
+  if (!abOn(G) || ui.boss) $('#abInfo').hidden = true;
   else if (!$('#abInfo').hidden) renderAbInfo();
   else if (!G.over && !lsGet('waribashi-abinfo') && $('#splash').hidden && ui.screen === 'game') { lsSet('waribashi-abinfo', '1'); openAbInfo(true); }
   renderRoomPanel(nm);
@@ -10485,7 +10804,7 @@ function renderGame(){
 }
 
 function renderSkillBtn(act){
-  const b = $('#skillBtn'), on = abOn(G) && G.n === 2;
+  const b = $('#skillBtn'), on = abOn(G) && G.n === 2 && !ui.boss;
   b.hidden = !on;
   if (!on) return;
   const k = isHuman(G.turn) ? G.turn : 0, g = G.ab.g[k], sk = SKILLS[abSk(G, k)], opts = act && k === G.turn ? abOptions(G, rules()) : [];
@@ -10751,7 +11070,7 @@ function renderStrip(act, ms, nm){
   turn.style.color = (seatChalk(G.turn) || {}).color || '';
   turn.textContent = `${nm[G.turn]}の番`;
   if (ui.puzzle) { ev.textContent = `${ui.puzzle.d}手詰め・のこり${ui.puzzle.left}手（${ruleShort(ui.puzzle.rules)}）`; ev.hidden = false; }
-  if (ui.boss) { ev.textContent = `ボスのライフ ${ui.boss.lives - ui.boss.life + 1}/${ui.boss.lives}・あなたのHP ${ui.boss.hp}・与えたダメージ ${ui.boss.dmg}`; ev.hidden = false; }
+  if (ui.boss) { ev.textContent = `ボスのライフ ${ui.boss.lives - ui.boss.life + 1}/${ui.boss.lives}・あなたのHP ${ui.boss.hp}・与えたダメージ ${ui.boss.dmg}` + (abOn(G) ? (G.ab.g[1] >= AB_MAX ? '・次のボスの番にパチン留め！' : `・パチン留めまであと${AB_MAX - G.ab.g[1]}ターン`) : ''); ev.hidden = false; }
   if (ui.stage && ui.stage.tower) { const sg = ui.stage; ev.textContent = `わりばしの塔 ${sg.n}階・あなたの手数 ${sg.moves}${sg.limit ? `/${sg.limit}` : ''}（${ruleShort(sg.rule)}）`; ev.hidden = false; }
   else if (ui.stage) { const sg = ui.stage; ev.textContent = `${sg.id}・あなたの手数 ${sg.moves}${sg.limit ? `/${sg.limit}` : ''}（${ruleShort(sg.rule)}）`; ev.hidden = false; }
   if (net.on && !net.connected) msg.textContent = 'インターネットにつながっていません';
