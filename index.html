@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="waribashi-version" content="11/20-1">
+<meta name="waribashi-version" content="11/20-2">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="指の本数を足して、相手の両手を消したら勝ち。教室の手遊び「わりばし」をスマホで。">
 <meta property="og:title" content="わりばし対戦">
@@ -4563,7 +4563,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/20-1';
+const APP_VERSION = '11/20-2';
 // ----- New version: the page's <head> carries its version (build.py writes it). Now and then, and whenever the app comes
 // back to the front, read the head of the live page; if its version differs, offer a reload. ?debug&vfast checks every few seconds.
 const VER_FAST = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('vfast'); } catch(e) { return false; } })();
@@ -9268,10 +9268,13 @@ function newGame(){
   render(); maybeCpu();
 }
 // The characters for a CPU / same-device ability battle: mine from my collection, the other side any character (or a surprise).
+// The character you picked for battle wins. Many friends have no full-body picture yet, so they can't stand on the home board:
+// the home partner is only the fallback (picking a home partner also picks it here, see setHomeChar).
 function abMine(){
+  const id = lsGet('waribashi-abme'), c = id && charaList().find(x => x.id === id);
+  if (c && abCan(c) && CHAR_SKILL[c.id]) return c.id;
   const h = myHomeChar();
-  if (h && abCan(h) && CHAR_SKILL[h.id]) return h.id;
-  const id = lsGet('waribashi-abme'), c = charaList().find(x => x.id === id); return c && abCan(c) ? c.id : 'waribo';
+  return h && abCan(h) && CHAR_SKILL[h.id] ? h.id : 'waribo';
 }
 // Admins may try every character and chalk (to check the balance).
 const abCan = c => !!(c && (c.have || net.admin));
@@ -10898,6 +10901,7 @@ function myHomeChar(){
 }
 function setHomeChar(id){
   lsSet('waribashi-homechar', id);
+  if (CHAR_SKILL[id]) lsSet('waribashi-abme', id);   // one character: the home partner also fights
   ui.tipUntil = 0; ui.tapN = 0; ui.charEx = '';
   net.profile = Object.assign({}, net.profile || {}, {homeChar: id});
   if (net.fb && net.uid) net.fb.update(net.fb.ref(net.fb.db, 'players/' + net.uid), {homeChar: id}).catch(() => {});
