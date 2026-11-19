@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="waribashi-version" content="11/18-7">
+<meta name="waribashi-version" content="11/19-2">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="指の本数を足して、相手の両手を消したら勝ち。教室の手遊び「わりばし」をスマホで。">
 <meta property="og:title" content="わりばし対戦">
@@ -22,7 +22,7 @@ body{margin:0}
 <title>わりばし対戦</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yusei+Magic&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=M+PLUS+Rounded+1c:wght@500;700;800&family=Yusei+Magic&display=swap">
 <style>
 /* Layout: a classroom wall. Menus sit in one narrow column of chalkboard tiles; the game is a wood-framed chalkboard with rivals across the top and you along the bottom. */
 :root{
@@ -60,14 +60,15 @@ body{margin:0}
   --coin:#f2cf5b;
   --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   --font-display:"Yusei Magic","Hiragino Maru Gothic ProN","BIZ UDPGothic","Meiryo",sans-serif;
-  --font-body:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Meiryo",sans-serif;
+  --font-body:"M PLUS Rounded 1c","Zen Maru Gothic","Hiragino Maru Gothic ProN","Meiryo",sans-serif;
+  --font-impact:"Dela Gothic One","Yusei Magic","Hiragino Sans","Meiryo",sans-serif;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{background:var(--wall)}
 body{
   background:var(--wall);color:var(--chalk);
-  font-family:var(--font-body);font-size:15px;line-height:1.65;line-break:strict;
+  font-family:var(--font-body);font-weight:500;font-size:15px;line-height:1.65;line-break:strict;
   padding-left:max(16px,env(safe-area-inset-left,0px));
   padding-right:max(16px,env(safe-area-inset-right,0px));
   padding-block:0 40px;
@@ -217,7 +218,7 @@ body.tabs .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .input:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .row{display:flex;flex-wrap:wrap;gap:8px}
 .row .input{flex:1 1 8em}
-.btn{min-height:44px;padding:8px 18px;border-radius:12px;border:1.5px solid var(--line);background:var(--panel);font-weight:700;font-size:15px;cursor:pointer}
+.btn{min-height:44px;padding:8px 18px;border-radius:12px;border:1.5px solid var(--line);background:var(--panel);font-weight:800;font-size:15px;cursor:pointer}
 .btn:hover:not(:disabled){border-color:var(--chalk-soft)}
 .btn:disabled{opacity:.4;cursor:default}
 .btn:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
@@ -457,16 +458,43 @@ fieldset:disabled .opts span{cursor:default}
 .tag.ab .gd{letter-spacing:0;margin-left:6px;color:#9fe0ff}
 .tag.ab.full .gd{color:#1c4d66}
 @keyframes abglow{50%{box-shadow:0 0 12px rgba(255,211,107,.7)}}
-.skillbtn{display:inline-flex;align-items:center;gap:8px}
-.skillbtn .sk-g{letter-spacing:.08em;color:var(--chalk-soft);font-size:12px}
+
 .skillbtn.ready{border-color:var(--coin);color:var(--coin);animation:abglow 1.6s ease-in-out infinite}
 .skillbtn.ready .sk-g{color:var(--coin)}
 .splits .chip.sk{min-width:200px;max-width:100%}
 .splits .chip.sk span{font-size:15px;font-family:inherit;font-weight:700}
 .splits .chip.sk.blk small{color:#9fe0ff}
-.hand[data-cab]::after{content:attr(data-cab);position:absolute;top:0;right:-2px;z-index:2;font-size:10px;font-weight:800;line-height:1.5;padding:0 6px;border-radius:999px;background:rgba(10,12,10,.55);color:var(--c);border:1px solid var(--c);white-space:nowrap;pointer-events:none}
-.opp .hand[data-cab]::after{top:auto;bottom:0}
-.hand.cab-used::after{opacity:.45;text-decoration:line-through}
+.hand .cab{--kc:var(--chalk);position:absolute;top:0;right:-4px;z-index:2;display:inline-flex;align-items:center;gap:3px;padding:1px 7px 1px 4px;border-radius:999px;background:rgba(10,12,10,.72);border:1.5px solid var(--kc);color:var(--kc);font-size:10.5px;font-weight:800;line-height:1.35;white-space:nowrap;pointer-events:none}
+.hand .cab .abic{width:13px;height:13px;stroke-width:2.4}
+.opp .hand .cab{top:auto;bottom:0}
+.hand.cab-used .cab{opacity:.45;text-decoration:line-through}
+.hand .pv{position:absolute;left:50%;top:56%;transform:translate(-50%,-50%);z-index:4;display:grid;justify-items:center;gap:2px;padding:4px 9px 5px;border-radius:12px;background:rgba(14,16,14,.92);border:1.5px solid var(--chalk-soft);color:var(--chalk);white-space:nowrap;pointer-events:none;animation:stIn .15s ease-out}
+.hand.tut-hl,.skillbtn.tut-hl,.chip.tut-hl{animation:tutHl 1.1s ease-in-out infinite}
+.hand.tut-hl{border-radius:22px;box-shadow:0 0 0 3px var(--you),0 0 24px 4px rgba(243,215,116,.55)}
+.skillbtn.tut-hl,.chip.tut-hl{border-color:var(--you);box-shadow:0 0 0 2px var(--you),0 0 20px 3px rgba(243,215,116,.55)}
+@keyframes tutHl{50%{box-shadow:0 0 0 3px var(--you),0 0 34px 8px rgba(243,215,116,.8)}}
+.turn.tut{font-size:18px;color:var(--you)!important}
+@media (prefers-reduced-motion: reduce){.hand.tut-hl,.skillbtn.tut-hl,.chip.tut-hl{animation:none}}
+.hand .pv b{display:inline-flex;align-items:center;gap:4px;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
+.hand .pv b.ko{color:var(--lose)}
+.hand .pv b .abic{width:15px;height:15px;color:var(--p2)}
+.hand .pv span{display:flex;gap:6px}
+.hand .pv i{--kc:var(--chalk);display:inline-flex;align-items:center;gap:2px;font-style:normal;font-size:11px;font-weight:800;color:var(--kc)}
+.hand .pv i .abic{width:12px;height:12px;stroke-width:2.4}
+.seat.abseat .name .bface{position:relative;overflow:visible}
+.seat.abseat .name .bface::after{content:"";position:absolute;inset:-5px;border-radius:50%;background:conic-gradient(var(--you) calc(var(--g,0) * 1turn),rgba(236,238,228,.18) 0);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3.5px),#000 calc(100% - 3px));mask:radial-gradient(farthest-side,transparent calc(100% - 3.5px),#000 calc(100% - 3px));pointer-events:none}
+.seat.abseat.gfull .name .bface::after{animation:gring 1.4s ease-in-out infinite}
+@keyframes gring{50%{filter:drop-shadow(0 0 6px rgba(243,215,116,.95))}}
+.skillbtn .sk-i{display:inline-grid;place-items:center}
+.skillbtn .sk-i .abic{width:20px;height:20px}
+.abcall .cf1{--kc:var(--coin);display:inline-flex;align-items:center;gap:6px;color:var(--kc)}
+.abcall .cf1 .abic{width:28px;height:28px;stroke-width:2.2}
+.abcall{border-color:var(--kc,var(--coin))}
+.abcall.fx{display:grid;justify-items:center;gap:0 12px;top:50%;padding:8px 16px;font-size:22px;animation-duration:1.7s}
+.abcall.fx .cf1 .abic{width:22px;height:22px}
+.abcall.fx small{font-size:12px}
+.hand[data-cab]::after{display:none;content:attr(data-cab);position:absolute;top:0;right:-2px;z-index:2;font-size:10px;font-weight:800;line-height:1.5;padding:0 6px;border-radius:999px;background:rgba(10,12,10,.55);color:var(--c);border:1px solid var(--c);white-space:nowrap;pointer-events:none}
+
 .abchips.ck .abchip .fc .cf{display:block;width:30px}
 .abchip .ab0{color:var(--chalk-soft)}
 .abchip{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:pan-x pan-y}
@@ -501,21 +529,156 @@ fieldset:disabled .opts span{cursor:default}
 .abi-note{margin:0;font-size:12px;color:var(--chalk-soft);text-align:center}
 .abi-note:empty{display:none}
 .abi-ok{justify-self:center;min-width:140px}
+/* ----- ability icons, kinds, loadout cards, picker ----- */
+.abic{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
+.abl{--kc:var(--chalk);display:inline-flex;align-items:center;gap:5px;min-width:0;color:var(--kc)}
+.abl b{font-size:13px;font-weight:800;line-height:1.2;white-space:nowrap}
+.abl i{font-style:normal;font-size:9.5px;font-weight:800;letter-spacing:.06em;padding:0 6px;border-radius:999px;border:1.2px solid var(--kc);line-height:1.5;white-space:nowrap}
+.abl.none{color:var(--chalk-soft)}
+.lobox{min-width:0}
+.rar.N{background:#d5d3cb}
+.cabx{display:inline-flex;flex-wrap:wrap;align-items:center;gap:3px 6px;min-width:0}
+.cabx .rar{min-width:2.4em;font-size:9.5px;line-height:1.5;padding:0 4px}
+.cabx em{font-style:normal;font-size:10.5px;font-weight:700;color:var(--chalk-soft);white-space:nowrap}
+.cab-s{display:block;font-size:11.5px;line-height:1.4;color:var(--chalk)}
+.lo-h .cabx{justify-content:center}
+.shop-ab{display:grid;justify-items:center;gap:2px;margin:2px 0 4px;text-align:center}
+.shop-ab .abl b{font-size:12px}
+.g-ab{display:flex;justify-content:center;margin-top:2px}
+.item .shop-ab svg.abic,.item .g-ab svg.abic,.gp .g-ab svg.abic,.bk .g-ab svg.abic,.gcard .g-ab svg.abic{width:15px;height:15px;max-width:none;margin:0;filter:none}
+.rate-ab{display:inline-flex;align-items:center;gap:2px;font-size:11px;font-weight:700;color:var(--kc)}
+.rate-ab .abic{width:12px;height:12px}
+.g-ab .abl b{font-size:11.5px}
+.g-ab .abl i{display:none}
+.g-ab .cabx .rar{display:none}
+.gp .g-ab em,.bk .g-ab em{display:none}
+.hand .cab em{font-style:normal;display:inline-grid;place-items:center;min-width:14px;height:14px;margin-left:1px;border-radius:7px;background:var(--kc);color:#1c1b18;font-size:9.5px;font-weight:900;line-height:1}
+.charget{z-index:80}
+.cg-card{width:min(340px,100%);justify-items:center;text-align:center;gap:8px;padding:18px 16px 16px;border:6px solid var(--wood);border-top-color:var(--wood-hi);background-color:var(--board);background-image:radial-gradient(ellipse 60% 40% at 50% 38%,rgba(243,215,116,.16),transparent 70%),var(--noise)}
+.cg-k{margin:0;font-family:var(--font-display);font-size:26px;color:var(--you);letter-spacing:.06em;animation:cgPop .5s cubic-bezier(.2,1.6,.4,1)}
+@keyframes cgPop{from{transform:scale(.4);opacity:0}}
+.cg-fig{display:grid;place-items:center;min-height:120px}
+.cg-fig .cav{width:110px;height:110px}
+.cg-fig .bfc,.cg-fig .bfc svg{width:110px;height:110px;display:block}
+.cg-art{display:block;width:150px}
+.cg-art svg{display:block;width:100%;height:auto}
+.cg-n{margin:0;font-size:20px;font-weight:800}
+.cg-sk{display:grid;justify-items:center;gap:4px;padding:8px 12px;border-radius:12px;border:1.5px dashed var(--chalk-faint)}
+.cg-sk small{font-size:12.5px;line-height:1.5}
+.cg-note{margin:0;font-size:12px;color:var(--chalk-soft)}
+.cg-btns{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;width:100%}
+.lo{display:grid;gap:8px}
+.lo-card{position:relative;min-width:0;border-radius:12px;border:1.5px solid var(--chalk-faint);background-color:var(--board-deep);background-image:var(--noise);color:var(--chalk);font:inherit;text-align:left;cursor:pointer;transition:border-color .15s,transform .1s}
+.lo-card:hover{border-color:var(--chalk-soft)}
+.lo-card:active{transform:scale(.98)}
+.lo-c{display:grid;grid-template-columns:58px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;padding:10px 10px 10px 8px}
+.lo-fig{display:grid;place-items:center}
+.lo-c .lo-fig .cav,.lo-c .lo-fig .bfc{width:54px;height:54px}
+.lo-c .lo-fig .bfc svg{width:54px;height:54px;display:block}
+.lo-fig.any{width:54px;height:54px;border-radius:50%;border:2px dashed var(--chalk-soft);font-family:var(--font-display);font-size:26px;color:var(--chalk-soft)}
+.lo-tx{display:grid;gap:3px;min-width:0}
+.lo-k{font-size:10.5px;font-weight:700;letter-spacing:.08em;color:var(--chalk-soft)}
+.lo-n{font-size:15px;line-height:1.25;overflow-wrap:anywhere}
+.lo-card small,.lo-opt small{font-size:12px;line-height:1.45;color:var(--chalk)}
+.lo-chg{align-self:center;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;border:1.5px solid var(--chalk-faint);color:var(--chalk-soft)}
+.lo-hands{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lo-h{display:grid;justify-items:center;align-content:start;gap:4px;padding:8px 8px 10px;text-align:center}
+.lo-h .lo-k{justify-self:start}
+.lo-h .lo-fig .cf{display:block;width:40px}
+.lo-h .abl{justify-content:center;flex-wrap:wrap}
+.lo-h.none{border-style:dashed}
+.losheet{align-items:end;padding-bottom:max(12px,env(safe-area-inset-bottom,0px))}
+.lo-card-s{width:min(440px,100%);max-height:min(640px,calc(100svh - 40px));grid-template-rows:auto auto minmax(0,1fr) auto;justify-items:stretch;text-align:left;padding:16px 14px 12px}
+.lo-card-s .cfm-t{text-align:center}
+.lo-hint{margin:0;font-size:12px;line-height:1.5;color:var(--chalk-soft);text-align:center}
+.lo-list{display:grid;gap:6px;overflow-y:auto;min-height:0;padding:2px;margin:0 -2px}
+.lo-sec{margin:8px 0 0;font-size:11.5px;font-weight:700;letter-spacing:.1em;color:var(--chalk-soft);border-bottom:1.5px dashed var(--chalk-faint);padding-bottom:3px}
+.lo-sec:first-child{margin-top:0}
+.lo-none{margin:0;font-size:12px;color:var(--chalk-soft)}
+.lo-opt{display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;align-items:center;width:100%;padding:8px 10px 8px 6px;border-radius:12px;border:1.5px solid var(--chalk-faint);background:rgba(0,0,0,.18);color:var(--chalk);font:inherit;text-align:left;cursor:pointer}
+.lo-opt .lo-fig .cav,.lo-opt .lo-fig .bfc,.lo-opt .lo-fig .bfc svg{width:40px;height:40px;display:block}
+.lo-opt .lo-fig .cf{display:block;width:32px}
+.lo-opt .lo-fig .any{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:2px dashed var(--chalk-soft);font-family:var(--font-display);font-size:20px;color:var(--chalk-soft)}
+.lo-opt .lo-n{font-size:14px}
+.lo-opt[aria-checked="true"]{border-color:var(--you);box-shadow:inset 0 0 0 1px var(--you)}
+.lo-opt.lock{opacity:.6}
+.lo-opt.lock small{color:var(--chalk-soft)}
+.lo-close{justify-self:center;min-width:140px;margin-top:6px}
+.hub-p{display:grid;gap:10px}
+.hub-tut{display:grid;gap:3px;width:100%;padding:12px 14px;border-radius:14px;border:2px dashed var(--you);background:rgba(243,215,116,.07);color:var(--chalk);font:inherit;text-align:left;cursor:pointer}
+.hub-tut .ht-k{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--you)}
+.hub-tut b{font-size:15px;line-height:1.4}
+.hub-tut .ht-r{font-size:12px;font-weight:700;color:var(--you)}
+.hub-tut.done{border-color:var(--chalk-faint);background:none}
+.hub-tut.done .ht-k,.hub-tut.done .ht-r{color:var(--chalk-soft)}
+.hub-p h3{margin:0}
+.hub-h{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.hub-n{margin:0}
+.hub-lv{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.hub-lv button{min-height:44px;border-radius:12px;border:1.5px solid var(--chalk-faint);background:var(--board-deep);color:var(--chalk);font:inherit;font-weight:700;cursor:pointer}
+.hub-lv button[aria-checked="true"]{border-color:var(--you);color:var(--you);box-shadow:inset 0 0 0 1px var(--you)}
+.hub-more{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#hubStart{font-family:var(--font-display);font-weight:400;font-size:22px;letter-spacing:.08em}
+.hm.c3{--c:var(--p3)}
+.hm-ab{border-color:var(--wood);border-top-color:var(--wood-hi);background-image:radial-gradient(ellipse 60% 100% at 15% 50%,rgba(200,180,244,.18),transparent 72%),var(--noise)}
+.hab-fig{grid-row:1/span 2;display:grid;place-items:center;width:28px;height:28px;color:var(--c)}
+.hab-fig .abic{width:26px;height:26px}
 .seat .tag.ab{cursor:pointer}
 .hand.frozen::before{content:"とめられ中";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-8deg);z-index:3;font-size:11px;font-weight:800;color:#2a2824;background:#ffd36b;border-radius:6px;padding:2px 6px;white-space:nowrap;pointer-events:none}
 .seat.guard .hands{filter:drop-shadow(0 0 6px rgba(159,224,255,.9))}
 .abcall{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);z-index:6;margin:0;padding:10px 18px;border-radius:16px;background:rgba(20,22,20,.9);border:2px solid var(--coin);color:var(--coin);font-family:var(--font-display);font-size:28px;text-align:center;width:max-content;max-width:calc(100% - 32px);pointer-events:none;animation:abcall 2.2s ease-out both}
 .abcall small{display:block;font-family:inherit;font-size:13px;line-height:1.5;color:var(--chalk);text-align:center;margin-top:2px}
 @keyframes abcall{0%{opacity:0;transform:translate(-50%,-30%) scale(.8)}9%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}15%{transform:translate(-50%,-50%) scale(1)}85%{opacity:1}100%{opacity:0}}
-@media (prefers-reduced-motion: reduce){.abcall,.tag.ab.full,.skillbtn.ready{animation:none}}
+@media (prefers-reduced-motion: reduce){.res-hana,.abcall.chalkcall,.abcall,.tag.ab.full,.skillbtn.ready,.seat.abseat.gfull .name .bface::after,.ci-sp,.abcall.band .ac-sp,.res-t::before{animation:none}}
 .chip{display:inline-flex;flex-direction:column;align-items:center;gap:2px;min-height:44px;padding:6px 16px;border-radius:12px;border:1.5px solid var(--chalk-faint);background:var(--board-deep);cursor:pointer}
 .chip span{font-family:var(--font-display);font-size:20px;line-height:1.2}
 .chip small{font-size:11px;font-weight:700}
 .chip small.k{color:var(--chalk-soft)}
 .chip:hover{border-color:var(--chalk-soft)}
 .chip:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
-.controls{display:flex;flex-wrap:wrap;gap:10px}
-.controls .end{margin-left:auto}
+/* the bar above the board */
+.gbar{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;min-height:38px}
+.gb-back{display:inline-flex;align-items:center;gap:4px;min-height:36px;padding:0 12px 0 8px;border-radius:999px;border:1.5px solid var(--line);background:var(--panel);color:var(--chalk);font:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.gb-back::before{content:"";width:8px;height:8px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin-right:2px}
+.gb-back.danger{border-color:var(--lose);color:var(--lose)}
+.gb-mode{margin:0;min-width:0;text-align:center;font-size:12.5px;font-weight:700;letter-spacing:.06em;color:var(--chalk-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gb-r{display:flex;gap:6px}
+.gb-ic{display:inline-grid;justify-items:center;align-content:center;gap:1px;min-width:46px;min-height:38px;padding:2px 6px;border-radius:10px;border:1.5px solid var(--line);background:var(--panel);color:var(--chalk);font:inherit;cursor:pointer}
+.gb-ic svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.gb-ic span{font-size:9.5px;font-weight:700;letter-spacing:.04em;line-height:1.1;white-space:nowrap}
+.gb-txt{min-height:38px;padding:0 12px;border-radius:10px;border:1.5px solid var(--lose);background:var(--panel);color:var(--lose);font:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.gb-txt:disabled{opacity:.5}
+/* the action bar under the board: a wooden ledge with big tiles */
+.actbar{display:flex;gap:8px;padding:8px;border-radius:14px;background:linear-gradient(180deg,var(--wood-hi),var(--wood) 60%,#5e3d24);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 12px rgba(0,0,0,.35)}
+.act{flex:1 1 0;min-width:0;display:grid;justify-items:center;align-content:center;gap:3px;min-height:62px;padding:6px 6px 7px;border-radius:10px;border:1.5px solid rgba(236,238,228,.14);background-color:var(--board-deep);background-image:var(--noise);color:var(--chalk);font:inherit;cursor:pointer;transition:transform .1s,border-color .15s,opacity .15s}
+.act:active:not(:disabled){transform:scale(.97)}
+.act:disabled{opacity:.42;cursor:default}
+.act .act-i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
+.act .act-t{font-size:12px;font-weight:800;letter-spacing:.04em;white-space:nowrap}
+.act[aria-expanded="true"]{border-color:var(--you);color:var(--you)}
+.actbar .stampbtn{width:auto;padding:6px 6px 7px}
+.actbar .stampbtn svg{width:24px;height:24px;stroke-width:2.6}
+/* the skill tile: icon, name, what is left, and the gauge filling along its bottom */
+.act-sk{flex:1.9 1 0;position:relative;grid-template-columns:auto minmax(0,1fr);justify-items:start;column-gap:8px;padding:6px 10px 12px;overflow:hidden}
+.act-sk .sk-i{grid-row:1/span 2}
+.act-sk .sk-i .abic{width:28px;height:28px}
+.act-sk .sk-tx{display:grid;gap:1px;min-width:0;text-align:left}
+.act-sk .sk-n{font-size:14.5px;font-weight:800;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.act-sk .sk-g{font-size:11px;letter-spacing:.02em;color:var(--chalk-soft)}
+.act-sk .sk-bar{position:absolute;left:10px;right:10px;bottom:5px;height:4px;border-radius:2px;background:rgba(236,238,228,.14);overflow:hidden}
+.act-sk .sk-bar i{display:block;height:100%;width:calc(var(--g,0) * 100%);background:var(--you);border-radius:2px;transition:width .3s}
+.act-sk.full{border-color:rgba(243,215,116,.55)}
+.act-sk.ready{border-color:var(--you);color:var(--you);box-shadow:0 0 0 1px var(--you),0 0 18px 2px rgba(243,215,116,.45)}
+.act-sk.ready .sk-g{color:var(--you);font-weight:800}
+.act-sk:disabled{opacity:.75}
+/* name plates and the side whose turn it is */
+.seat .name{padding:2px 12px 2px 8px;border-radius:999px;background:rgba(0,0,0,.22);border:1px solid rgba(236,238,228,.1)}
+.seat.active .name{border-color:color-mix(in srgb,var(--c) 70%,transparent);box-shadow:0 0 12px -2px color-mix(in srgb,var(--c) 60%,transparent)}
+.seat .hands{border-radius:24px;transition:background .3s}
+.seat .name .bface{width:36px;height:36px;display:inline-grid;place-items:center;margin-right:2px}
+.seat .name .bface>svg{width:auto;height:100%;max-width:100%}
+.seat .name .bface.cav{width:34px;height:34px}
+.seat.active .hands{background:radial-gradient(ellipse 58% 62% at 50% 52%,color-mix(in srgb,var(--c) 11%,transparent),transparent 72%)}
 
 .logbox{max-height:220px;overflow-y:auto;margin:0 -4px;padding:0 4px}
 .log{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:14px}
@@ -718,8 +881,105 @@ fieldset:disabled .opts span{cursor:default}
 /* ----- Effects ----- */
 .fx-layer{position:fixed;inset:0;z-index:80;pointer-events:none;overflow:hidden}
 .fx-dust{position:absolute;display:block;border-radius:35%;opacity:.95}
-.fx-float{position:absolute;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:22px;line-height:1;white-space:nowrap;text-shadow:0 2px 0 rgba(0,0,0,.45),0 0 10px rgba(0,0,0,.35)}
-.fx-float.big{font-size:34px}
+.fx-float{position:absolute;transform:translate(-50%,-50%);font-family:var(--font-impact);font-size:24px;letter-spacing:.02em;line-height:1;white-space:nowrap;text-shadow:0 2px 0 rgba(0,0,0,.45),0 0 10px rgba(0,0,0,.35)}
+.fx-float.big{font-size:36px}
+.fx-trail{position:absolute;height:6px;margin-top:-3px;transform-origin:0 50%;border-radius:3px;background:linear-gradient(90deg,transparent,currentColor 40%,#fff);box-shadow:0 0 12px currentColor;opacity:.9}
+.fx-burst{position:absolute;width:110px;height:110px;pointer-events:none}
+.fx-burst.big{width:170px;height:170px}
+.fx-burst svg{display:block;width:100%;height:100%;overflow:visible}
+.fx-burst polygon{fill:currentColor;fill-opacity:.35;stroke:#fffdf4;stroke-width:3;stroke-linejoin:round}
+.fx-slash{position:absolute;width:150px;height:150px;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 0 8px currentColor)}
+.fx-slash svg{display:block;width:100%;height:100%;overflow:visible}
+.fx-slash path{fill:none;stroke:#fffdf4;stroke-width:9;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
+.board.flash::after{content:"";position:absolute;inset:0;z-index:20;background:#fffdf4;pointer-events:none;animation:bflash .32s ease-out forwards}
+@keyframes bflash{from{opacity:.38}to{opacity:0}}
+/* 黒板風 */
+.ccut{position:absolute;inset:0;z-index:25;pointer-events:none;overflow:hidden;display:grid;place-items:center;--ww:300px}
+.cc-lines{position:absolute;inset:-6%;width:112%;height:112%;opacity:0}
+.ccut:not(.lines) .cc-lines{display:none}
+.cc-word{position:relative;width:min(96%,420px)}
+.cc-pad{position:absolute;left:50%;top:50%;width:calc(var(--ww) + 70px);height:var(--wh,120px);transform:translate(-50%,-50%) rotate(-4deg);border-radius:30px;background-color:var(--board);background-image:radial-gradient(ellipse 70% 60% at 40% 50%,rgba(236,238,228,.08),transparent 75%),var(--noise);box-shadow:0 0 22px 14px var(--board)}
+.cc-word svg{display:block;width:100%;height:auto;overflow:visible}
+.cc-word text{font-family:var(--font-display);paint-order:stroke fill}
+.cc-stick{position:absolute;left:calc(50% - var(--ww) / 2);top:46%;width:34px;height:10px;border-radius:3px;background:linear-gradient(90deg,#fffdf4,#e6e4d8);box-shadow:0 2px 3px rgba(0,0,0,.35);opacity:0}
+.cc-eraser{position:absolute;left:calc(50% - var(--ww) / 2);top:calc(50% - 26px);width:86px;height:46px;border-radius:7px;background:linear-gradient(180deg,#9c6b43 0 58%,#3a3f4a 58% 100%);box-shadow:0 4px 8px rgba(0,0,0,.45),inset 0 2px 0 rgba(255,255,255,.18);opacity:0}
+.cc-eraser::after{content:"";position:absolute;left:8px;right:8px;top:6px;height:8px;border-radius:3px;background:rgba(255,255,255,.18)}
+.cc-smear{position:absolute;left:calc(50% - var(--ww) / 2 - 20px);top:calc(50% - 50px);width:calc(var(--ww) + 60px);height:100px;border-radius:40px;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(236,238,228,.22),transparent 72%);filter:blur(6px);opacity:0}
+.fx-cword{position:absolute;width:170px;pointer-events:none}
+.fx-cword.big{width:220px}
+.fx-cword svg{display:block;width:100%;height:auto;overflow:visible}
+.fx-cword text{font-family:var(--font-display);paint-order:stroke fill}
+.fx-puff{position:absolute;border-radius:50%;filter:blur(5px);pointer-events:none}
+.fx-slash.red{color:#ff6b6b;filter:none}
+.fx-slash.red path{stroke:#ff7a6e;stroke-width:12}
+.fx-chalk .fx-trail{height:4px;margin-top:-2px;background:repeating-linear-gradient(90deg,rgba(236,238,228,.85) 0 10px,transparent 10px 16px);box-shadow:none;opacity:.7}
+.fx-chalk .fx-float{font-family:var(--font-display);text-shadow:0 2px 0 rgba(0,0,0,.45)!important;color:#eceee4!important}
+/* the skill written on the board */
+.abcall.chalkcall{left:4%;right:4%;width:auto;max-width:none;top:46%;display:grid;grid-template-columns:auto auto;justify-content:center;align-items:center;column-gap:12px;padding:10px 14px;border:0;border-radius:30px;background-color:var(--board);background-image:radial-gradient(ellipse 70% 60% at 40% 50%,rgba(236,238,228,.08),transparent 75%),var(--noise);box-shadow:0 0 22px 14px var(--board);transform:translateY(-50%) rotate(-4deg);animation:chalkCall 2.2s ease-out both}
+.abcall.chalkcall .ac-sp{display:none}
+.abcall.chalkcall .ac-face{grid-row:1/span 2;display:grid;place-items:center;width:58px;height:58px;border-radius:50%;border:3px solid var(--chalk-soft);overflow:hidden}
+.abcall.chalkcall .ac-face .bface{width:48px;height:48px;margin:0;display:inline-grid;place-items:center}
+.abcall.chalkcall .ac-face .bface:not(.cav){width:58px;height:58px;align-items:start}
+.abcall.chalkcall .ac-face .bface>svg{width:auto;height:100%;max-width:100%}
+.abcall.chalkcall .ac-face .bface:not(.cav)>svg{height:92px!important;max-width:none!important;margin-top:3px}
+.abcall.chalkcall .cf1{font-family:var(--font-display);font-size:30px;white-space:nowrap;color:var(--kc);filter:url(#chalkS);text-shadow:none}
+.fx-chalk .abcall.fx{border:0;border-radius:24px;background-color:var(--board);background-image:var(--noise);box-shadow:0 0 18px 10px var(--board);color:var(--chalk)}
+.fx-chalk .abcall.fx .cf1{font-family:var(--font-display);filter:url(#chalkS)}
+.fx-chalk .abcall.fx small{font-family:var(--font-display)}
+.abcall.chalkcall .cf1 .abic{width:30px;height:30px}
+.abcall.chalkcall small{grid-column:2;text-align:left;margin:0;color:var(--chalk);font-family:var(--font-display);font-size:13px}
+@keyframes chalkCall{0%{clip-path:inset(0 100% 0 0)}20%{clip-path:inset(0 0 0 0)}80%{clip-path:inset(0 0 0 0);opacity:1}100%{clip-path:inset(0 0 0 100%);opacity:.6}}
+/* a win: 花丸 and 100 */
+.chalkres .res-t::before{display:none}
+.chalkres .res-t{font-family:var(--font-display)}
+.res-in{position:relative}
+.res-hana{position:absolute;right:-14px;top:-48px;width:124px;color:#ff7a6e;rotate:12deg;pointer-events:none;animation:hanaIn .5s .25s cubic-bezier(.2,1.6,.4,1) both}
+.res-hana svg{display:block;width:100%;height:auto}
+.res-hana b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--font-display);font-weight:400;font-size:34px;color:#ff7a6e;filter:url(#chalkS);padding-top:4px}
+@keyframes hanaIn{from{transform:scale(2.4);opacity:0}to{transform:none;opacity:1}}
+/* cut-ins */
+.cutin,.vscut{position:absolute;inset:0;z-index:25;pointer-events:none;overflow:hidden}
+.cutin{--cc:#f3d774;display:grid;align-content:center}
+.ci-ln{position:absolute;left:-10%;right:-10%;height:3px;top:calc(50% - 52px);background:linear-gradient(90deg,transparent,#fffdf4 40%,var(--cc) 60%,transparent);box-shadow:0 0 10px var(--cc);transform-origin:50% 50%;rotate:-8deg}
+.ci-ln+.ci-ln{top:calc(50% + 50px)}
+.ci-band{position:relative;margin:0 -12%;height:92px;display:grid;place-content:center;justify-items:center;gap:0;rotate:-8deg;background:rgba(16,18,16,.88);border-top:4px solid var(--cc);border-bottom:4px solid var(--cc);box-shadow:0 0 26px -4px var(--cc)}
+.ci-sp{position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 26px,rgba(255,255,255,.07) 26px 28px,transparent 28px 61px,color-mix(in srgb,var(--cc) 22%,transparent) 61px 63px);animation:ciSpeed .5s linear infinite}
+@keyframes ciSpeed{to{background-position:-180px 0}}
+.ci-t{position:relative;font-family:var(--font-impact);font-weight:400;font-size:38px;line-height:1.1;letter-spacing:.04em;color:#fffdf4;text-shadow:0 0 14px var(--cc),0 3px 0 rgba(0,0,0,.6);white-space:nowrap}
+.ci-s{position:relative;font-size:13px;font-weight:800;letter-spacing:.1em;color:var(--cc);white-space:nowrap}
+.ci-s:empty{display:none}
+.vs-h{--cc:#f3d774;position:absolute;left:-6%;right:-6%;height:34%;display:flex;align-items:center;gap:14px;padding:0 14%;rotate:-8deg;background:linear-gradient(90deg,rgba(16,18,16,.96),color-mix(in srgb,var(--cc) 30%,rgba(16,18,16,.96)));border-top:4px solid var(--cc);border-bottom:4px solid var(--cc)}
+.vs-op{top:14%;flex-direction:row-reverse;text-align:right;background:linear-gradient(270deg,rgba(16,18,16,.96),color-mix(in srgb,var(--cc) 30%,rgba(16,18,16,.96)))}
+.vs-me{bottom:14%}
+.vs-f{display:grid;place-items:center;flex:none;width:76px;height:76px;border-radius:50%;background:rgba(0,0,0,.35);box-shadow:0 0 0 3px var(--cc)}
+.vs-f{overflow:hidden}
+.vs-f .bface{width:62px;height:62px;margin:0;display:inline-grid;place-items:center}
+.vs-f .bface>svg{width:auto;height:100%;max-width:100%}
+.vs-f .bface:not(.cav){width:76px;height:76px;align-items:start}
+.vs-f .bface:not(.cav)>svg{height:118px;max-width:none;margin-top:4px}
+.vs-f .bface.cav{width:66px;height:66px}
+.vs-ini{font-family:var(--font-impact);font-size:30px;color:var(--cc)}
+.vs-tx{display:grid;gap:2px;min-width:0}
+.vs-tx b{font-family:var(--font-impact);font-weight:400;font-size:26px;line-height:1.15;color:#fffdf4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vs-tx small{font-size:12px;font-weight:800;color:var(--cc)}
+.vs-x{position:absolute;left:50%;top:50%;font-family:var(--font-impact);font-weight:400;font-size:64px;line-height:1;color:#fffdf4;-webkit-text-stroke:3px #2a2824;paint-order:stroke fill;text-shadow:0 0 24px rgba(255,140,90,.9),0 4px 0 rgba(0,0,0,.5)}
+/* the skill as a band */
+.abcall.band{left:-8%;right:-8%;width:auto;max-width:none;top:46%;display:grid;grid-template-columns:auto auto;justify-content:center;align-items:center;column-gap:12px;padding:10px 12%;border-radius:0;border-width:4px 0;border-color:var(--kc);background:rgba(16,18,16,.9);box-shadow:0 0 30px -4px var(--kc);transform:translateY(-50%);rotate:-7deg;animation:abBand 2.2s ease-out both}
+.abcall.band .ac-sp{position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 22px,rgba(255,255,255,.07) 22px 24px,transparent 24px 57px,color-mix(in srgb,var(--kc) 25%,transparent) 57px 59px);animation:ciSpeed .45s linear infinite;pointer-events:none}
+.abcall.band .ac-face{grid-row:1/span 2;position:relative;display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:rgba(0,0,0,.35);box-shadow:0 0 0 3px var(--kc)}
+.abcall.band .ac-face{overflow:hidden}
+.abcall.band .ac-face .bface{width:48px;height:48px;margin:0;display:inline-grid;place-items:center}
+.abcall.band .ac-face .bface:not(.cav){width:58px;height:58px;align-items:start}
+.abcall.band .ac-face .bface:not(.cav)>svg{height:92px!important;max-width:none!important;margin-top:3px}
+.abcall.band .ac-face .bface>svg{width:auto;height:100%;max-width:100%}
+.abcall.band .cf1{position:relative;font-family:var(--font-impact);font-size:30px;color:#fffdf4;text-shadow:0 0 14px var(--kc),0 3px 0 rgba(0,0,0,.6);transform:skewX(-10deg)}
+.abcall.band .cf1 .abic{color:var(--kc)}
+.abcall.band small{position:relative;grid-column:2;text-align:left;margin:0;color:var(--chalk)}
+@keyframes abBand{0%{clip-path:inset(50% 0 50% 0);opacity:0}8%{clip-path:inset(50% 0 50% 0);opacity:1}18%{clip-path:inset(0 0 0 0)}86%{clip-path:inset(0 0 0 0);opacity:1}100%{clip-path:inset(50% 0 50% 0);opacity:1}}
+/* the result's words land on a band too */
+.res-t{position:relative;isolation:isolate;font-family:var(--font-impact);font-weight:400;padding:4px 0}
+.res-t::before{content:"";position:absolute;left:-40%;right:-40%;top:14%;bottom:10%;z-index:-1;rotate:-6deg;background:rgba(16,18,16,.75);border-top:4px solid currentColor;border-bottom:4px solid currentColor;animation:resBand .5s cubic-bezier(.2,.9,.3,1) both}
+@keyframes resBand{from{clip-path:inset(50% 0 50% 0)}to{clip-path:inset(0 0 0 0)}}
 .fx-coin{position:absolute;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff6c4 0 18%,#f3cf5a 46%,#b8861d 100%);box-shadow:inset 0 0 0 1.5px #9c7012,0 2px 6px rgba(0,0,0,.4)}
 /* result */
 .result{position:fixed;inset:0;z-index:55;display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-left,0px));background:rgba(20,18,15,.78)}
@@ -1841,6 +2101,20 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
   .mag > b{font-size:9.5px}
   .mag .mg text{font-size:20px}
 }
+/* the left column: 能力バトル on top (full width), カスタム and CPU side by side under it */
+.hm-pair{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.hm-pair .hm-ab{grid-column:1/-1}
+.hm-ab .hm-k{font-size:17px;white-space:nowrap;letter-spacing:-.01em}
+.hm-ab .hm-d{color:var(--chalk-soft)}
+.hm-pair .hm-sm:not(.hm-ab){grid-template-columns:none;justify-items:center;align-content:center;text-align:center;row-gap:3px;padding:6px 4px}
+.hm-pair .hm-sm:not(.hm-ab) .hm-ic{grid-row:auto;width:26px;height:26px}
+.hm-pair .hm-sm:not(.hm-ab) .hm-k{font-size:14px;white-space:nowrap;letter-spacing:-.02em}
+.hm-pair .hm-sm:not(.hm-ab) .hm-d{display:none}
+@media (max-height:780px){
+  .hm-pair .hm-sm:not(.hm-ab){grid-template-columns:auto auto;justify-content:center;column-gap:5px;padding:4px}
+  .hm-pair .hm-sm:not(.hm-ab) .hm-ic{width:22px;height:22px}
+  .hm-pair .hm-sm:not(.hm-ab) .hm-k{font-size:13px}
+}
 
 
 /* ===================== わりばしの塔 ===================== */
@@ -1940,6 +2214,9 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
 .mn-t small{display:block;margin-top:auto;max-width:100%;font-size:10.5px;line-height:1.35;color:var(--chalk-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mn-t .nb-new{position:absolute;top:-8px;right:-6px;font-style:normal}
 .mn-t .nb-t{white-space:nowrap}
+a.mn-t{text-decoration:none}
+.mn-dc svg{stroke:#9aa6ff}
+.mn-ext{position:absolute;top:6px;right:9px;font-style:normal;font-size:12px;color:var(--chalk-soft)}
 #scrMenu .fold{scroll-margin-top:84px}
 
 /* ===================== Collection ===================== */
@@ -2165,6 +2442,10 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
         <span class="bc-stamp" id="bcStamp" hidden>討伐！</span>
       </button>
       <div class="hm-pair">
+      <button type="button" class="hm hm-sm c3 hm-ab" id="goAb">
+        <span class="hab-fig" id="homeAbFig"></span>
+        <span class="hm-k">能力バトル</span><span class="hm-d" id="homeAbX"></span>
+      </button>
       <button type="button" class="hm hm-sm c2" id="goCustom">
         <svg class="hm-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8.5" r="3"/><circle cx="16.5" cy="9.5" r="2.5"/><path d="M3 19a5.5 5.5 0 0 1 11 0"/><path d="M14.6 14.4A4.6 4.6 0 0 1 21.5 18.5"/></svg>
         <span class="hm-k">カスタム</span><span class="hm-d">友達と2〜4人</span>
@@ -2416,6 +2697,30 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
     </section>
   </section>
 
+  <!-- Ability battle -->
+  <section class="screen narrow" id="scrAb" hidden>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>能力バトル</h2></div>
+    <button type="button" class="hub-tut" id="hubTut"><span class="ht-k">はじめての人へ</span><b>3ステップでわかる、能力バトルのれんしゅう</b><span class="ht-r">クリアでガチャチケット1枚</span></button>
+    <section class="panel hub-p">
+      <div class="hub-h"><h3>あなたの編成</h3><button type="button" class="btn sm" id="hubAuto">おまかせ編成</button></div>
+      <div class="lobox" id="hubLo"></div>
+      <p class="note hub-n">カードをタップすると変えられます。自分の番が来るたびにゲージが1たまり、3たまるとスキルが使えます。</p>
+    </section>
+    <section class="panel hub-p">
+      <h3>あいて</h3>
+      <div class="hub-lv" id="hubLv" role="radiogroup" aria-label="CPUの強さ">
+        <button type="button" role="radio" data-lv="weak">よわい</button><button type="button" role="radio" data-lv="normal">ふつう</button><button type="button" role="radio" data-lv="strong">つよい</button>
+      </div>
+      <p class="note" id="hubCpuK" style="margin:0"></p>
+      <div class="lobox" id="hubCpu"></div>
+    </section>
+    <button type="button" class="btn primary big" id="hubStart">CPUと対戦</button>
+    <div class="hub-more">
+      <button type="button" class="btn" id="hubFriend">友達と対戦する</button>
+      <button type="button" class="btn" id="hubList">能力の一覧</button>
+    </div>
+  </section>
+
   <!-- CPU setup -->
   <section class="screen narrow" id="scrCpu" hidden>
     <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>CPU対戦</h2></div>
@@ -2429,17 +2734,10 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
           </div>
           <p class="note abnote">キャラごとにスキルが1つ。自分の番が来るたびにチョークゲージが1たまり、3たまったら手のかわりにスキルを使えます。</p>
           <div class="abpick" id="abPick" hidden>
-            <span class="label" id="abMeL">あなたのキャラ</span>
-            <div class="abchips" id="abMe" role="radiogroup" aria-labelledby="abMeL"></div>
-            <p class="abdesc" id="abMeD"></p>
-            <span class="label" id="abK0L">左手のチョーク</span>
-            <div class="abchips ck" id="abK0" role="radiogroup" aria-labelledby="abK0L"></div>
-            <span class="label" id="abK1L">右手のチョーク</span>
-            <div class="abchips ck" id="abK1" role="radiogroup" aria-labelledby="abK1L"></div>
-            <p class="abdesc" id="abKD"></p>
+            <span class="label" id="abMeL">あなたの編成</span>
+            <div class="lobox" id="abLo"></div>
             <span class="label" id="abCpuL">CPUのキャラ</span>
-            <div class="abchips" id="abCpu" role="radiogroup" aria-labelledby="abCpuL"></div>
-            <p class="abdesc" id="abCpuD"></p>
+            <div class="lobox" id="abCpuLo"></div>
             <p class="note" id="abCpuK" style="margin:0"></p>
           </div>
         </fieldset>
@@ -2642,6 +2940,7 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
       <button type="button" class="mn-t" id="mnAcct"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><b>引き継ぎ</b><small id="mnAcctS">ほかの端末で遊ぶ</small></button>
       <button type="button" class="mn-t" id="mnSet"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.2M12 18.8V21M3 12h2.2M18.8 12H21M5.6 5.6l1.6 1.6M16.8 16.8l1.6 1.6M5.6 18.4l1.6-1.6M16.8 7.2l1.6-1.6"/></svg><b>設定</b><small>音・BGM・表示</small></button>
       <button type="button" class="mn-t" id="updCheck"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12a7 7 0 1 1-2.1-5"/><path d="M19 4.5V8h-3.5"/></svg><b>更新確認</b><small id="appVer"></small></button>
+      <a class="mn-t mn-dc" id="mnDiscord" href="https://discord.gg/QdPUV5zDH8" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.5a2.5 2.5 0 0 1 2.5-2.5h8a2.5 2.5 0 0 1 2.5 2.5v4.5a2.5 2.5 0 0 1-2.5 2.5H9l-3.5 3v-3a2 2 0 0 1-2-2z"/><path d="M19 9.5a2 2 0 0 1 1.5 2v3.8a2 2 0 0 1-2 2v2.7l-3.2-2.7h-3.3a2 2 0 0 1-1.6-.8"/><path d="M7.5 8.8h5M7.5 11h3"/></svg><b>公式Discord</b><small>要望・不具合・交流</small><i class="mn-ext" aria-hidden="true">↗</i></a>
       <button type="button" class="mn-t" id="goAdmin" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5a3.5 3.5 0 0 0-4.6 4.6L4.5 15.5l2 2 .9-.9 1.2 1.2 1.4-1.4-1.2-1.2 3.1-3.1a3.5 3.5 0 0 0 4.6-4.6l-2 2-2-2z"/></svg><b>管理者</b><small>配布・レート</small></button>
     </div>
     <details class="panel fold" id="foldAcct" data-fold="acct" hidden>
@@ -2689,13 +2988,20 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
       </div>
     </details>
     <details class="panel fold" id="foldSet" data-fold="set">
-      <summary><h3>設定</h3><span class="fold-s">効果音・BGM・対戦募集・相手のスタンプ</span></summary>
+      <summary><h3>設定</h3><span class="fold-s">効果音・演出・BGM・対戦募集・相手のスタンプ</span></summary>
       <div class="settings">
         <fieldset>
           <legend>効果音</legend>
           <div class="opts" id="soundOpts">
             <label><input type="radio" name="sound" value="on" id="snd-on"><span>オン</span></label>
             <label><input type="radio" name="sound" value="off" id="snd-off"><span>オフ</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>対戦の演出</legend>
+          <div class="opts" id="fxOpts">
+            <label><input type="radio" name="fxstyle" value="anime" id="fx-anime"><span>アニメ風</span></label>
+            <label><input type="radio" name="fxstyle" value="chalk" id="fx-chalk"><span>黒板風</span></label>
           </div>
         </fieldset>
         <fieldset>
@@ -3006,14 +3312,8 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
       </form>
       <p class="note" id="lobbyRulesNote"></p>
       <div class="abpick" id="lbAbPick" hidden>
-        <span class="label" id="lbAbL">あなたのキャラ</span>
-        <div class="abchips" id="lbAbMe" role="radiogroup" aria-labelledby="lbAbL"></div>
-        <p class="abdesc" id="lbAbMeD"></p>
-        <span class="label" id="lbK0L">左手のチョーク</span>
-        <div class="abchips ck" id="lbK0" role="radiogroup" aria-labelledby="lbK0L"></div>
-        <span class="label" id="lbK1L">右手のチョーク</span>
-        <div class="abchips ck" id="lbK1" role="radiogroup" aria-labelledby="lbK1L"></div>
-        <p class="abdesc" id="lbKD"></p>
+        <span class="label" id="lbAbL">あなたの編成</span>
+        <div class="lobox" id="lbLo"></div>
       </div>
     </section>
     <button type="button" class="btn primary big" id="lobbyStart">開始</button>
@@ -3036,11 +3336,23 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
   <section class="screen" id="scrGame" hidden>
     <div class="game">
       <div class="play">
+        <div class="gbar">
+          <button type="button" class="gb-back" id="exitBtn">ホームへ</button>
+          <p class="gb-mode" id="gbMode"></p>
+          <div class="gb-r">
+            <button type="button" class="gb-ic" id="abInfoBtn" hidden aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11M9 8h6"/></svg><span>能力</span></button>
+            <button type="button" class="gb-ic" id="resetBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 3.5v4.2h4.2"/></svg><span>最初から</span></button>
+            <button type="button" class="gb-txt danger" id="resignBtn" hidden>投了</button>
+          </div>
+        </div>
         <div class="board-wrap">
           <section class="board" id="board" aria-label="対戦ボード">
             <p class="boardnote" aria-hidden="true"><span id="date"></span>　日直</p>
             <div class="opps" id="opps" data-n="1"></div>
             <p class="abcall" id="abCall" aria-live="assertive" hidden></p>
+            <div class="cutin" id="cutIn" aria-hidden="true" hidden><i class="ci-ln"></i><i class="ci-ln"></i><div class="ci-band"><i class="ci-sp"></i><b class="ci-t"></b><small class="ci-s"></small></div></div>
+            <div class="ccut" id="chalkCut" aria-hidden="true" hidden><svg class="cc-lines" viewBox="0 0 400 300" preserveAspectRatio="none"><g filter="url(#chalkS)" stroke="#eceee4" stroke-linecap="round"><path d="M405 149L520 149" stroke-width="4"/><path d="M411 174L465 181" stroke-width="4"/><path d="M397 201L443 213" stroke-width="3"/><path d="M378 214L477 249" stroke-width="1.6"/><path d="M346 237L410 275" stroke-width="2.2"/><path d="M326 260L354 285" stroke-width="1.6"/><path d="M293 260L324 295" stroke-width="4"/><path d="M260 276L279 315" stroke-width="2.2"/><path d="M215 280L223 343" stroke-width="4"/><path d="M178 277L167 337" stroke-width="1.6"/><path d="M141 271L119 316" stroke-width="3"/><path d="M119 271L96 305" stroke-width="1.6"/><path d="M73 249L-5 309" stroke-width="1.6"/><path d="M45 247L14 266" stroke-width="4"/><path d="M24 211L-30 230" stroke-width="2.2"/><path d="M15 191L-48 205" stroke-width="3"/><path d="M6 181L-110 199" stroke-width="2.2"/><path d="M9 154L-60 155" stroke-width="4"/><path d="M-3 131L-84 123" stroke-width="2.2"/><path d="M8 94L-59 74" stroke-width="4"/><path d="M25 87L-37 66" stroke-width="3"/><path d="M45 52L-11 16" stroke-width="1.6"/><path d="M74 51L2 -7" stroke-width="1.6"/><path d="M105 43L58 -9" stroke-width="1.6"/><path d="M152 27L133 -22" stroke-width="1.6"/><path d="M172 27L157 -40" stroke-width="1.6"/><path d="M221 23L230 -33" stroke-width="4"/><path d="M260 33L288 -22" stroke-width="2.2"/><path d="M283 37L327 -23" stroke-width="2.2"/><path d="M318 41L368 -5" stroke-width="4"/><path d="M359 66L419 33" stroke-width="1.6"/><path d="M368 76L426 51" stroke-width="4"/><path d="M397 97L474 76" stroke-width="3"/><path d="M413 125L518 112" stroke-width="2.2"/></g></svg><i class="cc-pad"></i><div class="cc-word"><svg viewBox="0 0 400 190" aria-hidden="true"><g filter="url(#chalkS)"></g></svg></div><i class="cc-stick"></i><i class="cc-smear"></i><i class="cc-eraser"></i></div>
+            <div class="vscut" id="vsCut" aria-hidden="true" hidden><div class="vs-h vs-op"><span class="vs-f"></span><span class="vs-tx"><b></b><small></small></span></div><div class="vs-h vs-me"><span class="vs-f"></span><span class="vs-tx"><b></b><small></small></span></div><b class="vs-x">VS</b></div>
             <div class="strip" aria-live="polite">
               <p class="turn" id="turn"></p>
               <p class="msg" id="msg"></p>
@@ -3052,22 +3364,18 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
             </div>
             <div class="seat me" id="seat0">
               <div class="hands">
-                <button type="button" class="hand" data-k="0" data-i="0"><svg class="hs" viewBox="0 0 100 130" aria-hidden="true"></svg><i class="fxo" aria-hidden="true"></i><span class="count"></span><span class="badge" hidden></span></button>
-                <button type="button" class="hand" data-k="0" data-i="1"><svg class="hs" viewBox="0 0 100 130" aria-hidden="true"></svg><i class="fxo" aria-hidden="true"></i><span class="count"></span><span class="badge" hidden></span></button>
+                <button type="button" class="hand" data-k="0" data-i="0"><svg class="hs" viewBox="0 0 100 130" aria-hidden="true"></svg><i class="fxo" aria-hidden="true"></i><span class="count"></span><span class="badge" hidden></span><span class="cab" hidden></span><span class="pv" hidden></span></button>
+                <button type="button" class="hand" data-k="0" data-i="1"><svg class="hs" viewBox="0 0 100 130" aria-hidden="true"></svg><i class="fxo" aria-hidden="true"></i><span class="count"></span><span class="badge" hidden></span><span class="cab" hidden></span><span class="pv" hidden></span></button>
               </div>
               <p class="name"><span class="nm">あなた</span><span class="tag" hidden></span></p>
             </div>
           </section>
           <div class="tray" aria-hidden="true"></div>
         </div>
-        <div class="controls">
-          <button type="button" class="btn stampbtn" id="stampBtn" aria-expanded="false" aria-controls="stampPal" aria-label="スタンプ" title="スタンプ"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 6h24a5 5 0 0 1 5 5v13a5 5 0 0 1-5 5H18l-8 7v-7H8a5 5 0 0 1-5-5V11a5 5 0 0 1 5-5z"/><circle cx="15" cy="16" r="1.8" fill="currentColor"/><circle cx="25" cy="16" r="1.8" fill="currentColor"/><path d="M14 21q6 5 12 0"/></svg></button>
-          <button type="button" class="btn" id="shapeBtn" aria-expanded="false">分身・合成</button>
-          <button type="button" class="btn skillbtn" id="skillBtn" aria-expanded="false" hidden><span class="sk-n"></span><span class="sk-g" aria-hidden="true"></span></button>
-          <button type="button" class="btn abinfobtn" id="abInfoBtn" hidden aria-haspopup="dialog">能力</button>
-          <button type="button" class="btn end" id="resetBtn">最初から</button>
-          <button type="button" class="btn danger end" id="resignBtn" hidden>投了</button>
-          <button type="button" class="btn" id="exitBtn">ホームへ</button>
+        <div class="actbar controls">
+          <button type="button" class="act" id="shapeBtn" aria-expanded="false"><svg class="act-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-7M12 14 6.5 5.5M12 14l5.5-8.5"/><circle cx="6" cy="4.2" r="1.7"/><circle cx="18" cy="4.2" r="1.7"/></svg><span class="act-t">分身・合成</span></button>
+          <button type="button" class="act act-sk skillbtn" id="skillBtn" aria-expanded="false" hidden><span class="sk-i"></span><span class="sk-tx"><span class="sk-n"></span><span class="sk-g" aria-hidden="true"></span></span><span class="sk-bar" aria-hidden="true"><i></i></span></button>
+          <button type="button" class="act stampbtn" id="stampBtn" aria-expanded="false" aria-controls="stampPal" aria-label="スタンプ" title="スタンプ"><svg class="act-i" viewBox="0 0 40 40" aria-hidden="true"><path d="M8 6h24a5 5 0 0 1 5 5v13a5 5 0 0 1-5 5H18l-8 7v-7H8a5 5 0 0 1-5-5V11a5 5 0 0 1 5-5z"/><circle cx="15" cy="16" r="1.8" fill="currentColor"/><circle cx="25" cy="16" r="1.8" fill="currentColor"/><path d="M14 21q6 5 12 0"/></svg><span class="act-t">スタンプ</span></button>
         </div>
         <div class="stamppal" id="stampPal" hidden></div>
       </div>
@@ -3145,6 +3453,24 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
   <div class="st-box" id="stBox"><b class="st-name" id="stName"></b><p class="st-text" id="stText" aria-live="polite"></p><span class="st-next" aria-hidden="true">▼</span></div>
 </div>
 <div class="abtip" id="abTip" role="tooltip" hidden><span class="abt-art"></span><span class="abt-tx"><b></b><small></small></span></div>
+<div class="cfm charget" id="charGet" role="dialog" aria-modal="true" aria-labelledby="cgName" hidden>
+  <div class="cfm-card cg-card">
+    <p class="cg-k">なかまになった！</p>
+    <div class="cg-fig" id="cgFig"></div>
+    <p class="cg-n" id="cgName"></p>
+    <div class="cg-sk" id="cgSk"></div>
+    <p class="cg-note">能力バトルで、このキャラのスキルが使えます</p>
+    <div class="cg-btns"><button type="button" class="btn" id="cgOk">OK</button><button type="button" class="btn primary" id="cgSet">編成にセット</button></div>
+  </div>
+</div>
+<div class="cfm losheet" id="loSheet" role="dialog" aria-modal="true" aria-labelledby="loTitle" hidden>
+  <div class="cfm-card lo-card-s">
+    <p class="cfm-t" id="loTitle">えらぶ</p>
+    <p class="lo-hint" id="loHint"></p>
+    <div class="lo-list" id="loList" role="radiogroup" aria-labelledby="loTitle"></div>
+    <button type="button" class="btn lo-close" id="loClose">とじる</button>
+  </div>
+</div>
 <div class="cfm abinfo" id="abInfo" role="dialog" aria-modal="true" aria-labelledby="abInfoT" hidden>
   <div class="cfm-card abi-card">
     <p class="cfm-t" id="abInfoT">能力</p>
@@ -3387,8 +3713,13 @@ function showCoins(target){
 function hitFx(target, color, m, ch){
   if (!target) return;
   const [x, y] = centerOf(target), B = rules().base || 5;
-  target.animate([{transform: 'none'}, {transform: 'scale(1.14) rotate(-5deg)'}, {transform: 'none'}], {duration: 320, easing: 'ease-out'});
+  target.animate([{transform: 'none'}, {transform: 'scale(1.16) rotate(-6deg)'}, {transform: 'translateX(-4px)'}, {transform: 'translateX(3px)'}, {transform: 'none'}], {duration: 360, easing: 'ease-out'});
+  const ck = fxChalk();
+  if (ck) { puffFx(x, y, color); chalkWord(x, y - 36, m.after === 0 ? 'ドン！' : 'バシッ', '#eceee4', m.after === 0); }
+  else burstFx(x, y, color, m.after === 0);
   if (m.after === 0) {
+    buzz(30);
+    if (ck) redCrossFx(x, y); else slashFx(x, y, color);
     chalkDust(x, y, ch, color, 34, 110);
     if (ch && ch.fx) ringFx(x, y, ch.fxc && ch.fx !== 'hue' ? ch.g || color : color);
     floatText(x, y - 20, '消えた！', color, true);
@@ -3397,7 +3728,8 @@ function hitFx(target, color, m, ch){
     sfx('vanish');
   } else {
     chalkDust(x, y, ch, color, 22, 72);
-    floatText(x, y - 24, m.before + m.value >= B ? `${m.before + m.value}→${m.after}` : `+${m.value}`, color);
+    const fxs = String(m.fx || ''), add0 = m.value + (/fire/.test(fxs) ? 1 : 0), add = /petal/.test(fxs) ? Math.ceil(add0 / 2) : add0;
+    floatText(x, y - 24, m.before + add >= B || /iron/.test(fxs) ? `${m.before + add}→${m.after}` : `+${add}`, color);
     sfx('hit');
   }
 }
@@ -3421,8 +3753,9 @@ function boardFx(){
   if (!e || e.n !== G.ply || !L) return;
   requestAnimationFrame(() => {
     if (e.k === 'attack') {
-      const t = handBtns[L.target] && handBtns[L.target][L.to], a = handBtns[L.p] && handBtns[L.p][L.from];
-      hitFx(t, a ? getComputedStyle(a).color : '#eceee4', {after: e.a, before: e.b, value: e.v}, seatChalk(L.p));
+      const t = handBtns[L.target] && handBtns[L.target][L.to], a = handBtns[L.p] && handBtns[L.p][L.from], col = a ? getComputedStyle(a).color : '#eceee4';
+      trailFx(a, t, col);
+      setTimeout(() => hitFx(t, col, {after: e.a, before: e.b, value: e.v, fx: e.cfx}, seatChalk(L.p)), 90);
     } else if (e.k === 'merge' || e.k === 'split') shapeFx(L.p, {kind: e.k, into: L.into});
   });
 }
@@ -3457,7 +3790,9 @@ function showResult(){
     else if (o.winner === 0) { kind = 'win'; title = '勝利！'; }
     else { kind = 'lose'; title = '負け…'; }
   }
-  el.className = 'result ' + kind;
+  el.className = 'result ' + kind + (fxChalk() ? ' chalkres' : '');
+  { const old = el.querySelector('.res-hana'); if (old) old.remove(); }
+  if (fxChalk() && kind === 'win') el.querySelector('.res-in').insertAdjacentHTML('afterbegin', `<span class="res-hana" aria-hidden="true">${ICO_HANAMARU}<b>100</b></span>`);
   const t = $('#resT');
   t.innerHTML = '';
   [...title].forEach((ch, i) => { const sp = document.createElement('span'); sp.textContent = ch; sp.style.animationDelay = (i * 0.09) + 's'; t.append(sp); });
@@ -3707,6 +4042,11 @@ function sfx(name){
     else if (name === 'unlock') [1319, 1568, 2093].forEach((f, i) => tone(ctx, t + i * .07, f, .22, 'sine', .08));
     else if (name === 'up') [784, 988, 1175, 1568].forEach((f, i) => tone(ctx, t + i * .08, f, .3, 'triangle', .1));
     else if (name === 'start') { tone(ctx, t, 659, .12, 'triangle', .1); tone(ctx, t + .1, 988, .3, 'triangle', .1); }
+    else if (name === 'chalk') { for (let i = 0; i < 6; i++) noise(ctx, t + i * .055 + Math.random() * .02, .035, .28, 4200 + Math.random() * 1500); }
+    else if (name === 'erase') { noise(ctx, t, .32, .3, 700); noise(ctx, t + .05, .25, .18, 1400); }
+    else if (name === 'cut') { noise(ctx, t, .22, .28, 2600); tone(ctx, t, 420, .2, 'sine', .07, 1300); }
+    else if (name === 'vs') { noise(ctx, t, .35, .45, 700); tone(ctx, t, 140, .45, 'triangle', .2, 60); tone(ctx, t + .02, 880, .25, 'square', .03, 440); }
+    else if (name === 'slash') { noise(ctx, t, .12, .45, 4200); noise(ctx, t + .09, .14, .4, 3600); tone(ctx, t + .05, 300, .3, 'sawtooth', .05, 80); }
   } catch(e) {}
 }
 
@@ -3732,7 +4072,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/18-7';
+const APP_VERSION = '11/19-2';
 // ----- New version: the page's <head> carries its version (build.py writes it). Now and then, and whenever the app comes
 // back to the front, read the head of the live page; if its version differs, offer a reload. ?debug&vfast checks every few seconds.
 const VER_FAST = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('vfast'); } catch(e) { return false; } })();
@@ -4655,6 +4995,7 @@ function renderBook(){
     el.querySelector('.bk-h').textContent = it.have ? (it.limited ? '限定' : '手に入れた') : it.how;
     if (it.limited) el.insertAdjacentHTML('afterbegin', '<span class="lim">限定</span>');
     else if (it.item.gacha) el.insertAdjacentHTML('afterbegin', `<i class="rar ${it.item.gacha} bkr">${it.item.gacha}</i>`);
+    if (tab === 'chalk' && (it.have || it.limited || it.item.price) && chalkAb(it.id)) el.insertAdjacentHTML('beforeend', `<span class="g-ab">${chalkAbHTML(it.id)}</span>`);
     if (can && using === it.id) el.insertAdjacentHTML('afterbegin', '<span class="use">使用中</span>');
     if (can) el.addEventListener('click', () => {
       if (tab === 'chalk') equipChalk(it.id);
@@ -6589,7 +6930,7 @@ function showGacha(res, n, ticket){
   res.forEach(r => {
     const it = r.it, c = document.createElement('div');
     c.className = 'gcard ' + it.rar;
-    c.innerHTML = `<i class="rar ${it.rar}">${it.rar}</i><span class="gc-a">${itemArt(it.kind, it.id)}</span><b></b><small></small>`;
+    c.innerHTML = `<i class="rar ${it.rar}">${it.rar}</i><span class="gc-a">${itemArt(it.kind, it.id)}</span><b></b><small></small>` + (it.kind === 'chalk' && chalkAb(it.id) ? `<span class="g-ab">${chalkAbHTML(it.id)}</span>` : '');
     if (it.kind === 'title') c.querySelector('.tt').textContent = it.name;
     c.querySelector('b').textContent = it.kind === 'title' ? '称号' : it.name;
     const sm = c.querySelector('small');
@@ -6673,7 +7014,8 @@ function renderGacha(){
           const r = document.createElement('li'); r.className = x.pick ? 'pk' : '';
           r.innerHTML = '<span></span><span></span><span class="pc"></span>';
           r.children[0].textContent = x.pick ? 'UP!' : '';
-          r.children[1].textContent = x.it.name + ({chalk: '', board: '', plate: '（プレート）', title: '（称号）'})[x.it.kind];
+          r.children[1].textContent = x.it.name + (({chalk: '', board: '', plate: '（プレート）', title: '（称号）', stamp: '（スタンプ）'})[x.it.kind] || '');
+          if (x.it.kind === 'chalk' && chalkAb(x.it.id)) { const a = chalkAb(x.it.id); r.children[1].insertAdjacentHTML('beforeend', ` <span class="rate-ab" style="--kc:${abKind(a)[1]}">${abIcon(a)}${CHALK_AB[a].name}・${usesText(chalkUses(x.it.id))}</span>`); }
           r.children[2].textContent = pc(x.w);
           ol.append(r);
         });
@@ -6687,7 +7029,7 @@ function renderGacha(){
       GACHA.forEach(it => {
         const have = !!owned[it.id], cost = SHARD_COST[it.rar], el = document.createElement('div');
         el.className = 'item';
-        el.innerHTML = `<i class="rar ${it.rar}">${it.rar}</i><span class="gc-a">${itemArt(it.kind, it.id)}</span><b></b><span class="shd"></span>`;
+        el.innerHTML = `<i class="rar ${it.rar}">${it.rar}</i><span class="gc-a">${itemArt(it.kind, it.id)}</span><b></b>` + (it.kind === 'chalk' && chalkAb(it.id) ? `<span class="shop-ab">${chalkAbHTML(it.id, true)}</span>` : '') + '<span class="shd"></span>';
         if (it.kind === 'title') el.querySelector('.tt').textContent = it.name;
         el.querySelector('b').textContent = it.kind === 'title' ? '称号' : it.name;
         el.querySelector('.shd').textContent = cost;
@@ -7106,6 +7448,12 @@ async function claimGuideDone(){
 
 // ===================== News =====================
 const NEWS = [
+  {id: 'n28', date: '2026-11-19', tag: 'NEW', title: 'すべてのチョークに能力とレア度がつきました',
+    body: 'チョークの能力が変わりました。\n・すべてのチョークにレア度（N・R・SR・SSR）と能力がつきました。ショップの色だけのチョーク（白〜ミント）にも能力があります\n・レア度が高いほど、1試合で能力を使える回数が多くなります（N 1回・R 2回・SR 3回・SSR 何回でも。てっぺきだけは N・R 1回／SR 2回／SSR 3回）\n・手の上のバッジに、あと何回使えるかが出ます\n・ショップ・ガチャの提供割合・かけら交換・コレクション・図鑑で、チョークの能力が見られます\n・ステージやボスで新しいキャラが仲間になると「なかまになった！」でお知らせします\n・対戦の演出をパワーアップ：対戦開始の「VS」、「あなたの番！」、手を消したときの演出、スキル発動。文字のフォントも新しくなりました\n・演出は「アニメ風」と「黒板風」から選べます（メニュー → 設定 → 対戦の演出）。黒板風は、チョークで書いて黒板消しで消す演出・赤チョークの×・勝つと花丸。どっちがいいか教えてね\n・対戦画面を整理しました。盤の上に「ホームへ・能力・最初から」、盤の下に大きなボタン（分身・合成／スキル／スタンプ）。スキルのボタンにはゲージが出ます\n・スキル「じかんストップ」を直しました。使ったあと、2回つづけて動けます（今までは使った番がそのまま消えて、得をしていませんでした）\n・能力バトルの部屋は、相手もこのバージョンに更新している必要があります'},
+  {id: 'n29', date: '2026-11-19', tag: 'おしらせ', title: '公式Discordができました',
+    body: 'わりばしの公式Discordサーバーができました。\n・メニューの「公式Discord」から参加できます\n・「こうしてほしい」という要望や、不具合の報告、対戦相手さがしなどに使ってね\n・新しい機能のお知らせも、ここで先に出すことがあります\n・Discordは13歳以上が使えるサービスです'},
+  {id: 'n27', date: '2026-11-19', tag: 'NEW', title: '能力バトルがわかりやすくなりました',
+    body: '能力バトルを遊びやすくしました。\n・ホームに「能力バトル」ができました。キャラとチョークの「編成」を決めて、すぐに対戦できます\n・キャラやチョークのカードをタップすると、能力の説明つきで選べます。まだ持っていない能力は、どこで手に入るかも見られます\n・自分の手を選ぶと、相手の手がどうなるか（例：3→消える！）が先に表示されます\n・チョークの能力が発動すると、何が起きたか大きく表示されます\n・ゲージは顔のまわりの輪で表示。たまるとボタンが光ります\n・はじめての人向けの「れんしゅう」（3ステップ）を追加。クリアでガチャチケット1枚'},
   {id: 'n26', date: '2026-11-18', tag: 'NEW', title: 'ステージが「夜の学校マップ」になりました',
     body: 'ステージ画面を新しくしました。\n・学校の部屋を1つずつ進んでいくマップになりました。クリアした部屋には花丸がつきます\n・章の画面が黒板になりました。ステージはタップするとその場で開いて、★の条件やごほうびが見られます（もう一度タップで閉じます）\n・第2章は「時間割どおり」に変わりました。決められた手数のうちに勝てばクリアです（手数はゆるめ）\n・第7章のハンデ戦は、相手の指が多くても、正しく指せば必ず勝てる局面から始まるようになりました\n・木曜のボス「ホッチキス将軍」は、分身を禁止するかわりに、3ターンごとにあなたの手を1つパチン留めしてきます\n・「分身なし」のルールは、ステージ・ボス・塔・詰めわりばしではなくなりました（同じ局面のくり返しを防ぐため）。CPU対戦とカスタムマッチでは今まで通り選べます'},
   {id: 'n25', date: '2026-11-18', tag: 'NEW', title: '「能力バトル」が登場しました',
@@ -7663,7 +8011,7 @@ function newBossGame(){
   G.seen = {[posKeyOf(G)]: 1};
   G.norep = true;
   // ホッチキス将軍: only the boss has a skill (no chalks, no gauge of mine)
-  if ((ui.boss.base || ui.boss.info).pachin || ui.boss.info.pachin) G.ab = {c: ['', 'hotchkiss'], g: [0, 0], gd: [0, 0], fz: [-1, -1], rv: [0, 0], k: null, iu: [[0, 0], [0, 0]]};
+  if ((ui.boss.base || ui.boss.info).pachin || ui.boss.info.pachin) G.ab = {c: ['', 'hotchkiss'], g: [0, 0], gd: [0, 0], fz: [-1, -1], rv: [0, 0], k: null, iu: [[0, 0], [0, 0]], xt: [0, 0]};
   sel = null; panel = null;
   render(); maybeCpu();
 }
@@ -7870,7 +8218,7 @@ const SKILLS = {
   copy:   {name: 'コピー', desc: '自分の手を、相手の手と同じ本数にする'},
   double: {name: 'ばいぞう', desc: '自分の手を1つえらんで、本数を2倍にする'},
   renda:  {name: 'れんだ', desc: '同じ相手の手に、2回つづけてタッチする'},
-  stop:   {name: 'じかんストップ', desc: '相手の次の番をとばして、もう一度あなたの番'},
+  stop:   {name: 'じかんストップ', desc: '時間を止めて、2回つづけて動ける（相手の番を1回とばす）'},
   nagi:   {name: 'なぎはらい', desc: '相手の両手に1本ずつたす'},
   erase:  {name: 'けしさる', desc: '相手の手を1つえらんで、1本にもどす'},
   batsu:  {name: 'バツ', desc: '相手の手を1つえらんで、2本たす'},
@@ -7891,9 +8239,91 @@ const CHALK_AB = {
   star:    {name: 'ほし', desc: 'この手でタッチすると、相手のもう片方の手にも1本足す'},
   rainbow: {name: 'にじ', desc: 'この手がタッチされたら、タッチしてきた手に1本足し返す'},
 };
+// Every ability has a kind (colour + word) and a one-line summary for cards; the long text stays in SKILLS / CHALK_AB.
+const AB_KIND = {atk: ['攻め', '#ffa48c'], def: ['守り', '#9fd0f0'], jam: ['じゃま', '#c8b4f4'], chg: ['へんしん', '#b8e6a3'], gauge: ['ゲージ', '#f3d774']};
+const AB_META = {
+  fire: ['atk', 'タッチで1本多く足す'], ice: ['jam', 'タッチした手を1回止める'], thunder: ['gauge', 'この手で消すとゲージ+1'], gem: ['gauge', 'タッチするとゲージ+1'],
+  iron: ['def', '1回だけ消えずに1本で残る'], petal: ['def', 'タッチされても半分だけ'], star: ['atk', 'となりの手にも1本足す'], rainbow: ['def', 'タッチされたら1本やり返す'],
+  kazoe: ['chg', '自分の手を1本ふやす・へらす'], chui: ['jam', '相手の手を1回止める'], pachin: ['jam', '相手の手を1回止める'], guard: ['def', '次のタッチを1回はじく'],
+  irekae: ['chg', '自分の手と相手の手を入れかえ'], revive: ['def', '消えた手を1本で復活'], copy: ['chg', '相手の手と同じ本数になる'], double: ['chg', '自分の手を2倍にする'],
+  renda: ['atk', '同じ手に2回タッチ'], stop: ['jam', '2回つづけて動ける'], nagi: ['atk', '相手の両手に1本ずつ足す'], erase: ['jam', '相手の手を1本にもどす'], batsu: ['atk', '相手の手に2本足す']};
+const AB_ICON = {
+  fire: '<path d="M12 21c-3.6 0-6.3-2.5-6.3-6 0-3.6 2.7-5.3 3.5-8.7 2.2 1.5 3 3.5 2.9 5.5 1-.7 1.8-2 2-3.7 2.6 2 3.9 4.5 3.9 6.9 0 3.5-2.6 6-6 6z"/><path d="M12 21c-1.5 0-2.6-1.1-2.6-2.6 0-1.5 1.2-2.4 2.1-4 1.6 1.2 3.1 2.4 3.1 4 0 1.5-1.1 2.6-2.6 2.6z"/>',
+  ice: '<path d="M12 2.5v19M3.8 7.2l16.4 9.6M3.8 16.8l16.4-9.6"/><path d="M9.3 4.2 12 6.8l2.7-2.6M9.3 19.8 12 17.2l2.7 2.6M4.3 10.5l3.6-1-1-3.6M19.7 13.5l-3.6 1 1 3.6M4.3 13.5l3.6 1-1 3.6M19.7 10.5l-3.6-1 1-3.6"/>',
+  thunder: '<path d="M13.6 2.5 5.4 13.4h6.1l-1.1 8.1 8.2-11.2h-6.1z"/>',
+  gem: '<path d="M6.6 4.2h10.8L21 9.3l-9 10.9-9-10.9z"/><path d="M3 9.3h18M9.6 4.2 8 9.3l4 10.9M14.4 4.2 16 9.3l-4 10.9"/>',
+  iron: '<rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 9.7h18M3 14.3h18M9 5v4.7M15 5v4.7M6 9.7v4.6M12 9.7v4.6M18 9.7v4.6M9 14.3V19M15 14.3V19"/>',
+  petal: '<circle cx="12" cy="12" r="1.7"/><ellipse cx="12" cy="6.4" rx="2.5" ry="3.6" transform="rotate(0 12 12)"/><ellipse cx="12" cy="6.4" rx="2.5" ry="3.6" transform="rotate(72 12 12)"/><ellipse cx="12" cy="6.4" rx="2.5" ry="3.6" transform="rotate(144 12 12)"/><ellipse cx="12" cy="6.4" rx="2.5" ry="3.6" transform="rotate(216 12 12)"/><ellipse cx="12" cy="6.4" rx="2.5" ry="3.6" transform="rotate(288 12 12)"/>',
+  star: '<path d="M12 3.2l2.6 5.6 6.1.7-4.5 4.2 1.2 6.1L12 16.8l-5.4 3 1.2-6.1-4.5-4.2 6.1-.7z"/>',
+  rainbow: '<path d="M2.8 18.5a9.2 9.2 0 0 1 18.4 0M6.3 18.5a5.7 5.7 0 0 1 11.4 0M9.8 18.5a2.2 2.2 0 0 1 4.4 0"/>',
+  kazoe: '<path d="M12 3.5v9M7.5 8h9M7 19h10"/>',
+  chui: '<circle cx="12" cy="12" r="9"/><path d="M12 7v6.5M12 16.8v.3"/>',
+  pachin: '<path d="M5 16V9.5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2V16"/><path d="M2.8 16h4.4M16.8 16h4.4"/>',
+  guard: '<path d="M12 3 4.5 6v5.5c0 4.6 3.2 8 7.5 9.5 4.3-1.5 7.5-4.9 7.5-9.5V6z"/><path d="M8.6 12l2.4 2.4 4.6-4.6"/>',
+  irekae: '<path d="M4 8h15l-3.5-3.5M20 16H5l3.5 3.5"/>',
+  revive: '<path d="M12 20.5s-7.8-4.7-7.8-10.3A4.4 4.4 0 0 1 12 7.6a4.4 4.4 0 0 1 7.8 2.6c0 5.6-7.8 10.3-7.8 10.3z"/><path d="M12 10.6v5.2M9.4 13.2h5.2"/>',
+  copy: '<rect x="8.5" y="8.5" width="11.5" height="11.5" rx="2"/><path d="M15.5 8.5V5.5A1.5 1.5 0 0 0 14 4H5.5A1.5 1.5 0 0 0 4 5.5V14a1.5 1.5 0 0 0 1.5 1.5h3"/>',
+  double: '<path d="M3.5 8.5l6.5 7.5M10 8.5l-6.5 7.5"/><path d="M13.5 10a3 3 0 0 1 6 .2c0 2.4-6 4.2-6 6.3h6.4"/>',
+  renda: '<path d="M4 5.5l6.5 6.5L4 18.5M12 5.5l6.5 6.5-6.5 6.5"/>',
+  stop: '<path d="M6 3h12M6 21h12M7 3c0 5 5 6 5 9s-5 4-5 9M17 3c0 5-5 6-5 9s5 4 5 9"/>',
+  nagi: '<path d="M3 16c3.4-6.4 9.4-9.4 18-8.6"/><path d="M4.5 20.5c3.4-4.4 8.4-6.4 15-6.2"/><path d="M17.2 4.2 21 7.4l-3.6 3.5"/>',
+  erase: '<path d="M3.5 15.5 13 6l7 7-6.5 6.5H8z"/><path d="M8.5 10.5l7 7M8 19.5h12"/>',
+  batsu: '<path d="M5.5 5.5l13 13M18.5 5.5l-13 13"/>',
+};
+const esc = t => String(t).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'})[c]);
+const abIcon = (k, cls) => AB_ICON[k] ? `<svg class="abic${cls ? ' ' + cls : ''}" viewBox="0 0 24 24" aria-hidden="true">${AB_ICON[k]}</svg>` : '';
+const abKind = k => AB_KIND[(AB_META[k] || ['chg'])[0]];
+// "icon name kind" for a skill or a chalk ability, coloured by its kind
+function abLine(k, name){
+  const [kn, kc] = abKind(k);
+  return `<span class="abl" style="--kc:${kc}">${abIcon(k)}<b>${name}</b><i>${kn}</i></span>`;
+}
+// Where a chalk comes from (for the ones I don't have yet)
+function chalkWhere(c){
+  if (!c) return '';
+  if (c.need) return c.need;
+  if (c.season) return `${c.season}月のシーズンパス`;
+  if (c.price) return `ショップ（${c.price}コイン）`;
+  if (c.boss) return `ボスを${c.boss}回たおす`;
+  if (c.rate) return `レート${c.rate}に到達`;
+  if (c.book) return `図鑑を${c.book}%うめる`;
+  if (c.lvl) return `レベル${c.lvl}の報酬`;
+  if (c.tower) return `塔の${c.tower}階`;
+  if (c.rmp) return 'RPショップ';
+  return '';
+}
 const FX_AB = {ember: 'fire', legend: 'fire', firework: 'fire', ice: 'ice', snow: 'ice', thunder: 'thunder', pulse: 'thunder', glitter: 'gem',
   diamond: 'iron', aurora: 'iron', petal: 'petal', leaf: 'petal', spark: 'star', meteor: 'star', cosmos: 'star', hue: 'rainbow', prism: 'rainbow', shimmer: 'rainbow'};
-const chalkAb = id => { const c = CHALKS.find(x => x.id === id); return (c && c.fx && FX_AB[c.fx]) || ''; };
+// Plain colours (no effect) have an ability too: the weakest kind, by rarity.
+const PLAIN_AB = {white: 'iron', pink: 'petal', orange: 'fire', sky: 'ice', lime: 'gem', fuji: 'star', shu: 'thunder', mint: 'rainbow',
+  lemon: 'thunder', coral: 'fire', lavender: 'star', teal: 'ice', cream: 'petal'};
+const chalkAb = id => { const c = CHALKS.find(x => x.id === id); return c ? (c.fx && FX_AB[c.fx]) || PLAIN_AB[c.id] || '' : ''; };
+// Every chalk's rarity: gacha ones as drawn; the shop's plain colours N, its effect chalks R (under 1000 coins) or SR;
+// limited rewards SR; ranks, the book's prize and legendary bosses SSR.
+function chalkRar(c){
+  if (typeof c === 'string') c = CHALKS.find(x => x.id === c);
+  if (!c || c.id === 'auto') return '';
+  if (c.gacha) return c.gacha;
+  if (c.legend || c.rate || c.book) return 'SSR';
+  if (c.boss || c.rmp || c.tower || c.lvl || c.season || c.event || c.stars || c.price >= 1000) return 'SR';
+  return c.fx ? 'R' : 'N';
+}
+// The rarity decides how many times the ability works in one game (てっぺき is strong, so fewer).
+const AB_USES = {N: 1, R: 2, SR: 3, SSR: Infinity}, IRON_USES = {N: 1, R: 1, SR: 2, SSR: 3};
+function chalkUses(id){ const a = chalkAb(id), r = chalkRar(id) || 'N'; return a ? (a === 'iron' ? IRON_USES : AB_USES)[r] : 0; }
+const usesText = n => n === Infinity ? '何回でも' : `1試合${n}回`;
+// how many more times this hand's chalk works
+function abLeft(S, p, i){
+  if (!S.ab || !S.ab.k) return 0;
+  const id = S.ab.k[p][i], u = S.ab.iu ? +S.ab.iu[p][i] || 0 : 0;
+  return chalkAb(id) ? Math.max(0, chalkUses(id) - u) : 0;
+}
+// "R ほのお 攻め 1試合2回" for a chalk
+function chalkAbHTML(id, short){
+  const a = chalkAb(id), r = chalkRar(id);
+  if (!a) return '<span class="abl none"><b>能力なし</b></span>';
+  return `<span class="cabx">${r ? `<i class="rar ${r}">${r}</i>` : ''}${abLine(a, CHALK_AB[a].name)}<em>${usesText(chalkUses(id))}</em></span>` + (short ? `<small class="cab-s">${AB_META[a][1]}</small>` : '');
+}
 const abHandAb = (S, p, i) => S && S.ab && S.ab.k ? chalkAb(S.ab.k[p][i]) : '';
 const abOn = S => !!(S && S.ab);
 const abSk = (S, p) => CHAR_SKILL[S.ab.c[p]] || 'kazoe';
@@ -7901,25 +8331,27 @@ const abCharName = id => { const c = charaList().find(x => x.id === id); return 
 function abInit(c0, c1, first, k0, k1){
   const g = [0, 0];
   g[first] = 1;   // the first turn has come
-  return {c: [c0, c1], g, gd: [0, 0], fz: [-1, -1], rv: [0, 0], k: [k0 || ['auto', 'auto'], k1 || ['auto', 'auto']], iu: [[0, 0], [0, 0]]};
+  return {c: [c0, c1], g, gd: [0, 0], fz: [-1, -1], rv: [0, 0], k: [k0 || ['auto', 'auto'], k1 || ['auto', 'auto']], iu: [[0, 0], [0, 0]], xt: [0, 0]};
 }
 // An ordinary touch with chalk abilities: everything it does is worked out here (the rules are known here), step() applies it.
 function abAttack(S, r, p, f, q, t){
-  const v = S.hands[p][f], w = S.hands[q][t], A = abHandAb(S, p, f), D = abHandAb(S, q, t), iu = S.ab.iu || [[0, 0], [0, 0]], fx = [];
+  const v = S.hands[p][f], w = S.hands[q][t], fx = [];
+  // a chalk that has been used up does nothing
+  const A = abLeft(S, p, f) > 0 ? abHandAb(S, p, f) : '', D = abLeft(S, q, t) > 0 ? abHandAb(S, q, t) : '';
   let hit = v;
   if (A === 'fire') { hit += 1; fx.push('fire'); }
   if (D === 'petal') { hit = Math.ceil(hit / 2); fx.push('petal'); }
   const m = {kind: 'attack', from: f, to: t, target: q, value: v, before: w, after: abAdd(w, hit, r)};
-  if (m.after === 0 && D === 'iron' && !iu[q][t]) { m.after = 1; m.iron = 1; fx.push('iron'); }
+  if (m.after === 0 && D === 'iron') { m.after = 1; m.iron = 1; fx.push('iron'); }
   const t2 = 1 - t, w2 = S.hands[q][t2];
   if (A === 'star' && w2 > 0) {
     m.after2 = abAdd(w2, 1, r);
-    if (m.after2 === 0 && abHandAb(S, q, t2) === 'iron' && !iu[q][t2]) { m.after2 = 1; m.iron2 = 1; }
+    if (m.after2 === 0 && abHandAb(S, q, t2) === 'iron' && abLeft(S, q, t2) > 0) { m.after2 = 1; m.iron2 = 1; }
     fx.push('star');
   }
   if (D === 'rainbow') {
     m.self = abAdd(v, 1, r);
-    if (m.self === 0 && A === 'iron' && !iu[p][f]) { m.self = 1; m.ironSelf = 1; }
+    if (m.self === 0 && abHandAb(S, p, f) === 'iron' && abLeft(S, p, f) > 0) { m.self = 1; m.ironSelf = 1; }
     fx.push('rainbow');
   }
   if (A === 'ice' && m.after > 0) fx.push('ice');
@@ -7932,9 +8364,12 @@ function abAttackApply(S, p, q, m, e){
   const ab = S.ab, fx = String(m.fx || '').split(',');
   if (!ab.iu) ab.iu = [[0, 0], [0, 0]];
   e.cfx = m.fx;
-  if (m.iron) ab.iu[q][m.to] = 1;
-  if (m.after2 !== undefined) { S.hands[q][1 - m.to] = m.after2; e.a2 = m.after2; if (m.iron2) ab.iu[q][1 - m.to] = 1; }
-  if (m.self !== undefined) { S.hands[p][m.from] = m.self; e.s = m.self; if (m.ironSelf) ab.iu[p][m.from] = 1; }
+  // each ability that worked uses up one of its hand's turns
+  const use = (pp, i) => { ab.iu[pp][i] = (+ab.iu[pp][i] || 0) + 1; }, A = abHandAb(S, p, m.from), D = abHandAb(S, q, m.to);
+  if (['fire', 'star', 'ice', 'thunder', 'gem'].includes(A) && fx.includes(A)) use(p, m.from);
+  if (D === 'iron' ? m.iron : ['petal', 'rainbow'].includes(D) && fx.includes(D)) use(q, m.to);
+  if (m.after2 !== undefined) { S.hands[q][1 - m.to] = m.after2; e.a2 = m.after2; if (m.iron2) use(q, 1 - m.to); }
+  if (m.self !== undefined) { S.hands[p][m.from] = m.self; e.s = m.self; if (m.ironSelf) use(p, m.from); }
   if (fx.includes('ice') && S.hands[q][m.to] > 0) ab.fz[q] = m.to;
   if (fx.includes('thunder')) ab.g[p] = Math.min(AB_MAX, ab.g[p] + 1);
   if (fx.includes('gem')) ab.g[p] = Math.min(AB_MAX, ab.g[p] + 1);
@@ -7981,7 +8416,7 @@ function abOptions(S, r){
   }
   if (sk === 'nagi') { const o = op.map(v => v ? abAdd(v, 1, r) : 0); add([[...me], o], `相手の両手に+1 → ${o.map(x).join('・')}`); }
   if (sk === 'guard' && !S.ab.gd[p]) add([[...me], [...op]], 'ガードをはる');
-  if (sk === 'stop') add([[...me], [...op]], '相手の番をとばす');
+  if (sk === 'stop') add([[...me], [...op]], '時間を止める → 2回つづけて動ける');
   return out;
 }
 
@@ -8056,8 +8491,10 @@ function step(S0, m, now){
   if (alv.length <= 1) { S.over = {type:'win', winner: alv.length ? alv[0] : p}; return S; }
   S.turn = nextAlive(S, p);
   if (S.ab) {
+    if (!S.ab.xt) S.ab.xt = [0, 0];
     S.ab.fz[p] = -1;   // a stop lasts one turn
-    if (e.stop) S.turn = p;
+    if (e.stop) { S.turn = p; S.ab.xt[p] = 1; }                        // じかんストップ: the skill is free…
+    else if (S.ab.xt[p]) { S.ab.xt[p] = 0; S.turn = p; e.xt = 1; }     // …and the other side's next turn is skipped
     else S.ab.g[S.turn] = Math.min(AB_MAX, S.ab.g[S.turn] + 1);
   }
   S.seen = S.seen || {};
@@ -8091,7 +8528,7 @@ function normState(r){
   const hands = Array.from({length: n}, (_, p) => [0, 1].map(i => { const v = +((H[p] || {})[i]); return v >= 0 && v < BIN ? v : 0; }));
   const log = arr(r.log).filter(e => e && typeof e.k === 'string').map(e => {
     const o = {k: e.k};
-    for (const f of ['n','p','q','v','b','a','ko','x','blk','stop','a2','s']) if (e[f] !== undefined && e[f] !== null) o[f] = +e[f];
+    for (const f of ['n','p','q','v','b','a','ko','x','blk','stop','xt','a2','s']) if (e[f] !== undefined && e[f] !== null) o[f] = +e[f];
     if (typeof e.cfx === 'string' && /^[a-z,]{1,80}$/.test(e.cfx)) o.cfx = e.cfx;
     if (e.f) o.f = arr(e.f).map(Number);
     if (e.t) o.t = arr(e.t).map(Number);
@@ -8119,7 +8556,7 @@ function normState(r){
     const A = r.ab, two = (v, f) => [0, 1].map(i => f(arr(v)[i]));
     S.ab = {c: two(A.c, abCid), g: two(A.g, v => Math.max(0, Math.min(AB_MAX, Math.floor(+v) || 0))), gd: two(A.gd, v => +v ? 1 : 0),
       fz: two(A.fz, v => +v === 0 || +v === 1 ? +v : -1), rv: two(A.rv, v => +v ? 1 : 0),
-      k: two(A.k, abkOf), iu: two(A.iu, v => two(v, x => +x ? 1 : 0))};
+      k: two(A.k, abkOf), iu: two(A.iu, v => two(v, x => Math.max(0, Math.min(99, +x || 0)))), xt: two(A.xt, v => +v ? 1 : 0)};
   }
   if (typeof r.mid === 'string') S.mid = r.mid.slice(0, 64);
   if (r.devs && typeof r.devs === 'object') S.devs = Object.fromEntries(Object.entries(r.devs).slice(0, 8).map(([k, v]) => [k, String(v).slice(0, 24)]));
@@ -8150,6 +8587,10 @@ function names(){
 }
 
 function logText(e, nm){
+  const t = logText0(e, nm);
+  return e.xt ? t + '（時間が止まっている：もう1回）' : t;
+}
+function logText0(e, nm){
   const bin = isBin(), u = bin ? '' : '本', B = bin ? BIN : (rules().base || 5);
   const over = (sum, x) => bin ? `${sum}から31を引いて${x}` : `${sum}本なので${x}本`;
   if (e.k === 'attack' && e.blk) return `${nm[e.q]}の${e.b}${u}にタッチ → ガードではじかれた`;
@@ -8157,7 +8598,7 @@ function logText(e, nm){
     const sk = SKILLS[e.sk] || {name: 'スキル'}, hs = h => (h || []).map(v => v === 0 ? '×' : v).join('·');
     if (e.blk) return `スキル「${sk.name}」→ ガードではじかれた`;
     if (e.sk === 'guard') return `スキル「${sk.name}」：ガードをはった`;
-    if (e.sk === 'stop') return `スキル「${sk.name}」：${nm[e.q]}の番をとばした`;
+    if (e.sk === 'stop') return `スキル「${sk.name}」：時間を止めた（${nm[e.p]}が2回つづけて動ける）`;
     if (e.sk === 'chui' || e.sk === 'pachin') return `スキル「${sk.name}」：${nm[e.q]}の手を1つ止めた`;
     const mine = hs(e.f) !== hs(e.t), theirs = hs(e.ob) !== hs(e.oa);
     return `スキル「${sk.name}」：` + [mine ? `自分 ${hs(e.f)} → ${hs(e.t)}` : '', theirs ? `${nm[e.q]} ${hs(e.ob)} → ${hs(e.oa)}` : ''].filter(Boolean).join('・') + (e.ko ? '（両手が消えた）' : '');
@@ -8228,7 +8669,7 @@ function ensureBoard(n){
     seat.className = `seat opp c${k}`;
     seat.id = 'seat' + k;
     seat.innerHTML = '<p class="name"><span class="nm"></span><span class="tag" hidden></span></p><div class="hands">'
-      + [0, 1].map(i => `<button type="button" class="hand" data-k="${k}" data-i="${i}"><svg class="hs" viewBox="0 0 100 130" aria-hidden="true"></svg><i class="fxo" aria-hidden="true"></i><span class="count"></span><span class="badge" hidden></span></button>`).join('')
+      + [0, 1].map(i => `<button type="button" class="hand" data-k="${k}" data-i="${i}"><svg class="hs" viewBox="0 0 100 130" aria-hidden="true"></svg><i class="fxo" aria-hidden="true"></i><span class="count"></span><span class="badge" hidden></span><span class="cab" hidden></span><span class="pv" hidden></span></button>`).join('')
       + '</div>';
     opps.append(seat);
     handBtns[k] = [...seat.querySelectorAll('.hand')];
@@ -8257,6 +8698,7 @@ if (DEBUG) window.__wb = {primeRepeat(){ if (!G) return 0; let n = 0; for (const
   net: () => ({lobby: !!net.lobbyOff, board: net.boardSrc, onlineN: net.onlineN, pubDenied: !!net.pubDenied}),
   ab: () => G && G.ab && {ab: G.ab, hands: G.hands, turn: G.turn, over: G.over, log: G.log.slice(-3)},
   abSet(o){ if (!G || !G.ab) return false; clearTimeout(cpuTimer); cpuTimer = null; Object.assign(G.ab, o.ab || {}); if (o.hands) G.hands = o.hands.map(h => [...h]); if (o.turn !== undefined) G.turn = o.turn; G.seen = {}; G.seen[posKeyOf(G)] = 1; render(); maybeCpu(); return true; }};
+if (DEBUG) Object.assign(window.__wb, {chalkRar: id => chalkRar(id), chalkAb: id => chalkAb(id), chalkUses: id => { const n = chalkUses(id); return n === Infinity ? null : n; }, chalkList: () => CHALKS.map(c => ({id: c.id, name: c.name})), cutIn: (a, b, c) => cutIn(a, b, c), vsCut: () => vsCut()});
 
 function evalChild(next){
   const s = solver(), r = s.res[next], d = s.dist[next];
@@ -8280,6 +8722,7 @@ function newGame(){
   clearTimeout(cpuTimer); cpuTimer = null; busy = false;
   ui.gameSeq = (ui.gameSeq || 0) + 1;
   hideResult();
+  ui.tut = null;
   G = initState({n: 2, first: +settings.first});
   if (settings.ability === 'on') G.ab = abInit(abMine(), abTheirs(), +settings.first, abMyChalks(), abCpuChalks());
   sel = null; panel = null;
@@ -8334,7 +8777,7 @@ function abCpuMove(){
   const value = S2 => {
     if (S2.over) return end(S2);
     const ms = legalMoves(S2, r);
-    if (S2.turn === p) { let b = -Infinity; for (const m of ms) { const S3 = step(S2, m, 0); b = Math.max(b, S3.over ? end(S3) : -tab(S3, S3.turn)); } return b === -Infinity ? tab(S2, p) : b; }
+    if (S2.turn === p) { let b = -Infinity; for (const m of ms) { const S3 = step(S2, m, 0); b = Math.max(b, S3.over ? end(S3) : S3.turn === p ? tab(S3, p) : -tab(S3, S3.turn)); } return b === -Infinity ? tab(S2, p) : b; }
     let w = Infinity;
     for (const m of ms) { const S3 = step(S2, m, 0); w = Math.min(w, S3.over ? end(S3) : S3.turn === p ? tab(S3, p) : -tab(S3, S3.turn)); }
     return w === Infinity ? -tab(S2, q) : w;
@@ -8366,6 +8809,7 @@ function abBossSkill(){
   return best;
 }
 function chooseCpuMove(){
+  { const t = tutCpuMove(); if (t) return t; }
   if (abOn(G) && ui.boss && G.ab.g[1] >= AB_MAX) { const o = abBossSkill(); if (o) return o; }
   if (abOn(G) && !ui.boss) return abCpuMove();
   const s = solver(), ms = movesAt(G.turn);
@@ -8407,7 +8851,9 @@ async function doMove(m){
   busy = false;
   if (online) { if (gen === net.gen) await netMove(m); else render(); return; }
   if (net.on || G !== g0) { render(); return; }
+  const myTurn = G.turn === 0;
   G = step(G, m, 0);
+  if (tutOn() && myTurn) tutAfterMine(m);
   if (ui.boss) bossAfterMove(m);
   else if (ui.puzzle) puzzleAfterMove();
   else if (ui.stage) stageAfterMove();
@@ -8433,7 +8879,9 @@ function animateMove(m){
     ], {duration:520, easing:'cubic-bezier(.25,.8,.3,1)'});
     const color = getComputedStyle(a).color;
     const ch = seatChalk(p);
-    setTimeout(() => hitFx(t, color, m, ch), 230);
+    setTimeout(() => trailFx(a, t, color), 150);
+    setTimeout(() => { hitFx(t, color, m, ch); anim.pause(); setTimeout(() => anim.play(), m.after === 0 ? 110 : 70); }, 230);
+    if (abOn(G) && m.fx && !(G.ab.gd[m.target])) setTimeout(() => abFxCall(m), 260);
     return anim.finished.finally(() => { a.style.zIndex = ''; });
   }
   if (m.kind === 'merge') {
@@ -8522,7 +8970,7 @@ function watchGlobal(fb){
     const after = unlocked(statsOf(net.profile));
     if (!first) {
       CHALKS.filter(c => !c.price && c.id !== 'auto' && !c.gacha && !hasChalk(c.id, prevProfile || {}) && hasChalk(c.id)).forEach(c =>
-        celebrate('チョーク<br>ゲット！', () => itemBanner(chalkFig(c), c.name, (c.season ? 'シーズン限定' : '限定チョーク') + '。コレクションの「チョーク」で選べます')));
+        celebrate('チョーク<br>ゲット！', () => itemBanner(chalkFig(c), c.name, (c.season ? 'シーズン限定' : '限定チョーク') + (chalkAb(c.id) ? `・${chalkRar(c)}「${CHALK_AB[chalkAb(c.id)].name}」` : '') + '。コレクションの「チョーク」で選べます')));
       BOARDS.filter(b => !b.price && b.id !== 'bstd' && !b.gacha && !hasBoard(b.id, prevProfile || {}) && hasBoard(b.id)).forEach(b =>
         celebrate('黒板<br>ゲット！', () => itemBanner(boardSwatch(b.id, chalkOf(myChalk())), b.name, 'コレクションの「黒板」で選べます')));
       const p0 = statsOf(prevProfile || {}).maxRate, p1 = statsOf(net.profile).maxRate;
@@ -8692,7 +9140,7 @@ async function netCreate(){
     if (search.on) await cancelSearch();
     lsSet(NAME_KEY, typedName()); saveName(fb);
     const code = await createRoomRecord({kind:'custom', status:'lobby', games:0,
-      rules: {count: settings.count, overflow: settings.overflow, split: settings.split, merge: settings.merge, limit: 30},
+      rules: Object.assign({count: settings.count, overflow: settings.overflow, split: settings.split, merge: settings.merge, limit: 30}, ui.abRoom ? {ability: 'on', count: 'normal'} : {}),
       players: {[net.uid]: myEntry()}});
     attach(code);
   } catch(e) { toast(errText(e, '部屋を作れませんでした'), true); }
@@ -9590,10 +10038,10 @@ async function tryMatch(sg){
 }
 
 // ===================== Screens =====================
-const SCREENS = {home:'#scrHome', menu:'#scrMenu', tower:'#scrTower', cpu:'#scrCpu', plate:'#scrPlate', mission:'#scrMission', shop:'#scrShop', rank:'#scrRank', rules:'#scrRules', boss:'#scrBoss', events:'#scrEvents', pass:'#scrPass', puzzle:'#scrPuzzle', friends:'#scrFriends', book:'#scrBook', event:'#scrEvent', news:'#scrNews', stage:'#scrStage', chapter:'#scrChapter', rated:'#scrRated', rpshop:'#scrRpShop', gifts:'#scrGifts', admin:'#scrAdmin', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
+const SCREENS = {home:'#scrHome', ab:'#scrAb', menu:'#scrMenu', tower:'#scrTower', cpu:'#scrCpu', plate:'#scrPlate', mission:'#scrMission', shop:'#scrShop', rank:'#scrRank', rules:'#scrRules', boss:'#scrBoss', events:'#scrEvents', pass:'#scrPass', puzzle:'#scrPuzzle', friends:'#scrFriends', book:'#scrBook', event:'#scrEvent', news:'#scrNews', stage:'#scrStage', chapter:'#scrChapter', rated:'#scrRated', rpshop:'#scrRpShop', gifts:'#scrGifts', admin:'#scrAdmin', custom:'#scrCustom', lobby:'#scrLobby', search:'#scrSearch', game:'#scrGame'};
 // The tab bar stays on the menu screens and steps aside for matching and play.
-const TABBED = ['home', 'menu', 'tower', 'events', 'mission', 'shop', 'friends', 'plate', 'rank', 'rules', 'cpu', 'custom', 'boss', 'pass', 'puzzle', 'book', 'event', 'news', 'stage', 'chapter', 'rated', 'rpshop', 'gifts', 'admin'];
-const TAB_OF = {menu: 'home', rules: 'home', tower: 'events', boss: 'events', pass: 'events', puzzle: 'events', event: 'events', rank: 'friends', book: 'plate', news: 'home', stage: 'home', chapter: 'home', rated: 'home', rpshop: 'home', gifts: 'home', admin: 'plate'};
+const TABBED = ['home', 'ab', 'menu', 'tower', 'events', 'mission', 'shop', 'friends', 'plate', 'rank', 'rules', 'cpu', 'custom', 'boss', 'pass', 'puzzle', 'book', 'event', 'news', 'stage', 'chapter', 'rated', 'rpshop', 'gifts', 'admin'];
+const TAB_OF = {ab: 'home', menu: 'home', rules: 'home', tower: 'events', boss: 'events', pass: 'events', puzzle: 'events', event: 'events', rank: 'friends', book: 'plate', news: 'home', stage: 'home', chapter: 'home', rated: 'home', rpshop: 'home', gifts: 'home', admin: 'plate'};
 function showChrome(s){
   const tabs = TABBED.includes(s);
   $('#tabbar').hidden = !tabs;
@@ -9634,7 +10082,7 @@ function goBack(){
 function goHome(){
   clearTimeout(cpuTimer); cpuTimer = null;
   hideSplash(); hideResult();
-  ui.boss = null; ui.puzzle = null; ui.stage = null;
+  ui.boss = null; ui.puzzle = null; ui.stage = null; ui.tut = null;
   setScreen('home');
 }
 function toast(msg, err){
@@ -9668,6 +10116,9 @@ function render(){
   renderChrome();
   if (ui.screen === 'lobby') renderLobby();
   if (ui.screen === 'cpu') renderCpu();
+  if (ui.screen === 'ab') renderAbHub();
+  if (ui.screen === 'game') turnCut();
+  checkNewChars();
   if (ui.screen === 'plate') renderPlateEditor();
   if (ui.screen === 'mission') renderMission();
   if (ui.screen === 'shop') renderShop();
@@ -9801,6 +10252,7 @@ const TIPS = [
 ];
 function renderHome(){
   renderBossCard();
+  renderHomeAb();
   {
     const sStars = stageStars(), total = starCount();
     let cur = 1;
@@ -10173,7 +10625,7 @@ function renderGear(){
     chalks.forEach(c => {
       const b = document.createElement('button'), on = c.id === cur;
       b.type = 'button'; b.className = 'gp'; b.dataset.id = c.id; b.setAttribute('aria-pressed', String(on));
-      b.innerHTML = chalkFig(c.id === 'auto' ? null : c) + '<b></b><small></small>';
+      b.innerHTML = chalkFig(c.id === 'auto' ? null : c) + '<b></b><small></small>' + (chalkAb(c.id) ? `<span class="g-ab">${chalkAbHTML(c.id)}</span>` : '');
       b.querySelector('b').textContent = c.name;
       b.querySelector('small').textContent = on ? '使用中' : c.fx ? 'エフェクト' : '';
       b.addEventListener('click', () => { if (!on) { equipChalk(c.id); toast(`${c.name}にしました`); } });
@@ -10532,7 +10984,9 @@ function renderShop(){
     if (!boards && c.color) el.style.setProperty('--c', c.color);
     el.innerHTML = (boards ? boardSwatch(c.id, chalkOf(myChalk())) : chalkFig(c)) + '<b></b><span class="price"></span>';
     el.querySelector('b').textContent = c.name;
-    if (c.fx) el.querySelector('b').insertAdjacentHTML('afterend', '<span class="fxtag">エフェクト</span>');
+    if (!boards && chalkAb(c.id)) el.querySelector('b').insertAdjacentHTML('afterend', `<span class="shop-ab">${chalkAbHTML(c.id, true)}</span>`);
+    else if (c.fx) el.querySelector('b').insertAdjacentHTML('afterend', '<span class="fxtag">エフェクト</span>');
+    if (!boards && !c.gacha && chalkRar(c)) el.insertAdjacentHTML('afterbegin', `<i class="rar ${chalkRar(c)}">${chalkRar(c)}</i>`);
     const pr = el.querySelector('.price');
     if (have) { pr.className = 'owned'; pr.textContent = c.gacha ? `ガチャ（${c.gacha}）・持っている` : lim ? '限定・持っている' : c.price ? '持っている' : 'はじめから'; }
     if (c.gacha) el.insertAdjacentHTML('afterbegin', `<i class="rar ${c.gacha}">${c.gacha}</i>`);
@@ -10552,7 +11006,9 @@ function renderShop(){
     else {
       b.className = 'btn gold'; b.textContent = '買う';
       b.addEventListener('click', async () => {
-        if (!(await confirmBuy({art: boards ? boardSwatch(c.id, chalkOf(myChalk())) : chalkFig(c), name: c.name, cur: 'coins', cost: c.price, have: myCoins(), note: c.fx ? 'エフェクトつき' : ''}))) return;
+        const ca = !boards && chalkAb(c.id);
+        if (!(await confirmBuy({art: boards ? boardSwatch(c.id, chalkOf(myChalk())) : chalkFig(c), name: c.name, cur: 'coins', cost: c.price, have: myCoins(),
+          note: (ca ? `${chalkRar(c)}・能力「${CHALK_AB[ca].name}」${AB_META[ca][1]}（${usesText(chalkUses(c.id))}）` : '') + (c.fx ? (ca ? '・' : '') + 'エフェクトつき' : '')}))) return;
         b.disabled = true;
         (boards ? buyBoard(c.id) : buyChalk(c.id)).finally(() => { grid.dataset.key = ''; if (ui.screen === 'shop') renderShop(); });
       });
@@ -10630,30 +11086,14 @@ function renderPlateEditor(){
 // Ability rooms: my character (from my collection), saved on my room entry.
 const abCid = v => typeof v === 'string' && CHAR_SKILL[v] ? v : 'waribo';
 const abkOf = v => [0, 1].map(i => { const id = arr(v)[i]; return typeof id === 'string' && CHALKS.some(c => c.id === id) ? id : 'auto'; });
-const abVerOk = v => typeof v === 'string' && verNum(v) >= verNum('11/18-5');
+const abVerOk = v => typeof v === 'string' && verNum(v) >= verNum('11/19-2');
 function verNum(v){ const m = /^(\d+)\/(\d+)(?:-(\d+))?$/.exec(String(v || '')); return m ? (+m[1]) * 10000 + (+m[2]) * 100 + (+(m[3] || 0)) : 0; }
 function renderLobbyAb(on, ps){
   const box = $('#lbAbPick');
   box.hidden = !on;
   if (!on) return;
-  const list = charaList(), mine = abCid((ps[net.uid] || {}).abc), row = $('#lbAbMe');
-  const ks = abkOf((ps[net.uid] || {}).abk), kkey = Object.keys((net.profile || {}).owned || {}).join() + (net.admin ? 'A' : '');
-  renderChalkRow($('#lbK0'), ks[0], kkey); renderChalkRow($('#lbK1'), ks[1], kkey);
-  $('#lbAbMeD').textContent = abCharDesc(mine);
-  $('#lbKD').textContent = abHandsDesc(ks);
-  if (unchanged(row, JSON.stringify([mine, net.admin, list.map(c => c.id + (c.have ? 1 : 0))]))) return;
-  row.innerHTML = '';
-  for (const c of list) {
-    const b = document.createElement('button');
-    b.type = 'button'; b.className = 'abchip' + (abCan(c) ? '' : ' lock');
-    b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', String(c.id === mine));
-    b.dataset.id = c.id;
-    b.innerHTML = `<span class="fc">${abFaceHTML(c.id, 'cav')}</span><b></b><small></small>`;
-    b.querySelector('b').textContent = c.name;
-    b.querySelector('small').textContent = SKILLS[CHAR_SKILL[c.id]].name;
-    b.title = c.have ? `${SKILLS[CHAR_SKILL[c.id]].name}：${SKILLS[CHAR_SKILL[c.id]].desc}` : c.need;
-    row.append(b);
-  }
+  const me = ps[net.uid] || {};
+  renderLoadout($('#lbLo'), {c: abCid(me.abc), k: abkOf(me.abk), lbl: 'あなたのキャラ・スキル'});
 }
 function renderLobby(){
   const room = net.room;
@@ -10740,6 +11180,9 @@ function renderGame(){
       bf = tmp.firstElementChild; bf.dataset.k = faceKey; nameP.prepend(bf);
     }
     seatEl.classList.toggle('guard', abSeat && !!G.ab.gd[k] && !G.over);
+    seatEl.classList.toggle('abseat', abSeat);
+    seatEl.classList.toggle('gfull', abSeat && G.ab.g[k] >= AB_MAX && !G.over);
+    if (abSeat) seatEl.style.setProperty('--g', String(Math.min(1, G.ab.g[k] / AB_MAX))); else seatEl.style.removeProperty('--g');
     if (stageSeat) { tt = ui.stage.tower ? (ui.stage.boss ? '番人' : `${ui.stage.n}階`) : ui.stage.boss ? 'BOSS' : STAGE_LEVEL[ui.stage.level]; tc = 'boss'; }
     else if (!net.on && ui.puzzle && k === 1) { tt = `${ui.puzzle.d}手詰め`; tc = 'boss'; }
     else if (!net.on && ui.boss && k === 0) { tt = `HP ${ui.boss.hp}`; tc = 'hp' + (ui.boss.hp <= BOSS_ME_HIT ? ' low' : ''); }
@@ -10747,7 +11190,7 @@ function renderGame(){
     else if (out) { tt = '脱落'; tc = 'out'; }
     else if (net.on && k > 0 && G.seats && !online[G.seats[k]]) { tt = '切断中'; tc = 'off'; }
     else if (isRated() && G.seats) { const rr = Math.round(+((ps[G.seats[k]] || {}).rating)) || BASE_RATE; tt = String(rr); tc = 'rate ' + tierCls(rr); }
-    else if (abOn(G)) { const g = G.ab.g[k]; tt = SKILLS[abSk(G, k)].name + ' ' + '●'.repeat(g) + '○'.repeat(AB_MAX - g); tc = 'ab' + (g >= AB_MAX ? ' full' : ''); }
+    else if (abOn(G)) { const g = G.ab.g[k]; tt = SKILLS[abSk(G, k)].name + (g >= AB_MAX ? ' 使える！' : ''); tc = 'ab' + (g >= AB_MAX ? ' full' : ''); }
     tg.hidden = !tt; tg.textContent = tt; tg.className = 'tag ' + tc;
     if (abOn(G) && G.ab.gd[k] && !G.over) { const gd = document.createElement('span'); gd.className = 'gd'; gd.textContent = 'ガード中'; tg.append(gd); }
     for (const i of [0, 1]) {
@@ -10757,17 +11200,25 @@ function renderGame(){
       if (perHand) {
         applyFx(b, hch);
         if (hch && hch.color) b.style.setProperty('--c', hch.color); else b.style.removeProperty('--c');
-        const ab = abHandAb(G, k, i), used = ab === 'iron' && G.ab.iu && G.ab.iu[k][i];
+        const ab = abHandAb(G, k, i), left = ab ? abLeft(G, k, i) : 0, used = !!ab && left <= 0;
         const lab = ab ? CHALK_AB[ab].name + (used ? '済' : '') : '';
-        if ((b.dataset.cab || '') !== lab) { if (lab) b.dataset.cab = lab; else delete b.dataset.cab; }
+        if ((b.dataset.cab || '') !== lab) {
+          if (lab) b.dataset.cab = lab; else delete b.dataset.cab;
+          const cb = b.querySelector('.cab');
+          cb.hidden = !lab;
+          if (lab) { cb.style.setProperty('--kc', abKind(ab)[1]); cb.innerHTML = abIcon(ab) + `<span>${esc(lab)}</span><em></em>`; }
+        }
+        if (lab) { const em = b.querySelector('.cab em'), t = used || left === Infinity ? '' : String(left); if (em) { if (em.textContent !== t) em.textContent = t; em.hidden = !t; } }
         b.classList.toggle('cab-used', !!used);
-      } else if (b.dataset.cab !== undefined || b.style.getPropertyValue('--c')) { applyFx(b, null); b.style.removeProperty('--c'); delete b.dataset.cab; b.classList.remove('cab-used'); }
+      } else if (b.dataset.cab !== undefined || b.style.getPropertyValue('--c')) { applyFx(b, null); b.style.removeProperty('--c'); delete b.dataset.cab; b.classList.remove('cab-used'); b.querySelector('.cab').hidden = true; }
       const cnt = b.querySelector('.count');
       if (isBin(r) && n > 0) cnt.innerHTML = `${n}<small class="bits">${bits(n)}</small>`;
       else cnt.textContent = n === 0 ? '×' : n;
       const frz = abOn(G) && G.ab.fz[k] === i && n > 0;
-      const pickable = act && mine && n > 0 && !(frz && ms.some(m => m.kind !== 'attack' || m.from !== i));
-      const target = act && !mine && n > 0 && src !== null && (!abOn(G) || ms.some(m => m.kind === 'attack' && m.from === src && m.to === i && m.target === k));
+      const te = tutExpect();
+      const pickable = act && mine && n > 0 && !(frz && ms.some(m => m.kind !== 'attack' || m.from !== i)) && (!te || (te.kind === 'attack' && te.from === i));
+      const target = act && !mine && n > 0 && src !== null && (!abOn(G) || ms.some(m => m.kind === 'attack' && m.from === src && m.to === i && m.target === k)) && (!te || (te.kind === 'attack' && te.to === i && src === te.from));
+      b.classList.toggle('tut-hl', !!te && te.kind === 'attack' && (mine ? sel !== i && te.from === i : src === te.from && te.to === i));
       b.classList.toggle('frozen', frz && !G.over);
       b.classList.toggle('dead', n === 0);
       b.classList.toggle('selected', act && mine && sel === i);
@@ -10776,6 +11227,9 @@ function renderGame(){
       b.disabled = !(pickable || target);
       b.setAttribute('aria-pressed', String(act && mine && sel === i));
       b.setAttribute('aria-label', `${nm[k]}の${i === 0 ? '左側' : '右側'}の手、${n === 0 ? '消えている' : isBin(r) ? `${n}（2進数で${bits(n)}）` : n + '本'}`);
+      const pv = b.querySelector('.pv'), pm = target && abOn(G) && G.n === 2 ? ms.find(m => m.kind === 'attack' && m.from === src && m.to === i && m.target === k) : null;
+      pv.hidden = !pm;
+      if (pm) { const h = abPreview(pm, k); if (pv.dataset.k !== h) { pv.dataset.k = h; pv.innerHTML = h; } }
       const badge = b.querySelector('.badge');
       const sm = target && hintsOn() ? solverMove({kind:'attack', from: src, to: i}) : null;
       if (sm) { const e = evalChild(sm.next); badge.textContent = e.label; badge.className = 'badge ' + e.cls; badge.hidden = false; }
@@ -10792,9 +11246,10 @@ function renderGame(){
   cpuReact();
   const sb = $('#shapeBtn');
   sb.hidden = !r.split && !r.merge;
-  sb.disabled = !(act && ms.some(m => m.kind !== 'attack'));
+  sb.disabled = !(act && ms.some(m => m.kind !== 'attack')) || !!tutExpect();
   sb.setAttribute('aria-expanded', String(panel === 'shape'));
-  sb.textContent = panel === 'shape' ? 'やめる' : (r.split && r.merge ? '分身・合成' : r.split ? '分身' : '合成');
+  sb.querySelector('.act-t').textContent = panel === 'shape' ? 'やめる' : (r.split && r.merge ? '分身・合成' : r.split ? '分身' : '合成');
+  $('#gbMode').textContent = gameModeLabel();
   $('#resetBtn').hidden = net.on || !!ui.boss || !!ui.puzzle || !!(ui.stage && ui.stage.tower);
   const now = Date.now(), rb = $('#resignBtn'), xb = $('#exitBtn');
   rb.hidden = !(netPlaying() && !G.over && alive(G, 0));
@@ -10811,7 +11266,7 @@ function renderGame(){
   $('#abInfoBtn').hidden = !abOn(G) || !!ui.boss;
   if (!abOn(G) || ui.boss) $('#abInfo').hidden = true;
   else if (!$('#abInfo').hidden) renderAbInfo();
-  else if (!G.over && !lsGet('waribashi-abinfo') && $('#splash').hidden && ui.screen === 'game') { lsSet('waribashi-abinfo', '1'); openAbInfo(true); }
+  else if (!G.over && !tutOn() && !lsGet('waribashi-abinfo') && $('#splash').hidden && ui.screen === 'game') { lsSet('waribashi-abinfo', '1'); openAbInfo(true); }
   renderRoomPanel(nm);
   renderLog(nm);
   boardFx();
@@ -10824,9 +11279,15 @@ function renderSkillBtn(act){
   if (!on) return;
   const k = isHuman(G.turn) ? G.turn : 0, g = G.ab.g[k], sk = SKILLS[abSk(G, k)], opts = act && k === G.turn ? abOptions(G, rules()) : [];
   b.querySelector('.sk-n').textContent = panel === 'skill' ? 'やめる' : sk.name;
-  b.querySelector('.sk-g').textContent = panel === 'skill' ? '' : '●'.repeat(g) + '○'.repeat(AB_MAX - g);
+  b.querySelector('.sk-g').textContent = panel === 'skill' ? '' : g >= AB_MAX ? (k === G.turn ? '使える！' : 'たまった') : `あと${AB_MAX - g}ターン`;
+  b.style.setProperty('--g', String(Math.min(1, g / AB_MAX)));
+  b.classList.toggle('full', g >= AB_MAX);
+  const ic = b.querySelector('.sk-i'), sid = abSk(G, k);
+  if (ic && ic.dataset.k !== sid) { ic.dataset.k = sid; ic.innerHTML = abIcon(sid); }
+  const te = tutExpect();
   b.classList.toggle('ready', !!opts.length && panel !== 'skill');
-  b.disabled = !opts.length;
+  b.disabled = !opts.length || (!!te && te.kind !== 'skill');
+  b.classList.toggle('tut-hl', !!te && te.kind === 'skill' && panel !== 'skill');
   b.setAttribute('aria-expanded', String(panel === 'skill'));
   b.setAttribute('aria-label', `スキル「${sk.name}」${sk.desc}。ゲージ${g}/${AB_MAX}`);
 }
@@ -10850,7 +11311,8 @@ function renderAbInfo(){
       const id = ab.k ? ab.k[k][i] : 'auto', c = CHALKS.find(x => x.id === id), a = chalkAb(id), li = document.createElement('li');
       li.innerHTML = `${chalkFig(c && c.color ? c : null, 2)}<b></b><small></small>`;
       li.querySelector('b').textContent = `${LR[i]}手：${c ? c.name : 'いつもの色'}`;
-      li.querySelector('small').textContent = a ? `「${CHALK_AB[a].name}」${CHALK_AB[a].desc}` + (a === 'iron' && ab.iu && ab.iu[k][i] ? '（もう使った）' : '') : '能力なし（見た目だけ）';
+      const lf = a ? abLeft(G, k, i) : 0;
+      li.querySelector('small').textContent = a ? `「${CHALK_AB[a].name}」${CHALK_AB[a].desc}・${chalkRar(id)}：${usesText(chalkUses(id))}` + (lf <= 0 ? '（もう使い切った）' : lf !== Infinity ? `（あと${lf}回）` : '') : '能力なし（見た目だけ）';
       ul.append(li);
     }
     const st = [];
@@ -10869,15 +11331,267 @@ function openAbInfo(first){
   $('#abInfoOk').focus();
 }
 function closeAbInfo(){ if ($('#abInfo').hidden) return; $('#abInfo').hidden = true; maybeCpu(); }
+// ===== Tutorial: the first ability battle, three guided steps (my moves are fixed, so are the CPU's first two) =====
+const TUT = [
+  {h: 'ステップ1／3　ふつうのタッチ', t: '光っている自分の右手をタップして、次に相手の左手をタップ。タッチされた手は、タッチした手の本数だけ増えます', me: {kind: 'attack', from: 1, to: 0}, cpu: {from: 1, to: 1}},
+  {h: 'ステップ2／3　チョークの能力', t: '左手は「ほのお」のチョーク。この手でタッチすると1本多く足せます。左手で、相手の左手（2本）をタッチ！', me: {kind: 'attack', from: 0, to: 0}, cpu: {from: 1, to: 0}},
+  {h: 'ステップ3／3　スキル', t: 'ゲージがたまった！ 下の「なぎはらい」を押して、相手の両手に1本ずつ足そう', me: {kind: 'skill'}},
+];
+const tutOn = () => !!(ui.tut && G && G.tut);
+function tutExpect(){ return tutOn() && !G.over && G.turn === 0 && ui.tut.step < TUT.length ? TUT[ui.tut.step].me : null; }
+function startTutorial(){
+  Object.assign(settings, {ability: 'on', mode: 'cpu', level: 'weak', count: 'normal', first: '0'}); saveSettings();
+  ui.boss = null; ui.puzzle = null; ui.stage = null;
+  setScreen('game');
+  clearTimeout(cpuTimer); cpuTimer = null; busy = false;
+  ui.gameSeq = (ui.gameSeq || 0) + 1;
+  hideResult();
+  G = initState({n: 2, first: 0});
+  G.ab = abInit('king', 'iincho', 0, ['fire', 'auto'], ['auto', 'auto']);
+  G.tut = true;
+  ui.tut = {step: 0, cpu: 0, done: false};
+  sel = null; panel = null;
+  render();
+}
+// The CPU's scripted reply during the first two steps
+function tutCpuMove(){
+  if (!tutOn() || ui.tut.cpu >= 2) return null;
+  const c = TUT[ui.tut.cpu].cpu, m = legalMoves(G, rules()).find(x => x.kind === 'attack' && x.from === c.from && x.to === c.to && x.target === 0);
+  if (m) ui.tut.cpu++;
+  return m || null;
+}
+function tutAfterMine(m){
+  const e = TUT[ui.tut.step] && TUT[ui.tut.step].me;
+  if (!e || e.kind !== m.kind || (e.kind === 'attack' && (e.from !== m.from || e.to !== m.to))) return;
+  ui.tut.step++;
+  if (ui.tut.step === TUT.length && !ui.tut.done) {
+    ui.tut.done = true; ui.tut.doneAt = G.ply;
+    lsSet('waribashi-abtut', '1');
+    profileTx(cur => { if (cur.abtut) return undefined; cur.abtut = 1; cur.tickets = (+cur.tickets || 0) + 1; return cur; })
+      .then(r => { if (r && r.committed) toast('チュートリアルクリア！ ガチャチケット1枚をもらいました'); });
+  }
+}
+// ===== 黒板風: words written in chalk, then wiped with the eraser =====
+const fxChalk = () => lsGet('waribashi-fxstyle') === 'chalk';
+const buzz = ms => { try { if (navigator.vibrate) navigator.vibrate(ms); } catch(e) {} };
+// lines: [{t, size, color}], drawn top to bottom; the stick writes them left to right, then the eraser takes them away
+function chalkWrite(lines, opt){
+  const el = $('#chalkCut');
+  if (!el || reduceMotion.matches) return false;
+  opt = opt || {};
+  const seq = ui.cutSeq = (ui.cutSeq || 0) + 1;
+  el.getAnimations({subtree: true}).forEach(a => a.cancel());
+  const g = el.querySelector('.cc-word g'), tot = lines.reduce((a, l) => a + l.size * 1.12, 0);
+  let y = 95 - tot / 2;
+  g.innerHTML = lines.map(l => { y += l.size * 1.12; return `<text x="200" y="${(y - l.size * .2).toFixed(0)}" text-anchor="middle" font-size="${l.size}" fill="${l.color || '#eceee4'}" stroke="${l.color || '#eceee4'}" stroke-width="${(l.size / 26).toFixed(1)}" stroke-linejoin="round" transform="rotate(${opt.tilt === undefined ? -4 : opt.tilt} 200 95)">${esc(l.t)}</text>`; }).join('');
+  el.classList.toggle('lines', opt.lines !== false);
+  el.hidden = false;
+  const D = opt.dur || 1350, W = opt.write || 380, E0 = D - 420, word = el.querySelector('.cc-word'), stick = el.querySelector('.cc-stick'), er = el.querySelector('.cc-eraser'), sm = el.querySelector('.cc-smear');
+  const f = t => t / D, wr = word.getBoundingClientRect(), ww = Math.round(wr.width * .86);
+  el.style.setProperty('--ww', ww + 'px');
+  const tb = word.querySelector('g').getBBox(), sc = wr.width / 400;
+  el.style.setProperty('--wh', Math.round(Math.max(60, tb.height * sc + 34)) + 'px');
+  el.querySelector('.cc-pad').animate([{clipPath: 'inset(0 100% 0 0)', opacity: 1}, {clipPath: 'inset(0 0% 0 0)', offset: f(130)}, {clipPath: 'inset(0 0 0 0%)', offset: f(E0 + 40)}, {clipPath: 'inset(0 0 0 100%)', opacity: 1}], {duration: D, fill: 'both'});
+  el.querySelector('.cc-lines').animate([{opacity: 0, transform: 'scale(1.12)'}, {opacity: .55, transform: 'scale(1)', offset: f(140)}, {opacity: .45, offset: f(E0)}, {opacity: 0}], {duration: D, fill: 'both'});
+  word.animate([{clipPath: 'inset(0 100% 0 0)'}, {clipPath: 'inset(0 0% 0 0)', offset: f(60 + W)}, {clipPath: 'inset(0 0 0 0%)', offset: f(E0)}, {clipPath: 'inset(0 0 0 100%)'}], {duration: D, fill: 'both'});
+  word.animate([{transform: 'scale(1)'}, {transform: 'scale(1.06)', offset: f(60 + W + 40)}, {transform: 'scale(1)', offset: f(60 + W + 140)}, {transform: 'scale(1)'}], {duration: D, fill: 'both'});
+  stick.animate([{transform: 'translate(-30px,0) rotate(28deg)', opacity: 0}, {transform: 'translate(0,-6px) rotate(28deg)', opacity: 1, offset: f(60)},
+    ...Array.from({length: 6}, (_, i) => ({transform: `translate(${Math.round(ww * (i + 1) / 6)}px,${i % 2 ? -10 : 6}px) rotate(28deg)`, offset: f(60 + W * (i + 1) / 6)})),
+    {transform: `translate(${ww + 30}px,-20px) rotate(28deg)`, opacity: 0, offset: f(60 + W + 120)}, {opacity: 0}], {duration: D, fill: 'both'});
+  er.animate([{transform: 'translateX(-60px) rotate(-6deg)', opacity: 0}, {transform: 'translateX(-60px) rotate(-6deg)', opacity: 0, offset: f(E0 - 40)}, {transform: 'translateX(-30px) rotate(-6deg)', opacity: 1, offset: f(E0)},
+    {transform: `translateX(${ww + 40}px) rotate(-3deg)`, opacity: 1, offset: f(D - 60)}, {transform: `translateX(${ww + 60}px) rotate(-3deg)`, opacity: 0}], {duration: D, fill: 'both'});
+  const g2 = t => t / (D + 500);
+  sm.animate([{clipPath: 'inset(0 100% 0 0)', opacity: 0}, {clipPath: 'inset(0 100% 0 0)', opacity: .5, offset: g2(E0)}, {clipPath: 'inset(0 0% 0 0)', opacity: .4, offset: g2(D - 60)}, {opacity: 0}], {duration: D + 500, fill: 'both'});
+  sfx('chalk'); setTimeout(() => { if (ui.cutSeq === seq) sfx('erase'); }, E0);
+  setTimeout(() => { if (ui.cutSeq === seq) { el.hidden = true; el.getAnimations({subtree: true}).forEach(a => a.cancel()); } }, D + 520);
+  return true;
+}
+// ドン！ / バシッ written in chalk where a touch lands
+function chalkWord(x, y, text, color, big){
+  if (reduceMotion.matches) return;
+  const w = document.createElement('i');
+  w.className = 'fx-cword' + (big ? ' big' : ''); w.style.left = x + 'px'; w.style.top = y + 'px';
+  w.innerHTML = `<svg viewBox="0 0 200 90" aria-hidden="true"><g filter="url(#chalkS)"><path d="M16 46l-14-8M20 26 8 12M184 44l14-8M180 24l12-14" stroke="${color}" stroke-width="4" stroke-linecap="round" fill="none"/><text x="100" y="62" text-anchor="middle" font-size="${big ? 58 : 50}" fill="${color}" stroke="${color}" stroke-width="2.4" stroke-linejoin="round" transform="rotate(-8 100 45)">${esc(text)}</text></g></svg>`;
+  fxLayer().append(w);
+  w.animate([{transform: 'translate(-50%,-50%) scale(.4)', opacity: 0}, {transform: 'translate(-50%,-50%) scale(1.15)', opacity: 1, offset: .12}, {transform: 'translate(-50%,-50%) scale(1)', opacity: 1, offset: .22},
+    {transform: 'translate(-50%,-60%) scale(1)', opacity: 1, offset: .7}, {transform: 'translate(-50%,-70%) scale(1)', opacity: 0}], {duration: big ? 1100 : 800, easing: 'ease-out'}).finished.then(() => w.remove(), () => w.remove());
+}
+// a soft cloud of chalk dust
+function puffFx(x, y, color){
+  if (reduceMotion.matches) return;
+  const L = fxLayer();
+  for (let i = 0; i < 7; i++) {
+    const p = document.createElement('i'), r = 26 + Math.random() * 34, a = Math.random() * Math.PI * 2, d = 18 + Math.random() * 40;
+    p.className = 'fx-puff'; p.style.cssText = `left:${x}px;top:${y}px;width:${r}px;height:${r}px;background:${i % 3 ? '#eceee4' : color}`;
+    L.append(p);
+    p.animate([{transform: 'translate(-50%,-50%) scale(.3)', opacity: .55}, {transform: `translate(calc(-50% + ${Math.cos(a) * d}px),calc(-50% + ${Math.sin(a) * d - 14}px)) scale(1.5)`, opacity: 0}],
+      {duration: 700 + Math.random() * 500, easing: 'cubic-bezier(.2,.7,.3,1)'}).finished.then(() => p.remove(), () => p.remove());
+  }
+}
+// the teacher's red-chalk ×
+function redCrossFx(x, y){
+  if (reduceMotion.matches) return;
+  const s = document.createElement('i');
+  s.className = 'fx-slash red'; s.style.left = x + 'px'; s.style.top = y + 'px';
+  s.innerHTML = '<svg viewBox="0 0 100 100" aria-hidden="true"><g filter="url(#chalkS)"><path pathLength="1" d="M20 20Q50 52 82 80"/><path pathLength="1" d="M82 18Q48 50 18 82"/></g></svg>';
+  fxLayer().append(s);
+  s.querySelectorAll('path').forEach((p, i) => p.animate([{strokeDashoffset: 1}, {strokeDashoffset: 0}], {duration: 150, delay: i * 110, easing: 'ease-out', fill: 'both'}));
+  s.animate([{opacity: 1}, {opacity: 1, offset: .7}, {opacity: 0}], {duration: 1000, easing: 'ease-in'}).finished.then(() => s.remove(), () => s.remove());
+  sfx('chalk');
+}
+// ===== Cut-ins: a slash of light across the board, a band opens on it, the words slide through =====
+const seatEl = k => k === 0 ? $('#seat0') : $$('#opps .seat')[k - 1];
+const seatColor = k => { const e = seatEl(k); return (e && getComputedStyle(e).getPropertyValue('--c').trim()) || '#f3d774'; };
+function cutIn(text, sub, color){
+  if (fxChalk()) { chalkWrite([{t: text, size: 54, color: color === '#f3d774' ? '#f3d774' : color}].concat(sub ? [{t: sub, size: 22}] : [])); return; }
+  const el = $('#cutIn');
+  if (!el || reduceMotion.matches) return;
+  const seq = ui.cutSeq = (ui.cutSeq || 0) + 1;
+  el.getAnimations({subtree: true}).forEach(a => a.cancel());
+  el.style.setProperty('--cc', color || '#f3d774');
+  el.querySelector('.ci-t').textContent = text;
+  el.querySelector('.ci-s').textContent = sub || '';
+  el.hidden = false;
+  const D = 1050, band = el.querySelector('.ci-band'), t = el.querySelector('.ci-t'), sm = el.querySelector('.ci-s');
+  el.querySelectorAll('.ci-ln').forEach((l, i) => l.animate([{transform: 'translateX(-130%)', opacity: 0}, {opacity: 1, offset: .25}, {transform: 'translateX(130%)', opacity: 0}],
+    {duration: 380, delay: i * 70, easing: 'cubic-bezier(.3,.6,.3,1)', fill: 'both'}));
+  const O = 'cubic-bezier(.2,.9,.25,1)', I = 'cubic-bezier(.6,0,.8,.4)';
+  band.animate([{clipPath: 'inset(50% 0 50% 0)', opacity: 0}, {clipPath: 'inset(50% 0 50% 0)', opacity: 1, offset: .14, easing: O}, {clipPath: 'inset(0% 0 0% 0)', offset: .3},
+    {clipPath: 'inset(0% 0 0% 0)', offset: .82, easing: I}, {clipPath: 'inset(50% 0 50% 0)', opacity: 1}], {duration: D, fill: 'both'});
+  const slide = (e, d) => e.animate([{transform: 'translateX(90px) skewX(-12deg)', opacity: 0}, {transform: 'translateX(90px) skewX(-12deg)', opacity: 0, offset: .22 + d, easing: O},
+    {transform: 'translateX(-8px) skewX(-12deg)', opacity: 1, offset: .4 + d}, {transform: 'translateX(0) skewX(-12deg)', opacity: 1, offset: .8, easing: I},
+    {transform: 'translateX(-110px) skewX(-12deg)', opacity: 0}], {duration: D, fill: 'both'});
+  slide(t, 0); slide(sm, .04);
+  sfx('cut');
+  setTimeout(() => { if (ui.cutSeq === seq) { el.hidden = true; el.getAnimations({subtree: true}).forEach(a => a.cancel()); } }, D + 30);
+}
+// The start of a 1-on-1 game: the two players slide in from opposite sides, VS lands in the middle.
+function vsCut(){
+  const el = $('#vsCut');
+  if (!el || reduceMotion.matches || !G || G.n !== 2) return false;
+  const nm = names();
+  if (fxChalk()) return chalkWrite([{t: nm[1], size: 30, color: seatColor(1)}, {t: 'VS', size: 100}, {t: nm[0], size: 30, color: seatColor(0)}], {dur: 1550, write: 540, tilt: -6});
+  const fill = (box, k) => {
+    const f = seatEl(k) && seatEl(k).querySelector('.name .bface');
+    box.querySelector('.vs-f').innerHTML = f ? f.outerHTML : `<span class="vs-ini">${esc(String(nm[k] || '?').slice(0, 1))}</span>`;
+    box.querySelector('b').textContent = nm[k];
+    box.querySelector('small').textContent = abOn(G) ? `スキル「${SKILLS[abSk(G, k)].name}」` : '';
+    box.style.setProperty('--cc', seatColor(k));
+  };
+  fill(el.querySelector('.vs-op'), 1); fill(el.querySelector('.vs-me'), 0);
+  el.getAnimations({subtree: true}).forEach(a => a.cancel());
+  el.hidden = false;
+  const D = 1300, E = 'cubic-bezier(.2,.9,.25,1)', I = 'cubic-bezier(.6,0,.8,.4)';
+  el.querySelector('.vs-op').animate([{transform: 'translateX(110%)', easing: E}, {transform: 'translateX(0)', offset: .25}, {transform: 'translateX(-3%)', offset: .82, easing: I}, {transform: 'translateX(-115%)'}], {duration: D, fill: 'both'});
+  el.querySelector('.vs-me').animate([{transform: 'translateX(-110%)', easing: E}, {transform: 'translateX(0)', offset: .25}, {transform: 'translateX(3%)', offset: .82, easing: I}, {transform: 'translateX(115%)'}], {duration: D, fill: 'both'});
+  el.querySelector('.vs-x').animate([{transform: 'translate(-50%,-50%) scale(3) rotate(-12deg)', opacity: 0}, {transform: 'translate(-50%,-50%) scale(3) rotate(-12deg)', opacity: 0, offset: .22},
+    {transform: 'translate(-50%,-50%) scale(.9) rotate(-8deg)', opacity: 1, offset: .34}, {transform: 'translate(-50%,-50%) scale(1) rotate(-8deg)', opacity: 1, offset: .82},
+    {transform: 'translate(-50%,-50%) scale(1.4) rotate(-8deg)', opacity: 0}], {duration: D, fill: 'both'});
+  setTimeout(() => sfx('vs'), D * .3);
+  setTimeout(() => { el.hidden = true; el.getAnimations({subtree: true}).forEach(a => a.cancel()); }, D + 30);
+  return true;
+}
+// Whose turn: a cut-in when it becomes mine (each player's, on one device), and the VS at the start
+function turnCut(){
+  if (!G || ui.screen !== 'game' || G.over || reduceMotion.matches) return;
+  const gid = gameId(), key = `${gid}:${G.ply}:${G.turn}`;
+  if (ui.cutKey === key) return;
+  const fresh = ui.cutGid !== gid;
+  ui.cutKey = key; ui.cutGid = gid;
+  if (net.on && !netPlaying()) return;
+  if (tutOn()) return;
+  const two = !net.on && settings.mode === '2p' && !ui.boss && !ui.puzzle && !ui.stage, mine = two || G.turn === 0;
+  const say = () => {
+    if (!G || G.over || ui.cutKey !== key || ui.screen !== 'game') return;
+    const L = G.log && G.log[G.log.length - 1], xt = abOn(G) && G.ab.xt && G.ab.xt[G.turn];
+    if (mine && L && L.xt && L.p === G.turn) cutIn('もう1回！', '時間が止まっている', seatColor(G.turn));
+    else if (mine && xt) cutIn('時間よ、止まれ！', '2回つづけて動ける', seatColor(G.turn));
+    else if (mine) cutIn(two ? `${names()[G.turn]}の番！` : 'あなたの番！', abOn(G) && G.ab.g[G.turn] >= AB_MAX ? 'スキルが使える！' : G.ply ? '' : 'さあ、はじめよう', seatColor(G.turn));
+  };
+  if (fresh && G.ply === 0 && !ui.puzzle && $('#splash').hidden && vsCut()) setTimeout(say, 1250);
+  else setTimeout(say, G.ply ? 430 : 200);
+}
+// ===== Hits: a streak from the attacker, a burst where it lands, an × and a flash when a hand vanishes =====
+const BURST = '48.0,0.0 21.3,5.7 32.9,19.0 15.6,15.6 24.0,41.6 5.7,21.3 0.0,38.0 -5.7,21.3 -24.0,41.6 -15.6,15.6 -32.9,19.0 -21.3,5.7 -48.0,0.0 -21.3,-5.7 -32.9,-19.0 -15.6,-15.6 -24.0,-41.6 -5.7,-21.3 -0.0,-38.0 5.7,-21.3 24.0,-41.6 15.6,-15.6 32.9,-19.0 21.3,-5.7';
+function trailFx(a, t, color){
+  if (reduceMotion.matches || !a || !t) return;
+  if (fxChalk()) color = '#eceee4';
+  const [x1, y1] = centerOf(a), [x2, y2] = centerOf(t), len = Math.hypot(x2 - x1, y2 - y1), ang = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+  const d = document.createElement('i');
+  d.className = 'fx-trail'; d.style.cssText = `left:${x1}px;top:${y1}px;width:${len}px;color:${color};transform:rotate(${ang}deg)`;
+  fxLayer().append(d);
+  d.animate([{clipPath: 'inset(0 100% 0 0)', opacity: 1}, {clipPath: 'inset(0 0 0 0)', opacity: 1, offset: .45}, {clipPath: 'inset(0 0 0 100%)', opacity: .2}],
+    {duration: 300, easing: 'ease-out'}).finished.then(() => d.remove(), () => d.remove());
+}
+function burstFx(x, y, color, big){
+  if (reduceMotion.matches) return;
+  const b = document.createElement('i');
+  b.className = 'fx-burst' + (big ? ' big' : ''); b.style.left = x + 'px'; b.style.top = y + 'px'; b.style.color = color;
+  b.innerHTML = `<svg viewBox="-50 -50 100 100" aria-hidden="true"><polygon points="${BURST}"/></svg>`;
+  fxLayer().append(b);
+  b.animate([{transform: 'translate(-50%,-50%) scale(.2) rotate(0deg)', opacity: 1}, {transform: 'translate(-50%,-50%) scale(1) rotate(10deg)', opacity: .95, offset: .3},
+    {transform: 'translate(-50%,-50%) scale(1.25) rotate(16deg)', opacity: 0}], {duration: big ? 560 : 400, easing: 'ease-out'}).finished.then(() => b.remove(), () => b.remove());
+}
+function slashFx(x, y, color){
+  if (reduceMotion.matches) return;
+  const s = document.createElement('i');
+  s.className = 'fx-slash'; s.style.left = x + 'px'; s.style.top = y + 'px'; s.style.color = color;
+  s.innerHTML = '<svg viewBox="0 0 100 100" aria-hidden="true"><path pathLength="1" d="M18 22 82 78"/><path pathLength="1" d="M84 20 16 80"/></svg>';
+  fxLayer().append(s);
+  s.querySelectorAll('path').forEach((p, i) => p.animate([{strokeDashoffset: 1}, {strokeDashoffset: 0}], {duration: 140, delay: i * 90, easing: 'ease-out', fill: 'both'}));
+  s.animate([{opacity: 1, transform: 'translate(-50%,-50%) scale(1)'}, {opacity: 1, transform: 'translate(-50%,-50%) scale(1)', offset: .55}, {opacity: 0, transform: 'translate(-50%,-50%) scale(1.15)'}],
+    {duration: 800, easing: 'ease-in'}).finished.then(() => s.remove(), () => s.remove());
+  const board = $('#board');
+  if (board) { board.classList.remove('flash'); void board.offsetWidth; board.classList.add('flash'); }
+  sfx('slash');
+}
+// What this game is, for the bar above the board
+function gameModeLabel(){
+  if (!G) return '';
+  if (ui.puzzle) return '詰めわりばし';
+  if (ui.boss) return 'ボス戦・' + ((ui.boss.info && ui.boss.info.name) || '');
+  if (ui.stage) return ui.stage.tower ? `わりばしの塔 ${ui.stage.n}階` : `ステージ ${ui.stage.id}`;
+  if (tutOn()) return '能力バトル・れんしゅう';
+  const ab = abOn(G) ? '能力バトル・' : '';
+  if (net.on) return G.rated ? 'レート戦' : ab + '友達と対戦';
+  if (settings.mode === '2p') return ab + 'この端末で2人';
+  return (ab || 'CPU対戦・') + (LEVEL_NAME[settings.level] || '');
+}
+// What a touch will do, shown on the target hand before I touch it.
+function abPreview(m, k){
+  const u = isBin(rules()) ? '' : '', x = v => v === 0 ? '消える！' : String(v);
+  if (G.ab.gd[k]) return `<b>${abIcon('guard')}はじかれる</b>`;
+  const fx = String(m.fx || '').split(',').filter(Boolean), note = [];
+  for (const f of fx) {
+    const t = f === 'fire' ? '+1' : f === 'petal' ? '半分' : f === 'iron' ? '1本で残る' : f === 'star' ? `となり→${m.after2 === 0 ? '×' : m.after2}` : f === 'rainbow' ? '1本やり返し' : f === 'ice' ? '止める' : 'ゲージ+1';
+    note.push(`<i style="--kc:${abKind(f)[1]}">${abIcon(f)}${t}</i>`);
+  }
+  return `<b class="${m.after === 0 ? 'ko' : ''}">${m.before}→${x(m.after)}${u}</b>` + (note.length ? `<span>${note.join('')}</span>` : '');
+}
+// A chalk ability firing: its icon and a short line, big on the board for a moment.
+function abFxCall(m){
+  const fx = String(m.fx || '').split(',').filter(f => CHALK_AB[f]);
+  if (!fx.length) return;
+  const el = $('#abCall');
+  el.className = 'abcall fx';
+  el.innerHTML = fx.map(f => `<span class="cf1" style="--kc:${abKind(f)[1]}">${abIcon(f)}${CHALK_AB[f].name}！</span>`).join('') + `<small>${fx.map(f => AB_META[f][1]).join('・')}</small>`;
+  el.hidden = false;
+  el.style.animation = 'none'; void el.offsetWidth; el.style.animation = '';
+  clearTimeout(ui.abCallT);
+  ui.abCallT = setTimeout(() => { el.hidden = true; }, 1700);
+}
 // The skill's name, big on the board, while it happens.
 function skillFx(m){
   const el = $('#abCall'), sk = SKILLS[m.sk] || {name: 'スキル'};
-  el.innerHTML = '<span></span><small></small>';
-  el.querySelector('span').textContent = sk.name + '！';
+  el.className = 'abcall ' + (fxChalk() ? 'chalkcall' : 'band');
+  el.style.setProperty('--kc', abKind(m.sk)[1]);
+  const fc = seatEl(G.turn) && seatEl(G.turn).querySelector('.name .bface');
+  el.innerHTML = `<i class="ac-sp"></i>${fc ? `<span class="ac-face">${fc.outerHTML}</span>` : ''}<span class="cf1">${abIcon(m.sk)}<span></span></span><small></small>`;
+  el.querySelector('.cf1 span').textContent = sk.name + '！';
   el.querySelector('small').textContent = `${names()[G.turn]}のスキル：${sk.desc || ''}`;
   el.hidden = false;
   el.style.animation = 'none'; void el.offsetWidth; el.style.animation = '';
-  sfx('tap');
+  sfx('cut');
   clearTimeout(ui.abCallT);
   ui.abCallT = setTimeout(() => { el.hidden = true; }, 2300);
   return new Promise(res => setTimeout(res, reduceMotion.matches ? 200 : 750));
@@ -10887,6 +11601,166 @@ function abFaceHTML(id, cls){
   if (c.kind === 'story') return avatarHTML(c.ch, cls);
   const art = c.kind === 'boss' ? bossArt(bossInfoOf(c.id), false, 1) : charaSVG('waribo', '', HC_COLOR);
   return `<span class="${cls}${cls === 'bface' ? '' : ' bfc'}">${art}</span>`;
+}
+// ===== Loadout: one card for the character (its skill), one for each hand's chalk =====
+function loCharCard(id, slot, lbl){
+  const sk = CHAR_SKILL[id] || 'kazoe', S = SKILLS[sk];
+  return `<button type="button" class="lo-card lo-c" data-slot="${slot}"><span class="lo-fig">${abFaceHTML(id, 'cav')}</span>`
+    + `<span class="lo-tx"><span class="lo-k">${lbl}</span><b class="lo-n">${esc(abCharName(id))}</b>${abLine(sk, S.name)}<small>${AB_META[sk][1]}</small></span><span class="lo-chg" aria-hidden="true">かえる</span></button>`;
+}
+function loAnyCard(slot, lbl){
+  return `<button type="button" class="lo-card lo-c" data-slot="${slot}"><span class="lo-fig any">？</span>`
+    + `<span class="lo-tx"><span class="lo-k">${lbl}</span><b class="lo-n">おまかせ</b><small>毎回ちがうキャラが出てきます</small></span><span class="lo-chg" aria-hidden="true">かえる</span></button>`;
+}
+function loHandCard(id, i){
+  const c = CHALKS.find(x => x.id === id), ab = chalkAb(id), nm = c && c.id !== 'auto' ? c.name : 'いつもの色';
+  return `<button type="button" class="lo-card lo-h${ab ? '' : ' none'}" data-slot="${i}"><span class="lo-k">${i ? '右手' : '左手'}</span>`
+    + `<span class="lo-fig">${chalkFig(c && c.color ? c : null, 2)}</span><b class="lo-n">${esc(nm)}</b>`
+    + (ab ? chalkAbHTML(id, true) : '<span class="abl none"><b>能力なし</b></span><small>見た目だけ</small>') + '</button>';
+}
+// cfg: {c, k: [left, right], key} — the cards are rebuilt only when something changed
+function renderLoadout(box, cfg){
+  if (unchanged(box, JSON.stringify([cfg.c, cfg.k, cfg.lbl || '', net.admin]))) return;
+  box.innerHTML = `<div class="lo">${loCharCard(cfg.c, 'c', cfg.lbl || 'キャラ・スキル')}<div class="lo-hands">${loHandCard(cfg.k[0], 0)}${loHandCard(cfg.k[1], 1)}</div></div>`;
+}
+function renderCpuCard(box, lbl){
+  const id = lsGet('waribashi-abcpu') || 'any', ok = charaList().some(x => x.id === id);
+  if (unchanged(box, JSON.stringify([id, lbl]))) return;
+  box.innerHTML = ok ? loCharCard(id, 'cpu', lbl) : loAnyCard('cpu', lbl);
+}
+// The picker sheet: every choice with its ability in words; the ones I don't have yet say where they come from.
+function openLoPick(slot, ctx){
+  ui.loPick = {slot, ctx};
+  const sh = $('#loSheet'), list = $('#loList'), title = $('#loTitle');
+  title.textContent = slot === 'c' ? 'キャラをえらぶ' : slot === 'cpu' ? '相手のキャラをえらぶ' : `${slot === 1 ? '右手' : '左手'}のチョークをえらぶ`;
+  $('#loHint').textContent = slot === 'c' || slot === 'cpu' ? 'キャラごとにスキルが1つ。ゲージが3たまると使えます' : 'チョークの能力は、その手でタッチしたとき（されたとき）に効きます。レア度が高いほど1試合で使える回数が多い（N 1回・R 2回・SR 3回・SSR 何回でも）';
+  list.innerHTML = '';
+  const row = (id, fig, name, line, short, cur, lock) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'lo-opt' + (lock ? ' lock' : '');
+    b.dataset.id = id; b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', String(cur));
+    b.innerHTML = `<span class="lo-fig">${fig}</span><span class="lo-tx"><b class="lo-n"></b>${line}<small></small></span>`;
+    b.querySelector('.lo-n').textContent = name;
+    b.querySelector('small').textContent = lock ? '🔒 ' + lock : short;
+    list.append(b);
+  };
+  const head = t => { const h = document.createElement('p'); h.className = 'lo-sec'; h.textContent = t; list.append(h); };
+  if (slot === 'c' || slot === 'cpu') {
+    const cur = slot === 'cpu' ? (lsGet('waribashi-abcpu') || 'any') : ctx === 'room' ? abCid(((net.room && net.room.players) || {})[net.uid] && net.room.players[net.uid].abc) : abMine();
+    if (slot === 'cpu') row('any', '<span class="any">？</span>', 'おまかせ', '', '毎回ちがうキャラが出てきます', cur === 'any' || !charaList().some(x => x.id === cur), '');
+    const all = charaList(), have = all.filter(c => slot === 'cpu' || abCan(c)), not = slot === 'cpu' ? [] : all.filter(c => !abCan(c));
+    for (const c of have) { const sk = CHAR_SKILL[c.id] || 'kazoe'; row(c.id, abFaceHTML(c.id, 'cav'), c.name, abLine(sk, SKILLS[sk].name), SKILLS[sk].desc, c.id === cur, ''); }
+    if (not.length) { head('まだ仲間になっていないキャラ'); for (const c of not) { const sk = CHAR_SKILL[c.id] || 'kazoe'; row(c.id, abFaceHTML(c.id, 'cav'), c.name, abLine(sk, SKILLS[sk].name), '', false, c.short || c.need); } }
+  } else {
+    const ks = ctx === 'room' ? abkOf((((net.room && net.room.players) || {})[net.uid] || {}).abk) : abMyChalks(), cur = ks[slot];
+    const mine = CHALKS.filter(c => (c.color || c.id === 'auto') && abChalkCan(c.id));
+    const RO = {SSR: 0, SR: 1, R: 2, N: 3}, abi = c => Object.keys(CHALK_AB).indexOf(chalkAb(c.id));
+    const withAb = mine.filter(c => chalkAb(c.id)).sort((a, b) => RO[chalkRar(a)] - RO[chalkRar(b)] || abi(a) - abi(b));
+    head('能力つきのチョーク');
+    if (!withAb.length) { const p = document.createElement('p'); p.className = 'lo-none'; p.textContent = 'まだ持っていません。下の「まだ持っていない能力」から手に入れよう'; list.append(p); }
+    for (const c of withAb) { const a = chalkAb(c.id); row(c.id, chalkFig(c, 2), c.name, chalkAbHTML(c.id), CHALK_AB[a].desc, c.id === cur, ''); }
+    const missing = Object.keys(CHALK_AB).filter(a => !withAb.some(c => chalkAb(c.id) === a));
+    if (missing.length) {
+      head('まだ持っていない能力（いちばん手に入れやすいチョーク）');
+      for (const a of missing) {
+        const src = CHALKS.filter(c => chalkAb(c.id) === a && !c.season && !c.event).sort((x, y) => (x.price || 99999) - (y.price || 99999));
+        const best = src.find(c => c.price) || src[0];
+        if (best) row(best.id, chalkFig(best, 2), best.name, chalkAbHTML(best.id), '', false, `${chalkWhere(best)}で手に入る`);
+      }
+    }
+    head('能力なし（見た目だけ）');
+    for (const c of mine.filter(c => !chalkAb(c.id))) row(c.id, chalkFig(c.color ? c : null, 2), c.id === 'auto' ? 'いつもの色' : c.name, '', '能力なし', c.id === cur, '');
+  }
+  sh.hidden = false;
+  const on = list.querySelector('[aria-checked="true"]');
+  if (on) on.scrollIntoView({block: 'nearest'});
+  $('#loClose').focus({preventScroll: true});
+}
+function closeLoPick(){ $('#loSheet').hidden = true; ui.loPick = null; }
+function setMyChar(id){
+  const c = charaList().find(x => x.id === id);
+  if (!c) return false;
+  if (!abCan(c)) { toast(`まだ仲間になっていません：${c.need}`); return false; }
+  lsSet('waribashi-abme', c.id); sfx('tap');
+  if (net.on && net.fb && net.room && net.room.status === 'lobby')
+    net.fb.update(net.fb.ref(net.fb.db, `rooms/${net.code}/players/${net.uid}`), {abc: c.id, v: APP_VERSION}).catch(e => toast(errText(e, 'キャラを変えられませんでした'), true));
+  return true;
+}
+function loPicked(id){
+  const pk = ui.loPick; if (!pk) return;
+  if (pk.slot === 'cpu') { lsSet('waribashi-abcpu', id); sfx('tap'); }
+  else if (pk.slot === 'c') { if (!setMyChar(id)) return; }
+  else {
+    if (!abChalkCan(id)) { const c = CHALKS.find(x => x.id === id); toast(`まだ持っていません：${chalkWhere(c)}で手に入ります`); return; }
+    pickHandChalk(pk.slot, id);
+  }
+  closeLoPick(); render();
+}
+// おまかせ編成: a character I have, and two different abilities from my chalks (or what I have)
+function abAutoLoadout(){
+  const chars = charaList().filter(abCan), c = pick(chars), RO = {SSR: 4, SR: 3, R: 2, N: 1};
+  // the strongest chalks I have (by rarity), two different abilities
+  const all = CHALKS.filter(x => x.color && abChalkCan(x.id) && chalkAb(x.id)), top = Math.max(0, ...all.map(x => RO[chalkRar(x)]));
+  const mine = all.filter(x => RO[chalkRar(x)] >= top - 1), k = abMyChalks();
+  if (mine.length) { k[0] = pick(mine).id; const other = mine.filter(x => chalkAb(x.id) !== chalkAb(k[0])); k[1] = (other.length ? pick(other) : pick(mine)).id; }
+  lsSet('waribashi-abme', c.id); lsSet('waribashi-abk', JSON.stringify(k)); sfx('tap');
+  render();
+  toast(`おまかせ：${c.name}・${k.map(id => { const a = chalkAb(id); return a ? CHALK_AB[a].name : '能力なし'; }).join('／')}`);
+}
+// New characters (a cleared chapter, a beaten boss): show each once, big, with its skill.
+function checkNewChars(){
+  if ((FIREBASE_CONFIG && !net.profile) || (DEBUG && window.__noCharGet)) return;
+  const have = charaList().filter(c => c.have).map(c => c.id), raw = lsGet('waribashi-charseen');
+  if (raw === null || raw === undefined) { lsSet('waribashi-charseen', JSON.stringify(have)); return; }   // first time: what I have is not news
+  let seen; try { seen = JSON.parse(raw) || []; } catch(e) { seen = []; }
+  const fresh = have.filter(id => !seen.includes(id));
+  if (!fresh.length) return;
+  lsSet('waribashi-charseen', JSON.stringify([...new Set([...seen, ...fresh])]));
+  ui.cgQueue = (ui.cgQueue || []).concat(fresh.slice(0, 3));
+  clearTimeout(ui.cgT);
+  ui.cgT = setTimeout(nextCharGet, ui.screen === 'game' ? 1600 : 300);
+}
+function nextCharGet(){
+  const el = $('#charGet');
+  if (!el.hidden) return;
+  const id = (ui.cgQueue || []).shift();
+  if (!id) return;
+  const c = charaList().find(x => x.id === id);
+  if (!c) { nextCharGet(); return; }
+  const sk = CHAR_SKILL[id] || 'kazoe';
+  $('#cgFig').innerHTML = CHARA_ART[id] ? `<span class="cg-art">${charaSVG(id, 'smile', c.c)}</span>` : abFaceHTML(id, 'cav');
+  $('#cgName').textContent = c.name;
+  $('#cgSk').innerHTML = `${abLine(sk, SKILLS[sk].name)}<small></small>`;
+  $('#cgSk small').textContent = SKILLS[sk].desc;
+  el.dataset.id = id; el.hidden = false; sfx('unlock');
+  if (!reduceMotion.matches) requestAnimationFrame(() => { const r = $('#cgFig').getBoundingClientRect(); dust(r.left + r.width / 2, r.top + r.height / 2, [c.c || '#f2cf5b', '#fff6c4'], 26, 90); });
+  $('#cgOk').focus({preventScroll: true});
+}
+function closeCharGet(set){
+  const el = $('#charGet'), id = el.dataset.id;
+  el.hidden = true;
+  if (set && id && setMyChar(id)) toast(`編成のキャラを${abCharName(id)}にしました`);
+  setTimeout(nextCharGet, 250);
+}
+// The 能力バトル screen
+function renderAbHub(){
+  const done = !!lsGet('waribashi-abtut') || !!(net.profile && net.profile.abtut);
+  $('#hubTut').classList.toggle('done', done);
+  $('#hubTut').querySelector('.ht-k').textContent = done ? 'もう一度れんしゅう' : 'はじめての人へ';
+  $('#hubTut').querySelector('.ht-r').textContent = done ? 'クリア済み' : 'クリアでガチャチケット1枚';
+  renderLoadout($('#hubLo'), {c: abMine(), k: abMyChalks(), lbl: 'あなたのキャラ・スキル'});
+  renderCpuCard($('#hubCpu'), 'CPUのキャラ');
+  const lv = settings.level;
+  $$('#hubLv button').forEach(b => b.setAttribute('aria-checked', String(b.dataset.lv === lv)));
+  $('#hubCpuK').textContent = lv === 'strong' ? 'つよい：CPUは両手に能力チョーク。スキルの使い方もうまい' : lv === 'normal' ? 'ふつう：CPUは片手に能力チョーク' : 'よわい：CPUのチョークは能力なし。はじめての人はここから';
+}
+function renderHomeAb(){
+  const el = $('#homeAbFig'); if (!el) return;
+  const me = abMine(), k = abMyChalks(), key = JSON.stringify([me, k]);
+  if (unchanged(el, key)) return;
+  const sk = CHAR_SKILL[me] || 'kazoe';
+  el.innerHTML = abIcon(sk);
+  $('#homeAbX').textContent = SKILLS[sk].name;
 }
 // Long-press a character or chalk chip: what it does, in a bubble over it (the press does not pick it).
 function abTipShow(chip){
@@ -10964,38 +11838,12 @@ function renderAbPick(){
   const box = $('#abPick'), on = settings.ability === 'on';
   box.hidden = !on;
   if (!on) return;
-  const list = charaList(), me = abMine(), cpu = lsGet('waribashi-abcpu') || 'any', two = settings.mode === '2p';
-  $('#abMeL').textContent = two ? '下の人のキャラ' : 'あなたのキャラ';
+  const two = settings.mode === '2p';
+  $('#abMeL').textContent = two ? '下の人の編成' : 'あなたの編成';
   $('#abCpuL').textContent = two ? '上の人のキャラ' : 'CPUのキャラ';
-  const ks = abMyChalks(), kkey = Object.keys((net.profile || {}).owned || {}).join() + (net.admin ? 'A' : '');
-  renderChalkRow($('#abK0'), ks[0], kkey); renderChalkRow($('#abK1'), ks[1], kkey);
-  $('#abMeD').textContent = abCharDesc(me);
-  $('#abKD').textContent = abHandsDesc(ks);
-  $('#abCpuD').textContent = cpu === 'any' || !CHAR_SKILL[cpu] ? 'おまかせ：毎回ちがうキャラが出てきます' : abCharDesc(cpu);
-  $('#abK0L').textContent = (two ? '下の人の' : '') + '左手のチョーク';
-  $('#abK1L').textContent = (two ? '下の人の' : '') + '右手のチョーク';
+  renderLoadout($('#abLo'), {c: abMine(), k: abMyChalks(), lbl: two ? '下の人のキャラ・スキル' : 'あなたのキャラ・スキル'});
+  renderCpuCard($('#abCpuLo'), two ? '上の人のキャラ' : 'CPUのキャラ');
   $('#abCpuK').textContent = two ? '上の人のチョークは、CPUの強さで決まります' : 'CPUのチョーク：よわい＝能力なし・ふつう＝片手・さいきょう＝両手';
-  if (unchanged(box, JSON.stringify([me, cpu, two, net.admin, list.map(c => c.id + (c.have ? 1 : 0))]))) return;
-  const chip = (c, on, lock) => {
-    const b = document.createElement('button');
-    b.type = 'button'; b.className = 'abchip' + (lock ? ' lock' : '');
-    b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', String(on));
-    b.dataset.id = c.id;
-    b.innerHTML = `<span class="fc">${abFaceHTML(c.id, 'cav')}</span><b></b><small></small>`;
-    b.querySelector('b').textContent = c.name;
-    b.querySelector('small').textContent = SKILLS[CHAR_SKILL[c.id]].name;
-    b.title = lock ? c.need : `${SKILLS[CHAR_SKILL[c.id]].name}：${SKILLS[CHAR_SKILL[c.id]].desc}`;
-    return b;
-  };
-  const mine = $('#abMe'), theirs = $('#abCpu');
-  mine.innerHTML = ''; theirs.innerHTML = '';
-  for (const c of list) mine.append(chip(c, c.id === me, !abCan(c)));
-  const anyB = document.createElement('button');
-  anyB.type = 'button'; anyB.className = 'abchip any'; anyB.dataset.id = 'any';
-  anyB.setAttribute('role', 'radio'); anyB.setAttribute('aria-checked', String(cpu === 'any'));
-  anyB.innerHTML = '<span class="fc">？</span><b>おまかせ</b><small>毎回かわる</small>';
-  theirs.append(anyB);
-  for (const c of list) theirs.append(chip(c, c.id === cpu, false));
 }
 function renderStrip(act, ms, nm){
   const turn = $('#turn'), msg = $('#msg'), ev = $('#eval'), sp = $('#splits'), again = $('#again'), rw = $('#reward');
@@ -11084,6 +11932,19 @@ function renderStrip(act, ms, nm){
   turn.classList.add('c' + G.turn);
   turn.style.color = (seatChalk(G.turn) || {}).color || '';
   turn.textContent = `${nm[G.turn]}の番`;
+  const te = tutExpect();
+  if (te) {
+    const T = TUT[ui.tut.step];
+    turn.textContent = T.h; turn.classList.add('tut');
+    msg.textContent = panel === 'skill' ? '下に出てきた「相手の両手に+1」をタップ！' : T.t;
+    ev.hidden = true;
+    if (panel !== 'skill') { sp.hidden = true; return; }
+  } else if (tutOn() && ui.tut.done && G.ply <= ui.tut.doneAt + 1) {
+    turn.textContent = 'チュートリアルクリア！'; turn.classList.add('tut');
+    msg.textContent = 'これで全部。ゲージはまた3ターンでたまります。このまま自由に戦って勝とう！';
+    ev.hidden = true; sp.hidden = true;
+    return;
+  }
   if (ui.puzzle) { ev.textContent = `${ui.puzzle.d}手詰め・のこり${ui.puzzle.left}手（${ruleShort(ui.puzzle.rules)}）`; ev.hidden = false; }
   if (ui.boss) { ev.textContent = `ボスのライフ ${ui.boss.lives - ui.boss.life + 1}/${ui.boss.lives}・あなたのHP ${ui.boss.hp}・与えたダメージ ${ui.boss.dmg}` + (abOn(G) ? (G.ab.g[1] >= AB_MAX ? '・次のボスの番にパチン留め！' : `・パチン留めまであと${AB_MAX - G.ab.g[1]}ターン`) : ''); ev.hidden = false; }
   if (ui.stage && ui.stage.tower) { const sg = ui.stage; ev.textContent = `わりばしの塔 ${sg.n}階・あなたの手数 ${sg.moves}${sg.limit ? `/${sg.limit}` : ''}（${ruleShort(sg.rule)}）`; ev.hidden = false; }
@@ -11098,6 +11959,8 @@ function renderStrip(act, ms, nm){
   else if (panel === 'skill') { const sk = SKILLS[abSk(G, G.turn)]; msg.textContent = `${sk.name}：${sk.desc}`; }
   else if (panel) { const r = rules(); msg.textContent = r.split && r.merge ? '分身か合成を選んでください' : r.split ? '配り方を選んでください' : 'これでよければタップして合成'; }
   else if (abOn(G) && G.ab.fz[G.turn] >= 0 && isHuman(G.turn)) msg.textContent = `${G.ab.fz[G.turn] === 0 ? '左' : '右'}の手は止められています。もう片方の手か、分身・合成で`;
+  else if (abOn(G) && G.ab.xt && G.ab.xt[G.turn] && sourceHand() === null) msg.textContent = '時間が止まっています。このあと2回つづけて動けます';
+  else if (abOn(G) && sourceHand() === null && (G.log || []).length && G.log[G.log.length - 1].xt && G.log[G.log.length - 1].p === G.turn) msg.textContent = 'もう1回！ 使う手を選んでください';
   else if (sourceHand() === null) msg.textContent = '使う手を選んでください';
   else msg.textContent = G.n > 2 ? 'タッチする相手の手を選んでください（だれでもOK）' : 'タッチする相手の手を選んでください';
 
@@ -11113,7 +11976,7 @@ function renderStrip(act, ms, nm){
     sp.innerHTML = '';
     for (const o of opts) {
       const b = document.createElement('button');
-      b.type = 'button'; b.className = 'chip sk' + (o.blk ? ' blk' : '');
+      b.type = 'button'; b.className = 'chip sk' + (o.blk ? ' blk' : '') + (tutExpect() ? ' tut-hl' : '');
       b.innerHTML = '<span></span><small></small>';
       b.querySelector('span').textContent = o.label;
       b.querySelector('small').textContent = o.blk ? '相手はガード中（はじかれます）' : SKILLS[o.sk].name;
@@ -11558,7 +12421,7 @@ $('#evRankClaim').addEventListener('click', async () => {
 $('#tabDaily').addEventListener('click', () => { ui.missionTab = 'daily'; renderMission(); });
 $('#tabGuide').addEventListener('click', () => { ui.missionTab = 'guide'; renderMission(); });
 $('#tabNormal').addEventListener('click', () => { ui.missionTab = 'normal'; renderMission(); });
-$('#goCustom').addEventListener('click', () => setScreen('custom'));
+$('#goCustom').addEventListener('click', () => { ui.abRoom = false; setScreen('custom'); });
 $('#goRated').addEventListener('click', () => setScreen('rated'));
 $('#rtGo').addEventListener('click', () => startSearch());
 $('#rtShop').addEventListener('click', () => setScreen('rpshop'));
@@ -11583,14 +12446,6 @@ $('#settings').addEventListener('change', e => {
   settings[t.name] = t.value; saveSettings(); render();
 });
 $('#lobbyRules').addEventListener('change', e => setLobbyRule(e.target.name, e.target.value));
-$('#lbAbMe').addEventListener('click', e => {
-  const b = e.target.closest('.abchip'); if (!b || !net.on || !net.fb) return;
-  const c = charaList().find(x => x.id === b.dataset.id);
-  if (!c) return;
-  if (!abCan(c)) { toast(`まだ仲間になっていません：${c.need}`); return; }
-  lsSet('waribashi-abme', c.id); sfx('tap');
-  net.fb.update(net.fb.ref(net.fb.db, `rooms/${net.code}/players/${net.uid}`), {abc: c.id, v: APP_VERSION}).catch(e => toast(errText(e, 'キャラを変えられませんでした'), true));
-});
 $('#lobbyStart').addEventListener('click', startGame);
 $('#lobbyLeave').addEventListener('click', () => leaveRoom());
 $('#netCopy').addEventListener('click', copyLink);
@@ -11632,20 +12487,15 @@ nameInputs.forEach(inp => {
 $('#stampBtn').addEventListener('click', () => { const pal = $('#stampPal'); pal.hidden = !pal.hidden; renderStampPal(); $('#stampBtn').setAttribute('aria-expanded', String(!pal.hidden)); });
 document.getElementById(lsGet('waribashi-stampmute') === '1' ? 'stp-off' : 'stp-on').checked = true;
 $('#stampOpts').addEventListener('change', e => lsSet('waribashi-stampmute', e.target.value === 'off' ? '1' : '0'));
+document.getElementById(fxChalk() ? 'fx-chalk' : 'fx-anime').checked = true;
+document.body.classList.toggle('fx-chalk', fxChalk());
+$('#fxOpts').addEventListener('change', e => { lsSet('waribashi-fxstyle', e.target.value); document.body.classList.toggle('fx-chalk', fxChalk()); toast(e.target.value === 'chalk' ? '演出を「黒板風」にしました' : '演出を「アニメ風」にしました'); });
 $('#shapeBtn').addEventListener('click', () => { if (!interactive()) return; panel = panel === 'shape' ? null : 'shape'; sel = null; render(); });
 $('#abInfoBtn').addEventListener('click', () => openAbInfo(false));
 $('#abInfoOk').addEventListener('click', closeAbInfo);
 $('#abInfo').addEventListener('click', e => { if (e.target.id === 'abInfo') closeAbInfo(); });
 $('#board').addEventListener('click', e => { if (e.target.closest('.seat .tag.ab')) openAbInfo(false); });
 $('#skillBtn').addEventListener('click', () => { if (!interactive() || !abOn(G)) return; panel = panel === 'skill' ? null : 'skill'; sel = null; render(); });
-$('#abMe').addEventListener('click', e => {
-  const b = e.target.closest('.abchip'); if (!b) return;
-  const c = charaList().find(x => x.id === b.dataset.id);
-  if (!c) return;
-  if (!abCan(c)) { toast(`まだ仲間になっていません：${c.need}`); return; }
-  lsSet('waribashi-abme', c.id); sfx('tap'); render();
-});
-$('#abCpu').addEventListener('click', e => { const b = e.target.closest('.abchip'); if (!b) return; lsSet('waribashi-abcpu', b.dataset.id); sfx('tap'); render(); });
 // a chalk for one hand (CPU setup, and in a room's lobby: saved on my room entry too)
 function pickHandChalk(i, id){
   if (!abChalkCan(id)) return;
@@ -11655,7 +12505,28 @@ function pickHandChalk(i, id){
   if (net.on && net.fb && net.room && net.room.status === 'lobby') net.fb.update(net.fb.ref(net.fb.db, `rooms/${net.code}/players/${net.uid}`), {abk: k, v: APP_VERSION}).catch(e => toast(errText(e, 'チョークを変えられませんでした'), true));
   render();
 }
-for (const [sel, i] of [['#abK0', 0], ['#abK1', 1], ['#lbK0', 0], ['#lbK1', 1]]) $(sel).addEventListener('click', e => { const b = e.target.closest('.abchip'); if (b) pickHandChalk(i, b.dataset.id); });
+// a loadout card opens the picker (CPU setup, the 能力バトル screen, a room's lobby)
+document.addEventListener('click', e => {
+  const card = e.target.closest && e.target.closest('.lobox .lo-card');
+  if (!card) return;
+  const slot = card.dataset.slot;
+  openLoPick(slot === 'c' || slot === 'cpu' ? slot : +slot, card.closest('#lbLo') ? 'room' : 'me');
+});
+$('#loList').addEventListener('click', e => { const b = e.target.closest('.lo-opt'); if (b) loPicked(b.dataset.id); });
+$('#loClose').addEventListener('click', closeLoPick);
+$('#cgOk').addEventListener('click', () => closeCharGet(false));
+$('#cgSet').addEventListener('click', () => closeCharGet(true));
+$('#loSheet').addEventListener('click', e => { if (e.target.id === 'loSheet') closeLoPick(); });
+$('#goAb').addEventListener('click', () => setScreen('ab'));
+$('#hubAuto').addEventListener('click', abAutoLoadout);
+$('#hubTut').addEventListener('click', startTutorial);
+$('#hubLv').addEventListener('click', e => { const b = e.target.closest('button[data-lv]'); if (!b) return; settings.level = b.dataset.lv; saveSettings(); sfx('tap'); render(); });
+$('#hubStart').addEventListener('click', () => {
+  Object.assign(settings, {ability: 'on', mode: 'cpu', count: 'normal'}); saveSettings();
+  ui.boss = null; ui.puzzle = null; ui.stage = null; setScreen('game'); newGame();
+});
+$('#hubFriend').addEventListener('click', () => { ui.abRoom = true; setScreen('custom'); });
+$('#hubList').addEventListener('click', () => { setScreen('rules'); setTimeout(() => { const h = $('#skillList'); if (h) h.closest('section').scrollIntoView({block: 'start'}); }, 50); });
 for (const id of Object.keys(CHALK_AB)) {
   const li = document.createElement('li'), who = CHALKS.filter(c => c.fx && FX_AB[c.fx] === id && !c.season).map(c => c.name).slice(0, 5);
   li.innerHTML = '<b></b>';
