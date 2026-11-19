@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="waribashi-version" content="11/19-2">
+<meta name="waribashi-version" content="11/19-3">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="指の本数を足して、相手の両手を消したら勝ち。教室の手遊び「わりばし」をスマホで。">
 <meta property="og:title" content="わりばし対戦">
@@ -405,6 +405,9 @@ fieldset:disabled .opts span{cursor:default}
 .sp-range{width:100%;margin:0;accent-color:var(--you);min-height:28px}
 .sp-go{justify-self:center;min-width:12em}
 .sp-go:disabled{opacity:.5;cursor:default}
+.sp-hands{flex:1 1 100%;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;margin:0 0 2px;font-size:12px;color:var(--chalk-soft)}
+.sp-hands span{display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+.sp-hands svg.abic{width:14px;height:14px}
 .hand.dead .count{opacity:.55}
 .hand.pickable,.hand.target{cursor:pointer}
 .me .hand.pickable:hover{transform:translateY(-4px)}
@@ -482,7 +485,7 @@ fieldset:disabled .opts span{cursor:default}
 .hand .pv i{--kc:var(--chalk);display:inline-flex;align-items:center;gap:2px;font-style:normal;font-size:11px;font-weight:800;color:var(--kc)}
 .hand .pv i .abic{width:12px;height:12px;stroke-width:2.4}
 .seat.abseat .name .bface{position:relative;overflow:visible}
-.seat.abseat .name .bface::after{content:"";position:absolute;inset:-5px;border-radius:50%;background:conic-gradient(var(--you) calc(var(--g,0) * 1turn),rgba(236,238,228,.18) 0);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3.5px),#000 calc(100% - 3px));mask:radial-gradient(farthest-side,transparent calc(100% - 3.5px),#000 calc(100% - 3px));pointer-events:none}
+.seat.abseat .name .bface::after{content:"";position:absolute;inset:-5px;border-radius:50%;background:conic-gradient(var(--you) calc(var(--gg,0) * 1turn),rgba(236,238,228,.18) 0);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3.5px),#000 calc(100% - 3px));mask:radial-gradient(farthest-side,transparent calc(100% - 3.5px),#000 calc(100% - 3px));pointer-events:none}
 .seat.abseat.gfull .name .bface::after{animation:gring 1.4s ease-in-out infinite}
 @keyframes gring{50%{filter:drop-shadow(0 0 6px rgba(243,215,116,.95))}}
 .skillbtn .sk-i{display:inline-grid;place-items:center}
@@ -646,8 +649,8 @@ fieldset:disabled .opts span{cursor:default}
 .gb-ic{display:inline-grid;justify-items:center;align-content:center;gap:1px;min-width:46px;min-height:38px;padding:2px 6px;border-radius:10px;border:1.5px solid var(--line);background:var(--panel);color:var(--chalk);font:inherit;cursor:pointer}
 .gb-ic svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .gb-ic span{font-size:9.5px;font-weight:700;letter-spacing:.04em;line-height:1.1;white-space:nowrap}
-.gb-txt{min-height:38px;padding:0 12px;border-radius:10px;border:1.5px solid var(--lose);background:var(--panel);color:var(--lose);font:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
-.gb-txt:disabled{opacity:.5}
+.gb-resign{min-height:38px;padding:0 12px;border-radius:10px;border:1.5px solid var(--lose);background:var(--panel);color:var(--lose);font:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.gb-resign:disabled{opacity:.5}
 /* the action bar under the board: a wooden ledge with big tiles */
 .actbar{display:flex;gap:8px;padding:8px;border-radius:14px;background:linear-gradient(180deg,var(--wood-hi),var(--wood) 60%,#5e3d24);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 12px rgba(0,0,0,.35)}
 .act{flex:1 1 0;min-width:0;display:grid;justify-items:center;align-content:center;gap:3px;min-height:62px;padding:6px 6px 7px;border-radius:10px;border:1.5px solid rgba(236,238,228,.14);background-color:var(--board-deep);background-image:var(--noise);color:var(--chalk);font:inherit;cursor:pointer;transition:transform .1s,border-color .15s,opacity .15s}
@@ -1272,6 +1275,8 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .item .off{position:absolute;z-index:3;top:6px;left:6px;font-size:11px;font-weight:800;line-height:1.6;padding:0 7px;border-radius:999px;background:var(--lose);color:#2a1a14}
 .item{position:relative}
 .item .rar{position:absolute;z-index:3;top:6px;left:6px}
+.item .off + .rar{left:auto;right:6px}
+.item .shop-ab .rar{display:none}   /* the corner badge already says it */
 .dnote{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 10px;margin:0;font-size:12.5px;color:var(--chalk-soft)}
 .dnote span{white-space:nowrap}
 .gfx{position:fixed;inset:0;z-index:72;display:grid;place-items:center;padding:20px max(16px,env(safe-area-inset-left,0px));background:radial-gradient(circle at 50% 42%,#26302b,#0b0b0a 75%);cursor:pointer;overflow-y:auto}
@@ -2104,16 +2109,16 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
 /* the left column: 能力バトル on top (full width), カスタム and CPU side by side under it */
 .hm-pair{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
 .hm-pair .hm-ab{grid-column:1/-1}
-.hm-ab .hm-k{font-size:17px;white-space:nowrap;letter-spacing:-.01em}
+.hm-ab .hm-k{font-size:clamp(13px,4.3vw,17px);white-space:nowrap;letter-spacing:-.02em}
 .hm-ab .hm-d{color:var(--chalk-soft)}
 .hm-pair .hm-sm:not(.hm-ab){grid-template-columns:none;justify-items:center;align-content:center;text-align:center;row-gap:3px;padding:6px 4px}
 .hm-pair .hm-sm:not(.hm-ab) .hm-ic{grid-row:auto;width:26px;height:26px}
-.hm-pair .hm-sm:not(.hm-ab) .hm-k{font-size:14px;white-space:nowrap;letter-spacing:-.02em}
+.hm-pair .hm-sm:not(.hm-ab) .hm-k{font-size:clamp(11px,3.5vw,14px);white-space:nowrap;letter-spacing:-.03em}
 .hm-pair .hm-sm:not(.hm-ab) .hm-d{display:none}
 @media (max-height:780px){
-  .hm-pair .hm-sm:not(.hm-ab){grid-template-columns:auto auto;justify-content:center;column-gap:5px;padding:4px}
-  .hm-pair .hm-sm:not(.hm-ab) .hm-ic{width:22px;height:22px}
-  .hm-pair .hm-sm:not(.hm-ab) .hm-k{font-size:13px}
+  .hm-pair .hm-sm:not(.hm-ab){row-gap:1px;padding:3px 2px}
+  .hm-pair .hm-sm:not(.hm-ab) .hm-ic{width:20px;height:20px}
+  .hm-pair .hm-sm:not(.hm-ab) .hm-k{font-size:clamp(11px,3.3vw,13px)}
 }
 
 
@@ -2685,7 +2690,8 @@ a.mn-t{text-decoration:none}
       <ul class="rules">
         <li>CPU対戦と、フレンドとの部屋（2人）で遊べます。レート戦にはありません。</li>
         <li>キャラごとにスキルが1つ。コレクションで仲間にしたキャラを使えます。</li>
-        <li>自分の番が来るたびにチョークゲージが1たまり、3たまったら手のかわりにスキルを使えます（使うとその番は終わり、ゲージは0に）。</li>
+        <li>自分の番が来るたびにチョークゲージが1たまり、3たまったらスキルを使えます。スキルは番を使わないので、使ったあとそのまま1手動けます（ゲージは0に）。</li>
+        <li>能力バトルでは、合成するときにどちらの手にまとめるか選べます。分身も「左何本・右何本」で選べます。引き分けはありません（同じ形をくり返しても続きます）。</li>
         <li>ガードは、相手が次にあなたの手にさわったとき（タッチやスキル）、1回だけはじきます。</li>
       </ul>
       <ul class="rules" id="skillList"></ul>
@@ -2732,7 +2738,7 @@ a.mn-t{text-decoration:none}
             <label><input type="radio" name="ability" value="off" id="ability-off"><span>なし</span></label>
             <label><input type="radio" name="ability" value="on" id="ability-on"><span>あり</span></label>
           </div>
-          <p class="note abnote">キャラごとにスキルが1つ。自分の番が来るたびにチョークゲージが1たまり、3たまったら手のかわりにスキルを使えます。</p>
+          <p class="note abnote">キャラごとにスキルが1つ。自分の番が来るたびにチョークゲージが1たまり、3たまったらスキルを使えます。スキルは番を使わないので、使ったあともそのまま動けます。</p>
           <div class="abpick" id="abPick" hidden>
             <span class="label" id="abMeL">あなたの編成</span>
             <div class="lobox" id="abLo"></div>
@@ -3342,7 +3348,7 @@ a.mn-t{text-decoration:none}
           <div class="gb-r">
             <button type="button" class="gb-ic" id="abInfoBtn" hidden aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11M9 8h6"/></svg><span>能力</span></button>
             <button type="button" class="gb-ic" id="resetBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 3.5v4.2h4.2"/></svg><span>最初から</span></button>
-            <button type="button" class="gb-txt danger" id="resignBtn" hidden>投了</button>
+            <button type="button" class="gb-resign danger" id="resignBtn" hidden>投了</button>
           </div>
         </div>
         <div class="board-wrap">
@@ -4072,7 +4078,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/19-2';
+const APP_VERSION = '11/19-3';
 // ----- New version: the page's <head> carries its version (build.py writes it). Now and then, and whenever the app comes
 // back to the front, read the head of the live page; if its version differs, offer a reload. ?debug&vfast checks every few seconds.
 const VER_FAST = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('vfast'); } catch(e) { return false; } })();
@@ -4597,7 +4603,8 @@ function chalkFig(c, n){
 function applyFx(el, ch){
   const fxv = (ch && ch.fx) || '';
   if ((el.dataset.fx || '') !== fxv) { if (fxv) el.dataset.fx = fxv; else delete el.dataset.fx; }
-  if (fxv) { el.style.setProperty('--fxc', ch.fxc || '#fff'); el.style.setProperty('--fxc2', ch.fxc2 || ch.fxc || '#fff'); el.style.setProperty('--g', ch.g || ch.color); }
+  if (fxv) { el.style.setProperty('--fxc', ch.fxc || '#fff'); el.style.setProperty('--fxc2', ch.fxc2 || ch.fxc || '#fff'); el.style.setProperty('--g', ch.g || ch.color); el.dataset.fxv = '1'; }
+  else if (el.dataset.fxv) { el.style.removeProperty('--fxc'); el.style.removeProperty('--fxc2'); el.style.removeProperty('--g'); delete el.dataset.fxv; }
 }
 function boardSwatch(id, ch){
   const col = ch && ch.color ? ch.color : 'var(--you)';
@@ -7109,6 +7116,11 @@ function renderDaily(){
     if (g.item && g.item.color) el.style.setProperty('--c', g.item.color);
     el.innerHTML = goodArt(g) + '<b></b><span class="price"></span>';
     el.querySelector('b').textContent = g.name;
+    if (g.kind === 'chalk' && g.item) {
+      if (chalkAb(g.item.id)) el.querySelector('b').insertAdjacentHTML('afterend', `<span class="shop-ab">${chalkAbHTML(g.item.id, true)}</span>`);
+      const r = chalkRar(g.item);
+      if (r) el.insertAdjacentHTML('afterbegin', `<i class="rar ${r}">${r}</i>`);
+    }
     const pr = el.querySelector('.price');
     pr.innerHTML = (g.was ? `<span class="was">${g.was}</span> ` : '') + `<span class="coin">${g.price}</span>`;
     if (g.was) el.insertAdjacentHTML('afterbegin', `<span class="off">${Math.round((1 - g.price / g.was) * 100)}%OFF</span>`);
@@ -7449,7 +7461,7 @@ async function claimGuideDone(){
 // ===================== News =====================
 const NEWS = [
   {id: 'n28', date: '2026-11-19', tag: 'NEW', title: 'すべてのチョークに能力とレア度がつきました',
-    body: 'チョークの能力が変わりました。\n・すべてのチョークにレア度（N・R・SR・SSR）と能力がつきました。ショップの色だけのチョーク（白〜ミント）にも能力があります\n・レア度が高いほど、1試合で能力を使える回数が多くなります（N 1回・R 2回・SR 3回・SSR 何回でも。てっぺきだけは N・R 1回／SR 2回／SSR 3回）\n・手の上のバッジに、あと何回使えるかが出ます\n・ショップ・ガチャの提供割合・かけら交換・コレクション・図鑑で、チョークの能力が見られます\n・ステージやボスで新しいキャラが仲間になると「なかまになった！」でお知らせします\n・対戦の演出をパワーアップ：対戦開始の「VS」、「あなたの番！」、手を消したときの演出、スキル発動。文字のフォントも新しくなりました\n・演出は「アニメ風」と「黒板風」から選べます（メニュー → 設定 → 対戦の演出）。黒板風は、チョークで書いて黒板消しで消す演出・赤チョークの×・勝つと花丸。どっちがいいか教えてね\n・対戦画面を整理しました。盤の上に「ホームへ・能力・最初から」、盤の下に大きなボタン（分身・合成／スキル／スタンプ）。スキルのボタンにはゲージが出ます\n・スキル「じかんストップ」を直しました。使ったあと、2回つづけて動けます（今までは使った番がそのまま消えて、得をしていませんでした）\n・能力バトルの部屋は、相手もこのバージョンに更新している必要があります'},
+    body: 'チョークの能力が変わりました。\n・すべてのチョークにレア度（N・R・SR・SSR）と能力がつきました。ショップの色だけのチョーク（白〜ミント）にも能力があります\n・レア度が高いほど、1試合で能力を使える回数が多くなります（N 1回・R 2回・SR 3回・SSR 何回でも。てっぺきだけは N・R 1回／SR 2回／SSR 3回）\n・手の上のバッジに、あと何回使えるかが出ます\n・ショップ・ガチャの提供割合・かけら交換・コレクション・図鑑で、チョークの能力が見られます\n・ステージやボスで新しいキャラが仲間になると「なかまになった！」でお知らせします\n・対戦の演出をパワーアップ：対戦開始の「VS」、「あなたの番！」、手を消したときの演出、スキル発動。文字のフォントも新しくなりました\n・演出は「アニメ風」と「黒板風」から選べます（メニュー → 設定 → 対戦の演出）。黒板風は、チョークで書いて黒板消しで消す演出・赤チョークの×・勝つと花丸。どっちがいいか教えてね\n・対戦画面を整理しました。盤の上に「ホームへ・能力・最初から」、盤の下に大きなボタン（分身・合成／スキル／スタンプ）。スキルのボタンにはゲージが出ます\n・キャラのスキルは番を使わなくなりました。スキルを使ったあと、そのまま1手動けます（木曜のボスの「パチン留め」は今まで通り）\n・能力バトルの合成は、どちらの手にまとめるか選べるようになりました。分身も「左何本・右何本」で表示します\n・能力バトルは引き分けなしになりました（同じ形をくり返しても続きます）\n・スキル「じかんストップ」を直しました。使ったあと、2回つづけて動けます（今までは使った番がそのまま消えて、得をしていませんでした）\n・能力バトルの部屋は、相手もこのバージョンに更新している必要があります'},
   {id: 'n29', date: '2026-11-19', tag: 'おしらせ', title: '公式Discordができました',
     body: 'わりばしの公式Discordサーバーができました。\n・メニューの「公式Discord」から参加できます\n・「こうしてほしい」という要望や、不具合の報告、対戦相手さがしなどに使ってね\n・新しい機能のお知らせも、ここで先に出すことがあります\n・Discordは13歳以上が使えるサービスです'},
   {id: 'n27', date: '2026-11-19', tag: 'NEW', title: '能力バトルがわかりやすくなりました',
@@ -8331,7 +8343,7 @@ const abCharName = id => { const c = charaList().find(x => x.id === id); return 
 function abInit(c0, c1, first, k0, k1){
   const g = [0, 0];
   g[first] = 1;   // the first turn has come
-  return {c: [c0, c1], g, gd: [0, 0], fz: [-1, -1], rv: [0, 0], k: [k0 || ['auto', 'auto'], k1 || ['auto', 'auto']], iu: [[0, 0], [0, 0]], xt: [0, 0]};
+  return {c: [c0, c1], g, gd: [0, 0], fz: [-1, -1], rv: [0, 0], k: [k0 || ['auto', 'auto'], k1 || ['auto', 'auto']], iu: [[0, 0], [0, 0]], xt: [0, 0], fr: 1};
 }
 // An ordinary touch with chalk abilities: everything it does is worked out here (the rules are known here), step() applies it.
 function abAttack(S, r, p, f, q, t){
@@ -8444,7 +8456,10 @@ function legalMoves(S, r){
   }
   if (r.merge && a > 0 && b > 0) {
     let x = a + b; if (x >= B) x = r.overflow === 'wrap' ? x - B : 0;
-    if (x > 0) { const into = a >= b ? 0 : 1, h = [0, 0]; h[into] = x; out.push({kind:'merge', hands:h, into}); }
+    if (x > 0) {
+      const into = a >= b ? 0 : 1, h = [0, 0]; h[into] = x; out.push({kind:'merge', hands:h, into});
+      if (S.ab && S.ab.k) { const h2 = [0, 0]; h2[1 - into] = x; out.push({kind:'merge', hands:h2, into: 1 - into}); }   // ability battle: either hand
+    }
   }
   if (S.ab && S.ab.fz[p] >= 0) { const keep = out.filter(m => !(m.kind === 'attack' && m.from === S.ab.fz[p])); if (keep.length) return keep; }
   return out;
@@ -8490,17 +8505,20 @@ function step(S0, m, now){
   const alv = aliveList(S);
   if (alv.length <= 1) { S.over = {type:'win', winner: alv.length ? alv[0] : p}; return S; }
   S.turn = nextAlive(S, p);
+  const free = m.kind === 'skill' && !!(S.ab && S.ab.fr);   // a skill costs no turn: the move comes after it
   if (S.ab) {
     if (!S.ab.xt) S.ab.xt = [0, 0];
-    S.ab.fz[p] = -1;   // a stop lasts one turn
+    if (!free) S.ab.fz[p] = -1;   // a stop lasts until that side's next real move
     if (e.stop) { S.turn = p; S.ab.xt[p] = 1; }                        // じかんストップ: the skill is free…
+    else if (free) { S.turn = p; e.fr = 1; }
     else if (S.ab.xt[p]) { S.ab.xt[p] = 0; S.turn = p; e.xt = 1; }     // …and the other side's next turn is skipped
     else S.ab.g[S.turn] = Math.min(AB_MAX, S.ab.g[S.turn] + 1);
   }
   S.seen = S.seen || {};
+  if (free) return S;   // not a new position in the count, and the clock keeps running
   const k = posKeyOf(S);
   S.seen[k] = (S.seen[k] || 0) + 1;
-  if (S.seen[k] >= 3 && !S.norep) S.over = {type:'draw'};   // boss fights (norep) never end in a draw
+  if (S.seen[k] >= 3 && !S.norep && !(S.ab && S.ab.fr)) S.over = {type:'draw'};   // boss fights (norep) and ability battles never end in a draw
   else if (S.limit) S.turnAt = now || 0;
   return S;
 }
@@ -8528,7 +8546,7 @@ function normState(r){
   const hands = Array.from({length: n}, (_, p) => [0, 1].map(i => { const v = +((H[p] || {})[i]); return v >= 0 && v < BIN ? v : 0; }));
   const log = arr(r.log).filter(e => e && typeof e.k === 'string').map(e => {
     const o = {k: e.k};
-    for (const f of ['n','p','q','v','b','a','ko','x','blk','stop','xt','a2','s']) if (e[f] !== undefined && e[f] !== null) o[f] = +e[f];
+    for (const f of ['n','p','q','v','b','a','ko','x','blk','stop','xt','fr','a2','s']) if (e[f] !== undefined && e[f] !== null) o[f] = +e[f];
     if (typeof e.cfx === 'string' && /^[a-z,]{1,80}$/.test(e.cfx)) o.cfx = e.cfx;
     if (e.f) o.f = arr(e.f).map(Number);
     if (e.t) o.t = arr(e.t).map(Number);
@@ -8556,7 +8574,7 @@ function normState(r){
     const A = r.ab, two = (v, f) => [0, 1].map(i => f(arr(v)[i]));
     S.ab = {c: two(A.c, abCid), g: two(A.g, v => Math.max(0, Math.min(AB_MAX, Math.floor(+v) || 0))), gd: two(A.gd, v => +v ? 1 : 0),
       fz: two(A.fz, v => +v === 0 || +v === 1 ? +v : -1), rv: two(A.rv, v => +v ? 1 : 0),
-      k: two(A.k, abkOf), iu: two(A.iu, v => two(v, x => Math.max(0, Math.min(99, +x || 0)))), xt: two(A.xt, v => +v ? 1 : 0)};
+      k: two(A.k, abkOf), iu: two(A.iu, v => two(v, x => Math.max(0, Math.min(99, +x || 0)))), xt: two(A.xt, v => +v ? 1 : 0), ...(+A.fr ? {fr: 1} : {})};
   }
   if (typeof r.mid === 'string') S.mid = r.mid.slice(0, 64);
   if (r.devs && typeof r.devs === 'object') S.devs = Object.fromEntries(Object.entries(r.devs).slice(0, 8).map(([k, v]) => [k, String(v).slice(0, 24)]));
@@ -8574,7 +8592,7 @@ function toLocal(S, seat){
     turn: Lc(S.turn), first: Lc(S.first), over,
     last: S.last ? {...S.last, p: Lc(S.last.p), target: S.last.target >= 0 ? Lc(S.last.target) : -1} : null,
     log: S.log.map(e => Object.assign({}, e, {p: Lc(e.p)}, e.q !== undefined ? {q: Lc(e.q)} : {})),
-    ...(S.ab ? {ab: Object.fromEntries(Object.entries(S.ab).map(([k, v]) => [k, Array.from({length: n}, (_, i) => v[R(i)])]))} : {})};
+    ...(S.ab ? {ab: Object.fromEntries(Object.entries(S.ab).map(([k, v]) => [k, Array.isArray(v) ? Array.from({length: n}, (_, i) => v[R(i)]) : v]))} : {})};
 }
 
 function names(){
@@ -8588,7 +8606,7 @@ function names(){
 
 function logText(e, nm){
   const t = logText0(e, nm);
-  return e.xt ? t + '（時間が止まっている：もう1回）' : t;
+  return e.xt ? t + '（時間が止まっている：もう1回）' : e.fr ? t + '（つづけて1手）' : t;
 }
 function logText0(e, nm){
   const bin = isBin(), u = bin ? '' : '本', B = bin ? BIN : (rules().base || 5);
@@ -11086,7 +11104,7 @@ function renderPlateEditor(){
 // Ability rooms: my character (from my collection), saved on my room entry.
 const abCid = v => typeof v === 'string' && CHAR_SKILL[v] ? v : 'waribo';
 const abkOf = v => [0, 1].map(i => { const id = arr(v)[i]; return typeof id === 'string' && CHALKS.some(c => c.id === id) ? id : 'auto'; });
-const abVerOk = v => typeof v === 'string' && verNum(v) >= verNum('11/19-2');
+const abVerOk = v => typeof v === 'string' && verNum(v) >= verNum('11/19-3');
 function verNum(v){ const m = /^(\d+)\/(\d+)(?:-(\d+))?$/.exec(String(v || '')); return m ? (+m[1]) * 10000 + (+m[2]) * 100 + (+(m[3] || 0)) : 0; }
 function renderLobbyAb(on, ps){
   const box = $('#lbAbPick');
@@ -11182,7 +11200,7 @@ function renderGame(){
     seatEl.classList.toggle('guard', abSeat && !!G.ab.gd[k] && !G.over);
     seatEl.classList.toggle('abseat', abSeat);
     seatEl.classList.toggle('gfull', abSeat && G.ab.g[k] >= AB_MAX && !G.over);
-    if (abSeat) seatEl.style.setProperty('--g', String(Math.min(1, G.ab.g[k] / AB_MAX))); else seatEl.style.removeProperty('--g');
+    if (abSeat) seatEl.style.setProperty('--gg', String(Math.min(1, G.ab.g[k] / AB_MAX))); else seatEl.style.removeProperty('--gg');
     if (stageSeat) { tt = ui.stage.tower ? (ui.stage.boss ? '番人' : `${ui.stage.n}階`) : ui.stage.boss ? 'BOSS' : STAGE_LEVEL[ui.stage.level]; tc = 'boss'; }
     else if (!net.on && ui.puzzle && k === 1) { tt = `${ui.puzzle.d}手詰め`; tc = 'boss'; }
     else if (!net.on && ui.boss && k === 0) { tt = `HP ${ui.boss.hp}`; tc = 'hp' + (ui.boss.hp <= BOSS_ME_HIT ? ' low' : ''); }
@@ -11326,7 +11344,7 @@ function renderAbInfo(){
 function openAbInfo(first){
   if (!abOn(G)) return;
   renderAbInfo();
-  $('#abInfoNote').textContent = first ? 'この画面は、下の「能力」ボタンでいつでも見られます' : '';
+  $('#abInfoNote').textContent = first ? 'この画面は、上の「能力」ボタンでいつでも見られます' : '';
   $('#abInfo').hidden = false;
   $('#abInfoOk').focus();
 }
@@ -11335,7 +11353,7 @@ function closeAbInfo(){ if ($('#abInfo').hidden) return; $('#abInfo').hidden = t
 const TUT = [
   {h: 'ステップ1／3　ふつうのタッチ', t: '光っている自分の右手をタップして、次に相手の左手をタップ。タッチされた手は、タッチした手の本数だけ増えます', me: {kind: 'attack', from: 1, to: 0}, cpu: {from: 1, to: 1}},
   {h: 'ステップ2／3　チョークの能力', t: '左手は「ほのお」のチョーク。この手でタッチすると1本多く足せます。左手で、相手の左手（2本）をタッチ！', me: {kind: 'attack', from: 0, to: 0}, cpu: {from: 1, to: 0}},
-  {h: 'ステップ3／3　スキル', t: 'ゲージがたまった！ 下の「なぎはらい」を押して、相手の両手に1本ずつ足そう', me: {kind: 'skill'}},
+  {h: 'ステップ3／3　スキル', t: 'ゲージがたまった！ 下の「なぎはらい」を押して、相手の両手に1本ずつ足そう。スキルは番を使わないから、そのあとタッチもできるよ', me: {kind: 'skill'}},
 ];
 const tutOn = () => !!(ui.tut && G && G.tut);
 function tutExpect(){ return tutOn() && !G.over && G.turn === 0 && ui.tut.step < TUT.length ? TUT[ui.tut.step].me : null; }
@@ -11504,6 +11522,7 @@ function turnCut(){
   const say = () => {
     if (!G || G.over || ui.cutKey !== key || ui.screen !== 'game') return;
     const L = G.log && G.log[G.log.length - 1], xt = abOn(G) && G.ab.xt && G.ab.xt[G.turn];
+    if (L && L.fr && L.p === G.turn) return;   // a skill just went off and was called out: the same turn goes on
     if (mine && L && L.xt && L.p === G.turn) cutIn('もう1回！', '時間が止まっている', seatColor(G.turn));
     else if (mine && xt) cutIn('時間よ、止まれ！', '2回つづけて動ける', seatColor(G.turn));
     else if (mine) cutIn(two ? `${names()[G.turn]}の番！` : 'あなたの番！', abOn(G) && G.ab.g[G.turn] >= AB_MAX ? 'スキルが使える！' : G.ply ? '' : 'さあ、はじめよう', seatColor(G.turn));
@@ -11633,7 +11652,7 @@ function openLoPick(slot, ctx){
   ui.loPick = {slot, ctx};
   const sh = $('#loSheet'), list = $('#loList'), title = $('#loTitle');
   title.textContent = slot === 'c' ? 'キャラをえらぶ' : slot === 'cpu' ? '相手のキャラをえらぶ' : `${slot === 1 ? '右手' : '左手'}のチョークをえらぶ`;
-  $('#loHint').textContent = slot === 'c' || slot === 'cpu' ? 'キャラごとにスキルが1つ。ゲージが3たまると使えます' : 'チョークの能力は、その手でタッチしたとき（されたとき）に効きます。レア度が高いほど1試合で使える回数が多い（N 1回・R 2回・SR 3回・SSR 何回でも）';
+  $('#loHint').textContent = slot === 'c' || slot === 'cpu' ? 'キャラごとにスキルが1つ。ゲージが3たまると使えて、使ったあともそのまま動けます' : 'チョークの能力は、その手でタッチしたとき（されたとき）に効きます。レア度が高いほど1試合で使える回数が多い（N 1回・R 2回・SR 3回・SSR 何回でも）';
   list.innerHTML = '';
   const row = (id, fig, name, line, short, cur, lock) => {
     const b = document.createElement('button');
@@ -11939,9 +11958,9 @@ function renderStrip(act, ms, nm){
     msg.textContent = panel === 'skill' ? '下に出てきた「相手の両手に+1」をタップ！' : T.t;
     ev.hidden = true;
     if (panel !== 'skill') { sp.hidden = true; return; }
-  } else if (tutOn() && ui.tut.done && G.ply <= ui.tut.doneAt + 1) {
+  } else if (tutOn() && ui.tut.done && G.ply <= ui.tut.doneAt) {
     turn.textContent = 'チュートリアルクリア！'; turn.classList.add('tut');
-    msg.textContent = 'これで全部。ゲージはまた3ターンでたまります。このまま自由に戦って勝とう！';
+    msg.textContent = 'これで全部。スキルのあとも、このまま自分の番。ゲージはまた3ターンでたまります。自由に戦って勝とう！';
     ev.hidden = true; sp.hidden = true;
     return;
   }
@@ -11961,6 +11980,7 @@ function renderStrip(act, ms, nm){
   else if (abOn(G) && G.ab.fz[G.turn] >= 0 && isHuman(G.turn)) msg.textContent = `${G.ab.fz[G.turn] === 0 ? '左' : '右'}の手は止められています。もう片方の手か、分身・合成で`;
   else if (abOn(G) && G.ab.xt && G.ab.xt[G.turn] && sourceHand() === null) msg.textContent = '時間が止まっています。このあと2回つづけて動けます';
   else if (abOn(G) && sourceHand() === null && (G.log || []).length && G.log[G.log.length - 1].xt && G.log[G.log.length - 1].p === G.turn) msg.textContent = 'もう1回！ 使う手を選んでください';
+  else if (abOn(G) && sourceHand() === null && (G.log || []).length && G.log[G.log.length - 1].fr && G.log[G.log.length - 1].p === G.turn) msg.textContent = 'スキル発動！ このままつづけて、手を選んでください';
   else if (sourceHand() === null) msg.textContent = '使う手を選んでください';
   else msg.textContent = G.n > 2 ? 'タッチする相手の手を選んでください（だれでもOK）' : 'タッチする相手の手を選んでください';
 
@@ -12021,10 +12041,25 @@ function renderStrip(act, ms, nm){
       upd();
       sp.append(box);
     }
-    shapes.filter(m => m.kind === 'merge' || !isBin()).forEach(m => {
+    const perHand = abOn(G) && !!G.ab.k && G.n === 2;
+    if (perHand) {
+      // which chalk is on which hand, so the choice means something
+      const hd = document.createElement('p');
+      hd.className = 'sp-hands';
+      hd.innerHTML = [0, 1].map(i => { const a = abHandAb(G, G.turn, i); return `<span>${i ? '右' : '左'}の手${a ? `：${abIcon(a)}${CHALK_AB[a].name}` : ''}</span>`; }).join('');
+      sp.append(hd);
+    }
+    shapes.filter(m => m.kind === 'merge' || !isBin()).sort((p, q) => p.kind === 'merge' && q.kind === 'merge' ? p.into - q.into : 0).forEach(m => {
       const b = document.createElement('button');
-      b.type = 'button'; b.className = 'chip';
-      if (m.kind === 'merge') {
+      b.type = 'button'; b.className = 'chip' + (perHand ? ' lr' : '');
+      if (perHand && m.kind === 'merge') {
+        const side = m.into ? '右' : '左';
+        b.innerHTML = `<span>${side}にまとめる → ${m.hands[m.into]}</span><small class="k">合成</small>`;
+        b.setAttribute('aria-label', `${h0}と${h1}を合成して、${side}の手を${m.hands[m.into]}にする`);
+      } else if (perHand) {
+        b.innerHTML = `<span>左 ${m.hands[0]} ・ 右 ${m.hands[1]}</span><small class="k">分身</small>`;
+        b.setAttribute('aria-label', `左側${m.hands[0]}本、右側${m.hands[1]}本に分身`);
+      } else if (m.kind === 'merge') {
         b.innerHTML = `<span>${h0} + ${h1} → ${m.hands[m.into]}</span><small class="k">合成</small>`;
         b.setAttribute('aria-label', isBin() ? `${h0}と${h1}を合成して${m.hands[m.into]}にする` : `${h0}本と${h1}本を合成して${m.hands[m.into]}本にする`);
       } else {
