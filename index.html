@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="waribashi-version" content="11/19-3">
+<meta name="waribashi-version" content="11/20-1">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="指の本数を足して、相手の両手を消したら勝ち。教室の手遊び「わりばし」をスマホで。">
 <meta property="og:title" content="わりばし対戦">
@@ -22,7 +22,7 @@ body{margin:0}
 <title>わりばし対戦</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=M+PLUS+Rounded+1c:wght@500;700;800&family=Yusei+Magic&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=M+PLUS+Rounded+1c:wght@500;700;800;900&family=Yusei+Magic&display=swap">
 <style>
 /* Layout: a classroom wall. Menus sit in one narrow column of chalkboard tiles; the game is a wood-framed chalkboard with rivals across the top and you along the bottom. */
 :root{
@@ -62,6 +62,8 @@ body{margin:0}
   --font-display:"Yusei Magic","Hiragino Maru Gothic ProN","BIZ UDPGothic","Meiryo",sans-serif;
   --font-body:"M PLUS Rounded 1c","Zen Maru Gothic","Hiragino Maru Gothic ProN","Meiryo",sans-serif;
   --font-impact:"Dela Gothic One","Yusei Magic","Hiragino Sans","Meiryo",sans-serif;
+  --font-game:"Dela Gothic One","M PLUS Rounded 1c","Hiragino Sans","Meiryo",sans-serif;
+  --font-chalk:"Yusei Magic","Hiragino Maru Gothic ProN","BIZ UDPGothic","Meiryo",sans-serif;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -360,7 +362,7 @@ fieldset:disabled .opts span{cursor:default}
 .tray::before,.tray::after{content:"";position:absolute;top:-4px;height:7px;border-radius:4px}
 .tray::before{left:16%;width:36px;background:var(--chalk)}
 .tray::after{left:calc(16% + 46px);width:22px;background:var(--you)}
-.boardnote{position:absolute;right:8px;top:14px;margin:0;writing-mode:vertical-rl;font-family:var(--font-display);font-size:13px;letter-spacing:.12em;color:var(--chalk-faint);pointer-events:none;user-select:none}
+.boardnote{position:absolute;right:8px;top:14px;margin:0;writing-mode:vertical-rl;font-family:var(--font-chalk);font-size:13px;letter-spacing:.12em;color:var(--chalk-faint);pointer-events:none;user-select:none}
 .boardnote .tcy{text-combine-upright:all}
 
 .opps{display:flex;justify-content:space-around;align-items:start;gap:4px;min-width:0}
@@ -389,7 +391,7 @@ fieldset:disabled .opts span{cursor:default}
 .hand svg{width:100%;height:auto;aspect-ratio:100/130;display:block;overflow:visible;transition:opacity .25s}
 .hand svg .pm{fill:currentColor}
 .hand svg .fg{fill:currentColor;stroke:var(--board);stroke-width:2}
-.hand .count{font-family:var(--font-display);font-size:clamp(26px,7vw,34px);line-height:1.1;font-variant-numeric:tabular-nums}
+.hand .count{font-family:var(--font-chalk);font-size:clamp(26px,7vw,34px);line-height:1.1;font-variant-numeric:tabular-nums}
 .opps[data-n="2"] .count{font-size:clamp(20px,5.5vw,28px)}
 .opps[data-n="3"] .count{font-size:clamp(16px,4.6vw,24px)}
 .hand.dead svg{opacity:.2}
@@ -398,7 +400,7 @@ fieldset:disabled .opts span{cursor:default}
 .splitter{flex-basis:100%;display:grid;gap:10px;padding:10px 12px;border-radius:12px;border:1.5px solid var(--chalk-faint);background:var(--board-deep)}
 .sp-vals{display:flex;align-items:center;justify-content:center;gap:16px}
 .sp-h{display:grid;justify-items:center;min-width:4.5em}
-.sp-h b{font-family:var(--font-display);font-size:30px;line-height:1.1;font-variant-numeric:tabular-nums}
+.sp-h b{font-family:var(--font-chalk);font-size:30px;line-height:1.1;font-variant-numeric:tabular-nums}
 .sp-lbl{font-size:11px;font-weight:700;color:var(--chalk-soft)}
 .sp-b{font:700 12px/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.14em;color:var(--chalk-soft)}
 .sp-op{font-size:20px;color:var(--chalk-soft)}
@@ -430,7 +432,7 @@ fieldset:disabled .opts span{cursor:default}
   background-size:100% 2px;background-position:top,bottom;background-repeat:no-repeat;
 }
 .strip p{margin:0}
-.turn{font-family:var(--font-display);font-size:24px;line-height:1.25}
+.turn{font-family:var(--font-chalk);font-size:24px;line-height:1.25}
 .turn.big{font-size:34px}
 .turn.c0{color:var(--you)}
 .turn.c1{color:var(--p1)}
@@ -736,7 +738,7 @@ fieldset:disabled .opts span{cursor:default}
 .splash{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-left,0px));background:rgba(20,18,15,.74);cursor:pointer}
 .splash-in{width:min(440px,100%);padding:26px 20px;border-radius:6px;border:10px solid var(--wood);background-color:var(--board);background-image:var(--noise);text-align:center;display:grid;gap:14px;animation:pop .45s cubic-bezier(.2,.9,.3,1.3)}
 @keyframes pop{from{transform:scale(.85);opacity:0}}
-.splash-t{margin:0;font-family:var(--font-display);font-size:clamp(24px,7.2vw,38px);line-height:1.2;color:var(--you);white-space:nowrap}
+.splash-t{margin:0;font-family:var(--font-chalk);font-size:clamp(24px,7.2vw,38px);line-height:1.2;color:var(--you);white-space:nowrap}
 .splash-s{margin:0;color:var(--chalk-soft);font-size:14px}
 .splash .order{text-align:left}
 .dbg{pointer-events:none;position:fixed;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:70;max-height:38vh;overflow:auto;margin:0;padding:8px 10px;border-radius:8px;background:rgba(0,0,0,.86);color:#a6f0a6;font:11px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-all}
@@ -903,7 +905,7 @@ fieldset:disabled .opts span{cursor:default}
 .cc-word{position:relative;width:min(96%,420px)}
 .cc-pad{position:absolute;left:50%;top:50%;width:calc(var(--ww) + 70px);height:var(--wh,120px);transform:translate(-50%,-50%) rotate(-4deg);border-radius:30px;background-color:var(--board);background-image:radial-gradient(ellipse 70% 60% at 40% 50%,rgba(236,238,228,.08),transparent 75%),var(--noise);box-shadow:0 0 22px 14px var(--board)}
 .cc-word svg{display:block;width:100%;height:auto;overflow:visible}
-.cc-word text{font-family:var(--font-display);paint-order:stroke fill}
+.cc-word text{font-family:var(--font-chalk);paint-order:stroke fill}
 .cc-stick{position:absolute;left:calc(50% - var(--ww) / 2);top:46%;width:34px;height:10px;border-radius:3px;background:linear-gradient(90deg,#fffdf4,#e6e4d8);box-shadow:0 2px 3px rgba(0,0,0,.35);opacity:0}
 .cc-eraser{position:absolute;left:calc(50% - var(--ww) / 2);top:calc(50% - 26px);width:86px;height:46px;border-radius:7px;background:linear-gradient(180deg,#9c6b43 0 58%,#3a3f4a 58% 100%);box-shadow:0 4px 8px rgba(0,0,0,.45),inset 0 2px 0 rgba(255,255,255,.18);opacity:0}
 .cc-eraser::after{content:"";position:absolute;left:8px;right:8px;top:6px;height:8px;border-radius:3px;background:rgba(255,255,255,.18)}
@@ -911,12 +913,12 @@ fieldset:disabled .opts span{cursor:default}
 .fx-cword{position:absolute;width:170px;pointer-events:none}
 .fx-cword.big{width:220px}
 .fx-cword svg{display:block;width:100%;height:auto;overflow:visible}
-.fx-cword text{font-family:var(--font-display);paint-order:stroke fill}
+.fx-cword text{font-family:var(--font-chalk);paint-order:stroke fill}
 .fx-puff{position:absolute;border-radius:50%;filter:blur(5px);pointer-events:none}
 .fx-slash.red{color:#ff6b6b;filter:none}
 .fx-slash.red path{stroke:#ff7a6e;stroke-width:12}
 .fx-chalk .fx-trail{height:4px;margin-top:-2px;background:repeating-linear-gradient(90deg,rgba(236,238,228,.85) 0 10px,transparent 10px 16px);box-shadow:none;opacity:.7}
-.fx-chalk .fx-float{font-family:var(--font-display);text-shadow:0 2px 0 rgba(0,0,0,.45)!important;color:#eceee4!important}
+.fx-chalk .fx-float{font-family:var(--font-chalk);text-shadow:0 2px 0 rgba(0,0,0,.45)!important;color:#eceee4!important}
 /* the skill written on the board */
 .abcall.chalkcall{left:4%;right:4%;width:auto;max-width:none;top:46%;display:grid;grid-template-columns:auto auto;justify-content:center;align-items:center;column-gap:12px;padding:10px 14px;border:0;border-radius:30px;background-color:var(--board);background-image:radial-gradient(ellipse 70% 60% at 40% 50%,rgba(236,238,228,.08),transparent 75%),var(--noise);box-shadow:0 0 22px 14px var(--board);transform:translateY(-50%) rotate(-4deg);animation:chalkCall 2.2s ease-out both}
 .abcall.chalkcall .ac-sp{display:none}
@@ -925,20 +927,20 @@ fieldset:disabled .opts span{cursor:default}
 .abcall.chalkcall .ac-face .bface:not(.cav){width:58px;height:58px;align-items:start}
 .abcall.chalkcall .ac-face .bface>svg{width:auto;height:100%;max-width:100%}
 .abcall.chalkcall .ac-face .bface:not(.cav)>svg{height:92px!important;max-width:none!important;margin-top:3px}
-.abcall.chalkcall .cf1{font-family:var(--font-display);font-size:30px;white-space:nowrap;color:var(--kc);filter:url(#chalkS);text-shadow:none}
+.abcall.chalkcall .cf1{font-family:var(--font-chalk);font-size:30px;white-space:nowrap;color:var(--kc);filter:url(#chalkS);text-shadow:none}
 .fx-chalk .abcall.fx{border:0;border-radius:24px;background-color:var(--board);background-image:var(--noise);box-shadow:0 0 18px 10px var(--board);color:var(--chalk)}
-.fx-chalk .abcall.fx .cf1{font-family:var(--font-display);filter:url(#chalkS)}
-.fx-chalk .abcall.fx small{font-family:var(--font-display)}
+.fx-chalk .abcall.fx .cf1{font-family:var(--font-chalk);filter:url(#chalkS)}
+.fx-chalk .abcall.fx small{font-family:var(--font-chalk)}
 .abcall.chalkcall .cf1 .abic{width:30px;height:30px}
-.abcall.chalkcall small{grid-column:2;text-align:left;margin:0;color:var(--chalk);font-family:var(--font-display);font-size:13px}
+.abcall.chalkcall small{grid-column:2;text-align:left;margin:0;color:var(--chalk);font-family:var(--font-chalk);font-size:13px}
 @keyframes chalkCall{0%{clip-path:inset(0 100% 0 0)}20%{clip-path:inset(0 0 0 0)}80%{clip-path:inset(0 0 0 0);opacity:1}100%{clip-path:inset(0 0 0 100%);opacity:.6}}
 /* a win: 花丸 and 100 */
 .chalkres .res-t::before{display:none}
-.chalkres .res-t{font-family:var(--font-display)}
+.chalkres .res-t{font-family:var(--font-chalk)}
 .res-in{position:relative}
 .res-hana{position:absolute;right:-14px;top:-48px;width:124px;color:#ff7a6e;rotate:12deg;pointer-events:none;animation:hanaIn .5s .25s cubic-bezier(.2,1.6,.4,1) both}
 .res-hana svg{display:block;width:100%;height:auto}
-.res-hana b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--font-display);font-weight:400;font-size:34px;color:#ff7a6e;filter:url(#chalkS);padding-top:4px}
+.res-hana b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--font-chalk);font-weight:400;font-size:34px;color:#ff7a6e;filter:url(#chalkS);padding-top:4px}
 @keyframes hanaIn{from{transform:scale(2.4);opacity:0}to{transform:none;opacity:1}}
 /* cut-ins */
 .cutin,.vscut{position:absolute;inset:0;z-index:25;pointer-events:none;overflow:hidden}
@@ -1387,7 +1389,7 @@ button.bk:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .gbtns .jwl{font-size:15px}
 
 /* ===== Battle stamps (fixed phrases only) ===== */
-.stk{--sc:#f3d774;position:relative;display:inline-grid;grid-template-columns:auto minmax(0,auto);align-items:center;gap:4px;max-width:100%;padding:4px 11px 4px 5px;border-radius:14px;border:2px solid var(--sc);background:var(--board-deep);color:var(--sc);font-family:var(--font-display);font-size:14px;line-height:1.2;white-space:nowrap;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.stk{--sc:#f3d774;position:relative;display:inline-grid;grid-template-columns:auto minmax(0,auto);align-items:center;gap:4px;max-width:100%;padding:4px 11px 4px 5px;border-radius:14px;border:2px solid var(--sc);background:var(--board-deep);color:var(--sc);font-family:var(--font-chalk);font-size:14px;line-height:1.2;white-space:nowrap;box-shadow:0 3px 0 rgba(0,0,0,.3)}
 .stk::after{content:"";position:absolute;left:18px;bottom:-7px;width:10px;height:10px;background:var(--board-deep);border-right:2px solid var(--sc);border-bottom:2px solid var(--sc);transform:rotate(45deg)}
 .stk svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
 .stk b{font-weight:400;min-width:0;overflow:hidden;text-overflow:ellipsis}
@@ -1964,6 +1966,11 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
 .m-gift.has .mg{animation:wig 2.4s ease-in-out infinite}
 @keyframes wig{0%,80%,100%{transform:none}84%{transform:rotate(-10deg)}88%{transform:rotate(9deg)}92%{transform:rotate(-6deg)}96%{transform:rotate(3deg)}}
 .m-puz{--mc:var(--p2)}
+.m-mis{--mc:var(--coin)}
+.twf-sk{display:inline-flex;align-items:center;gap:2px;margin-left:6px;white-space:nowrap}
+.twf-sk svg.abic{width:12px;height:12px}
+.m-mis > b{letter-spacing:-.02em}
+.m-mis.has .mg{animation:wig 2.4s ease-in-out infinite}
 
 /* Speech bubble: what to do next (the pickup), or a hint when the character is tapped */
 .hsay{position:absolute;left:64px;top:8px;z-index:4;display:grid;grid-template-columns:minmax(0,1fr);gap:2px;width:min(168px,calc(100% - 64px - 150px));min-width:118px;padding:6px 9px 7px;border:0;border-radius:11px;background:#f4f1e4;color:#22302a;text-align:left;box-shadow:0 10px 18px -10px rgba(0,0,0,.85);font:inherit;cursor:pointer;animation:sayIn .4s cubic-bezier(.2,.9,.3,1.3)}
@@ -1994,7 +2001,7 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
 @keyframes breathe{50%{transform:translateY(-2px) scaleY(1.008)}}
 @keyframes hop{40%{transform:translateY(-12px)}}
 /* Date and 日直 on the right edge, as written on a real classroom board */
-.hdate{position:absolute;right:-4px;top:2px;z-index:0;margin:0;display:flex;gap:14px;writing-mode:vertical-rl;font-family:var(--font-display);font-size:13px;line-height:1;letter-spacing:.14em;color:rgba(236,238,228,.55);pointer-events:none}
+.hdate{position:absolute;right:-4px;top:2px;z-index:0;margin:0;display:flex;gap:14px;writing-mode:vertical-rl;font-family:var(--font-chalk);font-size:13px;line-height:1;letter-spacing:.14em;color:rgba(236,238,228,.55);pointer-events:none}
 .hdate .tcy{text-combine-upright:all;-webkit-text-combine:horizontal}
 .hduty b{font-weight:400;margin-top:6px;max-height:8em;overflow:hidden}
 /* Chalk tray */
@@ -2031,11 +2038,484 @@ body.practicing .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
 .hmodes .bc-stamp{right:5px;top:4px;padding:0 6px;border-width:2px;font-size:12px}
 .hmodes .lockb{top:6px;right:6px}
 .hm-pair{grid-column:span 5;display:grid;gap:8px}
+
+
+/* =================== 新デザイン（試作）: manga pop =================== */
+body.ui-modern{
+  --ink:#141a33;--ink2:#0c1024;--paper:#f7f3e8;--yl:#ffd23f;--coral:#ff5d7a;--aqua:#3fc8ff;--violet:#9b7bff;
+  --wall:#171c38;--panel:#222a52;--line:rgba(247,243,232,.14);--board:#1d2550;--board-deep:#161d40;
+  --chalk:#f7f3e8;--chalk-soft:rgba(247,243,232,.7);--chalk-faint:rgba(247,243,232,.22);
+  --you:#ffd23f;--p1:#ff5d7a;--p2:#3fc8ff;--p3:#9b7bff;--coin:#ffd23f;--win:#9ff0b0;--lose:#ff8a8a;
+  --wood:#0c1024;--wood-hi:#2e3770;
+  --noise:none;
+  --font-display:"Dela Gothic One","M PLUS Rounded 1c","Hiragino Sans","Meiryo",sans-serif;
+  --hard:0 4px 0 var(--ink2);
+  background:var(--wall);
+}
+html:has(body.ui-modern){background:#171c38}
+body.ui-modern .topbar{background:#171c38}
+/* panels and buttons: ink outline, hard shadow, no soft glow */
+body.ui-modern .panel{border:2px solid var(--ink2);border-radius:14px;background-color:var(--panel);box-shadow:var(--hard)}
+body.ui-modern .btn{border:2px solid var(--ink2);border-radius:11px;background:#2c3566;color:var(--paper);font-weight:800;box-shadow:0 3px 0 var(--ink2)}
+body.ui-modern .btn:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 var(--ink2)}
+body.ui-modern .btn.primary,body.ui-modern .btn.gold{background:var(--yl);color:var(--ink);border-color:var(--ink2)}
+body.ui-modern .shead h2{font-family:var(--font-display);font-weight:400;letter-spacing:.02em;position:relative;padding-bottom:2px}
+body.ui-modern .shead h2::after{content:"";position:absolute;left:2px;right:30%;bottom:-4px;height:5px;background:var(--yl);transform:skewX(-20deg);border-radius:1px}
+body.ui-modern .shead{border-bottom:0}
+body.ui-modern .back{border:2px solid var(--ink2);background:#2c3566;box-shadow:0 3px 0 var(--ink2);border-radius:10px;color:var(--paper)}
+body.ui-modern .seg{background:var(--ink2);border:2px solid var(--ink2);border-radius:12px}
+body.ui-modern .seg button[aria-selected="true"]{background:var(--yl);color:var(--ink);box-shadow:none}
+/* top bar */
+body.ui-modern .tb-me{border:2px solid var(--ink2);background:#232b57;box-shadow:0 3px 0 var(--ink2)}
+body.ui-modern .tb-me .nm{font-family:var(--font-display);font-size:17px}
+body.ui-modern .tb-lv{background:conic-gradient(var(--yl) calc(var(--xp) * 1%),#2e3770 0);box-shadow:0 0 0 2px var(--ink2)}
+body.ui-modern .tb-lv::before{background:var(--ink)}
+body.ui-modern .tb-lv b{font-family:var(--font-display)}
+body.ui-modern .tb-money .coin,body.ui-modern .tb-money .jwl{background:var(--ink2);box-shadow:inset 0 0 0 2px #2e3770;font-family:var(--font-display);font-weight:400;font-size:13px;letter-spacing:.02em}
+body.ui-modern .tb-menu{border:2px solid var(--ink2);background:var(--yl);box-shadow:0 3px 0 var(--ink2);color:var(--ink)}
+body.ui-modern .tb-menu .hb i{background:var(--ink)}
+body.ui-modern .tb-menu small{color:var(--ink);font-weight:900}
+/* tab bar: ink, the current tab a yellow slant */
+
+/* ---------- home: the drawn classroom; school things for buttons; the chopstick sleeve to fight ---------- */
+.mi,.hbg,.hsleeve,.hhanko,.bposter{display:none}
+body.ui-art .hscene .hboard{border:2.5px solid var(--ink2);border-radius:18px;box-shadow:0 5px 0 var(--ink2);background:#f2e6cc}
+body.ui-art .hscene .hboard::before{display:none}
+body.ui-art .hbg{display:block;position:absolute;inset:0;z-index:0;pointer-events:none}
+body.ui-art .hbg svg{display:block;width:100%;height:100%}
+body.ui-art .hscene .hstage{z-index:2}
+body.ui-art .hscene .htray{display:none}
+body.ui-art .hscene .hchar{height:78%;bottom:24%;transform:translateX(-50%)}
+body.ui-art .hscene .hchar .chara > g{stroke:var(--ink);filter:none}
+body.ui-art .hscene .hchar svg{filter:drop-shadow(0 6px 0 rgba(20,26,51,.12))}
+body.ui-art .hscene .hdate{display:none}
+/* the notice up top: paper taped to the wall */
+body.ui-art .hscene .banners{left:14px;right:14px;top:12px}
+body.ui-art .hscene .banners::before,body.ui-art .hscene .banners::after{content:"";position:absolute;z-index:3;top:-6px;width:46px;height:14px;background:rgba(255,230,140,.85);border:1px solid rgba(20,26,51,.25)}
+body.ui-art .hscene .banners::before{left:8px;transform:rotate(-8deg)}
+body.ui-art .hscene .banners::after{right:8px;transform:rotate(7deg)}
+body.ui-art .hscene .bn-track{border-radius:3px}
+body.ui-art .hscene .bn{background:#fffdf6;border:2px solid var(--ink);border-radius:3px;box-shadow:none;color:var(--ink)}
+body.ui-art .hscene .bn-h{color:var(--ink)!important;text-shadow:none}
+body.ui-art .hscene .bn-s{color:rgba(20,26,51,.68)}
+body.ui-art .hscene .bn-tag{background:#d93a44!important;color:#fff!important;border:0;border-radius:2px}
+body.ui-art .hscene .bn.bn-boss,body.ui-art .hscene .bn.bn-boss.legend{background:#fffdf6}
+body.ui-art .hscene .bn-dots{filter:none}
+body.ui-art .hscene .bn-dots button::before{background:rgba(20,26,51,.3)}
+body.ui-art .hscene .bn-dots button[aria-current="true"]::before{background:#d93a44}
+/* the speech bubble */
+body.ui-art .hscene .hsay{left:14px;top:6px;background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:none}
+body.ui-art .hscene .hsay::after{border-left-color:var(--ink);right:-11px}
+body.ui-art .hscene .hsay .pu-tag{background:var(--ink);color:#fff}
+/* things on the right: drawn icons, no rings */
+body.ui-art .hscene .hrail{right:8px;top:4px;gap:4px}
+body.ui-art .hscene .mag .mg{width:46px;height:46px;background:none;box-shadow:none}
+body.ui-art .hscene .mag .mg > svg{display:none}
+body.ui-art .hscene .mag .mg > .mi{display:block;width:44px;height:44px;filter:drop-shadow(0 3px 0 rgba(20,26,51,.35))}
+body.ui-art .hscene .mag .mi svg{display:block;width:100%;height:100%}
+body.ui-art .hscene .m-rank .mg{background:#fff;border-radius:50%;box-shadow:0 0 0 2.5px var(--ink),0 3px 0 2.5px rgba(20,26,51,.35)}
+body.ui-art .hscene .mag > b,body.ui-art .hscene .m-rank .tb-sub{color:var(--ink);font-weight:900;-webkit-text-stroke:3px #fff;paint-order:stroke fill;text-shadow:none}
+body.ui-art .hscene .m-rank > b{font-family:var(--font-display)}
+body.ui-art .hscene .mag .tab-badge{right:-2px;top:-2px}
+/* the controls: a sticky note (stages), a poster (today's boss), the chopstick sleeve (fight) */
+body.ui-art .hscene .hmodes{display:block;left:0;right:0;bottom:0;height:200px}
+body.ui-art .hscene .hm{position:absolute;border:0;background:none;box-shadow:none;padding:0;margin:0;transform:none;overflow:visible}
+body.ui-art .hscene .hm > *{transform:none}
+body.ui-art .hscene .hm-stage{left:10px;bottom:106px;width:37%;height:60px;display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:6px;align-content:center;padding:6px 8px;
+  background:#fff1a6;border:2px solid var(--ink);border-radius:2px;box-shadow:2px 3px 0 rgba(20,26,51,.3);transform:rotate(-3deg)}
+body.ui-art .hscene .hm-stage::before{content:"";position:absolute;left:50%;top:-8px;width:40px;height:13px;transform:translateX(-50%) rotate(4deg);background:rgba(160,210,255,.8);border:1px solid rgba(20,26,51,.25)}
+body.ui-art .hscene .hm-stage .mi{display:block;grid-row:1/span 2;width:34px;height:34px}
+body.ui-art .hscene .hm-stage .mi svg{display:block;width:100%;height:100%}
+body.ui-art .hscene .hm-stage .cav{display:none}
+body.ui-art .hscene .hm-stage .hm-k{font-family:var(--font-display);font-size:16px;color:var(--ink);-webkit-text-stroke:0;text-shadow:none}
+body.ui-art .hscene .hm-stage .hm-x{font-size:9.5px;color:rgba(20,26,51,.75);font-weight:800}
+body.ui-art .hscene .hmodes .bosscard{left:12px;bottom:18px;width:37%;height:76px;padding:22px 8px 6px;grid-template-columns:auto minmax(0,1fr);gap:0 6px;align-content:center;
+  background:#fffaf0;border:2px solid var(--ink);border-radius:2px;box-shadow:2px 3px 0 rgba(20,26,51,.3);transform:rotate(2deg);overflow:hidden}
+body.ui-art .hscene .bosscard .bposter{display:block;position:absolute;left:0;right:0;top:0;padding:2px 0;background:#d93a44;color:#fff;font-size:9.5px;font-weight:900;letter-spacing:.2em;text-align:center}
+body.ui-art .hscene .hmodes .bc-face{width:34px}
+body.ui-art .hscene .hmodes .bc-name{font-size:12.5px;color:var(--ink);-webkit-text-stroke:0;text-shadow:none}
+body.ui-art .hscene .hmodes .bc-hp{color:var(--ink);font-size:8.5px;font-weight:900}
+body.ui-art .hscene .hmodes .bc-hp .meter{background:rgba(20,26,51,.15);box-shadow:none}
+body.ui-art .hscene .hmodes .bc-hp .meter i{background:#d93a44}
+body.ui-art .hscene .hm-battle{right:-4px;bottom:28px;left:auto;width:60%;height:98px;border-radius:0;display:block;padding:0;background:none;box-shadow:none;transform:rotate(-5deg);filter:drop-shadow(0 6px 0 rgba(20,26,51,.85))}
+body.ui-art .hscene .hm-battle::after{display:none}
+body.ui-art .hscene .hm-battle .hsleeve{display:block;position:absolute;inset:0}
+body.ui-art .hscene .hm-battle .hsleeve svg{display:block;width:100%;height:100%}
+body.ui-art .hscene .hm-battle .hb-fig{position:absolute;left:4.5%;top:36%;display:grid;gap:2px;width:20%;justify-items:center}
+body.ui-art .hscene .hm-battle .hb-fig .abic{width:26px;height:26px;color:#fff}
+body.ui-art .hscene .hm-battle .hm-k{position:absolute;left:33%;top:33%;display:flex;font-family:var(--font-display);font-size:clamp(18px,5.4vw,23px);white-space:nowrap;line-height:1;color:var(--ink);-webkit-text-stroke:0;text-shadow:none;letter-spacing:.02em}
+body.ui-art .hscene .hm-battle .hm-x{position:absolute;left:33%;right:6%;top:66%;display:block;margin:0;font-size:9.5px;color:rgba(20,26,51,.7);text-align:left}
+body.ui-art .hscene .hm-battle .hhanko{display:grid;place-items:center;position:absolute;right:5%;bottom:5%;width:38px;height:38px;border-radius:50%;border:2.5px solid #d93a44;color:#d93a44;transform:rotate(-14deg);font-family:var(--font-display);font-size:13px;line-height:1;background:none;opacity:.88}
+body.ui-art .hscene .hm-battle:active:not(:disabled){transform:rotate(-5deg) translateY(3px);filter:drop-shadow(0 3px 0 rgba(20,26,51,.85))}
+body.ui-art .hscene .hm-battle.wait .hhanko{animation:btlPulse 1.4s ease-in-out infinite}
+/* the tab bar: a wooden desk, drawn things standing on it */
+body.ui-art .tabbar{background:linear-gradient(180deg,#d29a5f,#b47b45 45%,#8a5a33);border-top:3px solid var(--ink2);box-shadow:inset 0 3px 0 rgba(255,255,255,.22),0 -4px 14px rgba(0,0,0,.3)}
+body.ui-art .tab{isolation:auto;color:#fff}
+body.ui-art .tab > svg{display:none}
+body.ui-art .tab .mi{display:block;width:36px;height:36px;margin-top:-16px;filter:drop-shadow(0 3px 0 rgba(20,26,51,.45));transition:transform .15s ease}
+body.ui-art .tab .mi svg{display:block;width:100%;height:100%}
+body.ui-art .tab span:not(.mi){font-size:10.5px;font-weight:900;color:#fff;-webkit-text-stroke:3px var(--ink2);paint-order:stroke fill}
+body.ui-art .tab[aria-current="page"]{background:none;box-shadow:none}
+body.ui-art .tab[aria-current="page"]::before{content:"";position:absolute;inset:auto 20% 1px;height:5px;border-radius:3px;background:var(--yl);border:1.5px solid var(--ink2);transform:none;z-index:0}
+body.ui-art .tab[aria-current="page"] .mi{transform:translateY(-5px) scale(1.16)}
+body.ui-art .tab[aria-current="page"] span:not(.mi){color:var(--yl)}
+body.ui-art .tab[aria-current="page"] svg{animation:none}
+/* the hub's start: the same chopstick sleeve */
+body.ui-art #hubStart{position:relative;isolation:isolate;height:92px;min-height:0;margin:4px 2px 2px;border:0;border-radius:0;background:none;box-shadow:none;color:var(--ink);padding:20px 0 0 31%;text-align:left;font-size:23px;letter-spacing:.04em;transform:rotate(-1.5deg);filter:drop-shadow(0 5px 0 rgba(12,16,36,.9))}
+body.ui-art #hubStart .hsleeve{display:block;position:absolute;inset:0;z-index:-1}
+body.ui-art #hubStart .hsleeve svg{display:block;width:100%;height:100%}
+body.ui-art #hubStart:active:not(:disabled){transform:rotate(-1.5deg) translateY(3px);filter:drop-shadow(0 2px 0 rgba(12,16,36,.9))}
+body.ui-art .panel h3 small{font-family:var(--font-body);font-weight:800;letter-spacing:0}
+/* clean ink drawings: no chalk grain anywhere */
+body.ui-modern [filter="url(#chalk)"],body.ui-modern [filter="url(#chalkS)"]{filter:none}
+/* fewer words: the helper notes go */
+body.ui-modern .hub-n{display:none}
+/* ---------- the battle: a VS board, flat hands with ink outlines ---------- */
+body.ui-modern .board{border:3px solid var(--ink2);border-radius:20px;box-shadow:0 5px 0 var(--ink2);
+  background-color:#1d2550;background-image:linear-gradient(168deg,rgba(255,93,122,.16) 0 49.4%,rgba(255,255,255,.5) 49.6% 50%,rgba(255,210,63,.13) 50.2% 100%)}
+body.ui-modern .tray{display:none}
+body.ui-modern .boardnote{color:rgba(247,243,232,.25);font-family:var(--font-display)}
+body.ui-modern .hand svg > g > g[filter]{filter:none}
+body.ui-modern .hand svg > g{filter:drop-shadow(3px 4px 0 rgba(12,16,36,.85))}
+body.ui-modern .hand svg .pm,body.ui-modern .hand svg .fg{stroke:var(--ink2);stroke-width:3;paint-order:stroke}
+body.ui-modern .hand .count{font-family:var(--font-display);-webkit-text-stroke:5px var(--ink2);paint-order:stroke fill;text-shadow:0 3px 0 var(--ink2)}
+body.ui-modern:not(.fx-chalk) .turn{font-family:var(--font-display)}
+body.ui-modern .seat .name{background:var(--ink2);border:2px solid color-mix(in srgb,var(--c) 70%,var(--ink2));border-radius:999px}
+body.ui-modern .seat.active .name{background:var(--c);color:var(--ink);box-shadow:3px 3px 0 var(--ink2)}
+body.ui-modern .actbar{background:var(--ink2);border-radius:16px;box-shadow:none}
+body.ui-modern .act{background:#2c3566;border:2px solid #3b4683;border-radius:12px;box-shadow:0 3px 0 #070a18}
+body.ui-modern .act-sk.ready{background:var(--yl);color:var(--ink);border-color:var(--ink2);box-shadow:0 3px 0 #070a18,0 0 0 2px var(--yl)}
+body.ui-modern .act-sk.ready .sk-g{color:var(--ink)}
+body.ui-modern .act-sk .sk-bar i{background:var(--yl)}
+body.ui-modern .gb-back,body.ui-modern .gb-ic,body.ui-modern .gb-resign{border:2px solid var(--ink2);box-shadow:0 2px 0 var(--ink2);background:#2c3566}
+body.ui-modern .gb-mode{font-family:var(--font-display);font-weight:400;color:var(--yl);letter-spacing:.04em}
+
+
+/* =================== 明るい（試作）: a bright picture behind everything, navy frames, colour-coded buttons =================== */
+body.ui-bright{--font-display:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Meiryo",sans-serif;--font-game:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Meiryo",sans-serif;--navy:#16204a;--navy2:#0d1433;--gold:#ffcf3a;--red:#ec3b54;--blue:#2f7fe0;--purple:#7b4fd8;
+  --panel:rgba(22,32,74,.93);--wall:transparent;background:transparent}
+html:has(body.ui-bright){background:#8fd0ff}
+body.ui-bright::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:var(--ui-bg,radial-gradient(circle at 16% 10%,rgba(255,255,255,.85),rgba(255,255,255,0) 26%),radial-gradient(circle at 88% 26%,rgba(255,210,110,.5),rgba(255,210,110,0) 30%),radial-gradient(circle at 24% 64%,rgba(110,195,255,.55),rgba(110,195,255,0) 34%),radial-gradient(circle at 82% 82%,rgba(255,150,185,.4),rgba(255,150,185,0) 32%),
+    radial-gradient(circle at 70% 52%,rgba(255,255,255,.35) 0 22px,rgba(255,255,255,0) 24px),radial-gradient(circle at 12% 40%,rgba(255,255,255,.3) 0 14px,rgba(255,255,255,0) 16px),radial-gradient(circle at 58% 18%,rgba(255,255,255,.28) 0 30px,rgba(255,255,255,0) 33px),radial-gradient(circle at 36% 88%,rgba(255,255,255,.3) 0 18px,rgba(255,255,255,0) 20px),
+    linear-gradient(180deg,#3fa6ff 0%,#8fd0ff 42%,#e3f4ff 76%,#fff0c4 100%)) center/cover no-repeat}
+/* the top: a navy band across the whole width */
+body.ui-bright .topbar{background:rgba(13,20,51,.86);box-shadow:0 0 0 100vmax rgba(13,20,51,.86);clip-path:inset(0 -100vmax);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+body.ui-bright .tb-me{background:none;border:0;box-shadow:none}
+body.ui-bright .tb-money .coin,body.ui-bright .tb-money .jwl{background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.25)}
+body.ui-bright .tb-menu{background:linear-gradient(180deg,#ffe27a,var(--gold));border-color:var(--navy2)}
+/* titles straight on the picture: white with a navy edge */
+body.ui-bright .shead h2{color:#fff;-webkit-text-stroke:5px var(--navy);paint-order:stroke fill}
+body.ui-bright .shead h2::after{background:var(--red)}
+body.ui-bright .back{background:var(--navy);border-color:var(--navy2)}
+/* panels: navy, a thin light edge so they sit on any picture */
+body.ui-bright .panel{background-color:var(--panel);border-color:var(--navy2);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.12),0 4px 0 var(--navy2)}
+body.ui-bright .btn{background:linear-gradient(180deg,#34428a,#253170);border-color:var(--navy2)}
+body.ui-bright .btn.primary,body.ui-bright .btn.gold{background:linear-gradient(180deg,#ffe27a,var(--gold) 55%,#f2a91f);color:var(--navy2)}
+body.ui-bright .hub-tut{background:var(--panel)}
+/* words that sit straight on the picture get a navy chip behind them */
+body.ui-bright .shead .coin{padding:3px 12px;border-radius:99px;background:var(--navy);box-shadow:0 2px 0 var(--navy2)}
+body.ui-bright .gwallet{width:max-content;max-width:100%;padding:6px 14px;border-radius:99px;background:rgba(13,20,51,.84)}
+body.ui-bright .screen > .note:not(:empty),body.ui-bright .gpanel > .dnote,body.ui-bright .shop-hint,body.ui-bright .screen > p:not(.note):not(:empty){padding:8px 12px;border-radius:10px;background:rgba(13,20,51,.82);color:#fff}
+body.ui-bright .gpanel > .dnote span{color:rgba(255,255,255,.85)}
+/* the tab bar: navy, a gold line on top, the current tab a raised gold tile */
+body.ui-bright .tabbar{background:none;border:0;box-shadow:none;padding-top:0;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px))}
+body.ui-bright #goEvents{display:none}
+body.ui-bright .tabbar-in{grid-template-columns:repeat(5,minmax(0,1fr));padding:4px 6px;border-radius:20px;border:2.5px solid #fff;background:linear-gradient(180deg,#3d63c9,#22306e 55%,var(--navy2));box-shadow:0 0 0 2px var(--navy2),0 6px 16px rgba(13,20,51,.4)}
+body.ui-bright .tab{color:rgba(255,255,255,.88)}
+body.ui-bright .tab span{font-weight:900}
+body.ui-bright .tab[aria-current="page"]{background:linear-gradient(180deg,#ffe27a,var(--gold) 60%,#f2a91f);color:var(--navy2);box-shadow:0 3px 0 #b8760f,inset 0 0 0 2px #fff6cf;transform:translateY(-6px)}
+body.ui-bright .tab[aria-current="page"]::before{display:none}
+body.ui-bright .tab .tab-badge{box-shadow:0 0 0 2px var(--navy)}
+
+/* ---------- home: the picture is the room; the character stands in it ---------- */
+/* the home reaches both screen edges (the wings and the edge tabs touch them) and clips there, so the page never scrolls sideways */
+body.ui-bright .hscene .hboard{--gl:max(16px, env(safe-area-inset-left, 0px));--gr:max(16px, env(safe-area-inset-right, 0px));margin-left:calc(-1 * var(--gl));margin-right:calc(-1 * var(--gr));
+  background:none;border:0;border-radius:0;box-shadow:none;overflow:hidden;overflow:clip visible}
+body.ui-bright .hscene .hstage{left:var(--gl);right:var(--gr)}
+body.ui-bright .hscene .hboard::before,body.ui-bright .hscene .htray,body.ui-bright .hscene .hdate{display:none}
+body.ui-bright .hscene .hchar{height:72%;bottom:30%}
+body.ui-bright .hscene .hchar .chara > g{stroke:var(--navy2)}
+body.ui-bright .hscene .hchar svg{filter:drop-shadow(0 8px 0 rgba(13,20,51,.18))}
+/* the banner: a navy frame with a gold edge */
+body.ui-bright .hscene .banners{left:var(--gl);right:var(--gr);top:4px}
+body.ui-bright .hscene .bn{background:linear-gradient(100deg,rgba(13,20,51,.94),rgba(34,48,110,.9));border:2px solid var(--gold);border-radius:8px;box-shadow:0 4px 0 rgba(13,20,51,.5)}
+body.ui-bright .hscene .bn-h{color:#fff!important;text-shadow:none}
+body.ui-bright .hscene .bn-s{color:rgba(255,255,255,.75)}
+body.ui-bright .hscene .bn-tag{background:var(--red)!important;color:#fff!important;border:0}
+body.ui-bright .hscene .bn-dots button::before{background:rgba(13,20,51,.35)}
+body.ui-bright .hscene .bn-dots button[aria-current="true"]::before{background:var(--red)}
+/* the bubble: white, navy edge */
+body.ui-bright .hscene .hsay{left:0;background:#fff;border:2px solid var(--navy);color:var(--navy2);box-shadow:0 4px 0 rgba(13,20,51,.35)}
+body.ui-bright .hscene .hsay::after{border-left-color:var(--navy)}
+/* the things on the right: white tabs pinned to the screen edge */
+body.ui-bright .hscene .hrail{right:calc(-1 * max(16px, env(safe-area-inset-right, 0px)));top:0;gap:7px}
+body.ui-bright .hscene .mag{width:62px;padding:5px 0 4px 4px;border-radius:18px 0 0 18px;background:#fff;box-shadow:0 0 0 2px var(--navy),0 4px 0 2px rgba(13,20,51,.35);color:var(--navy)}
+body.ui-bright .hscene .mag .mg{width:34px;height:34px;background:none;box-shadow:none;color:var(--navy)}
+body.ui-bright .hscene .m-gift .mg > svg,body.ui-bright .hscene .m-mis .mg > svg{transform:scale(1.55)}
+body.ui-bright .hscene .mag .mg > svg .ring{display:none}
+body.ui-bright .hscene .m-gift .mg{color:var(--red)}
+body.ui-bright .hscene .m-mis .mg{color:var(--blue)}
+body.ui-bright .hscene .m-rank .emb{width:28px;height:28px}
+body.ui-bright .hscene .mag > b,body.ui-bright .hscene .m-rank .tb-sub{color:var(--navy);font-weight:900;font-size:10.5px;-webkit-text-stroke:0;text-shadow:none;line-height:1.2}
+body.ui-bright .hscene .m-rank > b{font-size:13px}
+body.ui-bright .hscene .mag .tab-badge{top:-4px;right:auto;left:-4px}
+/* the controls: two panels from the screen edges, the red diamond to fight in the middle */
+.bt-only,.bt-ic{display:none}
+.wing-in{display:contents}
+body.ui-bright .hscene .wing-in{display:flex;flex-direction:column;align-items:center;gap:1px}
+body.ui-bright .hscene .hmodes{display:block;left:0;right:0;bottom:0;height:176px;z-index:8}
+body.ui-bright .hscene .hmodes .bosscard{display:none}
+body.ui-bright .hscene .hm-ev,body.ui-bright .hscene .hm-stage{position:absolute;bottom:14px;height:79px;min-height:0;margin:0;padding:0;border:2.5px solid #fff;border-radius:14px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;overflow:visible;
+  background:linear-gradient(180deg,#5b8cf0,#2f5bc4 55%,#1f3f95);box-shadow:0 0 0 2px var(--navy2),0 6px 0 2px rgba(13,20,51,.45);transform-origin:50% 0}
+body.ui-bright .hscene .hm-ev{left:-84px;right:calc(50% + 118px);padding-left:84px;padding-right:36px;transform:skewX(45deg);transform-origin:0 0}
+body.ui-bright .hscene .hm-stage{right:-84px;left:calc(50% + 118px);padding-right:84px;padding-left:36px;transform:skewX(-45deg);transform-origin:100% 0}
+body.ui-bright .hscene .hm-ev > *{transform:skewX(-45deg)}
+body.ui-bright .hscene .hm-stage > *{transform:skewX(45deg)}
+body.ui-bright .hscene .hm-ev:active:not(:disabled){transform:skewX(45deg) translateY(3px)}
+body.ui-bright .hscene .hm-stage:active:not(:disabled){transform:skewX(-45deg) translateY(3px)}
+body.ui-bright .hscene .hm-ev .bt-ic,body.ui-bright .hscene .hm-stage .bt-ic{display:block;width:30px;height:30px;color:#fff;filter:drop-shadow(0 2px 0 var(--navy2))}
+body.ui-bright .hscene .bt-ic svg,body.ui-bright .hscene .bt-dia svg{display:block;width:100%;height:100%}
+body.ui-bright .hscene .hm-ev .hm-k,body.ui-bright .hscene .hm-stage .hm-k{font-size:16px;line-height:1.15;color:#fff;-webkit-text-stroke:4px var(--navy2);paint-order:stroke fill;text-shadow:0 2px 0 var(--navy2);white-space:nowrap}
+body.ui-bright .hscene .hm-stage .cav,body.ui-bright .hscene .hm-stage .hm-x{display:none}
+body.ui-bright .hscene .hm-ev .tab-badge{position:absolute;top:-11px;right:44px;left:auto;transform:skewX(-45deg);animation:none;box-shadow:0 0 0 2px #fff}
+body.ui-bright .hscene .hm-battle{position:absolute;left:50%;bottom:37px;width:112px;height:112px;margin-left:-56px;padding:0;border-radius:24px;transform:rotate(45deg);
+  display:grid;place-items:center;gap:0;grid-template-columns:none;
+  background:linear-gradient(135deg,#ff9a6b,var(--red) 52%,#a8173b);border:4px solid #fff;
+  box-shadow:0 0 0 3px var(--navy2),0 0 0 9px rgba(255,255,255,.75),0 0 0 12px rgba(255,214,90,.9),6px 6px 0 6px rgba(13,20,51,.35),0 0 22px 6px rgba(255,236,170,.7)}
+body.ui-bright .hscene .hm-battle::after{inset:7px;border-radius:16px;border:2px solid rgba(255,255,255,.4)}
+body.ui-bright .hscene .hm-battle > :not(.bt-dia){display:none}
+body.ui-bright .hscene .bt-dia .bt-ic{display:block}
+body.ui-bright .hscene .hm-battle .bt-dia{display:grid;justify-items:center;gap:2px;transform:rotate(-45deg)}
+body.ui-bright .hscene .bt-dia svg{width:44px;height:44px;color:#fff;filter:drop-shadow(0 2px 0 #7d0f2b)}
+body.ui-bright .hscene .bt-dia b{font-family:var(--font-display);font-weight:900;font-size:21px;line-height:1;color:#fff;-webkit-text-stroke:5px #7d0f2b;paint-order:stroke fill;text-shadow:0 3px 0 #7d0f2b;letter-spacing:.04em;white-space:nowrap}
+body.ui-bright .hscene .hm-battle.wait{animation:dia 1.6s ease-in-out infinite}
+@keyframes dia{50%{box-shadow:0 0 0 3px var(--navy2),0 0 0 11px rgba(255,255,255,.85),0 0 0 15px rgba(255,214,90,1),6px 6px 0 6px rgba(13,20,51,.35),0 0 30px 10px rgba(255,236,170,.9)}}
+body.ui-bright .hscene .hm-battle:active:not(:disabled){transform:rotate(45deg) scale(.95)}
+@media (prefers-reduced-motion:reduce){body.ui-bright .hscene .hm-battle.wait{animation:none}}
+body.ui-bright .hscene .hchar{bottom:27%;height:66%}
+/* titles and buttons in the bright style: M PLUS Rounded 1c Black (the effects keep Dela via --font-impact) */
+body.ui-bright .tb-box b,
+body.ui-bright .tb-me .nm,
+body.ui-bright .shead h2,
+body.ui-bright .myrank .mr-pos,
+body.ui-bright .myrank .mr-rate,
+body.ui-bright .bn-h,
+body.ui-bright .coins-art b,
+body.ui-bright .podium i,
+body.ui-bright .bn-help,
+body.ui-bright .sec-label,
+body.ui-bright .mode-go,
+body.ui-bright .mode-k,
+body.ui-bright .panel h2,
+body.ui-bright .panel h3,
+body.ui-bright .pl-name,
+body.ui-bright .vsbox .vs-x,
+body.ui-bright .rank .pos,
+body.ui-bright .code,
+body.ui-bright .seats .sn,
+body.ui-bright .search-t,
+body.ui-bright .search-s,
+body.ui-bright .abchip.any .fc,
+body.ui-bright .cg-k,
+body.ui-bright .lo-fig.any,
+body.ui-bright .lo-opt .lo-fig .any,
+body.ui-bright #hubStart,
+body.ui-bright .abcall,
+body.ui-bright .chip span,
+body.ui-bright .order .sn,
+body.ui-bright .ev-icon,
+body.ui-bright .ev-h,
+body.ui-bright .stamp b,
+body.ui-bright .stamp.done::after,
+body.ui-bright .ph-name,
+body.ui-bright .ph-lv,
+body.ui-bright .pt b,
+body.ui-bright .lvcard .lv-n,
+body.ui-bright .pz-title,
+body.ui-bright .pz-row figcaption,
+body.ui-bright .bc-name,
+body.ui-bright .bc-stamp,
+body.ui-bright .bh-name,
+body.ui-bright .bh-hpt,
+body.ui-bright .road .rn,
+body.ui-bright .road .ri .tt,
+body.ui-bright .res-t,
+body.ui-bright .res-row b,
+body.ui-bright .res-row.up,
+body.ui-bright .achv-k,
+body.ui-bright .ru-t,
+body.ui-bright .tt,
+body.ui-bright .pass-h,
+body.ui-bright .bk-ring b,
+body.ui-bright .bookhero .bk-count,
+body.ui-bright .mile .ml-p,
+body.ui-bright .bb-ic,
+body.ui-bright .bb-t b,
+body.ui-bright .bb-p,
+body.ui-bright .gb-h,
+body.ui-bright .gfx-orb,
+body.ui-bright .evh-name,
+body.ui-bright .evh-row b,
+body.ui-bright .guidehead b,
+body.ui-bright .mode.stagec .stg-go,
+body.ui-bright .room .rm-bb b,
+body.ui-bright .room .rm-next,
+body.ui-bright .chhero .ch-n,
+body.ui-bright .stc .sc-medal b,
+body.ui-bright .stc .sc-new,
+body.ui-bright .sd-head h3,
+body.ui-bright .stdetail #stGo,
+body.ui-bright .st-chap,
+body.ui-bright .cfm-t,
+body.ui-bright .btz-name,
+body.ui-bright .rt-strk.hot b,
+body.ui-bright .rt-rp .rpv,
+body.ui-bright .recruit .rc-ic,
+body.ui-bright .tb-lv b,
+body.ui-bright .tb-who .nm,
+body.ui-bright .mag .mg text,
+body.ui-bright .m-rank > b,
+body.ui-bright .hm-k,
+body.ui-bright.ui-modern .shead h2,
+body.ui-bright.ui-modern .tb-me .nm,
+body.ui-bright.ui-modern .tb-lv b,
+body.ui-bright.ui-modern .tb-money .coin,
+body.ui-bright.ui-modern .tb-money .jwl,
+body.ui-bright.ui-modern .boardnote,
+body.ui-bright.ui-modern .hand .count,
+body.ui-bright.ui-modern .gb-mode,
+body.ui-bright .hscene .bn-h,
+body.ui-bright .hscene .hm-stage .hm-k,
+body.ui-bright .hscene .hmodes .bc-name,
+body.ui-bright .hscene .hm-battle .hm-k,
+body.ui-bright .hm-go text,
+body.ui-bright .tw-now,
+body.ui-bright .tw-cap,
+body.ui-bright .twf-n,
+body.ui-bright .twf-ok,
+body.ui-bright .tw-sign,
+body.ui-bright .tw-road .rn,
+body.ui-bright .tw-rank .p,
+body.ui-bright .tw-rank .fl,
+body.ui-bright .mn-t b,
+body.ui-bright .cl-book .bb-ic,
+body.ui-bright .cl-book .bb-p{font-weight:900}
+body.ui-bright .vsbox .vs-x,body.ui-bright .turn,body.ui-bright .gfx-orb{font-family:var(--font-impact)}
+/* the battle picker: a sheet over the bottom */
+.btpop{position:fixed;inset:0;z-index:60;display:grid;align-items:end;justify-items:center;padding:0 12px calc(96px + env(safe-area-inset-bottom,0px));background:rgba(13,20,51,.55);animation:btpIn .18s ease-out}
+.btpop[hidden]{display:none}
+.btp-sheet{position:relative;width:100%;max-width:440px;padding:14px 14px 16px;border-radius:20px;background:linear-gradient(180deg,#22306e,#16204a);border:2.5px solid #fff;box-shadow:0 0 0 2px #0d1433,0 8px 0 2px rgba(13,20,51,.5);animation:btpUp .22s cubic-bezier(.2,.9,.3,1.2)}
+.btp-t{margin:0 0 10px;text-align:center;font-family:"M PLUS Rounded 1c",sans-serif;font-weight:900;font-size:18px;color:#fff;letter-spacing:.1em}
+.btp-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.btp-o{position:relative;display:grid;justify-items:center;align-content:center;gap:4px;min-height:104px;padding:10px 4px;border:2.5px solid #fff;border-radius:14px;cursor:pointer;color:#fff;box-shadow:0 0 0 2px #0d1433,0 5px 0 2px rgba(0,0,0,.35);font:inherit}
+.btp-o:active{transform:translateY(3px);box-shadow:0 0 0 2px #0d1433,0 2px 0 2px rgba(0,0,0,.35)}
+.btp-o b{font-family:"M PLUS Rounded 1c",sans-serif;font-weight:900;font-size:15px;white-space:nowrap;-webkit-text-stroke:4px rgba(13,20,51,.75);paint-order:stroke fill}
+.btp-ic{display:block;width:38px;height:38px;filter:drop-shadow(0 2px 0 rgba(13,20,51,.6))}
+.btp-ic svg{display:block;width:100%;height:100%}
+.btp-cpu{background:linear-gradient(180deg,#6cc0ff,#2f7fe0 55%,#1d4fa8)}
+.btp-cus{background:linear-gradient(180deg,#6fe0b0,#1fae7a 55%,#137a55)}
+.btp-rt{background:linear-gradient(180deg,#ffe27a,#ffb526 55%,#e0870f)}
+.btp-o.locked{filter:grayscale(.6)}
+.btp-x{position:absolute;top:-14px;right:-10px;width:36px;height:36px;border-radius:50%;border:2.5px solid #fff;background:#16204a;color:#fff;font-size:20px;line-height:1;cursor:pointer;box-shadow:0 0 0 2px #0d1433}
+@keyframes btpIn{from{opacity:0}}
+@keyframes btpUp{from{transform:translateY(30px) scale(.96);opacity:0}}
+@media (prefers-reduced-motion:reduce){.btpop,.btp-sheet{animation:none}}
+/* the game: the blackboard stays, clean, in a wooden frame */
+body.ui-bright .board{background-color:#2c5a4b;background-image:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(255,255,255,.07),transparent 70%);border:5px solid #9a6738;border-top-color:#c08a52;box-shadow:0 0 0 2.5px var(--navy2),0 6px 0 2.5px rgba(13,20,51,.5)}
+body.ui-bright .boardnote{color:rgba(236,238,228,.3)}
+body.ui-bright .actbar,body.ui-bright .gbar{background:var(--panel)}
+
+/* ===== Home as one scene ===== */
+#scrHome.hscene{gap:0}
+.hscene .hboard{position:relative;display:block;height:var(--home-h,calc(100svh - 186px));min-height:430px;padding:0;overflow:hidden;border:6px solid var(--wood);border-top-color:var(--wood-hi);border-radius:18px;
+  background-color:var(--board);background-image:radial-gradient(ellipse 70% 42% at 50% 46%,rgba(236,238,228,.07),transparent 72%),radial-gradient(ellipse 120% 60% at 50% 120%,rgba(0,0,0,.45),transparent 60%),var(--noise);box-shadow:inset 0 0 40px rgba(0,0,0,.45),0 6px 0 #3e2817}
+.hscene .hboard::before{content:"";position:absolute;inset:0;pointer-events:none;background:
+  radial-gradient(ellipse 30% 9% at 22% 30%,rgba(236,238,228,.05),transparent 70%),radial-gradient(ellipse 34% 8% at 76% 62%,rgba(236,238,228,.045),transparent 70%)}
+.hscene .banners{position:absolute;left:8px;right:8px;top:8px;z-index:6}
+.hscene .bn{min-height:70px;padding:5px 8px 5px 12px}
+.hscene .bn-h{font-family:var(--font-game);font-size:clamp(16px,4.8vw,20px);line-height:1.15;letter-spacing:.01em;-webkit-text-stroke:0}
+.hscene .bn-h br{display:none}
+.hscene .bn-s{-webkit-line-clamp:1;font-size:10.5px}
+.hscene .bn-tag{font-size:9px;line-height:1.6}
+.hscene .bn-art{zoom:.46}
+.hscene .bn-dots{margin-top:2px}
+.hscene .hstage{position:absolute;left:0;right:0;top:96px;bottom:14px;height:auto}
+/* the character: big, in the middle, on the chalk tray */
+.hscene .hchar{left:50%;right:auto;bottom:-6px;height:min(100%,calc(100% - 4px));transform:translateX(-46%)}
+.hscene .hchar.boss{width:min(240px,62%);bottom:30%}
+/* round buttons down the right side */
+.hscene .hrail{left:auto;right:6px;top:6px;gap:8px}
+.hscene .mag > b,.hscene .m-rank .tb-sub{text-shadow:0 1px 0 rgba(0,0,0,.6)}
+/* the bubble on the left, the date down the left edge */
+.hscene .hsay{left:30px;top:4px;width:min(170px,calc(100% - 110px))}
+.hscene .hdate{left:6px;right:auto;top:4px;font-size:12px;gap:10px}
+.hscene .htray{position:absolute;left:0;right:0;bottom:0;margin:0;height:14px;border-radius:0}
+/* the controls, over the lower part of the board */
+.hscene .hmodes{position:absolute;left:4px;right:4px;bottom:20px;z-index:8;display:grid;grid-template-columns:minmax(0,1fr) 118px minmax(0,1fr);align-items:end;gap:0 2px}
+.hscene .hm{min-height:0;border:0;box-shadow:none;background:none}
+.hscene .hm:active:not(:disabled){transform:translateY(2px)}
+/* wings */
+.hscene .hm-stage,.hscene .hmodes .bosscard{grid-row:1;position:relative;display:grid;align-content:center;min-height:62px;padding:6px 10px;margin-bottom:10px;border-radius:12px;overflow:hidden;
+  border:2.5px solid rgba(255,255,255,.85);box-shadow:0 4px 0 rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.4);transform:skewX(-8deg)}
+.hscene .hm-stage > *,.hscene .hmodes .bosscard > *{transform:skewX(8deg)}
+.hscene .hm-stage{grid-column:1;grid-template-columns:auto minmax(0,1fr);column-gap:6px;background:linear-gradient(160deg,#6fc3ff,#2f78d8 58%,#1f4fa3)}
+.hscene .hmodes .bosscard{grid-column:3;grid-template-columns:auto minmax(0,1fr);gap:0 4px;background:linear-gradient(200deg,#c79bff,#7a4fd6 58%,#4a2a92)}
+.hscene .hm-stage .cav{display:none;grid-row:1/span 2;width:26px;height:26px;background:rgba(0,0,0,.25);box-shadow:inset 0 0 0 2px #fff;color:#fff}
+.hscene .hm-stage .hm-k{font-family:var(--font-game);font-size:clamp(14px,4.2vw,17px);line-height:1.1;color:#fff;white-space:nowrap;paint-order:stroke fill;-webkit-text-stroke:3px #12305e;text-shadow:0 2px 0 #12305e}
+.hscene .hm-stage .hm-x{font-size:9.5px;color:#eaf5ff;-webkit-line-clamp:1;line-height:1.3}
+.hscene .hmodes .bc-face{width:26px}
+.hscene .hmodes .bc-tag{display:none}
+.hscene .hmodes .bc-name{font-family:var(--font-game);font-size:clamp(12px,3.5vw,14px);line-height:1.15;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;color:#fff;paint-order:stroke fill;-webkit-text-stroke:3px #2c1560;text-shadow:0 2px 0 #2c1560}
+.hscene .hmodes .bc-hp{font-size:8.5px;color:#f3eaff}
+.hscene .hmodes .bc-hp .meter{height:5px}
+.hscene .hmodes .bc-next{display:none}
+.hscene .hmodes .bc-stamp{top:2px;right:4px;font-size:11px}
+/* the big round one */
+.hscene .hm-battle{grid-column:2;grid-row:1;position:relative;display:grid;grid-template-columns:none;grid-auto-flow:row;justify-items:center;align-content:center;gap:1px;width:118px;height:118px;padding:10px 6px 8px;border-radius:50%;
+  background:radial-gradient(circle at 50% 32%,#fff3b0,#f6c64a 46%,#d98c1a 78%,#a85f0c);box-shadow:0 0 0 4px #fff6d6,0 0 0 7px rgba(120,70,10,.55),0 6px 0 7px rgba(0,0,0,.35),0 0 30px 8px rgba(255,214,90,.45)}
+.hscene .hm-battle::after{content:"";position:absolute;inset:7px;border-radius:50%;border:2px dashed rgba(120,70,10,.35);pointer-events:none}
+.hscene .hm-battle .hb-fig{grid-row:auto;display:flex;gap:2px;width:auto;height:auto;border:0;background:none}
+.hscene .hm-battle .hb-fig .abic{width:20px;height:20px;color:#6b3d06}
+.hscene .hm-battle .hm-k{grid-column:auto;display:grid;justify-items:center;font-family:var(--font-game);font-size:23px;line-height:1.02;color:#fff;letter-spacing:0;white-space:nowrap;paint-order:stroke fill;-webkit-text-stroke:5px #7a4206;text-shadow:0 3px 0 #7a4206}
+.hscene .hm-battle .hm-x{grid-column:auto;display:block;margin:2px 0 0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;font-weight:800;color:#6b3d06;text-align:center}
+.hscene .hm-battle .hm-x > span:not(:first-child){display:none}
+.hscene .hm-battle .hm-go{display:none}
+.hscene .hm-battle.wait{animation:btlPulse 1.6s ease-in-out infinite}
+@keyframes btlPulse{50%{filter:brightness(1.12);transform:scale(1.04)}}
+.hscene .hm-battle:hover:not(:disabled){filter:brightness(1.05)}
+@media (prefers-reduced-motion:reduce){.hscene .hm-battle.wait{animation:none}}
+.hscene .lockb{top:2px;right:6px}
+/* the big one: 能力バトル, with your skill and the chalk on each hand */
+.hm-battle{grid-column:span 12;grid-template-columns:auto minmax(0,1fr) auto;column-gap:12px;min-height:92px;padding:10px 10px 10px 14px;border-width:4px;border-top-color:var(--wood-hi);background-color:#1f3d33;background-image:radial-gradient(ellipse 55% 90% at 88% 50%,rgba(243,215,116,.14),transparent 70%),radial-gradient(ellipse 40% 90% at 8% 50%,rgba(200,180,244,.14),transparent 70%),var(--noise)}
+.hm-battle .hb-fig{grid-row:1/span 2;display:grid;place-items:center;width:50px;height:50px;border-radius:50%;border:2px solid rgba(200,180,244,.55);background:rgba(200,180,244,.08)}
+.hm-battle .hb-fig .abic{width:30px;height:30px}
+.hm-battle .hm-k{grid-column:2;align-self:end;font-size:clamp(23px,7vw,28px);line-height:1.1;white-space:nowrap;color:var(--you);letter-spacing:.02em;text-shadow:0 0 16px rgba(243,215,116,.4)}
+.hm-battle .hm-x{grid-column:2;align-self:start;display:flex;flex-wrap:wrap;align-items:center;gap:1px 10px;margin-top:3px;font-size:11px}
+.hm-battle .hm-x > span{display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+.hm-battle .hm-x .abic{width:14px;height:14px}
+.hm-battle .hm-x .hm-w{color:#9fe0a8}
+.hm-battle .hm-go{grid-column:3;grid-row:1/span 2;width:58px;height:58px}
+.hm-battle:hover:not(:disabled) .hm-go{transform:rotate(0) scale(1.05)}
+.hm-battle.wait .hm-go{animation:stampy 1.4s ease-in-out infinite}
 .hm-sm{grid-template-columns:auto minmax(0,1fr);column-gap:8px;align-content:center;min-height:46px;padding:4px 8px 4px 7px}
 .hm-ic{grid-row:1/span 2;width:28px;height:28px;fill:none;stroke:var(--c);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .hm-sm .hm-k{font-size:15px;line-height:1.15;color:var(--c)}
 .hm-sm .hm-d{font-size:9.5px;line-height:1.3;color:var(--chalk-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hm.c2{--c:var(--p2)}
+.uibg-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.hub-rated{display:grid;justify-items:center;gap:1px;width:100%;opacity:.6}
+.hub-rated small{font-size:11px;font-weight:700;color:var(--chalk-soft)}
+.hub-classic{margin-top:6px;padding:12px}
+.hub-classic h3{margin:0 0 8px;font-size:14px}
+.hub-classic h3 small{margin-left:6px;font-size:11px;font-weight:700;color:var(--chalk-soft)}
+.hc-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.hc-row .btn{min-width:0;padding-inline:6px}
+#goRated.wait{border-color:#9fe0a8;color:#9fe0a8}
+.hc-rate{display:flex;flex-wrap:wrap;align-items:center;gap:2px 6px;margin:8px 0 0;font-size:12px;color:var(--chalk-soft);font-variant-numeric:tabular-nums}
+.hc-rate .emb{width:1.35em;height:1.35em}
+.hc-rate .hm-w{color:#9fe0a8;font-weight:700}
 .hm.c1{--c:var(--p1)}
 .hm-rated{grid-column:span 7;grid-template-columns:minmax(0,1fr) auto;column-gap:6px;min-height:100px;padding:10px 8px 10px 14px;border-width:4px;border-top-color:var(--wood-hi);background-color:#1f3d33;background-image:radial-gradient(ellipse 60% 85% at 84% 50%,rgba(243,215,116,.2),transparent 72%),radial-gradient(ellipse 40% 50% at 20% 0%,rgba(236,238,228,.07),transparent 70%),var(--noise);box-shadow:inset 0 0 30px rgba(0,0,0,.38),0 4px 0 #3e2817,0 10px 22px -12px rgba(243,215,116,.45)}
 .hm-rated .hm-k{grid-column:1;font-size:26px;white-space:nowrap;line-height:1.1;color:var(--you);letter-spacing:.02em;text-shadow:0 0 16px rgba(243,215,116,.4)}
@@ -2278,7 +2758,7 @@ a.mn-t{text-decoration:none}
 .chc-art .cav.xl{width:76px;height:76px}
 
 @media (prefers-reduced-motion:reduce){
-  .hchar svg,.hsay,.hm-rated .hm-go{animation:none!important}
+  .hchar svg,.hsay,.hm-rated .hm-go,.hm-battle .hm-go{animation:none!important}
   .recruit,.practice-bar .dotp{animation:none!important}
   .cfm,.cfm-card{animation:none!important}
   .story,.st-ch.pop,.st-next{animation:none!important}
@@ -2364,17 +2844,13 @@ a.mn-t{text-decoration:none}
   </header>
 
   <!-- Home -->
-  <section class="screen narrow home2" id="scrHome">
+  <section class="screen narrow home2 hscene" id="scrHome">
     <div class="hboard">
       <div class="banners">
       <div class="bn-track" id="bnTrack" aria-roledescription="カルーセル" aria-label="おしらせ">
         <button type="button" class="bn" data-go="event" id="bnEvent" aria-label="イベントを開く" data-feat="event">
           <span class="bn-txt"><span class="bn-tag" id="bnEvTag">EVENT</span><b class="bn-h" id="bnEvH">イベント</b><span class="bn-s" id="bnEvS"></span></span>
           <span class="bn-art art" id="artEvent"></span>
-        </button>
-        <button type="button" class="bn" data-go="tower" id="bnTower" style="--c:#9fe0ff" aria-label="わりばしの塔を開く">
-          <span class="bn-txt"><span class="bn-tag">NEW</span><b class="bn-h">わりばしの塔<br>登場！</b><span class="bn-s" id="bnTowerS">階ごとにルールが変わる。どこまで登れる？</span></span>
-          <span class="bn-art"><svg viewBox="0 0 100 130" class="tw-art" aria-hidden="true"><g filter="url(#chalk)" fill="none" stroke="#eceee4" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><path d="M10 64q3-6 9-3q4-6 10-1q6-1 6 5H10z" stroke="#9fe0ff" fill="#9fe0ff" fill-opacity=".18"/><path d="M68 40q3-5 8-2q4-5 9 0q5 0 5 5H68z" stroke="#9fe0ff" fill="#9fe0ff" fill-opacity=".18"/><path d="M31 126V44h38v82" fill="#eceee4" fill-opacity=".08"/><path d="M27 44h46l-6-9H33z" fill="#9fe0ff" fill-opacity=".3"/><path d="M38 35V22h24v13" fill="#eceee4" fill-opacity=".08"/><path d="M50 22V6"/><path d="M50 6l13 5-13 5" fill="#ff8f8f" fill-opacity=".75" stroke="#ff8f8f"/><path d="M31 66h38M31 88h38M31 108h38" opacity=".6"/><rect x="44" y="50" width="12" height="10" rx="5" fill="#f3d774" fill-opacity=".55" stroke="#f3d774"/><rect x="44" y="72" width="12" height="10" rx="5"/><rect x="44" y="93" width="12" height="9" rx="4.5"/><path d="M44 126v-9a6 6 0 0 1 12 0v9"/></g></svg></span>
         </button>
         <button type="button" class="bn bn-boss" data-go="boss" id="bnBoss" aria-label="ボスを見る" data-feat="boss">
           <span class="bn-txt"><span class="bn-tag" id="bnBossTag">今日のボス</span><b class="bn-h" id="bnBossH">今日のボス</b><span class="bn-s" id="bnBossS"></span></span>
@@ -2384,25 +2860,9 @@ a.mn-t{text-decoration:none}
           <span class="bn-txt"><span class="bn-tag" id="bnGaTag">GACHA</span><b class="bn-h" id="bnGaH">チョーク<br>ガチャ</b><span class="bn-s" id="bnGaS">ここでしか出ないチョーク・黒板。ダブりはかけらに</span></span>
           <span class="bn-art art" id="artGacha"></span>
         </button>
-        <button type="button" class="bn" data-go="puzzle" style="--c:var(--p2)" aria-label="詰めわりばしを開く" data-feat="puzzle">
-          <span class="bn-txt"><span class="bn-tag">毎日1問</span><b class="bn-h">詰めわりばし</b><span class="bn-s">3手で勝てる？ 解けたら結果をシェアしよう</span></span>
-          <span class="bn-art"><span class="ev-icon" style="--c:var(--p2);width:84px;height:84px;font-size:38px" aria-hidden="true">詰</span></span>
-        </button>
         <button type="button" class="bn" data-go="pass" id="bnPass" aria-label="シーズンパスを開く" data-feat="pass">
           <span class="bn-txt"><span class="bn-tag">SEASON</span><b class="bn-h" id="bnPassH">シーズンパス</b><span class="bn-s">今月だけのプレート・称号・黒板・エフェクトチョーク</span></span>
           <span class="bn-art art" id="artPass"></span>
-        </button>
-        <button type="button" class="bn" data-go="bin" style="--c:var(--p2)" aria-label="2進数ルール：CPU対戦で遊ぶ">
-          <span class="bn-txt"><span class="bn-tag">NEW</span><b class="bn-h">2進数ルール<br>登場！</b><span class="bn-s">指1本ずつが 1・2・4・8・16。31以上で消える</span></span>
-          <span class="bn-art art" id="artBin"></span>
-        </button>
-        <button type="button" class="bn" data-go="mission" style="--c:var(--coin)" aria-label="デイリーミッションを見る">
-          <span class="bn-txt"><span class="bn-tag">毎日4:00更新</span><b class="bn-h">デイリー<br>ミッション</b><span class="bn-s">3つ全部クリアでボーナス50コイン</span></span>
-          <span class="bn-art"><span class="coins-art" aria-hidden="true"><i style="left:4px;top:40px"></i><i style="left:30px;top:50px"></i><i style="left:18px;top:18px"></i><b>+50</b></span></span>
-        </button>
-        <button type="button" class="bn" data-go="shop" style="--c:#b9a0ff" aria-label="ショップを見る" data-feat="shop">
-          <span class="bn-txt"><span class="bn-tag">NEW</span><b class="bn-h">エフェクト<br>チョーク</b><span class="bn-s">宇宙・雷・オーロラ。光って動くチョークが登場</span></span>
-          <span class="bn-art art" id="artShop"></span>
         </button>
         <button type="button" class="bn" data-go="book" style="--c:var(--coin)" aria-label="図鑑を開く">
           <span class="bn-txt"><span class="bn-tag">COLLECTION</span><b class="bn-h">わりばし<br>図鑑</b><span class="bn-s">集めるほど報酬。75%で限定プリズムチョーク</span></span>
@@ -2419,7 +2879,7 @@ a.mn-t{text-decoration:none}
         <div class="hrail">
           <button type="button" class="mag m-rank" id="tbRank" aria-label="ランキングを見る"><span class="mg"><svg viewBox="0 0 48 48" aria-hidden="true"><g filter="url(#chalkS)"><circle class="ring" cx="24" cy="24" r="20.5"/></g></svg><span class="emb" id="barEmb" aria-hidden="true"></span></span><b id="barRate">1500</b><span class="tb-sub" id="barTier">シルバー Ⅱ</span></button>
           <button type="button" class="mag m-gift" id="goGifts" aria-label="受け取りBOX"><span class="mg"><svg viewBox="0 0 48 48" aria-hidden="true"><g filter="url(#chalkS)"><circle class="ring" cx="24" cy="24" r="20.5"/><g class="ic" transform="translate(12 11.5)"><rect x="4" y="11" width="16" height="9.5" rx="1.5"/><rect x="2.8" y="7.5" width="18.4" height="4" rx="1"/><path d="M12 7.5v13"/><path d="M12 7.5c-1.6-3.6-6-4.2-5.6-1.6.3 1.6 3.4 1.6 5.6 1.6zM12 7.5c1.6-3.6 6-4.2 5.6-1.6-.3 1.6-3.4 1.6-5.6 1.6z"/></g></g></svg></span><b>BOX</b><i class="tab-badge" id="giftBadge" hidden></i></button>
-          <button type="button" class="mag m-puz" id="goPuzzleMag" data-feat="puzzle" aria-label="詰めわりばし"><span class="mg"><svg viewBox="0 0 48 48" aria-hidden="true"><g filter="url(#chalkS)"><circle class="ring" cx="24" cy="24" r="20.5"/><text x="24" y="31.5" text-anchor="middle">詰</text></g></svg></span><b>毎日1問</b><i class="tab-badge dot" id="puzBadge" hidden></i></button>
+          <button type="button" class="mag m-mis" id="goMission" aria-label="ミッション"><span class="mg"><svg viewBox="0 0 48 48" aria-hidden="true"><g filter="url(#chalkS)"><circle class="ring" cx="24" cy="24" r="20.5"/><g class="ic" transform="translate(12 12)"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="m8.5 11 1.6 1.6L13 9.7"/><path d="M8.5 16.5h7"/></g></g></svg></span><b>ミッション</b><i class="tab-badge" id="missionBadge" hidden></i></button>
         </div>
         <button type="button" class="pickup hsay" id="pickup">
           <span class="pu-tag" id="puTag">デイリー</span>
@@ -2432,39 +2892,29 @@ a.mn-t{text-decoration:none}
         <p class="hdate" aria-hidden="true"><span id="hDate"></span><span class="hduty">日直<b id="hDuty"></b></span></p>
       </div>
       <div class="htray" aria-hidden="true"><i class="ck"></i><i class="ck pk"></i><i class="ck yl"></i><i class="er"></i></div>
-    </div>
-    <div class="hmodes">
-      <button type="button" class="hm hm-stage" id="goStage">
-        <span class="cav" id="homeStageAv" style="--cc:#f2cf5b"></span>
-        <span class="hm-k">ステージ</span>
-        <span class="hm-x" id="homeStage">★0</span>
-      </button>
-      <button type="button" class="hm bosscard" id="goBoss" aria-label="今日のボス" data-feat="boss">
-        <span class="bc-face" id="bcFace"></span>
-        <span class="bc-txt"><span class="bc-tag" id="bcTag">今日のボス</span><b class="bc-name">黒板消し大王</b>
-          <span class="bc-hp"><span class="meter"><i id="bcHp" style="width:100%"></i></span><span id="bcHpT">HP --</span></span>
-          <span class="bc-sub" id="bcSub"></span><span class="bc-next" id="bcNext" hidden></span></span>
-        <span class="bc-stamp" id="bcStamp" hidden>討伐！</span>
-      </button>
-      <div class="hm-pair">
-      <button type="button" class="hm hm-sm c3 hm-ab" id="goAb">
-        <span class="hab-fig" id="homeAbFig"></span>
-        <span class="hm-k">能力バトル</span><span class="hm-d" id="homeAbX"></span>
-      </button>
-      <button type="button" class="hm hm-sm c2" id="goCustom">
-        <svg class="hm-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8.5" r="3"/><circle cx="16.5" cy="9.5" r="2.5"/><path d="M3 19a5.5 5.5 0 0 1 11 0"/><path d="M14.6 14.4A4.6 4.6 0 0 1 21.5 18.5"/></svg>
-        <span class="hm-k">カスタム</span><span class="hm-d">友達と2〜4人</span>
-      </button>
-      <button type="button" class="hm hm-sm c1" id="goCpu">
-        <svg class="hm-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="7" width="14" height="11" rx="3"/><path d="M12 7V4"/><circle cx="12" cy="3.4" r="1"/><circle cx="9.3" cy="12" r="1.3"/><circle cx="14.7" cy="12" r="1.3"/><path d="M9.5 15.2h5"/><path d="M3 11.5v3M21 11.5v3"/></svg>
-        <span class="hm-k">CPU</span><span class="hm-d">ひとりで練習</span>
-      </button>
+      <div class="hmodes">
+        <button type="button" class="hm hm-ev bt-only" id="goEvHome" aria-label="イベント"><span class="wing-in"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 4.5c4-2 7 2 12 0v8c-5 2-8-2-12 0"/></svg></span><span class="hm-k">イベント</span></span><i class="tab-badge" id="evHomeBadge" hidden></i></button>
+        <button type="button" class="hm hm-stage" id="goStage"><span class="wing-in">
+          <span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20z"/><path d="M9 4v13.5M15 6.5V20"/></svg></span>
+          <span class="cav" id="homeStageAv" style="--cc:#f2cf5b"></span>
+          <span class="hm-k">ステージ</span>
+          <span class="hm-x" id="homeStage">★0</span>
+        </span></button>
+        <button type="button" class="hm bosscard" id="goBoss" aria-label="今日のボス" data-feat="boss">
+          <span class="bc-face" id="bcFace"></span>
+          <span class="bc-txt"><span class="bc-tag" id="bcTag">今日のボス</span><b class="bc-name">黒板消し大王</b>
+            <span class="bc-hp"><span class="meter"><i id="bcHp" style="width:100%"></i></span><span id="bcHpT">HP --</span></span>
+            <span class="bc-sub" id="bcSub"></span><span class="bc-next" id="bcNext" hidden></span></span>
+          <span class="bc-stamp" id="bcStamp" hidden>討伐！</span>
+        </button>
+        <button type="button" class="hm hm-battle" id="goAb">
+          <span class="bt-dia bt-only"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.31 21.71 L17.36 5.63 L16.24 4.37 L3.09 20.29Z" fill="currentColor" stroke-width="1"/><path d="M20.91 20.29 L7.76 4.37 L6.64 5.63 L18.69 21.71Z" fill="currentColor" stroke-width="1"/><path d="M12 3.6v3M5.2 10.6l2.7.5M18.8 10.6l-2.7.5"/></svg></span><b>バトル</b></span>
+          <span class="hb-fig" id="homeAbFig" aria-hidden="true"></span>
+          <span class="hm-k"><span>能力</span><span>バトル</span></span>
+          <span class="hm-x" id="homeAbX"></span>
+          <span class="hm-go" aria-hidden="true"><svg viewBox="0 0 64 64"><g filter="url(#chalkS)"><circle cx="32" cy="32" r="27"/><text x="32" y="39" text-anchor="middle">対戦</text></g></svg></span>
+        </button>
       </div>
-      <button type="button" class="hm hm-rated" id="goRated" data-feat="rated">
-        <span class="hm-k">レート戦</span>
-        <span class="hm-x" id="homeRate">レート 1500・まだ0戦</span>
-        <span class="hm-go" aria-hidden="true"><svg viewBox="0 0 64 64"><g filter="url(#chalkS)"><circle cx="32" cy="32" r="27"/><text x="32" y="39" text-anchor="middle">対戦</text></g></svg></span>
-      </button>
     </div>
     <p class="note" id="homeNote" hidden>オンライン対戦はまだ準備中です。</p>
   </section>
@@ -2526,7 +2976,7 @@ a.mn-t{text-decoration:none}
       <div class="tw-ground" id="twGround" aria-hidden="true"><span class="tw-door"></span><span class="tw-sign">入口</span></div>
     </div>
     <button type="button" class="btn primary big" id="twGo">1階から挑戦</button>
-    <p class="note center" id="twNote" style="margin:-6px 0 0">負けたら1階から。階と階のあいだなら、いつやめても次はその階から続けられます。</p>
+    <p class="note center" id="twNote" style="margin:-6px 0 0">塔は能力バトル。あなたの編成で、階ごとにちがう門番と戦います。負けたら1階から。階と階のあいだなら、いつやめても次はその階から続けられます。</p>
     <section class="panel">
       <h3>報酬 <span class="tag mine">はじめて着いた階だけ</span></h3>
       <ol class="tw-road" id="twRoad"></ol>
@@ -2571,7 +3021,7 @@ a.mn-t{text-decoration:none}
         <li>ボスに挑戦 20（手を1本消すごとに +5）・詰めわりばし正解 40</li>
         <li>100ポイントで1段。8段でプレート、15段で称号、22段で黒板、30段でエフェクトチョーク。どれもその月だけの限定です。</li>
         <li>30段のあとは300ポイントごとにボーナス段（コイン100）が10段まで。シーズンは毎月1日の4:00に切り替わります。</li>
-        <li>ポイントはプレイヤーレベルにもたまります（コレクションの「記録」で見られます）。</li>
+        <li>ポイントはプレイヤーレベルにもたまります（編成タブの「記録」で見られます）。</li>
       </ul>
     </section>
   </section>
@@ -2689,7 +3139,7 @@ a.mn-t{text-decoration:none}
       <h2>能力バトル</h2>
       <ul class="rules">
         <li>CPU対戦と、フレンドとの部屋（2人）で遊べます。レート戦にはありません。</li>
-        <li>キャラごとにスキルが1つ。コレクションで仲間にしたキャラを使えます。</li>
+        <li>キャラごとにスキルが1つ。編成タブで、仲間にしたキャラを選べます。</li>
         <li>自分の番が来るたびにチョークゲージが1たまり、3たまったらスキルを使えます。スキルは番を使わないので、使ったあとそのまま1手動けます（ゲージは0に）。</li>
         <li>能力バトルでは、合成するときにどちらの手にまとめるか選べます。分身も「左何本・右何本」で選べます。引き分けはありません（同じ形をくり返しても続きます）。</li>
         <li>ガードは、相手が次にあなたの手にさわったとき（タッチやスキル）、1回だけはじきます。</li>
@@ -2725,6 +3175,16 @@ a.mn-t{text-decoration:none}
       <button type="button" class="btn" id="hubFriend">友達と対戦する</button>
       <button type="button" class="btn" id="hubList">能力の一覧</button>
     </div>
+    <button type="button" class="btn hub-rated" id="hubRated" disabled><b>能力レート戦</b><small>もうすぐ登場</small></button>
+    <section class="panel hub-classic">
+      <h3>クラシック <small>能力なしの、元のわりばし</small></h3>
+      <div class="hc-row">
+        <button type="button" class="btn" id="goCpu">CPU</button>
+        <button type="button" class="btn" id="goCustom">フレンド</button>
+        <button type="button" class="btn" id="goRated" data-feat="rated">レート戦</button>
+      </div>
+      <p class="hc-rate" id="homeRate"></p>
+    </section>
   </section>
 
   <!-- CPU setup -->
@@ -2812,7 +3272,7 @@ a.mn-t{text-decoration:none}
 
   <!-- Missions -->
   <section class="screen narrow" id="scrMission" hidden>
-    <div class="shead"><h2>ミッション</h2><span class="coin big" id="missionCoins">0</span></div>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>ミッション</h2><span class="coin big" id="missionCoins">0</span></div>
     <div class="seg" role="tablist" aria-label="ミッションの種類" id="missionTabs">
       <button type="button" role="tab" id="tabGuide" aria-selected="false" aria-controls="guidePanel" hidden>はじめて</button>
       <button type="button" role="tab" id="tabDaily" aria-selected="true" aria-controls="dailyPanel">デイリー</button>
@@ -2861,14 +3321,19 @@ a.mn-t{text-decoration:none}
       <p class="dnote"><span>毎朝4:00に入れ替わり・各1回まで</span><span id="dLeft"></span></p>
       <div class="shop" id="dGrid"></div>
     </div>
-    <p class="shop-hint" id="shopHint" hidden><span id="shopHintT">持っているチョークはコレクションで変えられます</span><button type="button" class="btn sm" id="shopToGear">コレクションで変える</button></p>
+    <p class="shop-hint" id="shopHint" hidden><span id="shopHintT">持っているチョークは編成タブで変えられます</span><button type="button" class="btn sm" id="shopToGear">編成タブで変える</button></p>
     <div class="shop" id="shopGrid" role="tabpanel" hidden></div>
     <div class="shop" id="shopBoards" role="tabpanel" hidden></div>
   </section>
 
   <!-- Nameplate editor -->
   <section class="screen narrow coll" id="scrPlate" hidden>
-    <div class="shead"><h2>コレクション</h2><button type="button" class="cl-book" id="goBook"><span class="bb-ic" aria-hidden="true">図</span>図鑑<b class="bb-p" id="bookPct">0%</b></button></div>
+    <div class="shead"><h2>編成</h2><button type="button" class="cl-book" id="goBook"><span class="bb-ic" aria-hidden="true">図</span>図鑑<b class="bb-p" id="bookPct">0%</b></button></div>
+    <section class="panel hub-p pl-lo">
+      <div class="hub-h"><h3>能力バトルの編成</h3><button type="button" class="btn sm" id="plAuto">おまかせ編成</button></div>
+      <div class="lobox" id="plLo"></div>
+      <p class="note hub-n">キャラはホームの相棒にもなります。カードをタップすると変えられます。</p>
+    </section>
     <div class="cl-hero">
       <div class="cl-look" id="clLook" aria-hidden="true"></div>
       <div class="cl-wear">
@@ -2877,7 +3342,7 @@ a.mn-t{text-decoration:none}
       </div>
     </div>
     <div class="pf-plate" id="homePlateBox"></div>
-    <div class="cl-tabs" id="clTabs" role="tablist" aria-label="コレクションの種類">
+    <div class="cl-tabs" id="clTabs" role="tablist" aria-label="持ちものの種類">
       <button type="button" role="tab" data-ct="chara">キャラ</button>
       <button type="button" role="tab" data-ct="chalk">チョーク</button>
       <button type="button" role="tab" data-ct="board">黒板</button>
@@ -3002,6 +3467,15 @@ a.mn-t{text-decoration:none}
             <label><input type="radio" name="sound" value="on" id="snd-on"><span>オン</span></label>
             <label><input type="radio" name="sound" value="off" id="snd-off"><span>オフ</span></label>
           </div>
+        </fieldset>
+        <fieldset id="uiField">
+          <legend>画面のデザイン</legend>
+          <div class="opts" id="uiOpts">
+            <label><input type="radio" name="uistyle" value="bright" id="ui-bright"><span>明るい（標準）</span></label>
+            <label><input type="radio" name="uistyle" value="chalk" id="ui-chalk"><span>黒板</span></label>
+            <label id="uiModernOpt" hidden><input type="radio" name="uistyle" value="modern" id="ui-modern"><span>描き下ろし（試作）</span></label>
+          </div>
+          <div class="uibg-row" id="uiBgRow" hidden><label class="btn sm" for="uiBgFile">背景の画像をえらぶ</label><input type="file" id="uiBgFile" accept="image/*" hidden><button type="button" class="btn sm" id="uiBgClear">背景をもとに戻す</button></div>
         </fieldset>
         <fieldset>
           <legend>対戦の演出</legend>
@@ -3420,13 +3894,24 @@ a.mn-t{text-decoration:none}
 <nav class="tabbar" id="tabbar" aria-label="メニュー">
   <div class="tabbar-in">
     <button type="button" class="tab" id="goHomeTab" data-tab="home" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h5v-6h3v6h5V10"/></svg><span>ホーム</span><i class="tab-badge" id="homeBadge" hidden></i></button>
-    <button type="button" class="tab" id="goEvents" data-tab="events"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4"/><path d="M6 4.5c4-2 7 2 12 0v8c-5 2-8-2-12 0"/></svg><span>イベント</span><i class="tab-badge" id="eventBadge" hidden></i></button>
-    <button type="button" class="tab" id="goMission" data-tab="mission"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="m8.5 11 1.6 1.6L13 9.7"/><path d="M8.5 16.5h7"/></svg><span>ミッション</span><i class="tab-badge" id="missionBadge" hidden></i></button>
+    <button type="button" class="tab" id="goProfile" data-tab="plate"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.2 19.5a5.8 5.8 0 0 1 11.6 0"/><path d="m16.2 6.3 3.6 1.2-3.3 10-3.6-1.2z"/></svg><span>編成</span></button>
+    <button type="button" class="tab" id="goGacha" data-tab="gacha" data-feat="gacha"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9.5" r="6.5"/><path d="M5.5 9.5h13"/><circle cx="12" cy="9.5" r="1.6"/><path d="M8.2 16.2 7 21h10l-1.2-4.8"/></svg><span>ガチャ</span></button>
     <button type="button" class="tab" id="goShop" data-tab="shop" data-feat="shop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span>ショップ</span></button>
+    <button type="button" class="tab" id="goEvents" data-tab="events"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4"/><path d="M6 4.5c4-2 7 2 12 0v8c-5 2-8-2-12 0"/></svg><span>イベント</span><i class="tab-badge" id="eventBadge" hidden></i></button>
     <button type="button" class="tab" id="goFriends" data-tab="friends"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3.2"/><path d="M3 19a6 6 0 0 1 12 0"/><circle cx="16.5" cy="8" r="2.6"/><path d="M15.5 13.2A5 5 0 0 1 21 18"/></svg><span>フレンド</span><i class="tab-badge" id="friendBadge" hidden></i></button>
-    <button type="button" class="tab" id="goProfile" data-tab="plate"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h16v10.5H4z"/><path d="M3 6.5h18v3H3z"/><path d="M10 13h4"/></svg><span>コレクション</span></button>
   </div>
 </nav>
+<div class="btpop" id="btPop" hidden>
+  <div class="btp-sheet" role="dialog" aria-modal="true" aria-label="バトルをえらぶ">
+    <p class="btp-t">バトル</p>
+    <div class="btp-row">
+      <button type="button" class="btp-o btp-cpu" id="btpCpu"><span class="btp-ic"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="11" rx="3"/><path d="M12 8V5.2"/><circle cx="12" cy="4.2" r="1.1"/><path d="M9.6 16h4.8M3 12.2v3M21 12.2v3"/><circle cx="9.5" cy="12.6" r="1" fill="currentColor" stroke="none"/><circle cx="14.5" cy="12.6" r="1" fill="currentColor" stroke="none"/></svg></span><b>CPU対戦</b></button>
+      <button type="button" class="btp-o btp-cus" id="btpCustom"><span class="btp-ic"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="3.2"/><path d="M3 19a6 6 0 0 1 12 0"/><circle cx="16.5" cy="8" r="2.6"/><path d="M15.2 13.6A5 5 0 0 1 21 18.5"/></svg></span><b>カスタム</b></button>
+      <button type="button" class="btp-o btp-rt" id="btpRated" data-feat="rated"><span class="btp-ic"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5.2a3 3 0 0 0 3 4M16 6h2.8a3 3 0 0 1-3 4"/><path d="M12 13v3.6M8.5 20h7M9.6 16.6h4.8v3.4H9.6z"/></svg></span><b>レート戦</b></button>
+    </div>
+    <button type="button" class="btp-x" id="btpClose" aria-label="とじる">×</button>
+  </div>
+</div>
 <div class="result" id="result" hidden role="dialog" aria-modal="true" aria-labelledby="resT">
   <div class="res-in">
     <p class="res-t" id="resT"></p>
@@ -4078,7 +4563,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/19-3';
+const APP_VERSION = '11/20-1';
 // ----- New version: the page's <head> carries its version (build.py writes it). Now and then, and whenever the app comes
 // back to the front, read the head of the live page; if its version differs, offer a reload. ?debug&vfast checks every few seconds.
 const VER_FAST = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('vfast'); } catch(e) { return false; } })();
@@ -4120,6 +4605,8 @@ function reloadNew(){
 }
 try { const q = location.search; if (/[?&]_v=/.test(q)) { const q2 = q.replace(/[?&]_v=[^&]*/, '').replace(/^&/, '?'); history.replaceState(history.state, '', location.pathname + q2 + location.hash); } } catch(e) {}
 const DEBUG = (() => { try { return new URLSearchParams(location.search).has('debug'); } catch(e) { return false; } })();
+// tests that play stages, bosses or the tower by the old rules open the page with ?debug&noab
+const DBG_NOAB = DEBUG && (() => { try { return new URLSearchParams(location.search).has('noab'); } catch(e) { return false; } })();
 const dbgLines = [];
 function dbg(...a){
   if (!DEBUG) return;
@@ -4987,7 +5474,7 @@ function renderBook(){
   }
   $$('#bkTabs [data-bk]').forEach(t => t.setAttribute('aria-selected', String(t.dataset.bk === tab)));
   const list = b.items.filter(x => x.cat === tab), look = myLook(), grid = $('#bkGrid');
-  $('#bkNote').textContent = `${BOOK_TABS[tab]}　${list.filter(x => x.have).length} / ${list.length}` + (tab === 'emblem' ? '・最高レートで集まる' : tab === 'stamp' ? '・使うスタンプはコレクションで選べる' : '・持っているものは押すと使える');
+  $('#bkNote').textContent = `${BOOK_TABS[tab]}　${list.filter(x => x.have).length} / ${list.length}` + (tab === 'emblem' ? '・最高レートで集まる' : tab === 'stamp' ? '・使うスタンプは編成タブで選べる' : '・持っているものは押すと使える');
   const using = {chalk: myChalk(), board: myBoard(), title: look.title, plate: look.plate}[tab];
   if (unchanged(grid, JSON.stringify([tab, list.map(x => [x.id, x.have]), using, typedName()]))) return;
   grid.innerHTML = '';
@@ -6186,8 +6673,9 @@ function stageDef(c, n){
   // a strong stage with no range is the normal start against a CPU that plays its best move with probability "skill"
   const dr = level !== 'strong' || L.open ? null : L.dr || (boss ? [9, 15] : ch.mix ? [3 + n, 5 + n] : n === 7 ? [3, 5] : n === 8 ? [5, 7] : [7, 9]);
   const fixed = level !== 'strong' && ch.handicap ? HANDICAP[(n - 1) % HANDICAP.length] : null;
+  const nk = c === 1 ? 0 : c <= 3 ? (level === 'weak' ? 0 : 1) : (level === 'weak' ? 1 : 2);
   return {id: `${c}-${n}`, c, n, ch, rule, level, boss, first, dr, fixed, skill: L.skill || 0, open: !!L.open,
-    coins: boss ? 200 : level === 'weak' ? 50 : level === 'normal' ? 80 : 120};
+    coins: boss ? 200 : level === 'weak' ? 50 : level === 'normal' ? 80 : 120, abc: ch.id || 'king', abk: abSeedChalks('stage|' + c + '-' + n, nk)};
 }
 // How hard each stage is. Chapter 1 is a gentle start (no puzzles), chapters 2-3 bring in short puzzles,
 // 4-8 climb to long ones, and chapter 9 is strong all the way.
@@ -6239,6 +6727,12 @@ function towerGuard(n){
   const all = [...STAGE_CH.map(ch => ({ch})), ...BOSS_DAYS.map(b => ({b})), {b: LEGENDS.dragon}];
   return all[(n / 10 - 1) % all.length];
 }
+function abSeedChalks(seed, n){
+  const rnd = seeded(hashStr('abk|' + seed)), pool = CHALKS.filter(c => c.fx && FX_AB[c.fx]).map(c => c.id), k = ['auto', 'auto'];
+  if (n >= 1) k[1] = pool[Math.floor(rnd() * pool.length)];
+  if (n >= 2) { const ab1 = chalkAb(k[1]), rest = pool.filter(id => chalkAb(id) !== ab1); k[0] = rest[Math.floor(rnd() * rest.length)]; }
+  return k;
+}
 function towerDef(n){
   const rnd = seeded(hashStr('tower|' + n)), guard = n % 10 === 0;
   const pool = TOWER_RULES.filter(r => r.from <= n);
@@ -6257,8 +6751,14 @@ function towerDef(n){
   const g = guard ? towerGuard(n) : null, rname = picks.map(x => x.name).join('・');
   const ch = Object.assign({face: TOWER_FACES[n % TOWER_FACES.length], c: '#9fe0ff'}, g && g.ch ? g.ch : {}, g && g.b ? {face: 'crown', c: g.b.color || '#c9a2ff'} : {},
     {name: rname, who: g ? (g.ch ? g.ch.who : g.b.name) : `${n}階の門番`, handicap: hand, limit, mix: false, alien: false});
+  // the gatekeeper's skill and chalks (the same every time for a floor)
+  const who = g && g.ch && g.ch.id ? g.ch.id : g && g.b ? g.b.id : '', chars = Object.keys(CHAR_SKILL).filter(id => id !== 'hotchkiss');
+  const abc = CHAR_SKILL[who] ? who : chars[Math.floor(rnd() * chars.length)];
+  const kpool = CHALKS.filter(c => c.fx && FX_AB[c.fx]).map(c => c.id), abk = ["auto", "auto"], nk = n <= 4 ? 0 : n <= 14 ? 1 : 2;
+  if (nk >= 1) abk[1] = kpool[Math.floor(rnd() * kpool.length)];
+  if (nk >= 2) { const rest = kpool.filter(id => FX_AB[(CHALKS.find(c => c.id === id) || {}).fx] !== FX_AB[(CHALKS.find(c => c.id === abk[1]) || {}).fx]); abk[0] = rest[Math.floor(rnd() * rest.length)]; }
   return {id: 'T' + n, c: 0, n, ch, rule, level, boss: guard, first: 0, dr, fixed: null, skill, open: false, coins: 0,
-    tower: true, rname, gBoss: g && g.b ? g.b : null};
+    tower: true, rname, gBoss: g && g.b ? g.b : null, abc, abk};
 }
 const myTower = () => { const t = (net.profile || {}).tower || {}; return {f: Math.max(1, +t.f || 1), best: +t.best || 0, busy: +t.busy || 0, at: +t.at || 0}; };
 // What reaching a floor for the first time pays.
@@ -6417,7 +6917,8 @@ function renderTower(){
       li.querySelector('.twf-n b').textContent = f;
       li.querySelector('.twf-w').innerHTML = f < n ? '<span class="twf-ok">✓</span>' : towerFace(st);
       li.querySelector('.twf-i b').textContent = st.rname;
-      li.querySelector('.twf-i small').textContent = f < n ? 'クリア' : st.boss ? `番人：${st.ch.who}` : `CPU：${STAGE_LEVEL[st.level]}` + (st.ch.limit ? '・手数制限' : '');
+      li.querySelector('.twf-i small').innerHTML = f < n ? 'クリア' : esc(st.boss ? `番人：${st.ch.who}` : `CPU：${STAGE_LEVEL[st.level]}` + (st.ch.limit ? '・手数制限' : ''))
+        + (f >= n && st.abc ? `<span class="twf-sk">${abIcon(CHAR_SKILL[st.abc])}${esc(SKILLS[CHAR_SKILL[st.abc]].name)}${st.abk.filter(k => k !== 'auto').map(k => abIcon(chalkAb(k))).join('')}</span>` : '');
       if (m && f > t.best) { const g = document.createElement('em'); g.className = 'twf-gift'; g.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="9.5" rx="1.5"/><rect x="2.8" y="7.5" width="18.4" height="4" rx="1"/><path d="M12 7.5v13"/><path d="M12 7.5c-1.6-3.6-6-4.2-5.6-1.6.3 1.6 3.4 1.6 5.6 1.6zM12 7.5c1.6-3.6 6-4.2 5.6-1.6-.3 1.6-3.4 1.6-5.6 1.6z"/></svg>'; g.append(towerMileText(m)); li.querySelector('.twf-i').append(g); }
       if (f === n) { const c = document.createElement('span'); c.className = 'twf-me' + (me.kind === 'boss' ? ' bs' : ''); c.innerHTML = homeCharArt(me, 'smile'); li.append(c); }
       stack.append(li);
@@ -6537,6 +7038,7 @@ function newStageGame(){
   G = initState({n: 2, first: sg.first});
   G.hands = [[...sg.mine], [...sg.his]];
   G.seen = {[posKeyOf(G)]: 1};
+  if (!DBG_NOAB && sg.abc && CHAR_SKILL[sg.abc]) G.ab = abInit(abMine(), sg.abc, sg.first || 0, abMyChalks(), sg.abk || ['auto', 'auto']);   // stages and the tower are ability battles
   Object.assign(sg, {moves: 0, lost: false, done: false, result: null});
   sel = null; panel = null;
   render(); maybeCpu();
@@ -7460,6 +7962,10 @@ async function claimGuideDone(){
 
 // ===================== News =====================
 const NEWS = [
+  {id: 'n31', date: '2026-11-20', tag: 'アップデート', title: '画面が明るく新しくなりました',
+    body: 'わりばしの画面デザインを新しくしました。\n・ホームのまん中の「バトル」から、CPU対戦・カスタム・レート戦を選べます\n・ホームの左は「イベント」（今日のボス・わりばしの塔・詰めわりばし・シーズンパスもここ）、右は「ステージ」です\n・下のタブは「ホーム・編成・ガチャ・ショップ・フレンド」の5つになりました\n・今までの黒板のデザインがいい人は、メニュー → 設定 → 画面のデザイン で「黒板」を選べます'},
+  {id: 'n30', date: '2026-11-19', tag: 'アップデート', title: '画面を整理しました・塔が能力バトルに',
+    body: 'ゲームの中心を「能力バトル」にして、画面を整理しました。\n・下のタブは「ホーム・編成・ガチャ・ショップ・イベント・フレンド」になりました\n・ミッションは、ホームの黒板の左にある丸いボタンから開けます\n・ホームのいちばん下の「能力バトル」から、CPUや友達と対戦できます。能力なしの元のわりばし（クラシック）は、能力バトル画面のいちばん下にあります\n・「編成」タブで、キャラと左右のチョークを選べます。ホームの相棒と能力バトルのキャラは同じになりました\n・詰めわりばしは「イベント」タブから遊べます\n・わりばしの塔・ステージ・ボスも能力バトルになりました。相手はキャラのスキルとチョークを持っています（ステージは章が進むほどチョークが増えます）。ボスの手をスキルで消してもダメージになります'},
   {id: 'n28', date: '2026-11-19', tag: 'NEW', title: 'すべてのチョークに能力とレア度がつきました',
     body: 'チョークの能力が変わりました。\n・すべてのチョークにレア度（N・R・SR・SSR）と能力がつきました。ショップの色だけのチョーク（白〜ミント）にも能力があります\n・レア度が高いほど、1試合で能力を使える回数が多くなります（N 1回・R 2回・SR 3回・SSR 何回でも。てっぺきだけは N・R 1回／SR 2回／SSR 3回）\n・手の上のバッジに、あと何回使えるかが出ます\n・ショップ・ガチャの提供割合・かけら交換・コレクション・図鑑で、チョークの能力が見られます\n・ステージやボスで新しいキャラが仲間になると「なかまになった！」でお知らせします\n・対戦の演出をパワーアップ：対戦開始の「VS」、「あなたの番！」、手を消したときの演出、スキル発動。文字のフォントも新しくなりました\n・演出は「アニメ風」と「黒板風」から選べます（メニュー → 設定 → 対戦の演出）。黒板風は、チョークで書いて黒板消しで消す演出・赤チョークの×・勝つと花丸。どっちがいいか教えてね\n・対戦画面を整理しました。盤の上に「ホームへ・能力・最初から」、盤の下に大きなボタン（分身・合成／スキル／スタンプ）。スキルのボタンにはゲージが出ます\n・キャラのスキルは番を使わなくなりました。スキルを使ったあと、そのまま1手動けます（木曜のボスの「パチン留め」は今まで通り）\n・能力バトルの合成は、どちらの手にまとめるか選べるようになりました。分身も「左何本・右何本」で表示します\n・能力バトルは引き分けなしになりました（同じ形をくり返しても続きます）\n・スキル「じかんストップ」を直しました。使ったあと、2回つづけて動けます（今までは使った番がそのまま消えて、得をしていませんでした）\n・能力バトルの部屋は、相手もこのバージョンに更新している必要があります'},
   {id: 'n29', date: '2026-11-19', tag: 'おしらせ', title: '公式Discordができました',
@@ -8022,15 +8528,29 @@ function newBossGame(){
   G.hands[1] = [...ui.boss.info.start];
   G.seen = {[posKeyOf(G)]: 1};
   G.norep = true;
-  // ホッチキス将軍: only the boss has a skill (no chalks, no gauge of mine)
-  if ((ui.boss.base || ui.boss.info).pachin || ui.boss.info.pachin) G.ab = {c: ['', 'hotchkiss'], g: [0, 0], gd: [0, 0], fz: [-1, -1], rv: [0, 0], k: null, iu: [[0, 0], [0, 0]], xt: [0, 0]};
+  // every boss is an ability battle: its own skill and chalks against my loadout
+  { const bid = (ui.boss.base || ui.boss.info).id, legend = !!(ui.boss.base || ui.boss.info).legend;
+    if (!DBG_NOAB && CHAR_SKILL[bid]) G.ab = abInit(abMine(), bid, 0, abMyChalks(), abSeedChalks('boss|' + bid + '|' + (ui.boss.form || 1), legend ? 2 : 1)); }
   sel = null; panel = null;
   render(); maybeCpu();
 }
 // After each move in a boss game: count damage, let the boss get up again, end the challenge.
-function bossAfterMove(m){
+function bossAfterMove(m, prev){
   const b = ui.boss;
   let dmg = 0;
+  if (m.kind === 'skill' && prev) {
+    // hands taken by a skill count like hands taken by a touch
+    const gone = side => [0, 1].filter(i => prev.hands[side][i] > 0 && G.hands[side][i] === 0);
+    for (const i of gone(1)) {
+      b.hands++; b.dmg += BOSS_HAND_DMG; dmg += BOSS_HAND_DMG;
+      setTimeout(() => { const t = handBtns[1] && handBtns[1][i]; if (t) { const [x, y] = centerOf(t); floatText(x, y + 34, `${BOSS_HAND_DMG}ダメージ`, b.chalk ? b.chalk.color : '#d6a8ff', true); } }, 120);
+    }
+    for (const i of gone(0)) if (b.hp > 0) {
+      b.hp = Math.max(0, b.hp - BOSS_ME_HIT);
+      setTimeout(() => { const t = handBtns[0] && handBtns[0][i]; if (t) { const [x, y] = centerOf(t); floatText(x, y - 34, `-${BOSS_ME_HIT}`, '#ff8f8f', true); } }, 120);
+      if (b.hp <= 0 && !G.over) G = Object.assign({}, G, {over: {type: 'win', winner: 1, reason: 'hp'}});
+    }
+  }
   const hit = m.kind === 'attack' && m.target === 1 && m.after === 0;
   if (hit) {
     b.hands++; b.dmg += BOSS_HAND_DMG; dmg += BOSS_HAND_DMG;
@@ -8711,7 +9231,8 @@ if (DEBUG) window.__wb = {primeRepeat(){ if (!G) return 0; let n = 0; for (const
   stageRule: (c, n) => stageDef(c, n).rule,
   stagePlan(c, n){ const st = stageDef(c, n), p = stagePlan(st); if (!p) return null; const S = solverFor(st.rule), mv = st.first ? p.his : p.mine, ot = st.first ? p.mine : p.his, id = S.sid(mv[0], mv[1], ot[0], ot[1]);
     return {mine: p.mine, his: p.his, first: st.first, limit: p.limit, best: p.best, level: st.level, split: st.rule.split, meWin: st.first ? S.res[id] === -1 : S.res[id] === 1, stars: p.stars}; }, puzzleRules: day => puzzleOf(day).rules, bossRules: id => bossRules(bossInfoOf(id)),
-  towerDef: n => { const d = towerDef(n); return {rname: d.rname, level: d.level, dr: d.dr, skill: d.skill, boss: d.boss, rule: d.rule, who: d.ch.who, first: d.first, limit: d.ch.limit, hand: d.ch.handicap, gBoss: !!d.gBoss}; },
+  towerDef: n => { const d = towerDef(n); return {rname: d.rname, level: d.level, dr: d.dr, skill: d.skill, boss: d.boss, rule: d.rule, who: d.ch.who, first: d.first, limit: d.ch.limit, hand: d.ch.handicap, gBoss: !!d.gBoss, abc: d.abc, abk: d.abk}; },
+  stageDef: (c, n) => { const d = stageDef(c, n); return {abc: d.abc, abk: d.abk, level: d.level}; }, startStage: (c, n) => { startStage(c, n); return true; },
   stage: () => ui.stage && {n: ui.stage.n, tower: !!ui.stage.tower, done: ui.stage.done, result: ui.stage.result, mine: ui.stage.mine, his: ui.stage.his},
   net: () => ({lobby: !!net.lobbyOff, board: net.boardSrc, onlineN: net.onlineN, pubDenied: !!net.pubDenied}),
   ab: () => G && G.ab && {ab: G.ab, hands: G.hands, turn: G.turn, over: G.over, log: G.log.slice(-3)},
@@ -8747,7 +9268,11 @@ function newGame(){
   render(); maybeCpu();
 }
 // The characters for a CPU / same-device ability battle: mine from my collection, the other side any character (or a surprise).
-function abMine(){ const id = lsGet('waribashi-abme'), c = charaList().find(x => x.id === id); return c && abCan(c) ? c.id : 'waribo'; }
+function abMine(){
+  const h = myHomeChar();
+  if (h && abCan(h) && CHAR_SKILL[h.id]) return h.id;
+  const id = lsGet('waribashi-abme'), c = charaList().find(x => x.id === id); return c && abCan(c) ? c.id : 'waribo';
+}
 // Admins may try every character and chalk (to check the balance).
 const abCan = c => !!(c && (c.have || net.admin));
 const abChalkCan = id => hasChalk(id) || (!!net.admin && CHALKS.some(c => c.id === id));
@@ -8806,9 +9331,15 @@ function abCpuMove(){
     return (sk.length && (!mv.length || Math.random() < 0.45) ? pick(sk) : pick(mv)).m;
   };
   const any = () => { const sk = cands.filter(m => m.kind === 'skill'), mv = cands.filter(m => m.kind !== 'skill'); return sk.length && (!mv.length || Math.random() < 0.4) ? pick(sk) : pick(mv); };
-  const lv = settings.level;
+  if (ui.boss) {
+    // a boss always fires its skill when it can (the best option of it), and plays well as often as its skill says
+    const sks = scored.filter(x => x.m.kind === 'skill');
+    if (sks.length) return sks.reduce((a, b) => b.v > a.v ? b : a).m;
+    return Math.random() < Math.min(.95, (ui.boss.skill || .5) + ((ui.boss.life || 1) - 1) * .12) ? best() : any();
+  }
+  const lv = ui.stage ? ui.stage.level : settings.level;
   if (lv === 'strong') return best();
-  if (lv === 'normal') return Math.random() < 0.65 ? best() : any();
+  if (lv === 'normal') return Math.random() < (ui.stage && ui.stage.skill ? ui.stage.skill : 0.65) ? best() : any();
   const kill = scored.filter(x => x.v >= 5000);
   return kill.length && Math.random() < 0.7 ? pick(kill).m : any();
 }
@@ -8828,8 +9359,8 @@ function abBossSkill(){
 }
 function chooseCpuMove(){
   { const t = tutCpuMove(); if (t) return t; }
-  if (abOn(G) && ui.boss && G.ab.g[1] >= AB_MAX) { const o = abBossSkill(); if (o) return o; }
-  if (abOn(G) && !ui.boss) return abCpuMove();
+  if (abOn(G) && ui.boss && !G.ab.fr && G.ab.g[1] >= AB_MAX) { const o = abBossSkill(); if (o) return o; }
+  if (abOn(G) && (!ui.boss || G.ab.fr)) return abCpuMove();
   const s = solver(), ms = movesAt(G.turn);
   if (!s.ready || !ms.length) return null;
   const score = m => s.res[m.next] === -1 ? 1000 - s.dist[m.next] : s.res[m.next] === 1 ? -1000 + s.dist[m.next] : 0;
@@ -8872,7 +9403,7 @@ async function doMove(m){
   const myTurn = G.turn === 0;
   G = step(G, m, 0);
   if (tutOn() && myTurn) tutAfterMine(m);
-  if (ui.boss) bossAfterMove(m);
+  if (ui.boss) bossAfterMove(m, g0);
   else if (ui.puzzle) puzzleAfterMove();
   else if (ui.stage) stageAfterMove();
   else if (G.over) recordCpu(G);
@@ -8988,9 +9519,9 @@ function watchGlobal(fb){
     const after = unlocked(statsOf(net.profile));
     if (!first) {
       CHALKS.filter(c => !c.price && c.id !== 'auto' && !c.gacha && !hasChalk(c.id, prevProfile || {}) && hasChalk(c.id)).forEach(c =>
-        celebrate('チョーク<br>ゲット！', () => itemBanner(chalkFig(c), c.name, (c.season ? 'シーズン限定' : '限定チョーク') + (chalkAb(c.id) ? `・${chalkRar(c)}「${CHALK_AB[chalkAb(c.id)].name}」` : '') + '。コレクションの「チョーク」で選べます')));
+        celebrate('チョーク<br>ゲット！', () => itemBanner(chalkFig(c), c.name, (c.season ? 'シーズン限定' : '限定チョーク') + (chalkAb(c.id) ? `・${chalkRar(c)}「${CHALK_AB[chalkAb(c.id)].name}」` : '') + '。編成タブの「チョーク」で選べます')));
       BOARDS.filter(b => !b.price && b.id !== 'bstd' && !b.gacha && !hasBoard(b.id, prevProfile || {}) && hasBoard(b.id)).forEach(b =>
-        celebrate('黒板<br>ゲット！', () => itemBanner(boardSwatch(b.id, chalkOf(myChalk())), b.name, 'コレクションの「黒板」で選べます')));
+        celebrate('黒板<br>ゲット！', () => itemBanner(boardSwatch(b.id, chalkOf(myChalk())), b.name, '編成タブの「黒板」で選べます')));
       const p0 = statsOf(prevProfile || {}).maxRate, p1 = statsOf(net.profile).maxRate;
       if (tierOf(p1) > tierOf(p0) && tierOf(p1) >= 2) celebrate('ランク<br>到達！', () => itemBanner(`<span class="emb r${tierOf(p1)}" style="width:34px;height:34px">${emblemSVG(tierOf(p1), 0)}</span>`, `${RANKS[tierOf(p1)].name}のエンブレム`, '図鑑に記録されました'));
       after.titles.filter(x => !before.titles.includes(x) && !(TITLES.find(t => t.id === x) || {}).gacha).forEach(x =>
@@ -9561,7 +10092,7 @@ async function buyChalk(id){
     return cur;
   });
   if (res && res.committed) {
-    lsSet('waribashi-chalk', id); toast(`${c.name}を買って使用中にしました。コレクションの「チョーク」でいつでも変えられます`); updateRoomEntry(); sfx('unlock');
+    lsSet('waribashi-chalk', id); toast(`${c.name}を買って使用中にしました。編成タブの「チョーク」でいつでも変えられます`); updateRoomEntry(); sfx('unlock');
     const it = [...$$('#shopGrid .item')].find(x => x.querySelector('b') && x.querySelector('b').textContent === c.name);
     if (it) { const [x, y] = centerOf(it); chalkDust(x, y, c, c.color, 34, 100); }
   }
@@ -9579,7 +10110,7 @@ async function buyBoard(id){
     return cur;
   });
   if (res && res.committed) {
-    lsSet('waribashi-board', id); toast(`${b.name}を買って使用中にしました。コレクションの「黒板」でいつでも変えられます`); sfx('unlock');
+    lsSet('waribashi-board', id); toast(`${b.name}を買って使用中にしました。編成タブの「黒板」でいつでも変えられます`); sfx('unlock');
     const it = [...$$('#shopBoards .item')].find(x => x.querySelector('b') && x.querySelector('b').textContent === b.name);
     if (it) { const [x, y] = centerOf(it); dust(x, y, ['#fff6c4', '#eceee4'], 30, 90, 'star'); }
   }
@@ -10060,15 +10591,17 @@ const SCREENS = {home:'#scrHome', ab:'#scrAb', menu:'#scrMenu', tower:'#scrTower
 // The tab bar stays on the menu screens and steps aside for matching and play.
 const TABBED = ['home', 'ab', 'menu', 'tower', 'events', 'mission', 'shop', 'friends', 'plate', 'rank', 'rules', 'cpu', 'custom', 'boss', 'pass', 'puzzle', 'book', 'event', 'news', 'stage', 'chapter', 'rated', 'rpshop', 'gifts', 'admin'];
 const TAB_OF = {ab: 'home', menu: 'home', rules: 'home', tower: 'events', boss: 'events', pass: 'events', puzzle: 'events', event: 'events', rank: 'friends', book: 'plate', news: 'home', stage: 'home', chapter: 'home', rated: 'home', rpshop: 'home', gifts: 'home', admin: 'plate'};
+TAB_OF.mission = 'home'; TAB_OF.cpu = 'home'; TAB_OF.custom = 'home';
 function showChrome(s){
   const tabs = TABBED.includes(s);
   $('#tabbar').hidden = !tabs;
   document.body.classList.toggle('tabs', tabs);
-  const cur = TAB_OF[s] || s;
+  let cur = s === 'shop' && ui.shopTab === 'gacha' ? 'gacha' : (TAB_OF[s] || s);
+  if (cur === 'events' && document.body.classList.contains('ui-bright')) cur = 'home';   // no events tab in the bright style: it opens from the home
   $$('#tabbar .tab').forEach(t => { if (t.dataset.tab === cur) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current'); });
 }
 // Back buttons return to the screen you came from; the tab screens start a fresh trail.
-const ROOTS = ['home', 'events', 'mission', 'shop', 'friends', 'plate'], NO_RETURN = ['game', 'search', 'lobby'];
+const ROOTS = ['home', 'events', 'shop', 'friends', 'plate'], NO_RETURN = ['game', 'search', 'lobby'];
 function setScreen(s, back){
   if (SCREEN_FEAT[s] && !featOpen(SCREEN_FEAT[s])) { lockToast(SCREEN_FEAT[s]); return; }
   setTimeout(bgmUpdate, 0);
@@ -10137,7 +10670,7 @@ function render(){
   if (ui.screen === 'ab') renderAbHub();
   if (ui.screen === 'game') turnCut();
   checkNewChars();
-  if (ui.screen === 'plate') renderPlateEditor();
+  if (ui.screen === 'plate') { renderLoadout($('#plLo'), {c: abMine(), k: abMyChalks(), lbl: 'キャラ・スキル'}); renderPlateEditor(); }
   if (ui.screen === 'mission') renderMission();
   if (ui.screen === 'shop') renderShop();
   if (ui.screen === 'rank') renderRank();
@@ -10203,8 +10736,10 @@ function renderChrome(){
   const evN = eventBadgeCount();
   $('#eventBadge').hidden = !evN;
   $('#eventBadge').textContent = `${evN}`;
+  $('#evHomeBadge').hidden = !evN; $('#evHomeBadge').textContent = `${evN}`;
   const msx = missionState(), nReady = msx.readyDaily + msx.readyNormal + (FIREBASE_CONFIG && net.profileLoaded ? guideState().ready : 0);
   $('#missionBadge').hidden = !nReady;
+  $('#goMission').classList.toggle('has', !!nReady);
   $('#missionBadge').textContent = `${nReady}`;
   const myCh = chalkOf(myChalk()), radar = $('.radar');
   if (radar.dataset.key !== myChalk()) { radar.dataset.key = myChalk(); $('#radarHand').innerHTML = handSVG(2, false, 0, myCh); }
@@ -10268,7 +10803,17 @@ const TIPS = [
   'イベント中は特効のチョークや黒板を使うとptが多くたまる',
   '日替わりショップは毎朝4:00に入れ替わる。ガチャチケットがお得',
 ];
+function fitHome(){
+  const b = $('#scrHome .hboard');
+  if (!b || ui.screen !== 'home') return;
+  const top = b.getBoundingClientRect().top + (window.scrollY || 0), tb = $('#tabbar'), tabH = tb && !tb.hidden ? tb.offsetHeight : 0;
+  const pb = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+  const h = Math.round(window.innerHeight - top - Math.max(pb, tabH + 24));
+  if (h > 0 && b.dataset.h !== String(h)) { b.dataset.h = String(h); b.style.setProperty('--home-h', h + 'px'); }
+}
+window.addEventListener('resize', () => requestAnimationFrame(fitHome));
 function renderHome(){
+  requestAnimationFrame(fitHome);
   renderBossCard();
   renderHomeAb();
   {
@@ -10331,7 +10876,7 @@ function renderHome(){
       $('#hDuty').textContent = typedName();
     }
   }
-  $('#puzBadge').hidden = !(ok && net.profileLoaded && featOpen('puzzle') && !myPuzzle().solved);
+
 }
 // Characters for the home board: おてもとくん from the start, story characters when their chapter is cleared,
 // bosses when their defeat reward is taken (players/<uid>/chars/<bossId>).
@@ -10977,6 +11522,14 @@ function renderShop(){
   if (tab === 'gacha' && !featOpen('gacha')) tab = 'daily';
   const boards = tab === 'board';
   $('#shopCoinsTop').textContent = coins;
+  // ガチャ and ショップ are two tabs on one screen
+  const gm = tab === 'gacha';
+  $('#scrShop .shead h2').textContent = gm ? 'ガチャ' : 'ショップ';
+  $('#scrShop .seg').hidden = gm;
+  $('#scrShop .seg').classList.toggle('four', false); $('#scrShop .seg').classList.toggle('three', true);
+  $('#tabShopGacha').hidden = true;
+  $('#shopWallet').hidden = !gm;
+  if (ui.screen === 'shop') showChrome('shop');
   [['#tabShopGacha', 'gacha'], ['#tabShopDaily', 'daily'], ['#tabShopChalk', 'chalk'], ['#tabShopBoard', 'board']].forEach(([id, t]) => $(id).setAttribute('aria-selected', String(tab === t)));
   $('#shopGacha').hidden = tab !== 'gacha'; $('#shopDaily').hidden = tab !== 'daily';
   $('#shopGrid').hidden = tab !== 'chalk'; $('#shopBoards').hidden = tab !== 'board';
@@ -10987,7 +11540,7 @@ function renderShop(){
     board: '黒板を変えると、対戦するときの自分の盤面の見た目が変わります（相手の画面はそのまま）。',
     chalk: 'チョークを変えると、自分の手がその色になります。対戦相手の画面でも同じに見えます。エフェクトチョークは光ったり、星や花びらが舞ったりします。'}[tab];
   $('#shopHint').hidden = !(tab === 'chalk' || tab === 'board');
-  $('#shopHintT').textContent = `持っている${boards ? '黒板' : 'チョーク'}は、コレクションで変えられます`;
+  $('#shopHintT').textContent = `持っている${boards ? '黒板' : 'チョーク'}は、編成タブで変えられます`;
   if (tab === 'gacha') { renderGacha(); return; }
   if (tab === 'daily') { renderDaily(); return; }
   const grid = boards ? $('#shopBoards') : $('#shopGrid'), armed = ui.buyArm && ui.buyArm.until > now ? ui.buyArm.id : '';
@@ -11189,12 +11742,12 @@ function renderGame(){
     let tt = '', tc = '';
     const nameP = seatEl.querySelector('.name');
     let bf = nameP.querySelector('.bface');
-    const bossSeat = !net.on && ui.boss && k === 1, stageSeat = !net.on && ui.stage && k === 1, abSeat = abOn(G) && G.n === 2 && !ui.boss,
-      faceKey = bossSeat ? `boss:${ui.boss.base ? ui.boss.base.id : ''}:${ui.boss.form || 1}` : stageSeat ? 'st' + (ui.stage.tower ? ui.stage.id : ui.stage.c) : abSeat ? 'ab:' + G.ab.c[k] : '';
+    const bossSeat = !net.on && ui.boss && k === 1, stageSeat = !net.on && ui.stage && k === 1, abSeat = abOn(G) && G.n === 2 && (!ui.boss || !!G.ab.fr),
+      faceKey = bossSeat ? `boss:${ui.boss.base ? ui.boss.base.id : ''}:${ui.boss.form || 1}` : abSeat ? 'ab:' + G.ab.c[k] : stageSeat ? 'st' + (ui.stage.tower ? ui.stage.id : ui.stage.c) : '';
     if (bf && bf.dataset.k !== faceKey) { bf.remove(); bf = null; }
     if (faceKey && !bf) {
       const tmp = document.createElement('span');
-      tmp.innerHTML = abSeat ? abFaceHTML(G.ab.c[k], 'bface') : bossSeat ? `<span class="bface">${bossArt(ui.boss.base, false, ui.boss.form)}</span>` : ui.stage.gBoss ? `<span class="bface">${bossArt(ui.stage.gBoss)}</span>` : avatarHTML(ui.stage.ch, 'bface');
+      tmp.innerHTML = bossSeat ? `<span class="bface">${bossArt(ui.boss.base, false, ui.boss.form)}</span>` : abSeat ? abFaceHTML(G.ab.c[k], 'bface') : ui.stage.gBoss ? `<span class="bface">${bossArt(ui.stage.gBoss)}</span>` : avatarHTML(ui.stage.ch, 'bface');
       bf = tmp.firstElementChild; bf.dataset.k = faceKey; nameP.prepend(bf);
     }
     seatEl.classList.toggle('guard', abSeat && !!G.ab.gd[k] && !G.over);
@@ -11281,8 +11834,9 @@ function renderGame(){
   $('#anaPanel').hidden = net.on || !!ui.boss || !!ui.puzzle || !!ui.stage || abOn(G);
   if (!net.on && !ui.boss && !ui.puzzle && !ui.stage && !abOn(G)) renderAnalysis();
   renderSkillBtn(act);
-  $('#abInfoBtn').hidden = !abOn(G) || !!ui.boss;
-  if (!abOn(G) || ui.boss) $('#abInfo').hidden = true;
+  const bossOld = !!ui.boss && abOn(G) && !G.ab.fr;   // only the old Thursday boss had a skill of its own and none of mine
+  $('#abInfoBtn').hidden = !abOn(G) || bossOld;
+  if (!abOn(G) || bossOld) $('#abInfo').hidden = true;
   else if (!$('#abInfo').hidden) renderAbInfo();
   else if (!G.over && !tutOn() && !lsGet('waribashi-abinfo') && $('#splash').hidden && ui.screen === 'game') { lsSet('waribashi-abinfo', '1'); openAbInfo(true); }
   renderRoomPanel(nm);
@@ -11292,7 +11846,7 @@ function renderGame(){
 }
 
 function renderSkillBtn(act){
-  const b = $('#skillBtn'), on = abOn(G) && G.n === 2 && !ui.boss;
+  const b = $('#skillBtn'), on = abOn(G) && G.n === 2 && (!ui.boss || !!G.ab.fr);
   b.hidden = !on;
   if (!on) return;
   const k = isHuman(G.turn) ? G.turn : 0, g = G.ab.g[k], sk = SKILLS[abSk(G, k)], opts = act && k === G.turn ? abOptions(G, rules()) : [];
@@ -11701,6 +12255,7 @@ function setMyChar(id){
   if (!c) return false;
   if (!abCan(c)) { toast(`まだ仲間になっていません：${c.need}`); return false; }
   lsSet('waribashi-abme', c.id); sfx('tap');
+  if (c.have && c.art && myHomeChar().id !== c.id) setHomeChar(c.id);   // one character: the partner on the home board
   if (net.on && net.fb && net.room && net.room.status === 'lobby')
     net.fb.update(net.fb.ref(net.fb.db, `rooms/${net.code}/players/${net.uid}`), {abc: c.id, v: APP_VERSION}).catch(e => toast(errText(e, 'キャラを変えられませんでした'), true));
   return true;
@@ -11775,11 +12330,13 @@ function renderAbHub(){
 }
 function renderHomeAb(){
   const el = $('#homeAbFig'); if (!el) return;
-  const me = abMine(), k = abMyChalks(), key = JSON.stringify([me, k]);
+  const me = abMine(), k = abMyChalks(), nw = FIREBASE_CONFIG ? recruitList().length : 0, key = JSON.stringify([me, k, nw]);
+  $('#goAb').classList.toggle('wait', !!nw);
   if (unchanged(el, key)) return;
   const sk = CHAR_SKILL[me] || 'kazoe';
   el.innerHTML = abIcon(sk);
-  $('#homeAbX').textContent = SKILLS[sk].name;
+  const hand = i => { const a = chalkAb(k[i]); return `<span>${i ? '右' : '左'} ${a ? abIcon(a) + CHALK_AB[a].name : '—'}</span>`; };
+  $('#homeAbX').innerHTML = `<span>${esc(SKILLS[sk].name)}</span>${hand(0)}${hand(1)}` + (nw ? `<span class="hm-w">いま${nw}人がレート戦の相手待ち！</span>` : '');
 }
 // Long-press a character or chalk chip: what it does, in a bubble over it (the press does not pick it).
 function abTipShow(chip){
@@ -11965,7 +12522,7 @@ function renderStrip(act, ms, nm){
     return;
   }
   if (ui.puzzle) { ev.textContent = `${ui.puzzle.d}手詰め・のこり${ui.puzzle.left}手（${ruleShort(ui.puzzle.rules)}）`; ev.hidden = false; }
-  if (ui.boss) { ev.textContent = `ボスのライフ ${ui.boss.lives - ui.boss.life + 1}/${ui.boss.lives}・あなたのHP ${ui.boss.hp}・与えたダメージ ${ui.boss.dmg}` + (abOn(G) ? (G.ab.g[1] >= AB_MAX ? '・次のボスの番にパチン留め！' : `・パチン留めまであと${AB_MAX - G.ab.g[1]}ターン`) : ''); ev.hidden = false; }
+  if (ui.boss) { ev.textContent = `ボスのライフ ${ui.boss.lives - ui.boss.life + 1}/${ui.boss.lives}・あなたのHP ${ui.boss.hp}・与えたダメージ ${ui.boss.dmg}` + (abOn(G) && SKILLS[CHAR_SKILL[G.ab.c[1]]] ? (G.ab.g[1] >= AB_MAX ? `・次のボスの番に「${SKILLS[CHAR_SKILL[G.ab.c[1]]].name}」！` : `・ボスの「${SKILLS[CHAR_SKILL[G.ab.c[1]]].name}」まであと${AB_MAX - G.ab.g[1]}ターン`) : ''); ev.hidden = false; }
   if (ui.stage && ui.stage.tower) { const sg = ui.stage; ev.textContent = `わりばしの塔 ${sg.n}階・あなたの手数 ${sg.moves}${sg.limit ? `/${sg.limit}` : ''}（${ruleShort(sg.rule)}）`; ev.hidden = false; }
   else if (ui.stage) { const sg = ui.stage; ev.textContent = `${sg.id}・あなたの手数 ${sg.moves}${sg.limit ? `/${sg.limit}` : ''}（${ruleShort(sg.rule)}）`; ev.hidden = false; }
   if (net.on && !net.connected) msg.textContent = 'インターネットにつながっていません';
@@ -12240,8 +12797,10 @@ function tick(){
   if (ui.screen === 'home') homeTick(now);
   if (ui.screen === 'mission') {
     $('#dailyNote').textContent = dailyNoteText();
-    if (ui.lastDay && ui.lastDay !== dayKey()) render();
-    ui.lastDay = dayKey();
+    // a new day while the missions are open: note the day first, or render → tick → render never ends
+    const dk = dayKey(), newDay = ui.lastDay && ui.lastDay !== dk;
+    ui.lastDay = dk;
+    if (newDay) render();
   }
   if (ui.screen === 'shop' && ui.buyArm && ui.buyArm.until <= now) { ui.buyArm = null; renderShop(); }
   if (ui.screen === 'search' && (search.on || net.on)) $('#searchTime').textContent = `${Math.floor((now - (ui.searchSince || search.since)) / 1000)}秒`;
@@ -12263,7 +12822,7 @@ setInterval(tick, 250);
 $('#goCpu').addEventListener('click', () => setScreen('cpu'));
 $('#homePlate').addEventListener('click', () => setScreen('menu'));
 $('#goMenu').addEventListener('click', () => { if (ui.screen === 'menu') goBack(); else setScreen('menu'); });
-$('#goPuzzleMag').addEventListener('click', () => setScreen('puzzle'));
+
 $('#homeChar').addEventListener('click', () => {
   const el = $('#homeChar');
   const hc = myHomeChar(), bi = hc.kind === 'boss' ? bossInfoOf(hc.id) : null;
@@ -12283,8 +12842,10 @@ $('#homeTip').addEventListener('click', () => { ui.tipUntil = 0; renderHomeChar(
 $$('#clTabs button').forEach(b => b.addEventListener('click', () => { ui.collTab = b.dataset.ct; renderColl(); }));
 $$('#scrPlate details.fold[data-ct-panel] > summary').forEach(sm => sm.addEventListener('click', e => e.preventDefault()));
 for (const [b, f] of [['#mnAcct', '#foldAcct'], ['#mnSet', '#foldSet']]) $(b).addEventListener('click', () => { const d = $(f); d.hidden = false; d.open = true; try { d.scrollIntoView({behavior: 'smooth', block: 'start'}); } catch(e) {} });
+$('#goMission').addEventListener('click', () => setScreen('mission'));
 $$('#tabbar .tab').forEach(t => t.addEventListener('click', () => {
-  if (t.dataset.tab === 'shop') { ui.buyArm = null; if (ui.screen !== 'shop') ui.shopTab = ui.shopTab || 'gacha'; }
+  if (t.dataset.tab === 'gacha') { ui.buyArm = null; ui.shopTab = 'gacha'; setScreen('shop'); showChrome('shop'); return; }
+  if (t.dataset.tab === 'shop') { ui.buyArm = null; if (ui.screen !== 'shop' || ui.shopTab === 'gacha') ui.shopTab = ['daily', 'chalk', 'board'].includes(ui.shopTab) ? ui.shopTab : 'daily'; setScreen('shop'); showChrome('shop'); return; }
   if (t.dataset.tab === 'home') goHome(); else setScreen(t.dataset.tab);
 }));
 $('#tbRank').addEventListener('click', () => setScreen('rank'));
@@ -12444,13 +13005,11 @@ $('#evRankClaim').addEventListener('click', async () => {
   for (const ev of ['pointerdown', 'touchstart', 'wheel']) t.addEventListener(ev, () => { ui.bnHold = Date.now() + 10000; ui.bnAt = Date.now(); }, {passive: true});
   // art drawn with the same chalk hands as the board
   const fig = (n, color, cap, cls) => `<figure class="${cls || ''}" style="color:${color};--c:${color}"><svg viewBox="0 0 100 130" aria-hidden="true">${handSVG(n, false, 0, null, true)}</svg>${cap ? `<figcaption>${cap}</figcaption>` : ''}</figure>`;
-  $('#artBin').innerHTML = fig(21, 'var(--p2)', '10101') + fig(10, 'var(--you)', '01010');
   const sea = CHALKS.find(c => c.id === 'sea' + seasonMonth()), th = SEASON_THEMES[seasonMonth()];
   $('#bnPass').style.setProperty('--c', th[1]);
   $('#bnPassH').innerHTML = `${seasonMonth()}月シーズン<br>「${th[0]}」`;
   $('#artPass').innerHTML = `<figure>${chalkFig(sea)}</figure>`;
   const ch = id => CHALKS.find(c => c.id === id);
-  $('#artShop').innerHTML = ['thunder', 'cosmos', 'aurora'].map(id => `<figure>${chalkFig(ch(id))}</figure>`).join('');
   $('#artRank').innerHTML = `<span class="podium" aria-hidden="true"><i style="height:62px;color:var(--t4)">${emblemSVG(4, 0)}</i><i style="height:84px;color:var(--t6)">${emblemSVG(6, 0)}</i><i style="height:46px;color:var(--t2)">${emblemSVG(2, 0)}</i></span>`;
 })();
 $('#tabDaily').addEventListener('click', () => { ui.missionTab = 'daily'; renderMission(); });
@@ -12523,6 +13082,53 @@ $('#stampBtn').addEventListener('click', () => { const pal = $('#stampPal'); pal
 document.getElementById(lsGet('waribashi-stampmute') === '1' ? 'stp-off' : 'stp-on').checked = true;
 $('#stampOpts').addEventListener('change', e => lsSet('waribashi-stampmute', e.target.value === 'off' ? '1' : '0'));
 document.getElementById(fxChalk() ? 'fx-chalk' : 'fx-anime').checked = true;
+// ===== drawn art for the new design (school things as icons, the classroom, the chopstick sleeve) =====
+const MART = {"home": "<svg viewBox=\"0 0 48 48\"><path d=\"M5 22h38v20H5z\" fill=\"#fbf1dc\" stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M17 22V13h14v9\" fill=\"#fbf1dc\" stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M15 13.5 24 7l9 6.5\" fill=\"#e0574f\" stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M3 23.5 9 18h30l6 5.5\" fill=\"#5aa86e\" stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><circle cx=\"24\" cy=\"16.5\" r=\"3.6\" fill=\"#fff\" stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M24 14.6v2.2l1.6 1\" fill=\"none\" stroke=\"#141a33\" stroke-width=\"1.6\" stroke-linecap=\"round\"/><rect x=\"20\" y=\"31\" width=\"8\" height=\"11\" fill=\"#6aa6e8\" stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><g fill=\"#9fd8ff\" stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><rect x=\"8.5\" y=\"27\" width=\"7\" height=\"6\"/><rect x=\"32.5\" y=\"27\" width=\"7\" height=\"6\"/><rect x=\"8.5\" y=\"35\" width=\"7\" height=\"5\"/><rect x=\"32.5\" y=\"35\" width=\"7\" height=\"5\"/></g><path d=\"M10 28.5h2.5\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" opacity=\".7\"/><path d=\"M34 28.5h2.5\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" opacity=\".7\"/></svg>", "team": "<svg viewBox=\"0 0 48 48\"><g stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><rect x=\"13\" y=\"8\" width=\"5.5\" height=\"20\" rx=\"2.7\" fill=\"#f7f3e8\" transform=\"rotate(-12 15.7 18)\"/><rect x=\"21\" y=\"6\" width=\"5.5\" height=\"22\" rx=\"2.7\" fill=\"#ffd23f\"/><rect x=\"29\" y=\"8\" width=\"5.5\" height=\"20\" rx=\"2.7\" fill=\"#ff7a93\" transform=\"rotate(12 31.7 18)\"/><path d=\"M8 22h32l-3 20H11z\" fill=\"#3fa7e8\"/><path d=\"M8 22h32v5H8z\" fill=\"#2f86c4\"/></g><rect x=\"17\" y=\"31\" width=\"14\" height=\"6\" rx=\"1.5\" fill=\"#fff\" stroke=\"#141a33\" stroke-width=\"1.8\"/><path d=\"M12.5 30v7\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" opacity=\".7\"/></svg>", "gacha": "<svg viewBox=\"0 0 48 48\"><g stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><circle cx=\"24\" cy=\"18\" r=\"13\" fill=\"#d8f1ff\"/><path d=\"M11 25h26v17H11z\" fill=\"#e8484f\"/></g><g stroke=\"#141a33\" stroke-width=\"1.8\"><circle cx=\"18\" cy=\"20\" r=\"4\" fill=\"#ffd23f\"/><circle cx=\"27\" cy=\"22\" r=\"4\" fill=\"#5fc4ff\"/><circle cx=\"23\" cy=\"13.5\" r=\"3.6\" fill=\"#ff7a93\"/><circle cx=\"30.5\" cy=\"14.5\" r=\"3\" fill=\"#9fe0a8\"/></g><g stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><circle cx=\"24\" cy=\"33\" r=\"4\" fill=\"#ffd23f\"/><path d=\"M16 39h7\" fill=\"none\"/></g><path d=\"M24 31v4\" stroke=\"#141a33\" stroke-width=\"1.8\" stroke-linecap=\"round\"/><path d=\"M15.5 12a10 10 0 0 1 5-5\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" opacity=\".7\"/></svg>", "shop": "<svg viewBox=\"0 0 48 48\"><path d=\"M7 30c0-10 7.5-17 17-17s17 7 17 17c0 5-7.6 9-17 9S7 35 7 30z\" fill=\"#ffd77a\" stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M11 33c3.5 2.4 8 3.6 13 3.6s9.5-1.2 13-3.6\" fill=\"none\" stroke=\"#d99a33\" stroke-width=\"2.2\" stroke-linecap=\"round\"/><g fill=\"none\" stroke=\"#d99a33\" stroke-width=\"1.8\" stroke-linecap=\"round\"><path d=\"M14 21l14 12M20 16l14 12M12 28l8 6M28 15l9 8\"/><path d=\"M34 19 20 33M28 15 13 29M37 25l-8 8\"/></g><g stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><path d=\"M33 6h9v8l-4.5 3-4.5-3z\" fill=\"#fff\"/></g><circle cx=\"37.5\" cy=\"9\" r=\"1.4\" fill=\"#141a33\"/><path d=\"M13 23c1.5-3.5 4-6 7.5-7.2\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" opacity=\".7\"/></svg>", "event": "<svg viewBox=\"0 0 48 48\"><g stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><rect x=\"5\" y=\"8\" width=\"38\" height=\"27\" rx=\"2.5\" fill=\"#c98d4f\"/><path d=\"M12 35v8M36 35v8\" fill=\"none\"/><rect x=\"9\" y=\"12\" width=\"13\" height=\"16\" fill=\"#fff\" transform=\"rotate(-4 15.5 20)\"/><rect x=\"25\" y=\"13\" width=\"14\" height=\"11\" fill=\"#ffd0dc\" transform=\"rotate(5 32 18.5)\"/></g><g fill=\"#e8484f\" stroke=\"#141a33\" stroke-width=\"1.6\"><circle cx=\"15.5\" cy=\"13\" r=\"2\"/><circle cx=\"32\" cy=\"14\" r=\"2\"/></g><g stroke=\"#141a33\" stroke-width=\"1.6\" stroke-linecap=\"round\"><path d=\"M12 19h7M12 22.5h6M12 26h7\" transform=\"rotate(-4 15.5 20)\"/><path d=\"M28 18.5h7M28 21.5h5\" transform=\"rotate(5 32 18.5)\"/></g></svg>", "friends": "<svg viewBox=\"0 0 48 48\"><path d=\"M11 21c7 9 19 9 26 0\" fill=\"none\" stroke=\"#141a33\" stroke-width=\"1.8\" stroke-linecap=\"round\"/><g stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><path d=\"M2 30l6-13 7 3.4-6 13z\" fill=\"#ff7a93\"/><ellipse cx=\"11.5\" cy=\"18.6\" rx=\"4.2\" ry=\"1.7\" fill=\"#fff\" transform=\"rotate(25 11.5 18.6)\"/><path d=\"M46 30l-6-13-7 3.4 6 13z\" fill=\"#5fc4ff\"/><ellipse cx=\"36.5\" cy=\"18.6\" rx=\"4.2\" ry=\"1.7\" fill=\"#fff\" transform=\"rotate(-25 36.5 18.6)\"/></g><path d=\"M5 29.5l4-8.5\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" opacity=\".7\"/><path d=\"M43 29.5l-4-8.5\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" opacity=\".7\"/></svg>", "gift": "<svg viewBox=\"0 0 48 48\"><g stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><rect x=\"9\" y=\"20\" width=\"30\" height=\"21\" fill=\"#e8484f\"/><rect x=\"7\" y=\"14\" width=\"34\" height=\"7\" rx=\"1.5\" fill=\"#ff6b6b\"/><path d=\"M21 14h6v27h-6z\" fill=\"#ffd23f\"/><path d=\"M24 14c-4-8-12-7-10-2 1.2 2.6 6 2 10 2zM24 14c4-8 12-7 10-2-1.2 2.6-6 2-10 2z\" fill=\"#ffd23f\"/></g><path d=\"M12 24v12\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" opacity=\".7\"/></svg>", "mission": "<svg viewBox=\"0 0 48 48\"><g stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><path d=\"M11 5h20l7 7v31H11z\" fill=\"#fff\"/><path d=\"M31 5v7h7\" fill=\"#e9e3d2\"/></g><g stroke=\"#9aa3c7\" stroke-width=\"1.8\" stroke-linecap=\"round\"><path d=\"M16 15h10M16 20h16M16 25h16M16 30h9\"/></g><path d=\"M30 40c-6.4 2-12-2.2-10.8-7.2 1.1-5 8.9-6.6 13.1-2.8 3.6 3.3 1.4 9.2-4.2 10-4.4.7-7.8-2.2-6.6-5.3\" fill=\"none\" stroke=\"#e8484f\" stroke-width=\"2.6\" stroke-linecap=\"round\"/></svg>", "note": "<svg viewBox=\"0 0 48 48\"><g stroke=\"#141a33\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><rect x=\"10\" y=\"5\" width=\"28\" height=\"38\" rx=\"2.5\" fill=\"#3f8be8\"/><rect x=\"14\" y=\"5\" width=\"24\" height=\"38\" rx=\"1.5\" fill=\"#5aa3ff\"/><rect x=\"18\" y=\"12\" width=\"16\" height=\"9\" rx=\"1\" fill=\"#fff\"/></g><g fill=\"#141a33\"><circle cx=\"10\" cy=\"11\" r=\"1.3\"/><circle cx=\"10\" cy=\"18\" r=\"1.3\"/><circle cx=\"10\" cy=\"25\" r=\"1.3\"/><circle cx=\"10\" cy=\"32\" r=\"1.3\"/><circle cx=\"10\" cy=\"39\" r=\"1.3\"/></g><path d=\"M20.5 15.5h11M20.5 18h7\" stroke=\"#141a33\" stroke-width=\"1.5\" stroke-linecap=\"round\"/><path d=\"M16.5 25v13\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" opacity=\".7\"/></svg>"};
+const MART_BG = "<svg viewBox=\"0 0 400 720\" preserveAspectRatio=\"xMidYMax slice\" xmlns=\"http://www.w3.org/2000/svg\">\n<defs>\n <linearGradient id=\"wl\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#f7eedb\"/><stop offset=\"1\" stop-color=\"#ecdcbc\"/></linearGradient>\n <linearGradient id=\"sk\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#3f9cf2\"/><stop offset=\".65\" stop-color=\"#8fd0ff\"/><stop offset=\"1\" stop-color=\"#d9f1ff\"/></linearGradient>\n <linearGradient id=\"fl\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#d7a06a\"/><stop offset=\"1\" stop-color=\"#b9824f\"/></linearGradient>\n <linearGradient id=\"bm\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff\" stop-opacity=\".55\"/><stop offset=\"1\" stop-color=\"#fff\" stop-opacity=\"0\"/></linearGradient>\n</defs>\n<rect width=\"400\" height=\"720\" fill=\"url(#wl)\"/>\n<!-- window -->\n<rect x=\"18\" y=\"64\" width=\"364\" height=\"300\" rx=\"4\" fill=\"url(#sk)\"/>\n<g fill=\"#fff\"><path d=\"M52 150c6-14 26-16 34-4 10-6 24 0 22 12H46c-4-4 0-8 6-8z\"/><path d=\"M250 118c5-11 21-12 27-3 8-5 19 0 17 10h-48c-3-3 0-7 4-7z\" opacity=\".95\"/><path d=\"M300 212c4-8 16-9 20-2 6-4 14 0 13 7h-36c-2-2 0-5 3-5z\" opacity=\".9\"/></g>\n<g fill=\"#b7d9f5\"><path d=\"M18 364v-44h26v-14h22v22h20v-30h28v66zM300 364v-36h22v-18h30v20h30v34z\"/></g>\n<g fill=\"#cfe6f7\"><path d=\"M120 364v-22h30v-12h36v34z\"/></g>\n<g fill=\"none\" stroke=\"#e9dcc0\" stroke-width=\"10\"><rect x=\"18\" y=\"64\" width=\"364\" height=\"300\" rx=\"4\"/><path d=\"M200 64v300M18 214h364\"/></g>\n<g fill=\"none\" stroke=\"#141a33\" stroke-width=\"2.4\"><rect x=\"12\" y=\"58\" width=\"376\" height=\"312\" rx=\"6\"/><rect x=\"24\" y=\"70\" width=\"352\" height=\"288\" rx=\"2\"/><path d=\"M194 70v288M206 70v288M24 208h352M24 220h352\"/></g>\n<!-- curtains -->\n<path d=\"M8 50c22 40 6 130 30 230 8 34-4 80-4 104H4V50z\" fill=\"#ffeaa8\" stroke=\"#141a33\" stroke-width=\"2.4\"/>\n<path d=\"M392 50c-22 40-6 130-30 230-8 34 4 80 4 104h30V50z\" fill=\"#ffeaa8\" stroke=\"#141a33\" stroke-width=\"2.4\"/>\n<path d=\"M18 80c8 60 0 150 12 220M382 80c-8 60 0 150-12 220\" fill=\"none\" stroke=\"#e8c36a\" stroke-width=\"2\"/>\n<path d=\"M0 44h400v12H0z\" fill=\"#c98d4f\" stroke=\"#141a33\" stroke-width=\"2.4\"/>\n<!-- light falling in -->\n<path d=\"M60 364 24 364 120 720H250zM230 364h70l90 356H330z\" fill=\"url(#bm)\"/>\n<!-- wall below the window, then the floor -->\n<rect x=\"0\" y=\"380\" width=\"400\" height=\"130\" fill=\"#eadbbb\"/>\n<path d=\"M0 380h400\" stroke=\"#141a33\" stroke-width=\"2.4\"/><path d=\"M0 392h400\" stroke=\"#d8c39a\" stroke-width=\"2\"/>\n<rect x=\"0\" y=\"510\" width=\"400\" height=\"210\" fill=\"url(#fl)\"/>\n<path d=\"M0 510h400\" stroke=\"#141a33\" stroke-width=\"2.4\"/>\n<g stroke=\"#a8743f\" stroke-width=\"2\" opacity=\".55\"><path d=\"M0 552h400M0 600h400M0 656h400M70 510 40 720M170 510l-10 210M260 510l20 210M350 510l50 210\"/></g>\n<!-- desk corners in front -->\n<g stroke=\"#141a33\" stroke-width=\"2.4\" stroke-linejoin=\"round\"><path d=\"M-10 640h96l-8 22H-10z\" fill=\"#e3b679\"/><path d=\"M-10 662h88v58H-10z\" fill=\"#9aa3c7\"/><path d=\"M60 662v58\" fill=\"none\"/>\n<path d=\"M410 610h-90l8 22h82z\" fill=\"#e3b679\"/><path d=\"M410 632h-82v88h82z\" fill=\"#9aa3c7\"/><path d=\"M346 632v88\" fill=\"none\"/></g>\n</svg>";
+const MART_SLEEVE = "<svg viewBox=\"0 0 260 96\" preserveAspectRatio=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<g stroke=\"#141a33\" stroke-width=\"2.6\" stroke-linejoin=\"round\">\n <path d=\"M14 10 34 -2l6 9-18 13zM28 18 52 6l5 9-21 12z\" fill=\"#e8bd84\"/>\n <path d=\"M6 22h244l6 6v60l-6 6H6z\" fill=\"#fffaf0\"/>\n <path d=\"M6 22h70v72H6z\" fill=\"#d93a44\"/>\n</g>\n<g fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" opacity=\".9\"><path d=\"M10 40a8 8 0 0 1 16 0a8 8 0 0 1 16 0a8 8 0 0 1 16 0a8 8 0 0 1 16 0\"/><path d=\"M10 56a8 8 0 0 1 16 0a8 8 0 0 1 16 0a8 8 0 0 1 16 0a8 8 0 0 1 16 0\"/><path d=\"M10 72a8 8 0 0 1 16 0a8 8 0 0 1 16 0a8 8 0 0 1 16 0a8 8 0 0 1 16 0\"/><path d=\"M10 88a8 8 0 0 1 16 0a8 8 0 0 1 16 0a8 8 0 0 1 16 0a8 8 0 0 1 16 0\"/></g>\n<path d=\"M76 22v72\" stroke=\"#141a33\" stroke-width=\"2.6\"/>\n<path d=\"M232 22v72\" stroke=\"#e2d6bd\" stroke-width=\"2\" stroke-dasharray=\"4 3\"/>\n</svg>";
+function installModernArt(){
+  const put = (el, html, cls, first) => { if (!el || el.querySelector(':scope > .' + cls)) return; const x = document.createElement('span'); x.className = cls; x.setAttribute('aria-hidden', 'true'); x.innerHTML = html; if (first) el.prepend(x); else el.append(x); };
+  for (const [id, k] of [['goHomeTab', 'home'], ['goProfile', 'team'], ['goGacha', 'gacha'], ['goShop', 'shop'], ['goEvents', 'event'], ['goFriends', 'friends']]) put($('#' + id), MART[k], 'mi', true);
+  for (const [id, k] of [['goGifts', 'gift'], ['goMission', 'mission']]) put($('#' + id + ' .mg'), MART[k], 'mi', false);
+  put($('#goStage'), MART.note, 'mi', true);
+  const hb = $('#scrHome .hboard');
+  if (hb && !hb.querySelector(':scope > .hbg')) { const d = document.createElement('div'); d.className = 'hbg'; d.setAttribute('aria-hidden', 'true'); d.innerHTML = MART_BG; hb.prepend(d); }
+  put($('#goAb'), MART_SLEEVE, 'hsleeve', true);
+  put($('#goAb'), '<b>対戦</b>', 'hhanko', false);
+  put($('#goBoss'), '今日のボス', 'bposter', true);
+  put($('#hubStart'), MART_SLEEVE, 'hsleeve', true);
+}
+// 新デザイン（試作）: shelved for now, so everyone gets the chalk look; debug builds can still switch it on for later work.
+// the bright style is the standard; the chalk look is a setting; the drawn prototype only in debug builds
+const uiStyle = () => { const v = lsGet('waribashi-uistyle'); return v === 'chalk' ? 'chalk' : DEBUG && v === 'modern' ? 'modern' : 'bright'; };
+const uiModern = () => uiStyle() !== 'chalk';
+function applyUiStyle(){
+  const st = uiStyle(), b = document.body;
+  b.classList.toggle('ui-modern', st !== 'chalk'); b.classList.toggle('ui-art', st === 'modern'); b.classList.toggle('ui-bright', st === 'bright');
+  const bg = DEBUG && lsGet('waribashi-uibg');
+  if (bg) b.style.setProperty('--ui-bg', `url("${bg}")`); else b.style.removeProperty('--ui-bg');
+}
+// try any picture as the background: shrunk to fit a phone, kept on this device only
+function loadUiBg(file){
+  const img = new Image(), url = URL.createObjectURL(file);
+  img.onload = () => {
+    const k = Math.min(1, 1400 / Math.max(img.width, img.height)), c = document.createElement('canvas');
+    c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+    let d = c.toDataURL('image/jpeg', .82);
+    if (d.length > 3e6) d = c.toDataURL('image/jpeg', .6);
+    try { localStorage.setItem('waribashi-uibg', d); } catch(e) { toast('画像が大きすぎて保存できませんでした'); return; }
+    applyUiStyle(); toast('背景の画像を変えました');
+  };
+  img.onerror = () => { URL.revokeObjectURL(url); toast('この画像は読み込めませんでした'); };
+  img.src = url;
+}
+if (DEBUG) { $('#uiModernOpt').hidden = false; $('#uiBgRow').hidden = false; installModernArt(); }
+applyUiStyle();
+document.getElementById('ui-' + uiStyle()).checked = true;
+$('#uiBgFile').addEventListener('change', e => { const f = e.target.files && e.target.files[0]; if (f) loadUiBg(f); e.target.value = ''; });
+$('#uiBgClear').addEventListener('click', () => { try { localStorage.removeItem('waribashi-uibg'); } catch(e) {} applyUiStyle(); toast('背景をもとに戻しました'); });
+$('#uiOpts').addEventListener('change', e => { if (e.target.name !== 'uistyle') return; lsSet('waribashi-uistyle', e.target.value); applyUiStyle(); requestAnimationFrame(fitHome); toast(`画面を「${{modern: '描き下ろし（試作）', bright: '明るい'}[e.target.value] || '黒板'}」にしました`); });
 document.body.classList.toggle('fx-chalk', fxChalk());
 $('#fxOpts').addEventListener('change', e => { lsSet('waribashi-fxstyle', e.target.value); document.body.classList.toggle('fx-chalk', fxChalk()); toast(e.target.value === 'chalk' ? '演出を「黒板風」にしました' : '演出を「アニメ風」にしました'); });
 $('#shapeBtn').addEventListener('click', () => { if (!interactive()) return; panel = panel === 'shape' ? null : 'shape'; sel = null; render(); });
@@ -12552,8 +13158,19 @@ $('#loClose').addEventListener('click', closeLoPick);
 $('#cgOk').addEventListener('click', () => closeCharGet(false));
 $('#cgSet').addEventListener('click', () => closeCharGet(true));
 $('#loSheet').addEventListener('click', e => { if (e.target.id === 'loSheet') closeLoPick(); });
-$('#goAb').addEventListener('click', () => setScreen('ab'));
+$('#goAb').addEventListener('click', () => { if (document.body.classList.contains('ui-bright')) openBtPop(); else setScreen('ab'); });
+// the battle picker (bright style): CPU (the 能力バトル screen), custom rooms, rated
+function openBtPop(){ const p = $('#btPop'); p.hidden = false; renderLocks(); requestAnimationFrame(() => $('#btpCpu').focus()); }
+function closeBtPop(){ $('#btPop').hidden = true; }
+$('#btPop').addEventListener('click', e => { if (e.target.id === 'btPop') closeBtPop(); });
+$('#btpClose').addEventListener('click', closeBtPop);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#btPop').hidden) closeBtPop(); });
+$('#btpCpu').addEventListener('click', () => { closeBtPop(); setScreen('ab'); });
+$('#btpCustom').addEventListener('click', () => { closeBtPop(); ui.abRoom = true; setScreen('custom'); });
+$('#btpRated').addEventListener('click', () => { closeBtPop(); setScreen('rated'); });
+$('#goEvHome').addEventListener('click', () => $('#goEvents').click());
 $('#hubAuto').addEventListener('click', abAutoLoadout);
+$('#plAuto').addEventListener('click', abAutoLoadout);
 $('#hubTut').addEventListener('click', startTutorial);
 $('#hubLv').addEventListener('click', e => { const b = e.target.closest('button[data-lv]'); if (!b) return; settings.level = b.dataset.lv; saveSettings(); sfx('tap'); render(); });
 $('#hubStart').addEventListener('click', () => {
