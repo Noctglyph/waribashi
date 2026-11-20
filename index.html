@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="waribashi-version" content="11/20-2">
+<meta name="waribashi-version" content="11/20-3">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="指の本数を足して、相手の両手を消したら勝ち。教室の手遊び「わりばし」をスマホで。">
 <meta property="og:title" content="わりばし対戦">
@@ -300,6 +300,11 @@ fieldset:disabled .opts span{cursor:default}
 .meter{display:block;height:4px;border-radius:2px;background:var(--line);overflow:hidden;margin-top:2px}
 .meter i{display:block;height:100%;background:var(--chalk-soft)}
 .vsbox{display:grid;gap:6px}
+.vs-ab{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 6px;margin-top:6px;font-size:13px;font-weight:800}
+.vs-ab .cav{width:30px;height:30px}
+.rt-lo{display:grid;gap:6px;width:100%;text-align:left}
+.rt-lo .note{margin:0}
+#rtMode,#rankMode{margin-bottom:10px}
 .vsbox .vs-x{margin:0;font-family:var(--font-display);font-size:26px;line-height:1.1;color:var(--p1)}
 .tiers{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
 .tiers li{font-size:12px;font-weight:700;line-height:1.6;padding:0 9px;border-radius:999px;border:1px solid currentColor;font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -2218,6 +2223,7 @@ body.ui-bright .shead .coin{padding:3px 12px;border-radius:99px;background:var(-
 body.ui-bright .gwallet{width:max-content;max-width:100%;padding:6px 14px;border-radius:99px;background:rgba(13,20,51,.84)}
 body.ui-bright .screen > .note:not(:empty),body.ui-bright .gpanel > .dnote,body.ui-bright .shop-hint,body.ui-bright .screen > p:not(.note):not(:empty){padding:8px 12px;border-radius:10px;background:rgba(13,20,51,.82);color:#fff}
 body.ui-bright .gpanel > .dnote span{color:rgba(255,255,255,.85)}
+body.ui-bright .rt-lo .note{padding:8px 12px;border-radius:10px;background:rgba(13,20,51,.82);color:#fff}
 /* the tab bar: navy, a gold line on top, the current tab a raised gold tile */
 body.ui-bright .tabbar{background:none;border:0;box-shadow:none;padding-top:0;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px))}
 body.ui-bright #goEvents{display:none}
@@ -3111,6 +3117,7 @@ a.mn-t{text-decoration:none}
   <!-- Ranking -->
   <section class="screen narrow" id="scrRank" hidden>
     <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>ランキング</h2></div>
+    <div class="seg" role="tablist" aria-label="ランキングの種類" id="rankMode"><button type="button" role="tab" data-rm="ab" aria-selected="true">能力レート</button><button type="button" role="tab" data-rm="classic" aria-selected="false">クラシック</button></div>
     <div class="myrank" id="myRank"></div>
     <section class="panel" id="rankPanel">
       <ol class="rank" id="rank"></ol>
@@ -3175,7 +3182,7 @@ a.mn-t{text-decoration:none}
       <button type="button" class="btn" id="hubFriend">友達と対戦する</button>
       <button type="button" class="btn" id="hubList">能力の一覧</button>
     </div>
-    <button type="button" class="btn hub-rated" id="hubRated" disabled><b>能力レート戦</b><small>もうすぐ登場</small></button>
+    <button type="button" class="btn hub-rated" id="hubRated"><b>能力レート戦</b><small>だれかと能力バトルでレートを競う</small></button>
     <section class="panel hub-classic">
       <h3>クラシック <small>能力なしの、元のわりばし</small></h3>
       <div class="hc-row">
@@ -3508,10 +3515,12 @@ a.mn-t{text-decoration:none}
 
   <!-- Rated matches -->
   <section class="screen narrow" id="scrRated" hidden>
-    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2>レート戦</h2></div>
+    <div class="shead"><button type="button" class="back" data-home>← もどる</button><h2 id="rtTitle">能力レート戦</h2></div>
+    <div class="seg" role="tablist" aria-label="レート戦の種類" id="rtMode"><button type="button" role="tab" data-rm="ab" aria-selected="true">能力あり</button><button type="button" role="tab" data-rm="classic" aria-selected="false">クラシック</button></div>
     <div class="rt-top">
       <div class="myrank" id="rtRank"></div>
       <p class="rt-strk" id="rtStreak"></p>
+      <div class="rt-lo" id="rtLoBox" hidden><div class="lobox" id="rtLo"></div><p class="note" id="rtLoN"></p></div>
       <button type="button" class="btn primary big" id="rtGo">マッチング開始</button>
       <p class="rt-live" id="rtLive"><span class="on">いまオンライン <b id="rtOnline">-</b>人</span><span class="wait">相手待ち <b id="rtWait">0</b>人</span></p>
     </div>
@@ -3524,7 +3533,7 @@ a.mn-t{text-decoration:none}
       <h3>最近の試合</h3>
       <ol class="rt-hist" id="rtHist"></ol>
     </section>
-    <p class="note" style="margin:0">1対1・1手30秒・ふつうのルール。結果はサーバーが判定します。作ったばかりのアカウントとの試合はレートがほとんど動かず、すぐに決着した試合はノーカウントです。勝つとレートが上がり、負けると下がります。引き分けはレートが変わりません。相手が見つからないあいだは、CPUと練習しながら待てます。</p>
+    <p class="note" style="margin:0" id="rtNote">1対1・1手30秒・ふつうのルール。結果はサーバーが判定します。作ったばかりのアカウントとの試合はレートがほとんど動かず、すぐに決着した試合はノーカウントです。勝つとレートが上がり、負けると下がります。引き分けはレートが変わりません。相手が見つからないあいだは、CPUと練習しながら待てます。</p>
   </section>
 
   <!-- RP shop -->
@@ -3907,7 +3916,7 @@ a.mn-t{text-decoration:none}
     <div class="btp-row">
       <button type="button" class="btp-o btp-cpu" id="btpCpu"><span class="btp-ic"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="11" rx="3"/><path d="M12 8V5.2"/><circle cx="12" cy="4.2" r="1.1"/><path d="M9.6 16h4.8M3 12.2v3M21 12.2v3"/><circle cx="9.5" cy="12.6" r="1" fill="currentColor" stroke="none"/><circle cx="14.5" cy="12.6" r="1" fill="currentColor" stroke="none"/></svg></span><b>CPU対戦</b></button>
       <button type="button" class="btp-o btp-cus" id="btpCustom"><span class="btp-ic"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="3.2"/><path d="M3 19a6 6 0 0 1 12 0"/><circle cx="16.5" cy="8" r="2.6"/><path d="M15.2 13.6A5 5 0 0 1 21 18.5"/></svg></span><b>カスタム</b></button>
-      <button type="button" class="btp-o btp-rt" id="btpRated" data-feat="rated"><span class="btp-ic"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5.2a3 3 0 0 0 3 4M16 6h2.8a3 3 0 0 1-3 4"/><path d="M12 13v3.6M8.5 20h7M9.6 16.6h4.8v3.4H9.6z"/></svg></span><b>レート戦</b></button>
+      <button type="button" class="btp-o btp-rt" id="btpRated"><span class="btp-ic"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5.2a3 3 0 0 0 3 4M16 6h2.8a3 3 0 0 1-3 4"/><path d="M12 13v3.6M8.5 20h7M9.6 16.6h4.8v3.4H9.6z"/></svg></span><b>レート戦</b></button>
     </div>
     <button type="button" class="btp-x" id="btpClose" aria-label="とじる">×</button>
   </div>
@@ -4423,7 +4432,8 @@ function updateResult(){
       ui.resShown.rate = true;
       const row = document.createElement('div');
       row.className = 'res-row';
-      row.innerHTML = '<span>レート</span><b></b>';
+      row.innerHTML = '<span></span><b></b>';
+      row.querySelector('span').textContent = RMODES[curRMode()].name;
       row.querySelector('b').textContent = `変動なし（${RATE_WHY[rr ? rr.why : 'short'] || '記録されませんでした'}）`;
       rows.append(row);
     } else if (S && S.over && rr) {
@@ -4431,7 +4441,8 @@ function updateResult(){
       const d = rr.d, k0 = rankOf(d.from), k1 = rankOf(d.to);
       const row = document.createElement('div');
       row.className = 'res-row';
-      row.innerHTML = '<span>レート</span><b></b>';
+      row.innerHTML = '<span></span><b></b>';
+      row.querySelector('span').textContent = RMODES[curRMode()].name;
       const b = row.querySelector('b'), sign = d.delta >= 0 ? '+' : '';
       const put = v => { b.innerHTML = ''; b.append(rateEl(v, 'span'), ` (${sign}${d.delta})`); };
       put(d.from);
@@ -4563,7 +4574,7 @@ const SPLASH_MS = 2600;
 const QUEUE_FRESH = 15000, HEARTBEAT_MS = 5000, RESCAN_MS = 2500, JOIN_WAIT = 12000;
 const ELO_K = 32, BASE_RATE = 1500;
 
-const APP_VERSION = '11/20-2';
+const APP_VERSION = '11/20-3';
 // ----- New version: the page's <head> carries its version (build.py writes it). Now and then, and whenever the app comes
 // back to the front, read the head of the live page; if its version differs, offer a reload. ?debug&vfast checks every few seconds.
 const VER_FAST = (() => { try { const q = new URLSearchParams(location.search); return q.has('debug') && q.has('vfast'); } catch(e) { return false; } })();
@@ -4638,7 +4649,7 @@ const saveSettings = () => lsSet(KEY, JSON.stringify(settings));
 const ui = {screen:'home', resignArm:0, exitArm:0, splashKeys:new Set(), splashTimer:null, toastTimer:null};
 const net = {on:false, gen:0, fbPromise:null, fb:null, uid:null, code:null, seat:-1, room:null, unsub:[], presRef:null,
   connected:true, busy:false, connecting:false, profile:null, board:null, offset:0, timeoutKey:''};
-const search = {on:false, gen:0, since:0, timers:[], unsub:null, working:false};
+const search = {on:false, gen:0, since:0, timers:[], unsub:null, working:false, mode:'classic'};
 let netQueue = Promise.resolve();
 const counted = new Set();
 
@@ -6171,7 +6182,8 @@ async function rewardRated(S, d, room, code){
     cur.rbest = Math.max(+cur.rbest || 0, stk);
     cur.rhk = key;
     const h = Object.assign({}, cur.rhist || {}), t = serverNow();
-    h['h' + t] = {t, o: String(opp.name || '相手').slice(0, 12), or: Math.round(+opp.rating) || BASE_RATE, w: win ? 1 : draw ? 0.5 : 0, d: d.delta, u: String(oppUid || '').slice(0, 40)};
+    h['h' + t] = Object.assign({t, o: String(opp.name || '相手').slice(0, 12), or: Math.round(+opp.rating) || BASE_RATE, w: win ? 1 : draw ? 0.5 : 0, d: d.delta, u: String(oppUid || '').slice(0, 40)},
+      room.kind === 'abrated' ? {m: 'ab'} : {});
     Object.keys(h).sort().slice(0, Math.max(0, Object.keys(h).length - RHIST_N)).forEach(k => delete h[k]);
     cur.rhist = h;
     got = {key, gain, notes, stk};
@@ -6179,20 +6191,34 @@ async function rewardRated(S, d, room, code){
   });
   if (res && res.committed && got) { ui.rmpRes = got; render(); }
 }
+const RT_NOTE = {};
 function renderRated(){
-  const p = net.profile || {}, stk = myRStreak();
-  rankCard($('#rtRank'), null, false);
+  const p = net.profile || {}, stk = myRStreak(), mode = ratedMode(), F = RMODES[mode], ab = mode === 'ab';
+  $('#rtTitle').textContent = F.game;
+  $$('#rtMode [data-rm]').forEach(x => x.setAttribute('aria-selected', String(x.dataset.rm === mode)));
+  rankCard($('#rtRank'), null, false, mode);
+  $('#rtLoBox').hidden = !ab;
+  if (ab) {
+    const k = abMyChalks();
+    renderLoadout($('#rtLo'), {c: abMine(), k, lbl: 'あなたのキャラ・スキル'});
+    // the cards say how often each chalk works here (the same for everyone), not its usual rarity count
+    [0, 1].forEach(i => { const em = document.querySelector(`#rtLo .lo-card[data-slot="${i}"] .cabx em`); if (em) em.textContent = 'レート戦は' + usesText(abUses({ab: {eq: 1}}, k[i])); });
+    $('#rtLoN').textContent = `レート戦では、チョークの能力はレア度に関係なく、どれも1試合${AB_USES.R}回（${CHALK_AB.iron.name}は${IRON_USES.R}回）。カードをタップすると変えられます`;
+  }
+  const nt = $('#rtNote');
+  if (!RT_NOTE.classic) RT_NOTE.classic = nt.textContent;
+  nt.textContent = ab ? `1対1・1手30秒・能力あり。チョークの能力の回数はみんな同じ。結果はサーバーが判定します。レートは今までのレート戦とは別です。作ったばかりのアカウントとの試合はレートがほとんど動かず、すぐに決着した試合はノーカウントです。` : RT_NOTE.classic;
   const sl = $('#rtStreak');
   sl.className = 'rt-strk' + (stk >= 2 ? ' hot' : '');
   sl.innerHTML = stk >= 2 ? `<i class="flame"></i><b>${stk}</b>連勝中！` : stk === 1 ? '1連勝中。つぎも勝てば連勝！' : `連勝なし${+p.rbest ? `（最高 ${+p.rbest}連勝）` : ''}`;
   $('#rtRpv').textContent = myRmp();
   $('#rtOnline').textContent = net.onlineN === null || net.onlineN === undefined ? '-' : net.onlineN;
-  $('#rtWait').textContent = recruitList().length;
+  $('#rtWait').textContent = recruitList(mode).length;
   $('#rtGo').disabled = !FIREBASE_CONFIG;
-  const ol = $('#rtHist'), h = Object.values(p.rhist || {}).sort((a, b) => b.t - a.t);
-  if (unchanged(ol, JSON.stringify(h))) return;
+  const ol = $('#rtHist'), h = Object.values(p.rhist || {}).filter(r => (r.m === 'ab') === ab).sort((a, b) => b.t - a.t);
+  if (unchanged(ol, JSON.stringify([mode, h]))) return;
   ol.innerHTML = '';
-  if (!h.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = 'まだレート戦をしていません'; ol.append(li); return; }
+  if (!h.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = `まだ${F.game}をしていません`; ol.append(li); return; }
   h.forEach(r => {
     const li = document.createElement('li');
     li.innerHTML = '<span class="wl"></span><span class="op"></span><span class="dr"></span><span class="tm"></span>';
@@ -6299,9 +6325,10 @@ function syncLobbyListen(){
   }, LOBBY_LINGER);
 }
 // People waiting in the queue right now (not me, not matched yet).
-function recruitList(){
+function recruitList(mode){
   const q = net.queueAll || {}, now = serverNow();
-  return Object.keys(q).filter(u => u !== net.uid && queueEntryOk(q[u]) && !q[u].match && now - (+q[u].ts || 0) < QUEUE_FRESH).map(u => Object.assign({uid: u}, q[u]));
+  return Object.keys(q).filter(u => u !== net.uid && entryMode(q[u]) && (!mode || entryMode(q[u]) === mode) && !q[u].match && now - (+q[u].ts || 0) < QUEUE_FRESH
+    && (entryMode(q[u]) !== 'ab' || abRatedVerOk(q[u].v))).map(u => Object.assign({uid: u, rmode: entryMode(q[u])}, q[u]));
 }
 // (quiet in the older test suites: ?noprog, or ?debug without &recruit)
 const RECRUIT_TEST_OFF = (() => { try { const q = new URLSearchParams(location.search); return q.has('noprog') || (q.has('debug') && !q.has('recruit')); } catch(e) { return false; } })();
@@ -6313,10 +6340,10 @@ function checkRecruit(){
   const r = busy ? null : recruitList().find(x => !(ui.recruitSeen[x.uid] > Date.now()));
   if (!r) { if (!box.hidden && (busy || !recruitList().some(x => x.uid === box.dataset.uid))) box.hidden = true; if (ui.screen === 'rated') renderRated(); return; }
   if (!box.hidden && box.dataset.uid === r.uid) return;
-  box.dataset.uid = r.uid;
-  const t = $('#recruitT'), k = rankOf(Math.round(+r.rating) || BASE_RATE), n = +r.stk || 0;
-  t.textContent = `${String(r.name || 'だれか').slice(0, 12)}さん（${k.label}）が対戦相手をさがしてる！`;
-  const sm = document.createElement('small'); sm.textContent = n >= 2 ? `${n}連勝中・レート${Math.round(+r.rating) || BASE_RATE}` : `レート${Math.round(+r.rating) || BASE_RATE}`; t.append(sm);
+  box.dataset.uid = r.uid; box.dataset.mode = r.rmode;
+  const t = $('#recruitT'), rt = entryRate(r), k = rankOf(rt), n = +r.stk || 0, F = RMODES[r.rmode];
+  t.textContent = `${String(r.name || 'だれか').slice(0, 12)}さん（${k.label}）が${F.game}の相手をさがしてる！`;
+  const sm = document.createElement('small'); sm.textContent = n >= 2 ? `${n}連勝中・${F.name}${rt}` : `${F.name}${rt}`; t.append(sm);
   box.hidden = false;
   sfx('tap');
   if (ui.screen === 'rated') renderRated();
@@ -6328,7 +6355,10 @@ function startPractice(){
   ui.boss = null; ui.puzzle = null; ui.stage = null;
   settings.mode = 'cpu';
   setScreen('game');
+  const keep = settings.ability;
+  settings.ability = search.mode === 'ab' ? 'on' : 'off';
   newGame();
+  settings.ability = keep;
   render();
 }
 function endPractice(){
@@ -7962,6 +7992,8 @@ async function claimGuideDone(){
 
 // ===================== News =====================
 const NEWS = [
+  {id: 'n32', date: '2026-11-20', tag: '新機能', title: '能力レート戦がはじまりました',
+    body: 'ホームの「バトル」→「レート戦」から遊べます。\n・能力バトルで、だれかとレートを競います（今までのレートとは別の「能力レート」）\n・チョークの能力は、レア度に関係なくどれも1試合2回（てっぺきは1回）。ガチャで差がつきません\n・使えるのは、持っているキャラとチョーク\n・ランキングに「能力レート」の欄ができました\n・能力なしのレート戦は、能力バトル画面のいちばん下の「クラシック」から遊べます'},
   {id: 'n31', date: '2026-11-20', tag: 'アップデート', title: '画面が明るく新しくなりました',
     body: 'わりばしの画面デザインを新しくしました。\n・ホームのまん中の「バトル」から、CPU対戦・カスタム・レート戦を選べます\n・ホームの左は「イベント」（今日のボス・わりばしの塔・詰めわりばし・シーズンパスもここ）、右は「ステージ」です\n・下のタブは「ホーム・編成・ガチャ・ショップ・フレンド」の5つになりました\n・今までの黒板のデザインがいい人は、メニュー → 設定 → 画面のデザイン で「黒板」を選べます'},
   {id: 'n30', date: '2026-11-19', tag: 'アップデート', title: '画面を整理しました・塔が能力バトルに',
@@ -8671,7 +8703,22 @@ function plateEl(info, size){
 const serverNow = () => Date.now() + (net.offset || 0);
 const myRating = () => BASE_RATE + Math.round(+((net.profile || {}).rp) || 0);
 const ratedGames = p => (+(p && p.rw) || 0) + (+(p && p.rl) || 0) + (+(p && p.rd) || 0);
-const isRated = () => !!(net.on && net.room && net.room.kind === 'rated');
+// Two rated modes. 能力 (ability battles, rooms of kind 'abrated') has a rating of its own; classic keeps the first one.
+const RMODES = {classic: {kind: 'rated', rp: 'rp', rw: 'rw', rl: 'rl', rd: 'rd', ropn: 'ropn', name: 'レート', game: 'レート戦'},
+  ab: {kind: 'abrated', rp: 'arp', rw: 'arw', rl: 'arl', rd: 'ard', ropn: 'aropn', name: '能力レート', game: '能力レート戦'}};
+const ratedKind = k => k === 'rated' || k === 'abrated';
+const modeOfKind = k => k === 'abrated' ? 'ab' : 'classic';
+const ratedMode = () => ui.ratedMode === 'classic' ? 'classic' : 'ab';   // the rated screen's mode (能力 unless chosen)
+const isRated = () => !!(net.on && net.room && ratedKind(net.room.kind));
+const isAbRated = () => !!(net.on && net.room && net.room.kind === 'abrated');
+// the mode of what is on screen now: the room being played, else the search, else the rated screen
+const curRMode = () => net.on && net.room && ratedKind(net.room.kind) ? modeOfKind(net.room.kind) : search.on ? search.mode || 'classic' : ratedMode();
+const rateOf = (p, mode) => BASE_RATE + Math.round(+((p || {})[RMODES[mode || 'classic'].rp]) || 0);
+const gamesOf = (p, mode) => { const F = RMODES[mode || 'classic']; return (+(p && p[F.rw]) || 0) + (+(p && p[F.rl]) || 0) + (+(p && p[F.rd]) || 0); };
+const myARating = () => rateOf(net.profile, 'ab');
+// in 能力レート戦 every chalk ability works as often as an R chalk's, whatever its rarity
+const AB_RATED_V = '11/20-3';
+const abRatedVerOk = v => typeof v === 'string' && verNum(v) >= verNum(AB_RATED_V);
 const isHost = () => !!(net.on && net.room && net.room.host === net.uid);
 const netPlaying = () => !!(net.on && net.room && net.room.status === 'playing' && net.room.state && net.seat >= 0);
 const typedName = () => ($('#netName').value || '').trim().slice(0, 12) || 'ななし';
@@ -8848,8 +8895,10 @@ const usesText = n => n === Infinity ? '何回でも' : `1試合${n}回`;
 function abLeft(S, p, i){
   if (!S.ab || !S.ab.k) return 0;
   const id = S.ab.k[p][i], u = S.ab.iu ? +S.ab.iu[p][i] || 0 : 0;
-  return chalkAb(id) ? Math.max(0, chalkUses(id) - u) : 0;
+  return chalkAb(id) ? Math.max(0, abUses(S, id) - u) : 0;
 }
+// how many times a chalk works in this game: by rarity, or (能力レート戦: S.ab.eq) the same for everyone, as an R chalk
+function abUses(S, id){ const a = chalkAb(id); return !a ? 0 : S && S.ab && S.ab.eq ? (a === 'iron' ? IRON_USES : AB_USES).R : chalkUses(id); }
 // "R ほのお 攻め 1試合2回" for a chalk
 function chalkAbHTML(id, short){
   const a = chalkAb(id), r = chalkRar(id);
@@ -9090,11 +9139,12 @@ function normState(r){
   if (seats.length) S.seats = seats;
   if (names.length) S.names = names;
   if (r.rated) S.rated = 1;
+  if (r.abr && !r.rated) S.abr = 1;
   if (r.ab && typeof r.ab === 'object' && n === 2 && !r.rated) {
     const A = r.ab, two = (v, f) => [0, 1].map(i => f(arr(v)[i]));
     S.ab = {c: two(A.c, abCid), g: two(A.g, v => Math.max(0, Math.min(AB_MAX, Math.floor(+v) || 0))), gd: two(A.gd, v => +v ? 1 : 0),
       fz: two(A.fz, v => +v === 0 || +v === 1 ? +v : -1), rv: two(A.rv, v => +v ? 1 : 0),
-      k: two(A.k, abkOf), iu: two(A.iu, v => two(v, x => Math.max(0, Math.min(99, +x || 0)))), xt: two(A.xt, v => +v ? 1 : 0), ...(+A.fr ? {fr: 1} : {})};
+      k: two(A.k, abkOf), iu: two(A.iu, v => two(v, x => Math.max(0, Math.min(99, +x || 0)))), xt: two(A.xt, v => +v ? 1 : 0), ...(+A.fr ? {fr: 1} : {}), ...(+A.eq ? {eq: 1} : {})};
   }
   if (typeof r.mid === 'string') S.mid = r.mid.slice(0, 64);
   if (r.devs && typeof r.devs === 'object') S.devs = Object.fromEntries(Object.entries(r.devs).slice(0, 8).map(([k, v]) => [k, String(v).slice(0, 24)]));
@@ -9237,7 +9287,7 @@ if (DEBUG) window.__wb = {primeRepeat(){ if (!G) return 0; let n = 0; for (const
   net: () => ({lobby: !!net.lobbyOff, board: net.boardSrc, onlineN: net.onlineN, pubDenied: !!net.pubDenied}),
   ab: () => G && G.ab && {ab: G.ab, hands: G.hands, turn: G.turn, over: G.over, log: G.log.slice(-3)},
   abSet(o){ if (!G || !G.ab) return false; clearTimeout(cpuTimer); cpuTimer = null; Object.assign(G.ab, o.ab || {}); if (o.hands) G.hands = o.hands.map(h => [...h]); if (o.turn !== undefined) G.turn = o.turn; G.seen = {}; G.seen[posKeyOf(G)] = 1; render(); maybeCpu(); return true; }};
-if (DEBUG) Object.assign(window.__wb, {chalkRar: id => chalkRar(id), chalkAb: id => chalkAb(id), chalkUses: id => { const n = chalkUses(id); return n === Infinity ? null : n; }, chalkList: () => CHALKS.map(c => ({id: c.id, name: c.name})), cutIn: (a, b, c) => cutIn(a, b, c), vsCut: () => vsCut()});
+if (DEBUG) Object.assign(window.__wb, {abLeft: (p, i) => G && G.ab ? (n => n === Infinity ? null : n)(abLeft(G, p, i)) : -1, chalkRar: id => chalkRar(id), chalkAb: id => chalkAb(id), chalkUses: id => { const n = chalkUses(id); return n === Infinity ? null : n; }, chalkList: () => CHALKS.map(c => ({id: c.id, name: c.name})), cutIn: (a, b, c) => cutIn(a, b, c), vsCut: () => vsCut()});
 
 function evalChild(next){
   const s = solver(), r = s.res[next], d = s.dist[next];
@@ -9575,7 +9625,7 @@ function watchBoss(){
 // ---- pub/<uid>: the small public card others see (ranking, friends). players/<uid> is the whole save, read only by its owner
 // (and the admin). The owner copies its name and look here, and its rating fields too: the database rules accept those
 // only when they equal what the server wrote in players/<uid>. The server's judge also writes them after each rated game.
-const PUB_RATE = ['rp', 'rw', 'rl', 'rd', 'ropn'];
+const PUB_RATE = ['rp', 'rw', 'rl', 'rd', 'ropn', 'arp', 'arw', 'arl', 'ard', 'aropn'];
 function pubCard(p){
   p = p || {};
   const o = {}, nm = String(p.name || '').trim().slice(0, 12);
@@ -9606,6 +9656,9 @@ function watchRankBoard(fb){
   net.boardOff = fb.onValue(fb.query(fb.ref(fb.db, 'pub'), fb.orderByChild('rp'), fb.limitToLast(50)),
     s => { net.board = s.val() || {}; renderRank(); },
     () => { net.pubDenied = true; old(); });
+  // 能力レート戦's own top 50
+  net.aboardOff = fb.onValue(fb.query(fb.ref(fb.db, 'pub'), fb.orderByChild('arp'), fb.limitToLast(50)),
+    s => { net.aboard = s.val() || {}; renderRank(); }, () => { net.aboard = {}; renderRank(); });
 }
 // One person's card for the friend screens. Someone who has not opened this version yet has no card: their save is read
 // once instead (no listener), and the card takes over as soon as it appears.
@@ -9779,7 +9832,7 @@ async function leaveRoom(msg){
     const S = res && res.committed ? normState(res.snapshot.val()) : null;
     if (S) { if (isRated()) applyRating(S); else await recordGame(S); }   // the server's judgement may take a moment: don't wait for it here
   }
-  const wasRated = !!(net.room && net.room.kind === 'rated');
+  const wasRated = !!(net.room && ratedKind(net.room.kind));
   detach();
   Object.assign(net, {on:false, code:null, room:null, seat:-1, busy:false});
   G = null;
@@ -9815,11 +9868,11 @@ function onRoom(room){
   if (room && !room.createdAt) room = null;   // a stray write left only a fragment: the room is gone
   if (net.joining) {
     const S0 = room && normState(room.state);
-    if (!room || room.kind !== 'rated' || !room.players || !room.players[net.uid] || !S0 || S0.over) { abandonJoin(!room ? 'gone' : 'not mine'); return; }
+    if (!room || !ratedKind(room.kind) || !room.players || !room.players[net.uid] || !S0 || S0.over) { abandonJoin(!room ? 'gone' : 'not mine'); return; }
     net.joining = 0;
   }
   if (!room) {
-    const waiting = net.room && net.room.kind === 'rated' && G && !G.over && G.ply === 0 && !G.turnAt;
+    const waiting = net.room && ratedKind(net.room.kind) && G && !G.over && G.ply === 0 && !G.turnAt;
     if (waiting) {
       dbg('pending room ' + net.code + ' gone, searching again');
       detach();
@@ -9849,7 +9902,8 @@ function onRoom(room){
   const seat = S && S.seats ? S.seats.indexOf(net.uid) : -1;
   if (!S || seat < 0) { dropRoom('この試合には入っていません'); return; }
   net.seat = seat;
-  if (room.kind === 'rated' && !S.over && S.ply === 0 && !S.turnAt) {
+  if (ratedKind(room.kind)) ui.ratedMode = modeOfKind(room.kind);   // "next rival" and the way back stay in this mode
+  if (ratedKind(room.kind) && !S.over && S.ply === 0 && !S.turnAt) {
     if (net.started) { dbg('ignoring a stale not-started view'); return; }
     const joined = room.joined || {};
     dbg('room ' + net.code + ' joined: ' + S.seats.map(u => short(u) + (joined[u] ? '✓' : '…')).join(' '));
@@ -9860,7 +9914,7 @@ function onRoom(room){
     setScreen('search');
     return;
   }
-  if (room.kind === 'rated') applyRating(S); else recordGame(S);
+  if (ratedKind(room.kind)) applyRating(S); else recordGame(S);
   maybeSplash(room, S);
   const L = toLocal(S, seat), gen = net.gen;
   if (S.turnAt) net.started = true;
@@ -10161,11 +10215,11 @@ const rateKey = () => `rated:${net.code}:${net.room && net.room.createdAt}`;
 const rateRes = () => ui.rateRes && ui.rateRes.key === rateKey() ? ui.rateRes : null;
 const rateEarly = S => !!(S && S.over && S.over.type === 'win' && (S.over.reason === 'resign' || S.over.reason === 'time') && (+S.ply || 0) < RATED_MIN_PLY);
 const banOf = uid => ((net.bans || {})[uid]) || {};
-const rankOk = (uid, p) => ratedGames(p) >= RANK_MIN_GAMES && (+p.ropn || 0) >= RANK_MIN_OPP && !banOf(uid).rank;
+const rankOk = (uid, p, mode) => gamesOf(p, mode) >= RANK_MIN_GAMES && (+p[RMODES[mode || 'classic'].ropn] || 0) >= RANK_MIN_OPP && !banOf(uid).rank;
 // What is still missing before I show up in the ranking.
-function rankNeed(p){
-  const g = Math.max(0, RANK_MIN_GAMES - ratedGames(p)), o = Math.max(0, RANK_MIN_OPP - (+p.ropn || 0));
-  return g || o ? `ランキングまで：${[g ? `レート戦あと${g}戦` : '', o ? `ちがう相手とあと${o}人` : ''].filter(Boolean).join('・')}` : '';
+function rankNeed(p, mode){
+  const F = RMODES[mode || 'classic'], g = Math.max(0, RANK_MIN_GAMES - gamesOf(p, mode)), o = Math.max(0, RANK_MIN_OPP - (+p[F.ropn] || 0));
+  return g || o ? `ランキングまで：${[g ? `${F.game}あと${g}戦` : '', o ? `ちがう相手とあと${o}人` : ''].filter(Boolean).join('・')}` : '';
 }
 
 // ----- the admin's player check: rating, record, recent rivals, and two switches (ranking / rated games), plus a reset
@@ -10342,7 +10396,7 @@ function waitJudge(k, ms){
 }
 // After a rated game: wait for the server's judgement, then this player's RP, history and coins.
 async function applyRating(S){
-  if (!S || !S.over || !net.room || net.room.kind !== 'rated') return;
+  if (!S || !S.over || !net.room || !ratedKind(net.room.kind)) return;
   const key = `rated:${net.code}:${net.room.createdAt}`;
   if (counted.has(key)) return;
   counted.add(key);
@@ -10363,12 +10417,12 @@ async function applyRating(S){
 
 function maybeSplash(room, S){
   const key = `${net.code}:${room.createdAt}:${S.game}`;
-  if (S.ply > 0 || S.over || ui.splashKeys.has(key) || (room.kind === 'rated' && !S.turnAt)) return;
+  if (S.ply > 0 || S.over || ui.splashKeys.has(key) || (ratedKind(room.kind) && !S.turnAt)) return;
   ui.splashKeys.add(key);
   const L = toLocal(S, net.seat), nm = L.names.map((x, k) => k === 0 ? 'あなた' : x);
   const body = $('#splashB');
   body.innerHTML = '';
-  if (room.kind === 'rated') {
+  if (ratedKind(room.kind)) {
     const ps = room.players || {};
     const info = k => Object.assign({name: L.names[k]}, ps[L.seats[k]] || {}, {rating: Math.round(+((ps[L.seats[k]] || {}).rating)) || BASE_RATE});
     const box = document.createElement('div');
@@ -10378,12 +10432,14 @@ function maybeSplash(room, S){
     const side = k => {
       const d = document.createElement('div'), n = +info(k).stk || 0;
       d.append(plateEl(info(k)));
+      if (L.ab) { const c = L.ab.c[k], sk = SKILLS[CHAR_SKILL[c] || 'kazoe'], e = document.createElement('span'); e.className = 'vs-ab';
+        e.innerHTML = `${abFaceHTML(c, 'cav')}<b></b>${abLine(CHAR_SKILL[c] || 'kazoe', sk.name)}`; e.querySelector('b').textContent = abCharName(c); d.append(e); }
       if (n >= 2) { const t = document.createElement('span'); t.className = 'vs-stk'; t.innerHTML = '<i class="flame"></i>'; t.append(`${n}連勝中`); d.append(t); }
       return d;
     };
     box.append(side(0), x, side(1));
     body.append(box);
-    showSplash('マッチングしました！', `先手は${nm[L.turn]}。1手${S.limit}秒`);
+    showSplash(room.kind === 'abrated' ? '能力レート戦 マッチング！' : 'マッチングしました！', `先手は${nm[L.turn]}。1手${S.limit}秒`);
   } else {
     const ol = document.createElement('ol');
     ol.className = 'order';
@@ -10414,9 +10470,11 @@ function hideSplash(){ clearTimeout(ui.splashTimer); $('#splash').hidden = true;
 
 // ===================== Matchmaking =====================
 // A shared queue; whoever finds a partner makes the room and marks both entries in one transaction.
-async function startSearch(keepTimer){
+async function startSearch(keepTimer, mode){
   if (search.on || net.on || net.connecting) return;
-  if (!featOpen('rated')) { lockToast('rated'); return; }
+  mode = mode === 'classic' || mode === 'ab' ? mode : ratedMode();
+  ui.ratedMode = mode;
+  if (mode === 'classic' && !featOpen('rated')) { lockToast('rated'); return; }   // 能力レート戦 is open to everyone
   if (banOf(net.uid).rated) { toast('レート戦は使えません（運営によって止められています）', true); return; }
   ui.resumeSearch = false;
   if (!keepTimer) ui.searchSince = Date.now();
@@ -10429,8 +10487,8 @@ async function startSearch(keepTimer){
   if (search.on || net.on || ui.screen !== 'search') return;
   lsSet(NAME_KEY, typedName()); saveName(fb);
   const sg = ++search.gen;
-  Object.assign(search, {on:true, since: ui.searchSince || Date.now(), working:false});
-  dbg('search start me=' + short(net.uid));
+  Object.assign(search, {on:true, mode, since: ui.searchSince || Date.now(), working:false});
+  dbg('search start (' + mode + ') me=' + short(net.uid));
   const meRef = fb.ref(fb.db, 'queue/' + net.uid);
   search.unsub = fb.onValue(meRef, s => { const v = s.val(); dbg('my entry: ' + (v ? (v.match ? 'match ' + v.match : 'waiting') : 'none')); if (sg === search.gen && v && v.match) gotMatch(String(v.match)); });
   // The whole queue stays synced while searching (no one-off reads); a change triggers a match attempt.
@@ -10467,16 +10525,23 @@ async function cancelSearch(){
 async function beatQueue(sg){
   if (sg !== search.gen || !search.on) return;
   const fb = net.fb;
-  try { await fb.runTransaction(fb.ref(fb.db, `queue/${net.uid}/ts`), cur => (sg !== search.gen || (cur === null && !queueEntryOk((search.q || {})[net.uid]))) ? undefined : serverNow()); }
+  try { await fb.runTransaction(fb.ref(fb.db, `queue/${net.uid}/ts`), cur => (sg !== search.gen || (cur === null && !entryOk((search.q || {})[net.uid], search.mode))) ? undefined : serverNow()); }
   catch(e) { dbg('beat: ' + (e && e.message)); }
 }
-const queueEntryOk = e => !!(e && typeof e === 'object' && e.name !== undefined && e.rating !== undefined);
+// One queue for both modes. A 能力 entry carries "ar" (its rating) and no "rating", so pages from before it never pick it.
+const queueEntryOk = e => !!(e && typeof e === 'object' && !e.mode && e.name !== undefined && e.rating !== undefined);
+const abEntryOk = e => !!(e && typeof e === 'object' && e.mode === 'ab' && e.name !== undefined && e.ar !== undefined);
+const entryOk = (e, mode) => mode === 'ab' ? abEntryOk(e) : queueEntryOk(e);
+const entryMode = e => abEntryOk(e) ? 'ab' : queueEntryOk(e) ? 'classic' : '';
+const entryRate = e => Math.round(+(abEntryOk(e) ? e.ar : (e || {}).rating)) || BASE_RATE;
 async function enqueue(sg, create){
   if (sg !== search.gen || !search.on) return;
   const fb = net.fb, meRef = fb.ref(fb.db, 'queue/' + net.uid);
   try {
     await fb.onDisconnect(meRef).remove();
-    const entry = Object.assign({name: typedName(), rating: myRating(), ts: serverNow(), chalk: myChalk(), stk: myRStreak(), dev: myDevice()}, myLook());
+    const entry = search.mode === 'ab'
+      ? Object.assign({mode: 'ab', name: typedName(), ar: myARating(), ts: serverNow(), chalk: myChalk(), stk: myRStreak(), dev: myDevice(), abc: abMine(), abk: abMyChalks(), v: APP_VERSION}, myLook())
+      : Object.assign({name: typedName(), rating: myRating(), ts: serverNow(), chalk: myChalk(), stk: myRStreak(), dev: myDevice()}, myLook());
     await fb.runTransaction(meRef, cur => (sg !== search.gen || (cur && cur.match) || (!cur && !create)) ? undefined : entry);
   } catch(e) { if (sg === search.gen) toast(errText(e, '相手さがしに参加できませんでした'), true); }
 }
@@ -10544,23 +10609,28 @@ async function tryMatch(sg){
   try {
     if (!search.q) return;
     const q = search.q;
-    const mine = queueEntryOk(q[net.uid]) || (q[net.uid] && q[net.uid].match) ? q[net.uid] : null;
+    const mode = search.mode, ab = mode === 'ab';
+    const mine = entryOk(q[net.uid], mode) || (q[net.uid] && q[net.uid].match) ? q[net.uid] : null;
     if (mine && mine.match) { gotMatch(String(mine.match)); return; }
-    const now = serverNow(), myR = myRating();
-    const gap = u => Math.abs((+q[u].rating || BASE_RATE) - myR);
-    const cands = Object.keys(q).filter(u => u !== net.uid && queueEntryOk(q[u]) && !q[u].match && now - (+q[u].ts || 0) < QUEUE_FRESH && q[u].dev !== myDevice()).sort((a, b) => gap(a) - gap(b));
+    const now = serverNow(), myR = ab ? myARating() : myRating();
+    const gap = u => Math.abs(entryRate(q[u]) - myR);
+    const cands = Object.keys(q).filter(u => u !== net.uid && entryOk(q[u], mode) && !q[u].match && now - (+q[u].ts || 0) < QUEUE_FRESH && q[u].dev !== myDevice()
+      && (!ab || abRatedVerOk(q[u].v))).sort((a, b) => gap(a) - gap(b));
     dbg('queue: ' + Object.keys(q).map(u => short(u) + (q[u].match ? '(m)' : '') + '/' + Math.round((now - (+q[u].ts || 0)) / 1000) + 's').join(' ') + ' → cands ' + cands.map(short).join(','));
     if (!cands.length) { if (!mine) await enqueue(sg, true); return; }
     const oppUid = cands[0], opp = q[oppUid];
     const t0 = Date.now();
     const pls = {[net.uid]: Object.assign(myEntry(), {rating: myR, joinedAt: t0, dev: myDevice()}),
-                 [oppUid]: {name: String(opp.name || '相手').slice(0, 12), rating: Math.round(+opp.rating) || BASE_RATE, joinedAt: t0,
-                   title: titleId(opp.title), plate: plateId(opp.plate), chalk: chalkId(opp.chalk), stk: Math.max(0, Math.min(999, +opp.stk || 0)), dev: String(opp.dev || '').slice(0, 24)}};
+                 [oppUid]: Object.assign({name: String(opp.name || '相手').slice(0, 12), rating: entryRate(opp), joinedAt: t0,
+                   title: titleId(opp.title), plate: plateId(opp.plate), chalk: chalkId(opp.chalk), stk: Math.max(0, Math.min(999, +opp.stk || 0)), dev: String(opp.dev || '').slice(0, 24)},
+                   ab ? {abc: abCid(opp.abc), abk: abkOf(opp.abk), v: String(opp.v || '').slice(0, 16)} : {})};
     const seats = shuffle([net.uid, oppUid]);
-    code = await createRoomRecord({kind:'rated', status:'playing', games:1, rules: Object.assign({}, RATED_RULES, {limit: RATED_LIMIT}), players: pls,
-      waitUntil: serverNow() + JOIN_WAIT,
-      state: Object.assign(initState({n: 2, seats, names: seats.map(u => pls[u].name), game: 1, limit: RATED_LIMIT, turnAt: 0}),
-        {rated: 1, mid: 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8), devs: {[net.uid]: myDevice(), [oppUid]: pls[oppUid].dev || ''}})});
+    const st = Object.assign(initState({n: 2, seats, names: seats.map(u => pls[u].name), game: 1, limit: RATED_LIMIT, turnAt: 0}),
+      ab ? {abr: 1} : {rated: 1}, {mid: 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8), devs: {[net.uid]: myDevice(), [oppUid]: pls[oppUid].dev || ''}});
+    // 能力レート戦: both loadouts as they were in the queue; every chalk works as often (eq)
+    if (ab) { st.ab = abInit(abCid(pls[seats[0]].abc), abCid(pls[seats[1]].abc), 0, abkOf(pls[seats[0]].abk), abkOf(pls[seats[1]].abk)); st.ab.eq = 1; }
+    code = await createRoomRecord({kind: RMODES[mode].kind, status:'playing', games:1, rules: Object.assign({}, RATED_RULES, {limit: RATED_LIMIT}, ab ? {ability: 'on'} : {}), players: pls,
+      waitUntil: serverNow() + JOIN_WAIT, state: st});
     if (sg !== search.gen) return;
     const res = await fb.runTransaction(fb.ref(db, 'queue'), cur => {
       if (cur === null) return null;
@@ -10606,7 +10676,7 @@ function showChrome(s){
 // Back buttons return to the screen you came from; the tab screens start a fresh trail.
 const ROOTS = ['home', 'events', 'shop', 'friends', 'plate'], NO_RETURN = ['game', 'search', 'lobby'];
 function setScreen(s, back){
-  if (SCREEN_FEAT[s] && !featOpen(SCREEN_FEAT[s])) { lockToast(SCREEN_FEAT[s]); return; }
+  if (SCREEN_FEAT[s] && !(SCREEN_FEAT[s] === 'rated' && ratedMode() === 'ab') && !featOpen(SCREEN_FEAT[s])) { lockToast(SCREEN_FEAT[s]); return; }
   setTimeout(bgmUpdate, 0);
   if (ui.screen !== s) {
     const h = ui.hist || (ui.hist = []);
@@ -10707,15 +10777,15 @@ function renderChrome(){
   const ok = !!FIREBASE_CONFIG, p = net.profile || {}, g = ratedGames(p);
   $('#barName').textContent = typedName();
   $('#barTitle').textContent = titleName(myLook().title);
-  const mr = myRating(), coins = myCoins();
+  const mr = myRating(), amr = myARating(), coins = myCoins();
   $('#tbRank').hidden = !ok;
   $('#barCoins').hidden = !ok;
   showCoins(coins);
   $('#barJewels').hidden = !ok;
   $('#barJewels').textContent = myJewels();
-  const rk = rankOf(mr), be = $('#barEmb'), ek = rk.i + ':' + rk.div;
+  const rk = rankOf(amr), be = $('#barEmb'), ek = rk.i + ':' + rk.div;
   $('#barTier').textContent = rk.label;
-  $('#barTier').className = 'tb-sub ' + tierCls(mr);
+  $('#barTier').className = 'tb-sub ' + tierCls(amr);
   if (be.dataset.k !== ek) { be.dataset.k = ek; be.className = 'emb r' + rk.i; be.innerHTML = emblemSVG(rk.i, rk.div); }
   for (const id of ['#goMission', '#goShop', '#goEvents', '#goFriends']) $(id).disabled = !ok;
   const lv = myLevel();
@@ -10749,17 +10819,17 @@ function renderChrome(){
   $('#radarHand').style.color = myCh ? myCh.color : '';
   radar.style.setProperty('--c', myCh ? myCh.color : 'var(--you)');
   applyFx(radar, myCh);
-  $('#barRate').textContent = mr;
-  $('#barRate').className = tierCls(mr);
+  $('#barRate').textContent = amr;
+  $('#barRate').className = tierCls(amr);
   const hr = $('#homeRate');
   hr.textContent = '';
   hr.append(emblemEl(mr), rateEl(mr), `・` + (g ? `${+p.rw || 0}勝${+p.rl || 0}敗${+p.rd ? (+p.rd) + '分' : ''}` : 'まだ0戦'));
-  const nw = recruitList().length, sk = myRStreak();
+  const nw = recruitList('classic').length, sk = myRStreak();
   $('#goRated').classList.toggle('wait', !!nw);
   if (nw || sk >= 2) { const w = document.createElement('span'); w.className = 'hm-w'; w.textContent = nw ? `いま${nw}人が相手待ち！` : `${sk}連勝中`; hr.append(w); }
   const hb = $('#homePlateBox');
   hb.innerHTML = '';
-  hb.append(plateEl(Object.assign({name: typedName(), rating: ok ? mr : 0}, myLook()), 'lg'));
+  hb.append(plateEl(Object.assign({name: typedName(), rating: ok ? amr : 0}, myLook()), 'lg'));
   $('#goRated').disabled = !ok;
   $('#goCustom').disabled = !ok;
   $('#homeNote').hidden = ok;
@@ -10770,9 +10840,10 @@ function renderChrome(){
     $('#searchTitle').textContent = '相手が見つかりました';
     si.textContent = `${G.names[1] || '相手'}さんとつないでいます…`;
   } else {
-    $('#searchTitle').textContent = '相手をさがしています';
-    si.textContent = 'あなたのレート ';
-    si.append(rateEl(mr), '・見つかったら自動で始まります');
+    const sm = search.on ? search.mode : ratedMode();
+    $('#searchTitle').textContent = sm === 'ab' ? '能力レート戦の相手をさがしています' : '相手をさがしています';
+    si.textContent = `あなたの${RMODES[sm].name} `;
+    si.append(rateEl(sm === 'ab' ? amr : mr), '・見つかったら自動で始まります');
   }
 }
 
@@ -11662,7 +11733,7 @@ function renderPlateEditor(){
 const abCid = v => typeof v === 'string' && CHAR_SKILL[v] ? v : 'waribo';
 const abkOf = v => [0, 1].map(i => { const id = arr(v)[i]; return typeof id === 'string' && CHALKS.some(c => c.id === id) ? id : 'auto'; });
 const abVerOk = v => typeof v === 'string' && verNum(v) >= verNum('11/19-3');
-function verNum(v){ const m = /^(\d+)\/(\d+)(?:-(\d+))?$/.exec(String(v || '')); return m ? (+m[1]) * 10000 + (+m[2]) * 100 + (+(m[3] || 0)) : 0; }
+function verNum(v){ const m = /^(\d+)\/(\d+)(?:-(\d+))?$/.exec(String(v || '')); return m ? ((+m[1]) < 7 ? (+m[1]) + 12 : +m[1]) * 10000 + (+m[2]) * 100 + (+(m[3] || 0)) : 0; }   // Jan–Jun come after Jul–Dec
 function renderLobbyAb(on, ps){
   const box = $('#lbAbPick');
   box.hidden = !on;
@@ -11888,7 +11959,7 @@ function renderAbInfo(){
       li.innerHTML = `${chalkFig(c && c.color ? c : null, 2)}<b></b><small></small>`;
       li.querySelector('b').textContent = `${LR[i]}手：${c ? c.name : 'いつもの色'}`;
       const lf = a ? abLeft(G, k, i) : 0;
-      li.querySelector('small').textContent = a ? `「${CHALK_AB[a].name}」${CHALK_AB[a].desc}・${chalkRar(id)}：${usesText(chalkUses(id))}` + (lf <= 0 ? '（もう使い切った）' : lf !== Infinity ? `（あと${lf}回）` : '') : '能力なし（見た目だけ）';
+      li.querySelector('small').textContent = a ? `「${CHALK_AB[a].name}」${CHALK_AB[a].desc}・${ab.eq ? 'レート戦' : chalkRar(id)}：${usesText(abUses(G, id))}` + (lf <= 0 ? '（もう使い切った）' : lf !== Infinity ? `（あと${lf}回）` : '') : '能力なし（見た目だけ）';
       ul.append(li);
     }
     const st = [];
@@ -12130,7 +12201,7 @@ function gameModeLabel(){
   if (ui.stage) return ui.stage.tower ? `わりばしの塔 ${ui.stage.n}階` : `ステージ ${ui.stage.id}`;
   if (tutOn()) return '能力バトル・れんしゅう';
   const ab = abOn(G) ? '能力バトル・' : '';
-  if (net.on) return G.rated ? 'レート戦' : ab + '友達と対戦';
+  if (net.on) return G.rated ? 'レート戦' : G.abr ? '能力レート戦' : ab + '友達と対戦';
   if (settings.mode === '2p') return ab + 'この端末で2人';
   return (ab || 'CPU対戦・') + (LEVEL_NAME[settings.level] || '');
 }
@@ -12334,13 +12405,13 @@ function renderAbHub(){
 }
 function renderHomeAb(){
   const el = $('#homeAbFig'); if (!el) return;
-  const me = abMine(), k = abMyChalks(), nw = FIREBASE_CONFIG ? recruitList().length : 0, key = JSON.stringify([me, k, nw]);
+  const me = abMine(), k = abMyChalks(), nw = FIREBASE_CONFIG ? recruitList('ab').length : 0, key = JSON.stringify([me, k, nw]);
   $('#goAb').classList.toggle('wait', !!nw);
   if (unchanged(el, key)) return;
   const sk = CHAR_SKILL[me] || 'kazoe';
   el.innerHTML = abIcon(sk);
   const hand = i => { const a = chalkAb(k[i]); return `<span>${i ? '右' : '左'} ${a ? abIcon(a) + CHALK_AB[a].name : '—'}</span>`; };
-  $('#homeAbX').innerHTML = `<span>${esc(SKILLS[sk].name)}</span>${hand(0)}${hand(1)}` + (nw ? `<span class="hm-w">いま${nw}人がレート戦の相手待ち！</span>` : '');
+  $('#homeAbX').innerHTML = `<span>${esc(SKILLS[sk].name)}</span>${hand(0)}${hand(1)}` + (nw ? `<span class="hm-w">いま${nw}人が能力レート戦の相手待ち！</span>` : '');
 }
 // Long-press a character or chalk chip: what it does, in a bubble over it (the press does not pick it).
 function abTipShow(chip){
@@ -12481,16 +12552,16 @@ function renderStrip(act, ms, nm){
       const S = normState(net.room.state);
       const rr = rateRes();
       if (S && S.over && ((rr && rr.why) || (!rr && rateEarly(S)))) {
-        ev.textContent = `レート変動なし（${RATE_WHY[rr ? rr.why : 'short'] || '記録されませんでした'}）`;
+        ev.textContent = `${RMODES[curRMode()].name}変動なし（${RATE_WHY[rr ? rr.why : 'short'] || '記録されませんでした'}）`;
         ev.hidden = false;
       } else if (S && S.over && rr) {
         const d = rr.d, k0 = rankOf(d.from), k1 = rankOf(d.to);
-        ev.textContent = 'レート ';
+        ev.textContent = RMODES[curRMode()].name + ' ';
         ev.append(rateEl(d.from, 'span'), ' → ', rateEl(d.to, 'span'), `（${d.delta >= 0 ? '+' : ''}${d.delta}）`);
         if (k1.step !== k0.step) ev.append(k1.step > k0.step ? `　${k1.label}に上がった！` : `　${k1.label}に下がった`);
         if (rr.small) ev.append('（相手か自分が、作ったばかりのアカウント）');
         ev.hidden = false;
-      } else if (S && S.over && !rr) { ev.textContent = 'レートを集計中…'; ev.hidden = false; }
+      } else if (S && S.over && !rr) { ev.textContent = `${RMODES[curRMode()].name}を集計中…`; ev.hidden = false; }
       again.textContent = '次の相手をさがす';
     } else if (net.on) {
       again.textContent = isHost() ? 'ロビーにもどる' : 'ホストを待っています…';
@@ -12692,11 +12763,13 @@ function renderAnalysis(){
 }
 
 // My rank card: emblem, rating, the way to the next division (ranking screen, and the profile without the position).
-function rankCard(box, rows, withPos){
-  const p = net.profile || {}, mr = myRating(), g = ratedGames(p), k = rankOf(mr);
+function rankCard(box, rows, withPos, mode){
+  mode = mode === 'ab' ? 'ab' : 'classic';
+  const F = RMODES[mode], p = net.profile || {}, mr = rateOf(p, mode), g = gamesOf(p, mode), k = rankOf(mr);
   const pos = g && rows ? 1 + rows.filter(x => x.rate > mr).length : 0;
-  if (unchanged(box, JSON.stringify([mr, g, pos, withPos, p.rw, p.rl, p.rd, p.ropn, banOf(net.uid).rank]))) return;
-  box.innerHTML = '<span class="mr-k">あなたのレート</span><span class="mr-pos"></span><b class="mr-rate"></b><span class="mr-next"><span class="meter"><i></i></span><small></small></span><span class="mr-rec"></span>';
+  if (unchanged(box, JSON.stringify([mode, mr, g, pos, withPos, p[F.rw], p[F.rl], p[F.rd], p[F.ropn], banOf(net.uid).rank]))) return;
+  box.innerHTML = '<span class="mr-k"></span><span class="mr-pos"></span><b class="mr-rate"></b><span class="mr-next"><span class="meter"><i></i></span><small></small></span><span class="mr-rec"></span>';
+  box.querySelector('.mr-k').textContent = 'あなたの' + F.name;
   box.prepend(embSpan(k.i, k.div, 'mr-emb'));
   const rt = box.querySelector('.mr-rate'), rkn = document.createElement('span');
   rkn.className = 'rk ' + tierCls(mr); rkn.textContent = k.label;
@@ -12706,10 +12779,11 @@ function rankCard(box, rows, withPos){
   const f = k.next ? Math.max(0, Math.min(1, (mr - k.from) / (k.next - k.from))) : 1;
   box.querySelector('.mr-next i').style.width = Math.round(f * 100) + '%';
   box.querySelector('.mr-next small').textContent = k.next ? `${k.nextLabel}まで あと${k.next - mr}` : '最高ランク！';
-  const need = rankNeed(p);
-  box.querySelector('.mr-rec').textContent = g ? `${+p.rw || 0}勝${+p.rl || 0}敗${+p.rd ? (+p.rd) + '分' : ''}` + (need ? `　${need}` : '') : `レート戦${RANK_MIN_GAMES}戦・ちがう相手${RANK_MIN_OPP}人でランキングに載ります`;
+  const need = rankNeed(p, mode);
+  box.querySelector('.mr-rec').textContent = g ? `${+p[F.rw] || 0}勝${+p[F.rl] || 0}敗${+p[F.rd] ? (+p[F.rd]) + '分' : ''}` + (need ? `　${need}` : '') : `${F.game}${RANK_MIN_GAMES}戦・ちがう相手${RANK_MIN_OPP}人でランキングに載ります`;
 }
-function renderMyRank(rows){ rankCard($('#myRank'), rows, true); }
+function renderMyRank(rows){ rankCard($('#myRank'), rows, true, rankMode()); }
+const rankMode = () => ui.rankMode === 'classic' ? 'classic' : 'ab';
 function renderRank(){
   const panelEl = $('#rankPanel'), ol = $('#rank');
   panelEl.hidden = !FIREBASE_CONFIG;
@@ -12718,11 +12792,13 @@ function renderRank(){
   renderMyRank(null);
   ol.innerHTML = '';
   const empty = t => { const li = document.createElement('li'); li.className = 'empty'; li.textContent = t; ol.append(li); };
-  const b = net.board;
+  const mode = rankMode(), F = RMODES[mode];
+  $$('#rankMode [data-rm]').forEach(x => x.setAttribute('aria-selected', String(x.dataset.rm === mode)));
+  const b = mode === 'ab' ? net.aboard : net.board;
   if (!b) { empty('読み込み中…'); return; }
-  const all = Object.keys(b).map(uid => ({uid, p: b[uid] || {}})).filter(r => ratedGames(r.p) > 0 && !banOf(r.uid).rank)
-    .map(r => ({uid: r.uid, name: String(r.p.name || 'ななし').slice(0, 12), title: r.p.title, rate: BASE_RATE + Math.round(+r.p.rp || 0),
-      w: +r.p.rw || 0, l: +r.p.rl || 0, d: +r.p.rd || 0, ok: rankOk(r.uid, r.p), need: rankNeed(r.p)}))
+  const all = Object.keys(b).map(uid => ({uid, p: b[uid] || {}})).filter(r => gamesOf(r.p, mode) > 0 && !banOf(r.uid).rank)
+    .map(r => ({uid: r.uid, name: String(r.p.name || 'ななし').slice(0, 12), title: r.p.title, rate: rateOf(r.p, mode),
+      w: +r.p[F.rw] || 0, l: +r.p[F.rl] || 0, d: +r.p[F.rd] || 0, ok: rankOk(r.uid, r.p, mode), need: rankNeed(r.p, mode)}))
     .sort((x, y) => y.rate - x.rate || (y.w - x.w));
   const rows = all.filter(r => r.ok), wait = all.filter(r => !r.ok);
   renderMyRank(rows);
@@ -12733,12 +12809,12 @@ function renderRank(){
     bt.addEventListener('click', () => adminLoad(r.uid));
     li.querySelector('.who').append(bt);
   };
-  if (!rows.length) empty(`まだランキングに入った人はいません（レート戦${RANK_MIN_GAMES}戦・ちがう相手${RANK_MIN_OPP}人で入ります）`);
+  if (!rows.length) empty(`まだランキングに入った人はいません（${F.game}${RANK_MIN_GAMES}戦・ちがう相手${RANK_MIN_OPP}人で入ります）`);
   const pend = [];
   if (wait.length) {
     const sep = document.createElement('li');
     sep.className = 'rank-sep';
-    sep.textContent = `ランキング入りまで、あと少しの人（レート戦${RANK_MIN_GAMES}戦・ちがう相手${RANK_MIN_OPP}人で入ります）`;
+    sep.textContent = `ランキング入りまで、あと少しの人（${F.game}${RANK_MIN_GAMES}戦・ちがう相手${RANK_MIN_OPP}人で入ります）`;
     pend.push(sep);
     wait.slice(0, 10).forEach(r => {
       const li = document.createElement('li');
@@ -13020,15 +13096,18 @@ $('#tabDaily').addEventListener('click', () => { ui.missionTab = 'daily'; render
 $('#tabGuide').addEventListener('click', () => { ui.missionTab = 'guide'; renderMission(); });
 $('#tabNormal').addEventListener('click', () => { ui.missionTab = 'normal'; renderMission(); });
 $('#goCustom').addEventListener('click', () => { ui.abRoom = false; setScreen('custom'); });
-$('#goRated').addEventListener('click', () => setScreen('rated'));
-$('#rtGo').addEventListener('click', () => startSearch());
+$('#goRated').addEventListener('click', () => { ui.ratedMode = 'classic'; setScreen('rated'); });
+$('#hubRated').addEventListener('click', () => { ui.ratedMode = 'ab'; setScreen('rated'); });
+$('#rtMode').addEventListener('click', e => { const b = e.target.closest('[data-rm]'); if (!b || search.on) return; ui.ratedMode = b.dataset.rm; sfx('tap'); render(); });
+$('#rankMode').addEventListener('click', e => { const b = e.target.closest('[data-rm]'); if (!b) return; ui.rankMode = b.dataset.rm; sfx('tap'); renderRank(); });
+$('#rtGo').addEventListener('click', () => startSearch(false, ratedMode()));
 $('#rtShop').addEventListener('click', () => setScreen('rpshop'));
 $('#recruitGo').addEventListener('click', () => {
   $('#recruit').hidden = true;
   if (net.on) return;
   clearTimeout(cpuTimer); cpuTimer = null; hideResult(); hideSplash();
   ui.boss = null; ui.puzzle = null; ui.stage = null;
-  startSearch();
+  startSearch(false, $('#recruit').dataset.mode === 'ab' ? 'ab' : 'classic');
 });
 $('#recruitNo').addEventListener('click', () => { const u = $('#recruit').dataset.uid; ui.recruitSeen = ui.recruitSeen || {}; ui.recruitSeen[u] = Date.now() + 120000; $('#recruit').hidden = true; checkRecruit(); });
 document.getElementById(lsGet('waribashi-recruit') === '0' ? 'rcr-off' : 'rcr-on').checked = true;
@@ -13171,7 +13250,7 @@ $('#btpClose').addEventListener('click', closeBtPop);
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#btPop').hidden) closeBtPop(); });
 $('#btpCpu').addEventListener('click', () => { closeBtPop(); setScreen('ab'); });
 $('#btpCustom').addEventListener('click', () => { closeBtPop(); ui.abRoom = true; setScreen('custom'); });
-$('#btpRated').addEventListener('click', () => { closeBtPop(); setScreen('rated'); });
+$('#btpRated').addEventListener('click', () => { closeBtPop(); ui.ratedMode = 'ab'; setScreen('rated'); });
 $('#goEvHome').addEventListener('click', () => $('#goEvents').click());
 $('#hubAuto').addEventListener('click', abAutoLoadout);
 $('#plAuto').addEventListener('click', abAutoLoadout);
